@@ -1,0 +1,2 @@
+include:
+  - git.salt

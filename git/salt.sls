@@ -23,7 +23,7 @@ https://github.com/saltstack/salt.git:
 
 test_cmd:
   cmd.run:
-    - name: {{ python }} /testing/tests/runtests.py
+    - name: {{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo
     - require:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting

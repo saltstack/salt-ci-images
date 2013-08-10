@@ -1,3 +1,6 @@
+include:
+  - git
+
 /testing:
   file.directory
 
@@ -7,6 +10,7 @@ https://github.com/saltstack/salt.git:
     - target: /testing
     - require:
       - file: /testing
+      - sls: git
 
 test_cmd:
   cmd.run:

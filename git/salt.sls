@@ -17,7 +17,7 @@ https://github.com/saltstack/salt.git:
 
 test_cmd:
   cmd.run:
-    - name: python2 /testing/tests/runtests.py --sysinfo -v --coverage --no-coverage-report
+    - name: python2 /testing/tests/runtests.py
     - require:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting

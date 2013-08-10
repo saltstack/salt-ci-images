@@ -1,6 +1,9 @@
 include:
   - git
 
+SaltTesting:
+  pip.installed
+
 /testing:
   file.directory
 
@@ -17,3 +20,4 @@ test_cmd:
     - name: python2 /testing/tests/runtests.py
     - require:
       - git: https://github.com/saltstack/salt.git
+      - pip: SaltTesting

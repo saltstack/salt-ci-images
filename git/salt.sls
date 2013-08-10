@@ -7,6 +7,7 @@
 include:
   - git
   - python.salttesting
+  - python.virtualenv
   - python.unittest2
   - python.mock
 
@@ -27,5 +28,6 @@ test_cmd:
     - require:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting
+      - pip: virtualenv
       - pip: unittest2
       - pip: mock

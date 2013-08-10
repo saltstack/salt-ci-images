@@ -2,6 +2,7 @@ include:
   - git
   - python.salttesting
   - python.unittest2
+  - python.mock
 
 /testing:
   file.directory
@@ -21,3 +22,4 @@ test_cmd:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting
       - pip: unittest2
+      - pip: mock

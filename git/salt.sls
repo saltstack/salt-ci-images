@@ -1,3 +1,9 @@
+{% if grains['os'] == 'Arch' %}
+  {% set python = 'python2' %}
+{% else %}
+  {% set python = 'python' %}
+{% endif %}
+
 include:
   - git
   - python.salttesting
@@ -17,7 +23,7 @@ https://github.com/saltstack/salt.git:
 
 test_cmd:
   cmd.run:
-    - name: python2 /testing/tests/runtests.py
+    - name: {{ python }} /testing/tests/runtests.py
     - require:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting

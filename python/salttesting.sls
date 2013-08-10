@@ -3,5 +3,6 @@ include:
 
 SaltTesting:
   pip.installed:
-    - require: pkg: python-pip
+    - require:
+      - pkg: python-pip
 

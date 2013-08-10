@@ -1,8 +1,6 @@
 include:
   - git
-
-SaltTesting:
-  pip.installed
+  - python.salttesting
 
 /testing:
   file.directory

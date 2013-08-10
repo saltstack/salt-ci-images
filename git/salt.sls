@@ -10,6 +10,7 @@ include:
   - python.virtualenv
   - python.unittest2
   - python.mock
+  - python.timelib
 
 /testing:
   file.directory
@@ -31,3 +32,4 @@ test_cmd:
       - pip: virtualenv
       - pip: unittest2
       - pip: mock
+      - pip: timelib

@@ -3,7 +3,7 @@ include:
   - gcc
 {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD') %}
 {#- These distributions don't ship the develop headers separately #}
-  - headers
+  - python.headers
 {% endif %}
 
 timelib:

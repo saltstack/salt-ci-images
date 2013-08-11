@@ -1,7 +1,7 @@
 {% if grains['os'] == 'SmartOS' %}
-  {% let gcc = 'gcc47' %}
+  {% set gcc = 'gcc47' %}
 {% else %}
-  {% let gcc = 'gcc' %}
+  {% set gcc = 'gcc' %}
 {% endif %}
 
 gcc:

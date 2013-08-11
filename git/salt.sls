@@ -32,4 +32,4 @@ test_cmd:
       - pip: virtualenv
       - pip: unittest2
       - pip: mock
-      - pip: timelib
+    - order: last

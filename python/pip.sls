@@ -1,4 +1,4 @@
-{% if grains['os'] == 'FreeBSD' %}
+{% if grains['os'] in ('FreeBSD', 'SmartOS' %}
   {% set pip = 'py27-pip' %}
 {% elif grains['os'] == 'Arch' %}
   {% set pip = 'python2-pip'%}

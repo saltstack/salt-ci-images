@@ -25,11 +25,12 @@ https://github.com/saltstack/salt.git:
 
 test_cmd:
   cmd.run:
-    - name: {{ python }} /testing/tests/runtests.py --run-destructive --sysinfo --no-colors -v
+    - name: '{{ python }} /testing/tests/runtests.py --run-destructive --sysinfo --no-colors -v; code=$?; echo "Test Suite Exit Code: ${code}";'
     - require:
       - git: https://github.com/saltstack/salt.git
       - pip: SaltTesting
       - pip: virtualenv
       - pip: unittest2
       - pip: mock
+      - pip: timelib
     - order: last

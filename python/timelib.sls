@@ -13,5 +13,8 @@ timelib:
       {#- These distributions don't ship the develop headers separately #}
       - pkg: python-dev
       {%- endif %}
+      {%- if grains['os_family'] not in ('FreeBSD',) %}
+        {#- FreeBSD always ships with gcc #}
       - pkg: gcc
+      {%- endif %}
       - pkg: python-pip

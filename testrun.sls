@@ -1,3 +1,9 @@
+{% if grains['os'] == 'Arch' %}
+  {% set python = 'python2' %}
+{% else %}
+  {% set python = 'python' %}
+{% endif %}
+
 include:
   - git.salt
 

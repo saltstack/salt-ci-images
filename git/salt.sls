@@ -17,7 +17,7 @@ include:
 
 https://github.com/saltstack/salt.git:
   git.latest:
-    - rev: {{ pillar['git_commit'] }}
+    - rev: {{ pillar.get('git_commit', 'develop') }}
     - target: /testing
     - require:
       - file: /testing

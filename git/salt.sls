@@ -9,8 +9,6 @@ include:
   - python.salttesting
   - python.virtualenv
   - python.unittest2
-  - python.mock
-  - python.timelib
 
 /testing:
   file.directory
@@ -31,6 +29,4 @@ test_cmd:
       - pip: SaltTesting
       - pip: virtualenv
       - pip: unittest2
-      - pip: mock
-      - pip: timelib
     - order: last

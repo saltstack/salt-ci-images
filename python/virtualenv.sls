@@ -1,5 +1,5 @@
 include:
-  - pip
+  - python.pip
 
 virtualenv:
   pip.installed:

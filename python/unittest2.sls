@@ -1,5 +1,5 @@
 include:
-  - pip
+  - python.pip
 
 unittest2:
   pip.installed:

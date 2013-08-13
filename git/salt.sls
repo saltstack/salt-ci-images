@@ -1,5 +1,6 @@
 include:
   - git
+  - curl
   - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -18,6 +19,7 @@ https://github.com/saltstack/salt.git:
     - require:
       - file: /testing
       - pkg: git
+      - pkg: curl
       - pip: SaltTesting
       - pip: virtualenv
       {%- if grains.get('pythonversion')[:2] < [2, 7] %}

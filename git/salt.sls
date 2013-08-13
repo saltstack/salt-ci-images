@@ -2,7 +2,7 @@ include:
   - git
   - python.salttesting
   - python.virtualenv
-  {%- if tuple(grains.get('pythonversion')) < (2, 7) %}
+  {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
   - python.mock
@@ -20,7 +20,7 @@ https://github.com/saltstack/salt.git:
       - pkg: git
       - pip: SaltTesting
       - pip: virtualenv
-      {%- if tuple(grains.get('pythonversion')) < (2, 7) %}
+      {%- if grains.get('pythonversion')[:2] < [2, 7] %}
       - pip: unittest2
       {%- endif %}
       - pip: mock

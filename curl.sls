@@ -1,2 +1,2 @@
 curl:
-  pkg.installed:
+  pkg.installed

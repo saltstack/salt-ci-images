@@ -1,6 +1,7 @@
 include:
   - git
   - patch
+  - subversion
   - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -20,6 +21,7 @@ https://github.com/saltstack/salt.git:
       - file: /testing
       - pkg: git
       - pkg: patch
+      - pkg: subversion
       - pip: SaltTesting
       - pip: virtualenv
       {%- if grains.get('pythonversion')[:2] < [2, 7] %}

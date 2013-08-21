@@ -1,5 +1,7 @@
 include:
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - gcc
+  {%- endif %}
   - python.pip
 {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD') %}
 {#- These distributions don't ship the develop headers separately #}

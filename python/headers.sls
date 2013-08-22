@@ -1,5 +1,5 @@
 {% if grains['os_family'] == 'RedHat' %}
-  {% if grains['os'] in ('Fedora', 'Amazon') or grains['os_family'] == 'Suse' %}
+  {% if grains['os'] in ('Fedora', 'Amazon') %}
     {% set python_dev = 'python-devel' %}
   {% elif grains['os'] == 'CentOS' %}
     {% if grains['osrelease'].startswith('5') %}
@@ -10,6 +10,8 @@
   {% else %}
     {% set python_dev = 'libpython-devel' %}
   {% endif %}
+{% elif grains['os_family'] == 'Suse' %}
+  {% set python_dev = 'python-devel' %}
 {% else %}
   {% set python_dev = 'python-dev' %}
 {% endif %}

@@ -1,7 +1,9 @@
 include:
   - git
   - patch
+  {%- if grains['os_family'] in ('FreeBSD',) %}
   - subversion
+  {%- endif %}
   - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -21,7 +23,9 @@ https://github.com/saltstack/salt.git:
       - file: /testing
       - pkg: git
       - pkg: patch
+      {%- if grains['os_family'] in ('FreeBSD',) %}
       - pkg: subversion
+      {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv
       {%- if grains.get('pythonversion')[:2] < [2, 7] %}

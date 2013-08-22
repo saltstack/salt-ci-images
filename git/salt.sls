@@ -11,6 +11,10 @@ include:
   {%- endif %}
   - python.mock
   - python.timelib
+  {%- if grains['os'] == 'openSUSE' %}
+  {#- Yes! openSuse ships xml as separate package #}
+  - python.xml
+  {%- endif %}
 
 /testing:
   file.directory
@@ -23,6 +27,10 @@ https://github.com/saltstack/salt.git:
       - file: /testing
       - pkg: git
       - pkg: patch
+      {%- if grains['os'] == 'openSUSE' %}
+      {#- Yes! openSuse ships xml as separate package #}
+      - pkg: python-xml
+      {%- endif %}
       {%- if grains['os_family'] in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}

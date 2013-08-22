@@ -1,7 +1,7 @@
 include:
   - git
   - patch
-  {%- if grains['os_family'] in ('FreeBSD',) %}
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
   {%- endif %}
   - python.salttesting
@@ -23,7 +23,7 @@ https://github.com/saltstack/salt.git:
       - file: /testing
       - pkg: git
       - pkg: patch
-      {%- if grains['os_family'] in ('FreeBSD',) %}
+      {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}
       - pip: SaltTesting

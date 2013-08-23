@@ -23,6 +23,7 @@ python-pip:
     {%- else %}
     - name: easy_install --script-dir=/usr/bin -U pip virtualenv
     {%- endif %}
+    - reload_modules: true
     - require:
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}

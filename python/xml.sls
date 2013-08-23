@@ -1,0 +1,2 @@
+python-xml:
+  pkg.installed

@@ -1,5 +1,9 @@
 include:
   - python.setuptools
+  {%- if grains['os'] == 'openSUSE' %}
+  {#- Yes! openSuse ships xml as separate package #}
+  - python.xml
+  {%- endif %}
 
 python-pip:
   {#
@@ -19,5 +23,10 @@ python-pip:
     {%- else %}
     - name: easy_install --script-dir=/usr/bin -U pip virtualenv
     {%- endif %}
+    - reload_modules: true
     - require:
+      {%- if grains['os'] == 'openSUSE' %}
+      {#- Yes! openSuse ships xml as separate package #}
+      - pkg: python-xml
+      {%- endif %}
       - cmd: python-setuptools

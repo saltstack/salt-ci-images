@@ -16,7 +16,7 @@ python-setuptools:
     - run
     - cwd: /
     {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
-    - name: curl -L https://bitbucket.org/s0undt3ch/setuptools/raw/tip/ez_setup.py | {{ python }}
+    - name: curl -L https://bitbucket.org/s0undt3ch/setuptools/raw/fix-curl/ez_setup.py | {{ python }}
     {%- else %}
     - name: curl -L https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | {{ python }}
     {%- endif %}

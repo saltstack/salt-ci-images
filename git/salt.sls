@@ -26,9 +26,6 @@ https://github.com/saltstack/salt.git:
       - file: /testing
       - pkg: git
       - pkg: patch
-      {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
-      - pkg: python26
-      {%- endif %}
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}

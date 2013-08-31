@@ -2,6 +2,9 @@
 
 include:
   - curl
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+  - python26
+  {%- endif %}
 
 python-setuptools:
   {#
@@ -15,3 +18,6 @@ python-setuptools:
     - name: curl -L https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py | {{ python }}
     - require:
       - pkg: curl
+      {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+      - pkg: python26
+      {%- endif %}

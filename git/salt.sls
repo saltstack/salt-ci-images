@@ -4,9 +4,6 @@ include:
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
   {%- endif %}
-  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
-  - python26
-  {%- endif %}
   - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}

@@ -11,6 +11,7 @@ include:
   {%- endif %}
   - python.mock
   - python.timelib
+  - python.unittest-xml-reporting
 
 /testing:
   file.directory
@@ -33,3 +34,4 @@ https://github.com/saltstack/salt.git:
       {%- endif %}
       - pip: mock
       - pip: timelib
+      - pip: unittest-xml-reporting

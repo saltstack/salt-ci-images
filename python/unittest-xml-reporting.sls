@@ -3,6 +3,6 @@ include:
 
 unittest-xml-reporting:
   pip.installed:
-    - name: git+git://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
+    - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     - require:
       - cmd: python-pip

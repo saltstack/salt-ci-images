@@ -5,7 +5,7 @@ include:
 
 test_cmd:
   cmd.run:
-    - name: '{{ python }} /testing/tests/runtests.py --run-destructive --sysinfo --no-colors -v -x --coverage-xml=/tmp/coverage.xml; code=$?; echo "Test Suite Exit Code: ${code}";'
+    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors --xml-out --html-out --coverage-html=/tmp/html-unitests-output --coverage-xml=/tmp/coverage.xml; code=$?; echo "Test Suite Exit Code: ${code}";'
     - order: last
     - require:
       - git: https://github.com/saltstack/salt.git

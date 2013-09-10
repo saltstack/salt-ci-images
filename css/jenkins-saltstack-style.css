@@ -3,11 +3,14 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
 }
 
 #top-panel {
-  height: 56px;
-  color: #333333;
+  height: 52px;
   background-color: #F7F9F8;
   background-repeat: no-repeat;
   background-image: url('../img/saltstack_logo.png');
+}
+
+#top-panel, #login-field SPAN {
+  color: #333;
 }
 
 #top-panel img:first-child {

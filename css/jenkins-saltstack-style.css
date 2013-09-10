@@ -1,9 +1,11 @@
-body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
+@import url('main.css');
+
+/*body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+}*/
 
 #top-panel {
-  height: 52px;
+  height: 48px;
   background-color: #F7F9F8;
   background-repeat: no-repeat;
   background-image: url('../img/saltstack_logo.png');
@@ -18,6 +20,14 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
   display: none;
 }
 
+#top-panel table:first-child {
+  height: 48px;
+}
+
 #search-box {
-  margin-top: 8px;
+  margin-top: 2px;
+}
+
+body>table:last-child {
+  background-color: #F7F9F8;
 }

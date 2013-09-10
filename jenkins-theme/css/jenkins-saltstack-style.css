@@ -3,14 +3,15 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
 }
 
 #top-panel {
-   background-image: none;
-   background: black;
+  background-image: none;
+  background: black;
 }
 
 #top-panel img:first-child {
-   display:none;
+  background-image: url(../img/saltstack_logo.png)
+  display:none;
 }
 
 #search-box {
-   margin-top: 8px;
+  margin-top: 8px;
 }

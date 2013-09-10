@@ -3,12 +3,12 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
 }
 
 #top-panel {
-  background-image: none;
+  background-image: none !important;
   background: black;
 }
 
 #top-panel img:first-child {
-  background-image: url(../img/saltstack_logo.png)
+  background-image: url(../img/saltstack_logo.png) !important;
   display:none;
 }
 

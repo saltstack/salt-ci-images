@@ -112,7 +112,8 @@ License:  The WebFont(s) listed in this document must follow the YouWorkForThem
 }
 
 body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
-   font-family: 'Nexa Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Nexa Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
 }
 
 #top-panel {

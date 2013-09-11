@@ -148,8 +148,8 @@ body>table:last-child {
   font-family: 'Nexa XBold';
 }
 
-#main-table {
+#main-table > tbody > tr >  td:first-child {
   background-image: url(../img/saltstack-logo-color.png);
   background-repeat: no-repeat;
-  background-position: bottom left;
+  background-position: bottom center;
 }

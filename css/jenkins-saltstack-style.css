@@ -147,3 +147,9 @@ body>table:last-child {
 #footer {
   font-family: 'Nexa XBold';
 }
+
+#main-table {
+  background-image: url(../img/saltstack-logo-color.png);
+  background-repeat: no-repeat;
+  background-position: bottom left;
+}

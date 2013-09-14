@@ -19,9 +19,9 @@ python-pip:
     - cwd: /
     {% if grains['os'] == 'SmartOS' %}
     {#- Adapt to SmartOS's script directory #}
-    - name: easy_install --script-dir=/opt/local/bin -U pip virtualenv
+    - name: easy_install --script-dir=/opt/local/bin -U distribute pip virtualenv
     {%- else %}
-    - name: easy_install --script-dir=/usr/bin -U pip virtualenv
+    - name: easy_install --script-dir=/usr/bin -U pip distribute virtualenv
     {%- endif %}
     - reload_modules: true
     - require:

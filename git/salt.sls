@@ -13,6 +13,9 @@ include:
   - python.timelib
   - python.coverage
   - python.unittest-xml-reporting
+  {%- if grains['os'] == 'openSUSE' %}
+  - python.elementtree
+  {%- endif %}
 
 /testing:
   file.directory
@@ -27,6 +30,9 @@ https://github.com/saltstack/salt.git:
       - pkg: patch
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
+      {%- endif %}
+      {%- if grains['os'] == 'openSUSE' %}
+      - pkg: python-elementtree
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

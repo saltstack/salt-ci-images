@@ -9,13 +9,14 @@ include:
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
+  {%- if grains['os'] == 'openSUSE' %}
+  {#- Yes! openSuse ships xml as separate package #}
+  - python.xml
+  {%- endif %}
   - python.mock
   - python.timelib
   - python.coverage
   - python.unittest-xml-reporting
-  {%- if grains['os'] == 'openSUSE' %}
-  - python.elementtree
-  {%- endif %}
 
 /testing:
   file.directory
@@ -32,7 +33,8 @@ https://github.com/saltstack/salt.git:
       - pkg: subversion
       {%- endif %}
       {%- if grains['os'] == 'openSUSE' %}
-      - pkg: python-elementtree
+      {#- Yes! openSuse ships xml as separate package #}
+      - pkg: python.xml
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

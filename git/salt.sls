@@ -9,6 +9,10 @@ include:
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
+  {%- if grains['os'] == 'openSUSE' %}
+  {#- Yes! openSuse ships xml as separate package #}
+  - python.xml
+  {%- endif %}
   - python.mock
   - python.timelib
   - python.coverage
@@ -27,6 +31,10 @@ https://github.com/saltstack/salt.git:
       - pkg: patch
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
+      {%- endif %}
+      {%- if grains['os'] == 'openSUSE' %}
+      {#- Yes! openSuse ships xml as separate package #}
+      - pkg: python.xml
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

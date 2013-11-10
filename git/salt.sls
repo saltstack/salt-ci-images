@@ -34,7 +34,7 @@ https://github.com/saltstack/salt.git:
       {%- endif %}
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
-      - pkg: python.xml
+      - pkg: python-xml
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

@@ -1,2 +1,0 @@
-python-elementtree:
-  pkg.installed

@@ -11,7 +11,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
-  - python-xml
+  - python.xml
   {%- endif %}
   - python.mock
   - python.timelib

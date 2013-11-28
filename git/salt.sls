@@ -11,12 +11,13 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
-  - python-xml
+  - python.xml
   {%- endif %}
   - python.mock
   - python.timelib
   - python.coverage
   - python.unittest-xml-reporting
+  - python.libcloud
 
 /testing:
   file.directory
@@ -45,3 +46,4 @@ https://github.com/saltstack/salt.git:
       - pip: timelib
       - pip: coverage
       - pip: unittest-xml-reporting
+      - pip: apache-libcloud

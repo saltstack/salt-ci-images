@@ -17,6 +17,7 @@ include:
   - python.timelib
   - python.coverage
   - python.unittest-xml-reporting
+  - python.libcloud
 
 /testing:
   file.directory
@@ -45,3 +46,4 @@ https://github.com/saltstack/salt.git:
       - pip: timelib
       - pip: coverage
       - pip: unittest-xml-reporting
+      - pip: apache-libcloud

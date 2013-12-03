@@ -4,6 +4,9 @@ include:
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   {%- endif %}
+  {%- if grains['os'] == 'Fedora' %}
+  - openssl-dev.sls
+  {%- endif %}
 
 python-pip:
   {#
@@ -28,5 +31,8 @@ python-pip:
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml
+      {%- endif %}
+      {%- if grains['os'] == 'Fedora' %}
+      - pkg: openssl-dev-libs
       {%- endif %}
       - cmd: python-setuptools

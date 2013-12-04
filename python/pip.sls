@@ -5,7 +5,7 @@ include:
   - python.xml
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
-  - openssl-dev.sls
+  - openssl-dev
   {%- endif %}
 
 python-pip:

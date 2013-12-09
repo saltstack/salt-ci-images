@@ -13,6 +13,7 @@
 '''
 
 import os
+import sys
 import time
 import salt.utils.vt
 
@@ -37,7 +38,14 @@ def run(cmd, env=None):
 
     exiting = False
     while True:
-        terminal.recv()
+        stdout, stderr = terminal.recv()
+        if stdout:
+            sys.stdout.write(stdout)
+            sys.stdout.flush()
+
+        if stderr:
+            sys.stderr.write(stderr)
+            sys.stderr.flush()
 
         if exiting:
             break

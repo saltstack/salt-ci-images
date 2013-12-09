@@ -25,8 +25,9 @@ def run(cmd, env=None):
     run_env = os.environ.copy()
     run_env.update(env)
 
-    terminal = vt.Terminal(
+    terminal = salt.utils.vt.Terminal(
         cmd,
+        shell=True,
         env=run_env,
         stream_stdout=True,
         stream_stderr=True,
@@ -34,6 +35,7 @@ def run(cmd, env=None):
         log_stderr=True
     )
 
+    exiting = False
     while True:
         terminal.recv()
 

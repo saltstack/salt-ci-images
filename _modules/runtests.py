@@ -36,7 +36,7 @@ def run(cmd, env=None):
         log_stderr=True
     )
     terminal.wait()
-    return terminal.exitcode
+    return terminal.exitstatus
 
     exiting = False
     while True:

@@ -55,4 +55,4 @@ def run(name, env=None):
                                 'Invalid environmental var: "{0}"'.format(var)
                             return ret
             env = _env
-    return __salt__['runtests.run'](name, env=env)
+    return {'Test Suite Exit Code': __salt__['runtests.run'](name, env=env)}

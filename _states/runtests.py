@@ -14,6 +14,13 @@
 import yaml
 
 def run(name, env=None):
+    ret = {
+        'name': name,
+        'result': False,
+        'changes': {},
+        'comment': ''
+    }
+
     if env:
         if isinstance(env, basestring):
             try:
@@ -55,4 +62,10 @@ def run(name, env=None):
                                 'Invalid environmental var: "{0}"'.format(var)
                             return ret
             env = _env
-    return {'Test Suite Exit Code': __salt__['runtests.run'](name, env=env)}
+
+    result = __salt__['runtests.run'](name, env=env)
+    ret.update({
+        'result': result > 0,
+        'comment': 'Test Suite Exit Code: {0}'.format(result)
+    })
+    return ret

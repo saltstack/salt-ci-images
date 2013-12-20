@@ -9,3 +9,4 @@
 git:
   pkg.installed:
     - name: {{ git }}
+    - refresh: True  # Ensure that pacman runs the first time with -Syu

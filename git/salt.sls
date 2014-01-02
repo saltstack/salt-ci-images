@@ -1,3 +1,5 @@
+{% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt.git') %}
+
 include:
   - git
   - patch
@@ -22,8 +24,9 @@ include:
 /testing:
   file.directory
 
-https://github.com/saltstack/salt.git:
+{{git_url}}:
   git.latest:
+    - name: {{ git_url }}
     - rev: {{ pillar.get('git_commit', 'develop') }}
     - target: /testing
     - require:

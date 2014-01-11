@@ -62,7 +62,7 @@ add-upstream-repo:
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:
-  - cmd.run:
+  cmd.run:
     - name: git fetch upstream --tags
     - cwd: /testing
     - require:

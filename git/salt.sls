@@ -50,3 +50,21 @@ include:
       - pip: coverage
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
+
+{% if git_url != "https://github.com/saltstack/salt.git" %}
+{#- Add Salt Upstream Git Repo #}
+add-upstream-repo:
+  cmd.run:
+    name: git remote add upstream https://github.com/saltstack/salt.git
+    cwd: /testing
+    require:
+      - git: {{ git_url }}
+
+{# Fetch Upstream Tags -#}
+fetch-upstream-tags:
+  cmd.run:
+    name: git fetch upstream --tags
+    cwd: /testing
+    require:
+      - cmd: add-upstream-repo
+{% endif %}

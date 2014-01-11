@@ -14,5 +14,8 @@ test_cmd:
     - order: last
     - require:
       - git: {{ gitsalt.git_url }}
+    {%- if gitsalt.git_url != "https://github.com/saltstack/salt.git" %}
+      - cmd: fetch-upstream-tags
+    {%- endif %}
     - env:
       - XML_TESTS_OUTPUT_DIR: /tmp/xml-unitests-output

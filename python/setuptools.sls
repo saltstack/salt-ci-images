@@ -1,7 +1,7 @@
 {% from '_python.sls' import python with context %}
 
 {% if salt['cmd.run_stdout']('curl -sL -w "%{http_code}" https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -o /dev/null') != '200' %}
-  {% set ez_setup_url = 'https://raw2.github.com/jaraco/setuptools/master/ez_setup.py' %}
+  {% set ez_setup_url = 'https://github.com/jaraco/setuptools/blob/2.2/ez_setup.py' %}
 {% else %}
   {% set ez_setup_url = 'https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py' %}
 {% endif %}

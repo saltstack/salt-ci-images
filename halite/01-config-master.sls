@@ -3,9 +3,9 @@ include:
 
 /etc/salt/master.conf.d/gitfs.conf:
   file.managed:
-    source: salt://halite/files/gitfs.conf
+    - source: salt://halite/files/gitfs.conf
     - require:
-      cmd: gitpython
+      - cmd: gitpython
 
 salt-master:
   service:

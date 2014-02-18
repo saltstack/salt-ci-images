@@ -1,0 +1,8 @@
+{% set settings = {
+    'git_url': pillar.get('git_url', 'https://github.com/saltstack/salt.git'),
+    'git_commit': pillar.get('git_commit', 'develop'),
+    'build_id': pillar.get('build_id', '0000'),
+    'master_id': 'test-halite-master-{0}'.format(pillar.get('build_id', '0000'))
+}
+%}
+

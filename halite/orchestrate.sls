@@ -38,3 +38,10 @@ configure-minions:
       - apache
     - require:
       - salt: accept-minion-keys
+
+
+run-halite-testsuite:
+  salt.state:
+    - tgt: 'test-halite-master-*'
+    - sls:
+      - halite.master.run-halite-testsuite

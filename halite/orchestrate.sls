@@ -1,3 +1,4 @@
+
 deploy-master:
   salt.state:
     - tgt: {{ grains.get('id') }}
@@ -10,7 +11,30 @@ configure-master:
     - tgt: 'test-halite-master-*'
     - sls:
       - halite.master.config
-      - apache
       - halite.master.setup-halite
     - require:
       - salt: deploy-master
+
+
+deploy-minions:
+  salt.state:
+    - tgt: {{ grains.get('id') }}
+    - sls:
+      - halite.minions.deploy
+
+accept-minion-keys:
+  salt.state:
+    - tgt: 'test-halite-master-*'
+    - sls:
+      - halite.master.accept-keys
+    - require:
+      - salt: deploy-minions
+
+
+configure-minions:
+  salt.state:
+    - tgt: 'test-halite-minion-*'
+    - sls:
+      - apache
+    - require:
+      - salt: accept-minion-keys

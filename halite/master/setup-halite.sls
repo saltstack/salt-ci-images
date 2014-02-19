@@ -11,6 +11,7 @@ include:
   - curl
   - python.nose
   - python.paste
+  - python.bottle
   - python.webtest
 
 https://github.com/saltstack/halite.git:

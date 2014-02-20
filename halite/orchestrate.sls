@@ -4,6 +4,7 @@ deploy-master:
     - tgt: {{ grains.get('id') }}
     - sls:
       - halite.master.deploy
+    - failhard: true
 
 
 configure-master:
@@ -14,6 +15,7 @@ configure-master:
       - halite.master.setup-halite
     - require:
       - salt: deploy-master
+    - failhard: true
 
 
 deploy-minions:
@@ -23,6 +25,7 @@ deploy-minions:
       - halite.minions.deploy
     - require:
       - salt: configure-master
+    - failhard: true
 
 accept-minion-keys:
   salt.state:
@@ -31,6 +34,7 @@ accept-minion-keys:
       - halite.master.accept-keys
     - require:
       - salt: deploy-minions
+    - failhard: true
 
 
 configure-minions:
@@ -40,6 +44,7 @@ configure-minions:
       - apache
     - require:
       - salt: accept-minion-keys
+    - failhard: true
 
 
 run-halite-testsuite:
@@ -49,3 +54,4 @@ run-halite-testsuite:
       - halite.master.run-halite-testsuite
     - require:
       - salt: configure-minions
+    - failhard: true

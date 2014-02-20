@@ -1,3 +1,5 @@
+{% from "halite/settings.jinja" import settings with context %}
+
 deploy-master:
   salt.state:
     - tgt: {{ grains.get('id') }}
@@ -6,52 +8,40 @@ deploy-master:
     - failhard: true
 
 
-configure-master:
-  salt.state:
-    - tgt: 'test-halite-master-*'
-    - sls:
-      - halite.master.config
-      - halite.master.setup-halite
-    - require:
-      - salt: deploy-master
-    - failhard: true
-
-
 deploy-minions:
   salt.state:
     - tgt: {{ grains.get('id') }}
     - sls:
       - halite.minions.deploy
-    - require:
-      - salt: configure-master
     - failhard: true
-
 
 accept-minion-keys:
+  salt.function:
+    - name: 'cmd.run_all'
+    - tgt: {{ settings.master_id }}
+    - arg:
+      - 'salt-key -ya test-halite-minion-{{ settings.build_id }}-*'
+
+configure-master:
   salt.state:
-    - tgt: 'test-halite-master-*'
+    - tgt: {{ settings.master_id }}
     - sls:
-      - halite.master.accept-keys
-    - require:
-      - salt: deploy-minions
+      - halite.master.config
+      - halite.master.setup-halite
     - failhard: true
 
 
-configure-minions:
+setup-minions:
   salt.state:
-    - tgt: 'test-halite-minion-*'
+    - tgt: {{ settings.master_id }}
     - sls:
-      - halite.minions.install-halite
-    - require:
-      - salt: accept-minion-keys
+      - halite.master.setup-minions
     - failhard: true
 
 
 run-halite-testsuite:
   salt.state:
-    - tgt: 'test-halite-master-*'
+    - tgt: {{ settings.master_id }}
     - sls:
       - halite.master.run-halite-testsuite
-    - require:
-      - salt: configure-minions
     - failhard: true

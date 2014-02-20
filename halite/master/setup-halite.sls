@@ -1,3 +1,5 @@
+{% from "halite/settings.jinja" import settings with context %}
+
 include:
   - git
 {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
@@ -42,7 +44,7 @@ ui-tester:
   user.present:
     - groups:
       - sudo
-    - password: {{ pillar.get('halite_password_hash', 'U1234567890') }}
+    - password: {{ settings.ui_tester_password_hash }}
 
 write-override-file:
   file.managed:

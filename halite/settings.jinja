@@ -3,6 +3,8 @@
     'git_commit': pillar.get('git_commit', 'develop'),
     'build_id': pillar.get('build_id', '0000'),
     'master_id': 'test-halite-master-{0}'.format(pillar.get('build_id', '0000')),
-    'num_minions': pillar.get('num_minions', '1') | int
+    'num_minions': pillar.get('num_minions', '1') | int,
+    'ui_tester_password': pillar.get('ui_tester_password', 'U1234567'),
+    'ui_tester_password_hash': pillar.get('ui_tester_password_hash', '$6$GubOGQhH8TR6F/XU$RCEtMLSHFVzNrKfoASfbpr37U83Mx8MAUzWVUi3qY0RRjCv/IcsSi06kgXUXY9Cj2Neg8TOypgOoB2fcndoU20')
 }
 %}

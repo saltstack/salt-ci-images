@@ -14,6 +14,7 @@
     {%- endif %}
     - require:
       - pkg: {{ apache }}
+  force_reload: true
 
 {%- if grains['os_family'] == 'RedHat' %}
 /etc/httpd/conf/httpd.conf:

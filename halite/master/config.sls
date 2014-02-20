@@ -18,3 +18,4 @@ salt-master:
     - reload: True
     - require:
       - file: /etc/salt/master.conf.d/gitfs.conf
+      - file: /etc/salt/master.conf.d/external_auth.conf

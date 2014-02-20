@@ -21,6 +21,8 @@ deploy-minions:
     - tgt: {{ grains.get('id') }}
     - sls:
       - halite.minions.deploy
+    - require:
+      - salt: configure-master
 
 accept-minion-keys:
   salt.state:
@@ -45,3 +47,5 @@ run-halite-testsuite:
     - tgt: 'test-halite-master-*'
     - sls:
       - halite.master.run-halite-testsuite
+    - require:
+      - salt: configure-minions

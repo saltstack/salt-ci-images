@@ -28,6 +28,7 @@ configure-master:
     - sls:
       - halite.master.config
       - halite.master.setup-halite
+      - halite.master.restart-service
     - failhard: true
 
 

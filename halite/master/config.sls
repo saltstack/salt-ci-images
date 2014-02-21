@@ -17,12 +17,3 @@ include:
 /etc/salt/master.d/external_auth.conf:
   file.managed:
     - source: salt://halite/master/files/external_auth.conf
-
-salt-master:
-  service:
-    - running
-    - reload: True
-    - require:
-      - file: /etc/salt/master.d/gitfs.conf
-      - file: /etc/salt/master.d/halite.conf
-      - file: /etc/salt/master.d/external_auth.conf

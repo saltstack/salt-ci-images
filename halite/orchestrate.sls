@@ -21,6 +21,7 @@ accept-minion-keys:
     - tgt: {{ settings.master_id }}
     - arg:
       - 'salt-key -ya test-halite-minion-{{ settings.build_id }}-*'
+    - failhard: True
 
 configure-master:
   salt.state:

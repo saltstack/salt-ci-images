@@ -1,4 +1,5 @@
 salt-master:
   service:
     - running
-    - reload: True
+    - restart: True
+    - failhard: True

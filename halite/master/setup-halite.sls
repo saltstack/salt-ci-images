@@ -1,4 +1,4 @@
-{% from "halite/settings.jinja" import settings with context %}
+{%- from "halite/settings.jinja" import settings with context %}
 
 include:
   - git
@@ -16,24 +16,31 @@ include:
   - python.bottle
   - python.webtest
 
+
 https://github.com/saltstack/halite.git:
   git.latest:
     - rev: master
     - target: /root/halite
     - require:
       - pkg: git
+    - failhard: True
+
 
 halite-pkg:
   pip.installed:
     - editable: '/root/halite'
     - require:
       - cmd: python-pip
+    - failhard: True
+
 
 install-nvm:
   cmd.run:
     - name: 'curl https://raw.github.com/creationix/nvm/master/install.sh | sh'
     - require:
       - pkg: curl
+    - failhard: True
+
 
 install-js-halite:
   cmd.script:
@@ -45,6 +52,8 @@ ui-tester:
     - groups:
       - sudo
     - password: {{ settings.ui_tester_password_hash }}
+    - failhard: True
+
 
 write-override-file:
   file.managed:
@@ -53,3 +62,4 @@ write-override-file:
     - user: root
     - group: root
     - template: jinja
+    - failhard: True

@@ -29,6 +29,13 @@ configure-master:
     - sls:
       - halite.master.config
       - halite.master.setup-halite
+    - failhard: true
+
+
+restart-master:
+  salt.state:
+    - tgt: {{ settings.master_id }}
+    - sls:
       - halite.master.restart-service
     - failhard: true
 

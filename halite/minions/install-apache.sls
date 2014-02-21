@@ -1,4 +1,4 @@
-{% from "apache.sls" import apache with context %}
+{% from "apache/init.sls" import apache with context %}
 
 include:
   - apache
@@ -10,3 +10,5 @@ salt-minion:
     - reload: True
     - require:
       - pkg: {{ apache }}
+    - failhard: True
+

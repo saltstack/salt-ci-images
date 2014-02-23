@@ -15,6 +15,7 @@ deploy-minions:
       - halite.minions.deploy
     - failhard: true
 
+
 accept-minion-keys:
   salt.function:
     - name: 'cmd.run_all'
@@ -22,6 +23,7 @@ accept-minion-keys:
     - arg:
       - 'salt-key -ya test-halite-minion-{{ settings.build_id }}-*'
     - failhard: True
+
 
 configure-master:
   salt.state:
@@ -33,19 +35,21 @@ configure-master:
 
 
 restart-master:
-  salt.state:
+  salt.function:
+    - name: 'cmd.run_all'
     - tgt: {{ settings.master_id }}
-    - sls:
-      - halite.master.restart-service
-    - failhard: true
+    - arg:
+      - 'salt-call service.restart salt-master'
+    - failhard: True
 
 
-setup-minions:
-  salt.state:
+install-minions-apache:
+  salt.function:
+    - name: 'cmd.run_all'
     - tgt: {{ settings.master_id }}
-    - sls:
-      - halite.master.setup-minions
-    - failhard: true
+    - arg:
+      - 'salt test-halite-minion-{{ settings.build_id }}-* state.sls apache'
+    - failhard: True
 
 
 run-halite-testsuite:

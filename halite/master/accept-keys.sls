@@ -5,5 +5,5 @@ accept-minion-keys:
     - name: 'cmd.run_all'
     - tgt: {{ settings.master_id }}
     - arg:
-      - 'salt-key -ya test-halite-minion-*'
+      - 'salt-key -ya test-halite-minion-{{ settings.build_id }}-*'
     - failhard: True

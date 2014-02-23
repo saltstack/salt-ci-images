@@ -58,3 +58,21 @@ run-halite-testsuite:
     - sls:
       - halite.master.run-halite-testsuite
     - failhard: true
+
+
+download-testsuite-reports:
+  salt.function:
+    - name: 'cmd.run_all'
+    - tgt: {{ grains.get('id') }}
+    - arg:
+      - 'salt {{ settings.master_id }} cp.push /root/halite_test_results.xml'
+    - failhard: True
+
+
+kill-boostrapped-vms:
+  salt.state:
+    - tgt: {{ grains.get('id') }}
+    - sls:
+      - halite.master.destroy-master
+      - halite.minions.destroy-minions
+    - failhard: true

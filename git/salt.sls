@@ -7,7 +7,7 @@ include:
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
   {%- endif %}
-  -#}
+  #}
   - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -40,7 +40,7 @@ include:
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}
-      -#}
+      #}
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml

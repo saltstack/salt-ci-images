@@ -20,6 +20,7 @@ include:
   - python.coverage
   - python.unittest-xml-reporting
   - python.libcloud
+  - python.requests
 
 /testing:
   file.directory
@@ -50,6 +51,7 @@ include:
       - pip: coverage
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
+      - pip: requests
 
 {% if git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

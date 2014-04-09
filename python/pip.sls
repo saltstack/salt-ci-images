@@ -8,17 +8,6 @@ include:
   - openssl-dev
   {%- endif %}
 
-
-{% if grains['osfinger'] == 'Ubuntu-10.04' -%}
-{#
-On Ubuntu 10.04 we're having issues upgrading pip and reloading modules.
-Make sure python-pip is not installed
-#}
-python-pip-remove:
-  pkg.absend:
-    - name: python-pip
-{% endif %}
-
 python-pip:
   {#
     I'm installing pip this way since I want the most up to date version
@@ -39,9 +28,6 @@ python-pip:
     {%- endif %}
     - reload_modules: true
     - require:
-      {%- if grains['osfinger'] == 'Ubuntu-10.04' %}
-      - pkg: python-pip-remove
-      {%- endif %}
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml

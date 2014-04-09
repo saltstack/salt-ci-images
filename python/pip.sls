@@ -15,7 +15,7 @@ On Ubuntu 10.04 we're having issues upgrading pip and reloading modules.
 Make sure python-pip is not installed
 #}
 python-pip-remove:
-  pkg.absend:
+  pkg.purged:
     - name: python-pip
 {% endif %}
 

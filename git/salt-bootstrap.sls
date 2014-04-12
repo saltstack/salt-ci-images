@@ -104,6 +104,11 @@ adapt-/var/log:
     - require:
       - cmd: copy-salt-config
 
+/usr/bin/supervisorctl:
+  file.symlink:
+    - source: {{ svi }}/bin/supervisorctl
+    - force: true
+
 install-salt:
   pip.installed:
     - name: salt

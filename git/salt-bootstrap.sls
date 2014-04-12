@@ -12,7 +12,7 @@ include:
   - python.salttesting
   - python.virtualenv
   - python.supervisor
-  - python.apache-libcloud
+  - python.libcloud
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
@@ -140,6 +140,7 @@ install-salt:
       - pip: m2crypto
       - pip: pycrypto
       - pip: pyzmq
+      - pip: apache-libcloud
 
 run-salt:
   supervisord:

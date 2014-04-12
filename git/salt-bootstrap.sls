@@ -66,43 +66,43 @@ copy-salt-config:
 
 adapt-root_dir:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: 'root_dir: /'
     - repl: 'root_dir: {{ sssi }}/'
 
 adapt-/var/run:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: /var/run
     - repl: {{ sssi }}/var/run
 
 adapt-/var/cache:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: /var/cache/salt
     - repl: {{ sssi }}/var/cache
 
 adapt_conf_file:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: 'conf_file: /etc/salt/minion'
     - repl: 'conf_file: {{ sssi }}/etc/minion'
 
 adapt-/srv/salt:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: /srv/salt
     - repl: {{ sssi }}/srv/salt
 
 adapt-/srv/pillar:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: /srv/salt
     - repl: {{ sssi }}/srv/pillar
 
 adapt-/var/log:
   file.replace:
-    - path: {{ sssi }}/etc/minion
+    - name: {{ sssi }}/etc/minion
     - pattern: /var/log/salt
     - repl: {{ sssi }}/log
 

@@ -1,18 +1,7 @@
 include:
-  - git
-  - python.setuptools
-
+  - python.pip
 
 supervisor:
-  cmd:
-    - run
-    - cwd: /
-    {% if grains['os'] == 'SmartOS' %}
-    {#- Adapt to SmartOS's script directory #}
-    - name: easy_install --script-dir=/opt/local/bin -U supervisor
-    {%- else %}
-    - name: easy_install --script-dir=/usr/bin -U supervisor
-    {%- endif %}
+  pip.installed:
     - require:
-      - pkg: git
-      - cmd: python-setuptools
+      - cmd: python-pip

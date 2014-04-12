@@ -1,6 +1,6 @@
 {% from '_python.sls' import python with context %}
 {% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
-{% set svi = config.get('virtualenv_path', '/SaViEn') %}
+{% set svi = salt['config.get']('virtualenv_path', '/SaViEn') %}
 
 include:
   - git

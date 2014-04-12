@@ -1,5 +1,6 @@
 {% from '_python.sls' import python with context %}
 {% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
+{% set sssi = '/salt-source/system-installation' %}
 
 include:
   - git
@@ -34,89 +35,81 @@ https://github.com/saltstack/salt-bootstrap.git:
 
 copy-salt-config:
   cmd.run:
-    - name: cp -Rp /etc/salt /salt-source/system-installation/etc
+    - name: cp -Rp /etc/salt {{ sssi }}/etc
 
-/salt-source/system-installation:
+{{ sssi }}:
   file.directory
 
-/salt-source/system-installation/log:
+{{ sssi }}/log:
   file.directory
 
 {#
-/salt-source/system-installation/etc:
+{{ sssi }}/etc:
   file.directory
 #}
 
-/salt-source/system-installation/var/cache:
+{{ sssi }}/var/cache:
   file.directory:
     - makedirs: true
 
-/salt-source/system-installation/var/run/salt:
+{{ sssi }}/var/run/salt:
   file.directory:
     - makedirs: true
 
-/salt-source/system-installation/srv/salt:
+{{ sssi }}/srv/salt:
   file.directory:
     - makedirs: true
 
-/salt-source/system-installation/srv/pillar:
+{{ sssi }}/srv/pillar:
   file.directory:
     - makedirs: true
 
 adapt-root_dir:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: 'root_dir: /'
-    - repl: 'root_dir: /salt-source/system-installation/'
+    - repl: 'root_dir: {{ sssi }}/'
 
 adapt-/var/run:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: /var/run
-    - repl: /salt-source/system-installation/var/run
+    - repl: {{ sssi }}/var/run
 
 adapt-/var/cache:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: /var/cache/salt
-    - repl: /salt-source/system-installation/var/cache
+    - repl: {{ sssi }}/var/cache
 
 adapt_conf_file:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: 'conf_file: /etc/salt/minion'
-    - repl: 'conf_file: /salt-source/system-installation/etc/minion'
+    - repl: 'conf_file: {{ sssi }}/etc/minion'
 
 adapt-/srv/salt:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: /srv/salt
-    - repl: /salt-source/system-installation/srv/salt
+    - repl: {{ sssi }}/srv/salt
 
 adapt-/srv/pillar:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: /srv/salt
-    - repl: /salt-source/system-installation/srv/pillar
+    - repl: {{ sssi }}/srv/pillar
 
 adapt-/var/log:
   file.replace:
-    - path: /salt-source/system-installation/etc/minion
+    - path: {{ sssi }}/etc/minion
     - pattern: /var/log/salt
-    - repl: /salt-source/system-installation/log
+    - repl: {{ sssi }}/log
 
 
 install-salt:
   cmd.run:
-    - name: {{ python }} setup.py install --salt-root-dir=/salt-source/system-installation/ \
-      --salt-config-dir=/salt-source/system-installation/etc \
-      --salt-cache-dir=/salt-source/system-installation/cache \
-      --salt-sock-dir=/salt-source/system-installation/run/salt \
-      --salt-srv-root-dir=/salt-source/system-installation/srv \
-      --salt-base-file-roots-dir=/salt-source/system-installation/salt \
-      --salt-base-pillar-roots-dir=/salt-source/system-installation/pillar \
-      --salt-logs-dir=/salt-source/system-installation/log \
-      --salt-pidfile-dir=/salt-source/system-installation/run
+    - name: {{ python }} setup.py install --salt-root-dir={{ sssi }}/ --salt-config-dir={{ sssi }}/etc --salt-cache-dir={{ sssi }}/cache --salt-sock-dir={{ sssi }}/run/salt --salt-srv-root-dir={{ sssi }}/srv --salt-base-file-roots-dir={{ sssi }}/salt --salt-base-pillar-roots-dir={{ sssi }}/pillar --salt-logs-dir={{ sssi }}/log --salt-pidfile-dir={{ sssi }}/run
 
 
 run-salt:

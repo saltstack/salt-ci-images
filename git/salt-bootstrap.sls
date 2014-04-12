@@ -23,9 +23,9 @@ include:
 /salt-source:
   file.directory
 
-https://github.com/saltstack/salt-bootstrap.git:
+https://github.com/saltstack/salt.git:
   git.latest:
-    - name: https://github.com/saltstack/salt-bootstrap.git
+    - name: https://github.com/saltstack/salt.git
     - rev: 2014.1
     - target: /salt-source
     - require:

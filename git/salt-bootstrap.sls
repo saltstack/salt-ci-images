@@ -106,7 +106,7 @@ adapt-/var/log:
 
 /usr/bin/supervisorctl:
   file.symlink:
-    - source: {{ svi }}/bin/supervisorctl
+    - target: {{ svi }}/bin/supervisorctl
     - force: true
 
 install-salt:

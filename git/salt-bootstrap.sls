@@ -23,6 +23,9 @@ include:
 /salt-source:
   file.directory
 
+{{ sssi }}:
+  file.directory
+
 https://github.com/saltstack/salt.git:
   git.latest:
     - name: https://github.com/saltstack/salt.git
@@ -36,17 +39,13 @@ https://github.com/saltstack/salt.git:
 copy-salt-config:
   cmd.run:
     - name: cp -Rp /etc/salt {{ sssi }}/etc
+    - require:
+      - file: /salt-source
+      - file: {{ sssi }}
 
-{{ sssi }}:
-  file.directory
 
 {{ sssi }}/log:
   file.directory
-
-{#
-{{ sssi }}/etc:
-  file.directory
-#}
 
 {{ sssi }}/var/cache:
   file.directory:
@@ -64,11 +63,11 @@ copy-salt-config:
   file.directory:
     - makedirs: true
 
-adapt-root_dir:
+adapt-/etc/salt/:
   file.replace:
     - name: {{ sssi }}/etc/minion
-    - pattern: 'root_dir: /'
-    - repl: 'root_dir: {{ sssi }}/'
+    - pattern: /etc/salt
+    - repl: {{ sssi }}/etc
 
 adapt-/var/run:
   file.replace:
@@ -109,7 +108,7 @@ adapt-/var/log:
 
 install-salt:
   cmd.run:
-    - name: {{ python }} setup.py install --salt-root-dir={{ sssi }}/ --salt-config-dir={{ sssi }}/etc --salt-cache-dir={{ sssi }}/cache --salt-sock-dir={{ sssi }}/run/salt --salt-srv-root-dir={{ sssi }}/srv --salt-base-file-roots-dir={{ sssi }}/salt --salt-base-pillar-roots-dir={{ sssi }}/pillar --salt-logs-dir={{ sssi }}/log --salt-pidfile-dir={{ sssi }}/run
+    - name: {{ python }} setup.py install --salt-config-dir={{ sssi }}/etc --salt-cache-dir={{ sssi }}/cache --salt-sock-dir={{ sssi }}/run/salt --salt-srv-root-dir={{ sssi }}/srv --salt-base-file-roots-dir={{ sssi }}/salt --salt-base-pillar-roots-dir={{ sssi }}/pillar --salt-logs-dir={{ sssi }}/log --salt-pidfile-dir={{ sssi }}/run
     - cwd: /salt-source
 
 

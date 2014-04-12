@@ -19,9 +19,9 @@ include:
 
 
 {{ svi }}:
-virtualenv.managed:
-  - require:
-    - pip: virtualenv
+  virtualenv.managed:
+    - require:
+      - pip: virtualenv
 
 copy-salt-config:
   cmd.run:

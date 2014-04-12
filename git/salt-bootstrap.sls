@@ -110,6 +110,7 @@ adapt-/var/log:
 install-salt:
   cmd.run:
     - name: {{ python }} setup.py install --salt-root-dir={{ sssi }}/ --salt-config-dir={{ sssi }}/etc --salt-cache-dir={{ sssi }}/cache --salt-sock-dir={{ sssi }}/run/salt --salt-srv-root-dir={{ sssi }}/srv --salt-base-file-roots-dir={{ sssi }}/salt --salt-base-pillar-roots-dir={{ sssi }}/pillar --salt-logs-dir={{ sssi }}/log --salt-pidfile-dir={{ sssi }}/run
+    - cwd: /salt-source
 
 
 run-salt:

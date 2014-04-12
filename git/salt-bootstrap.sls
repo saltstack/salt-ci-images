@@ -6,7 +6,7 @@ include:
   - git
   - python.salttesting
   - python.virtualenv
-  - python.supervisord
+  - python.supervisor
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}

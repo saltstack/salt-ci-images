@@ -1,6 +1,6 @@
 {% from '_python.sls' import python with context %}
 {% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
-{% set sssi = '/salt-source/system-installation' %}
+{% set sssi = '/SSSI' %}
 
 include:
   - git

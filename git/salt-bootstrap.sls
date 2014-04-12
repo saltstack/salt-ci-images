@@ -136,7 +136,7 @@ run-salt:
     - running
     - name: salt
     - require:
-      - cmd: install-salt
+      - pip: install-salt
       - pip: supervisor
 
 

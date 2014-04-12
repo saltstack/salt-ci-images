@@ -4,9 +4,15 @@
 
 include:
   - git
+  - python.pyyaml
+  - python.jinja2
+  - python.m2crypto
+  - python.pycrypto
+  - python.pyzmq
   - python.salttesting
   - python.virtualenv
   - python.supervisor
+  - python.apache-libcloud
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
@@ -16,7 +22,6 @@ include:
   {%- endif %}
   - python.mock
   - python.unittest-xml-reporting
-
 
 {{ svi }}:
   virtualenv.managed:
@@ -104,11 +109,6 @@ adapt-/var/log:
     - require:
       - cmd: copy-salt-config
 
-/usr/bin/supervisorctl:
-  file.symlink:
-    - target: {{ svi }}/bin/supervisorctl
-    - force: true
-
 install-salt:
   pip.installed:
     - name: salt
@@ -135,15 +135,20 @@ install-salt:
       {%- endif %}
       - pip: mock
       - pip: unittest-xml-reporting
+      - pip: jinja2
+      - pip: PyYAML
+      - pip: m2crypto
+      - pip: pycrypto
+      - pip: pyzmq
 
 run-salt:
   supervisord:
     - running
     - name: salt
+    - bin_env: {{ svi }}/bin/supervisorctl
     - require:
       - pip: install-salt
       - pip: supervisor
-
 
 {# Setup Salt Bootstrap Source #}
 /testing:

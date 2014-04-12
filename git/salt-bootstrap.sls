@@ -27,9 +27,7 @@ copy-salt-config:
   cmd.run:
     - name: cp -Rp /etc/salt {{ svi }}/etc
     - require:
-      - file: /salt-source
-      - file: {{ svi }}
-
+      - virtualenv: {{ svi }}
 
 {{ svi }}/log:
   file.directory
@@ -55,43 +53,56 @@ adapt-/etc/salt/:
     - name: {{ svi }}/etc/minion
     - pattern: /etc/salt
     - repl: {{ svi }}/etc
+    - require:
+      - cmd: copy-salt-config
 
 adapt-/var/run:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: /var/run
     - repl: {{ svi }}/var/run
+    - require:
+      - cmd: copy-salt-config
 
 adapt-/var/cache:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: /var/cache/salt
     - repl: {{ svi }}/var/cache
+    - require:
+      - cmd: copy-salt-config
 
 adapt_conf_file:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: 'conf_file: /etc/salt/minion'
     - repl: 'conf_file: {{ svi }}/etc/minion'
+    - require:
+      - cmd: copy-salt-config
 
 adapt-/srv/salt:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: /srv/salt
     - repl: {{ svi }}/srv/salt
+    - require:
+      - cmd: copy-salt-config
 
 adapt-/srv/pillar:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: /srv/salt
     - repl: {{ svi }}/srv/pillar
+    - require:
+      - cmd: copy-salt-config
 
 adapt-/var/log:
   file.replace:
     - name: {{ svi }}/etc/minion
     - pattern: /var/log/salt
     - repl: {{ svi }}/log
-
+    - require:
+      - cmd: copy-salt-config
 
 install-salt:
   pip.installed:
@@ -107,6 +118,7 @@ install-salt:
       - --salt-logs-dir={{ svi }}/log
       - --salt-pidfile-dir={{ svi }}/run
     - require:
+      - file: adapt-/var/log
       - virtualenv: {{ svi }}
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}

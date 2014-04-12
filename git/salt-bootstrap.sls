@@ -13,6 +13,7 @@ include:
   - python.virtualenv
   - python.supervisor
   - python.libcloud
+  - python.msgpack
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
   {%- endif %}
@@ -141,6 +142,7 @@ install-salt:
       - pip: pycrypto
       - pip: pyzmq
       - pip: apache-libcloud
+      - pip: msgpack
 
 run-salt:
   supervisord:

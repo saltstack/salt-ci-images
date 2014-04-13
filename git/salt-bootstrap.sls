@@ -26,6 +26,7 @@ include:
 
 {{ svi }}:
   virtualenv.managed:
+    - python: {{ python }}
     - order: 1
     - require:
       - pip: virtualenv
@@ -41,7 +42,7 @@ copy-salt-config:
     - require:
       - virtualenv: {{ svi }}
 
-{{ svi }}/etc/supervidor.d/salt.ini:
+{{ svi }}/etc/supervisor.d/salt.ini:
   file.managed:
     - source: salt://supervisor/salt.ini
     - makedirs: true
@@ -49,8 +50,9 @@ copy-salt-config:
     - require:
       - virtualenv: {{ svi }}
 
-{{ svi }}/log:
+{{ svi }}/log/supervisor:
   file.directory:
+    - makedirs: true
     - require:
       - virtualenv: {{ svi }}
 
@@ -173,11 +175,11 @@ run-salt:
     - running
     - name: salt
     - bin_env: {{ svi }}/bin/supervisorctl
-    - conf_file: {{ svi }}/etc/supervidor.d/salt.ini
+    - conf_file: {{ svi }}/etc/supervisor.d/salt.ini
     - require:
       - pip: install-salt
       - pip: supervisor
-      - file: {{ svi }}/etc/supervidor.d/salt.ini
+      - file: {{ svi }}/etc/supervisor.d/salt.ini
 
 {# Setup Salt Bootstrap Source #}
 /testing:

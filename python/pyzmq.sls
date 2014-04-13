@@ -4,7 +4,9 @@ include:
 
 pyzmq:
   pip.installed:
-    - bin_env: {{ salt['config.get']('virtualenv_path', None) }}
+    {%- if salt['config.get']('virtualenv_path', None) is not None %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
     - global-options:
       - fetch_libzmq
     - install-options:

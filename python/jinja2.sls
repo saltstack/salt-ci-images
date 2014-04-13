@@ -4,7 +4,9 @@ include:
 
 jinja2:
   pip.installed:
-    - bin_env: {{ salt['config.get']('virtualenv_path', None) }}
+    {%- if salt['config.get']('virtualenv_path', None) is not None %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
     - require:
       - cmd: python-pip
       - pkg: gcc

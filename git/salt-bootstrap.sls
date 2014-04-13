@@ -38,6 +38,12 @@ copy-salt-config:
     - require:
       - virtualenv: {{ svi }}
 
+{{ svi }}/etc/supervidor.d/salt.ini:
+  file.managed:
+    - source: salt://supervisor/salt.ini
+    - require:
+      - virtualenv: {{ svi }}
+
 {{ svi }}/log:
   file.directory
 
@@ -152,6 +158,7 @@ run-salt:
     - running
     - name: salt
     - bin_env: {{ svi }}/bin/supervisorctl
+    - conf_file: {{ svi }}/etc/supervidor.d/salt.ini
     - require:
       - pip: install-salt
       - pip: supervisor

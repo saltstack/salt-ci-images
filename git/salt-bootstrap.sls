@@ -188,6 +188,9 @@ run-salt:
       - pip: install-salt
       - cmd: start-supervisord
 
+salt-minion:
+  service.dead
+
 {# Setup Salt Bootstrap Source #}
 /testing:
   file.directory

@@ -29,9 +29,12 @@ include:
     - require:
       - pip: virtualenv
 
+{{ svi }}/etc:
+  file.directory
+
 copy-salt-config:
   cmd.run:
-    - name: cp -Rp /etc/salt {{ svi }}/etc
+    - name: cp -Rp /etc/salt {{ svi }}/etc/
     - require:
       - virtualenv: {{ svi }}
 
@@ -56,15 +59,15 @@ copy-salt-config:
 
 adapt-/etc/salt/:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /etc/salt
-    - repl: {{ svi }}/etc
+    - repl: {{ svi }}/etc/salt
     - require:
       - cmd: copy-salt-config
 
 adapt-/var/run:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /var/run
     - repl: {{ svi }}/var/run
     - require:
@@ -72,7 +75,7 @@ adapt-/var/run:
 
 adapt-/var/cache:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /var/cache/salt
     - repl: {{ svi }}/var/cache
     - require:
@@ -80,15 +83,15 @@ adapt-/var/cache:
 
 adapt_conf_file:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: 'conf_file: /etc/salt/minion'
-    - repl: 'conf_file: {{ svi }}/etc/minion'
+    - repl: 'conf_file: {{ svi }}/etc/salt/minion'
     - require:
       - cmd: copy-salt-config
 
 adapt-/srv/salt:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /srv/salt
     - repl: {{ svi }}/srv/salt
     - require:
@@ -96,7 +99,7 @@ adapt-/srv/salt:
 
 adapt-/srv/pillar:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /srv/salt
     - repl: {{ svi }}/srv/pillar
     - require:
@@ -104,7 +107,7 @@ adapt-/srv/pillar:
 
 adapt-/var/log:
   file.replace:
-    - name: {{ svi }}/etc/minion
+    - name: {{ svi }}/etc/salt/minion
     - pattern: /var/log/salt
     - repl: {{ svi }}/log
     - require:

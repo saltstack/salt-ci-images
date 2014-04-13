@@ -170,6 +170,14 @@ install-salt:
       - pip: apache-libcloud
       - pip: msgpack-python
 
+
+start-supervisord:
+  cmd.run:
+    - name: {{ svi }}/bin/supervisord -c {{ svi }}/etc/supervisor.d/salt.ini
+    - require:
+      - pip: supervisor
+      - file: {{ svi }}/etc/supervisor.d/salt.ini
+
 run-salt:
   supervisord:
     - running
@@ -178,8 +186,7 @@ run-salt:
     - conf_file: {{ svi }}/etc/supervisor.d/salt.ini
     - require:
       - pip: install-salt
-      - pip: supervisor
-      - file: {{ svi }}/etc/supervisor.d/salt.ini
+      - cmd: start-supervisord
 
 {# Setup Salt Bootstrap Source #}
 /testing:

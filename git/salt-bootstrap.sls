@@ -30,7 +30,9 @@ include:
       - pip: virtualenv
 
 {{ svi }}/etc:
-  file.directory
+  file.directory:
+    require:
+      - virtualenv: {{ svi }}
 
 copy-salt-config:
   cmd.run:

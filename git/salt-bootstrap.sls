@@ -31,7 +31,7 @@ include:
 
 {{ svi }}/etc:
   file.directory:
-    require:
+    - require:
       - virtualenv: {{ svi }}
 
 copy-salt-config:

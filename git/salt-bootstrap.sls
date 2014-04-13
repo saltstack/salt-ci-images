@@ -47,23 +47,33 @@ copy-salt-config:
       - virtualenv: {{ svi }}
 
 {{ svi }}/log:
-  file.directory
+  file.directory:
+    - require:
+      - virtualenv: {{ svi }}
 
 {{ svi }}/var/cache:
   file.directory:
     - makedirs: true
+    - require:
+      - virtualenv: {{ svi }}
 
 {{ svi }}/var/run/salt:
   file.directory:
     - makedirs: true
+    - require:
+      - virtualenv: {{ svi }}
 
 {{ svi }}/srv/salt:
   file.directory:
     - makedirs: true
+    - require:
+      - virtualenv: {{ svi }}
 
 {{ svi }}/srv/pillar:
   file.directory:
     - makedirs: true
+    - require:
+      - virtualenv: {{ svi }}
 
 adapt-/etc/salt/:
   file.replace:
@@ -126,7 +136,7 @@ install-salt:
     - name: salt
     - bin_env: {{ svi }}
     - install_options:
-      - --salt-config-dir={{ svi }}/etc
+      - --salt-config-dir={{ svi }}/etc/salt
       - --salt-cache-dir={{ svi }}/cache
       - --salt-sock-dir={{ svi }}/run/salt
       - --salt-srv-root-dir={{ svi }}/srv
@@ -164,6 +174,7 @@ run-salt:
     - require:
       - pip: install-salt
       - pip: supervisor
+      - file: {{ svi }}/etc/supervidor.d/salt.ini
 
 {# Setup Salt Bootstrap Source #}
 /testing:
@@ -177,3 +188,4 @@ run-salt:
     - require:
       - file: /testing
       - pkg: git
+      - supervisord: run-salt

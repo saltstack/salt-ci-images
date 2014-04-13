@@ -1,4 +1,4 @@
-{% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt.git') %}
+{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
 
 include:
   - git
@@ -27,10 +27,10 @@ include:
 /testing:
   file.directory
 
-{{git_url}}:
+{{ test_git_url }}:
   git.latest:
-    - name: {{ git_url }}
-    - rev: {{ pillar.get('git_commit', 'develop') }}
+    - name: {{ test_git_url }}
+    - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:
       - file: /testing
@@ -57,14 +57,14 @@ include:
       - pip: apache-libcloud
       - pip: requests
 
-{% if git_url != "https://github.com/saltstack/salt.git" %}
+{% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
     - name: git remote add upstream https://github.com/saltstack/salt.git
     - cwd: /testing
     - require:
-      - git: {{ git_url }}
+      - git: {{ test_git_url }}
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:

@@ -1,7 +1,7 @@
 {% set default_build_id = '0001' %}
 {% set settings = {
-    'git_url': salt['config.get']('git_url', 'https://github.com/saltstack/salt.git'),
-    'git_commit': salt['config.get']('git_commit', 'develop'),
+    'test_git_url': salt['config.get']('test_git_url', 'https://github.com/saltstack/salt.git'),
+    'test_git_commit': salt['config.get']('test_git_commit', 'develop'),
     'build_id': salt['config.get']('build_id', default_build_id),
     'master_id': 'test-halite-master-{0}'.format(salt['config.get']('build_id', default_build_id)),
     'num_minions': salt['config.get']('num_minions', '1') | int,

@@ -8,7 +8,7 @@ test-halite-minion-{{ settings.build_id }}-{{ num }}:
     - provider: rackspace
     - size: 1 GB Performance
     - image: Ubuntu 12.04 LTS (Precise Pangolin)
-    - script_args: -U -A {{ halite_master_ip }} -g {{ settings.git_url }} git {{ settings.git_commit }}
+    - script_args: -U -A {{ halite_master_ip }} -g {{ settings.test_git_url }} git {{ settings.test_git_commit }}
     - minion:
         master: {{ halite_master_ip }}
         grains: {{ settings | yaml }}

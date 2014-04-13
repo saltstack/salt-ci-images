@@ -1,5 +1,5 @@
 {% from '_python.sls' import python with context %}
-{% set git_url =  pillar.get('git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
+{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
 {% set svi = salt['config.get']('virtualenv_path', '/SaViEn') %}
 
 include:
@@ -192,10 +192,10 @@ run-salt:
 /testing:
   file.directory
 
-{{git_url}}:
+{{ test_git_url }}:
   git.latest:
-    - name: {{ git_url }}
-    - rev: {{ pillar.get('git_commit', 'develop') }}
+    - name: {{ test_git_url }}
+    - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:
       - file: /testing

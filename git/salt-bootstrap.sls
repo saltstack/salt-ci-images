@@ -165,7 +165,7 @@ install-salt:
       - pip: pycrypto
       - pip: pyzmq
       - pip: apache-libcloud
-      - pip: msgpack
+      - pip: msgpack-python
 
 run-salt:
   supervisord:

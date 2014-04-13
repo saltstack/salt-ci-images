@@ -26,6 +26,7 @@ include:
 
 {{ svi }}:
   virtualenv.managed:
+    - order: 1
     - require:
       - pip: virtualenv
 

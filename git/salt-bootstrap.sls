@@ -45,6 +45,7 @@ copy-salt-config:
   file.managed:
     - source: salt://supervisor/salt.ini
     - makedirs: true
+    - template: jinja
     - require:
       - virtualenv: {{ svi }}
 

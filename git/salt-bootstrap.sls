@@ -4,13 +4,13 @@
 
 include:
   - git
+  - python.virtualenv
   - python.pyyaml
   - python.jinja2
   - python.m2crypto
   - python.pycrypto
   - python.pyzmq
   - python.salttesting
-  - python.virtualenv
   - python.supervisor
   - python.libcloud
   - python.msgpack
@@ -43,6 +43,7 @@ copy-salt-config:
 {{ svi }}/etc/supervidor.d/salt.ini:
   file.managed:
     - source: salt://supervisor/salt.ini
+    - makedirs: true
     - require:
       - virtualenv: {{ svi }}
 

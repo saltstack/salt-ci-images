@@ -26,7 +26,7 @@ include:
 
 {{ svi }}:
   virtualenv.managed:
-    - python: {{ python }}
+    - python: {{ salt['cmd.which'](python) }}
     - order: 1
     - require:
       - pip: virtualenv

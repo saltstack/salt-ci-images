@@ -188,5 +188,8 @@ start-supervisord:
   service.running:
     - name: supervisord
     - enable: true
+    - reload: true
     - require:
       - pkg: supervisor
+    - watch:
+      - file: /etc/supervisor.d/salt.ini

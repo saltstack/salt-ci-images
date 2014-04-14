@@ -186,7 +186,7 @@ install-salt:
 
 start-supervisord:
   service.running:
-    - name: supervisor
+    - name: supervisord
     - enable: true
     - require:
       - pkg: supervisor

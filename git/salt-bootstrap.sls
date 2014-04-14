@@ -183,6 +183,15 @@ copy-salt-cache:
       - virtualenv: {{ svi }}
       - pip: install-salt
 
+copy-salt-log:
+  cmd.run:
+    - name: cp -Rp /var/log/salt/* {{ svi }}/log
+    - require:
+      - virtualenv: {{ svi }}
+      - pip: install-salt
+      - cmd: copy-salt-cache
+
+
 /etc/supervisor.d/salt.ini:
   file.managed:
     - source: salt://supervisor/salt.ini
@@ -190,6 +199,7 @@ copy-salt-cache:
     - template: jinja
     - require:
       - pip: install-salt
+      - cmd: copy-salt-log
 
 start-supervisord:
   service.running:

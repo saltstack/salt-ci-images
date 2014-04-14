@@ -188,7 +188,7 @@ start-supervisord:
   service.running:
     - name: supervisord
     - enable: true
-    - reload: true
+    - full_restart: true
     - require:
       - pkg: supervisor
     - watch:

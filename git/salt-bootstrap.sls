@@ -4,6 +4,7 @@
 
 include:
   - git
+  - supervisor
   - python.virtualenv
   - python.pyyaml
   - python.jinja2
@@ -11,7 +12,6 @@ include:
   - python.pycrypto
   - python.pyzmq
   - python.salttesting
-  - python.supervisor
   - python.libcloud
   - python.msgpack
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -42,15 +42,7 @@ copy-salt-config:
     - require:
       - virtualenv: {{ svi }}
 
-{{ svi }}/etc/supervisor.d/salt.ini:
-  file.managed:
-    - source: salt://supervisor/salt.ini
-    - makedirs: true
-    - template: jinja
-    - require:
-      - virtualenv: {{ svi }}
-
-{{ svi }}/log/supervisor:
+{{ svi }}/log:
   file.directory:
     - makedirs: true
     - require:
@@ -171,23 +163,6 @@ install-salt:
       - pip: msgpack-python
 
 
-start-supervisord:
-  cmd.run:
-    - name: {{ svi }}/bin/supervisord -c {{ svi }}/etc/supervisor.d/salt.ini
-    - require:
-      - pip: supervisor
-      - file: {{ svi }}/etc/supervisor.d/salt.ini
-
-run-salt:
-  supervisord:
-    - running
-    - name: salt
-    - bin_env: {{ svi }}/bin/supervisorctl
-    - conf_file: {{ svi }}/etc/supervisor.d/salt.ini
-    - require:
-      - pip: install-salt
-      - cmd: start-supervisord
-
 {# Setup Salt Bootstrap Source #}
 /testing:
   file.directory
@@ -200,4 +175,18 @@ run-salt:
     - require:
       - file: /testing
       - pkg: git
-      - supervisord: run-salt
+
+/etc/supervisor.d/salt.ini:
+  file.managed:
+    - source: salt://supervisor/salt.ini
+    - makedirs: true
+    - template: jinja
+    - require:
+      - pip: install-salt
+
+start-supervisord:
+  service.running:
+    - name: supervisor
+    - enable: true
+    - require:
+      - pkg: supervisor

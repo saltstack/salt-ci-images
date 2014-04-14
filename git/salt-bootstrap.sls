@@ -176,6 +176,13 @@ install-salt:
       - file: /testing
       - pkg: git
 
+copy-salt-cache:
+  cmd.run:
+    - name: cp -Rp /var/cache/salt/* {{ svi }}/var/cache
+    - require:
+      - virtualenv: {{ svi }}
+      - pip: install-salt
+
 /etc/supervisor.d/salt.ini:
   file.managed:
     - source: salt://supervisor/salt.ini

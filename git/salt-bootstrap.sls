@@ -201,6 +201,13 @@ copy-salt-log:
       - pip: install-salt
       - cmd: copy-salt-log
 
+{# The new minion will include the runtests:true grain, let's set that same grain
+   on the old minion to false #}
+reset-runtests-grain:
+  grains.present:
+    - name: runtests
+    - value: false
+
 start-supervisord:
   service.running:
     - name: supervisord

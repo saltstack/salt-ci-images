@@ -23,6 +23,7 @@ include:
   - python.unittest-xml-reporting
   - python.libcloud
   - python.requests
+  - python.keyring
 
 /testing:
   file.directory
@@ -56,6 +57,7 @@ include:
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
       - pip: requests
+      - pip: keyring
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

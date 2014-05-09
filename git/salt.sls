@@ -24,6 +24,7 @@ include:
   - python.libcloud
   - python.requests
   - python.keyring
+  - python.gnupg
 
 /testing:
   file.directory
@@ -58,6 +59,7 @@ include:
       - pip: apache-libcloud
       - pip: requests
       - pip: keyring
+      - pip: gnupg
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

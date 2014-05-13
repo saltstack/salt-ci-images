@@ -15,9 +15,9 @@ def python_executable():
     Return the system's python binray
     '''
     if __grains__['os'] == 'Arch':
-        return {'python-executable', 'python2'}
+        return {'pythonexecutable', 'python2'}
 
     if __grains__['os_family'] == 'RedHat' and __grains__['osmajorrelease'][0] == '5':
-        return {'python-executable', 'python2'}
+        return {'pythonexecutable', 'python2'}
 
-    return {'python-executable', 'python'}
+    return {'pythonexecutable', 'python'}

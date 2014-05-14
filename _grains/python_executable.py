@@ -17,4 +17,4 @@ def python_executable():
     '''
     Return the system's python binray
     '''
-    return {'pythonexecutable', sys.executable}
+    return {'pythonexecutable': sys.executable}

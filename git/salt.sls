@@ -2,6 +2,7 @@
 
 include:
   - git
+  - npm
   - patch
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
@@ -37,6 +38,7 @@ include:
     - require:
       - file: /testing
       - pkg: git
+      - pkg: npm
       - pkg: patch
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}

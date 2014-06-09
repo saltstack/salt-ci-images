@@ -64,7 +64,7 @@ include:
       - pip: requests
       - pip: keyring
       - pip: gnupg
-      - pip: gitpython
+      - cmd: gitpython
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

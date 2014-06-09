@@ -1,3 +1,4 @@
+{% from 'npm.sls' import npm with context %}
 {% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
 
 include:
@@ -38,7 +39,7 @@ include:
     - require:
       - file: /testing
       - pkg: git
-      - pkg: npm
+      - pkg: {{ npm }}
       - pkg: patch
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}

@@ -5,6 +5,7 @@
 {% set npm = 'nodejs' %}
 {% else %}
 {% set npm = 'npm' %}
+{% endif %}
 
 {{ npm }}:
   pkg.installed

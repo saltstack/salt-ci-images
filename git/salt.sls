@@ -1,4 +1,5 @@
 {% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
+{% set test_transport =  pillar.get('test_transport', 'zeromq') %}
 
 include:
   - git
@@ -26,6 +27,11 @@ include:
   - python.keyring
   - python.gnupg
   - python.gitpython
+  {%- if test_transport == 'raet' %}
+  - python.libnacl
+  - python.ioflo
+  - python.raet
+  {%- endif %}
 
 /testing:
   file.directory
@@ -62,6 +68,11 @@ include:
       - pip: keyring
       - pip: gnupg
       - cmd: gitpython
+      {%- if test_transport == 'raet' %}
+      - pip: libnacl
+      - pip: ioflo
+      - pip: raet
+      {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

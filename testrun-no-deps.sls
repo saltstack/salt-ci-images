@@ -1,5 +1,5 @@
 {% from '_python.sls' import python with context %}
-{% set test_transport =  pillar.get('test_transport', 'zeromq') %}
+{% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 test_cmd:
 {%- if 'runtests.run' in salt %}

@@ -1,6 +1,6 @@
 {% from '_python.sls' import python with context %}
 {% import 'git/salt.sls' as gitsalt with context %}
-{% set test_transport =  pillar.get('test_transport', 'zeromq') %}
+{% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
   - git.salt

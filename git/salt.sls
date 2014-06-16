@@ -1,5 +1,5 @@
 {% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
-{% set test_transport =  pillar.get('test_transport', 'zeromq') %}
+{% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
   - git

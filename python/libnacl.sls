@@ -1,5 +1,8 @@
+{% from 'libsodium.sls' import libsodium with context %}
+
 include:
   - python.pip
+  - libsodium
 
 libnacl:
   pip.installed:
@@ -8,4 +11,5 @@ libnacl:
     {%- endif %}
     - require:
       - cmd: python-pip
+      - pkg: {{ libsodium }}
 

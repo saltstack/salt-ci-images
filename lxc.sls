@@ -1,0 +1,3 @@
+lxc:
+  pkg:
+    - installed

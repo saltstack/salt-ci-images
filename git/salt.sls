@@ -32,6 +32,9 @@ include:
   - python.ioflo
   - python.raet
   {%- endif %}
+  {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  - lxc
+  {%- endif %}
 
 /testing:
   file.directory
@@ -72,6 +75,9 @@ include:
       - pip: libnacl
       - pip: ioflo
       - pip: raet
+      {%- endif %}
+      {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      - pkg: lxc
       {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

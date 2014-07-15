@@ -7,6 +7,6 @@
 {% endif %}
 lxc-packages:
   pkg.latest:
-    -pkgs:
+    - pkgs:
       - lxc
       - {{ cgmanager }}

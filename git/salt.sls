@@ -26,6 +26,7 @@ include:
   - python.requests
   - python.keyring
   - python.gnupg
+  - python.cherrypy
   - python.gitpython
   {%- if test_transport == 'raet' %}
   - python.libnacl
@@ -70,6 +71,7 @@ include:
       - pip: requests
       - pip: keyring
       - pip: gnupg
+      - pip: cherrypy
       - cmd: gitpython
       {%- if test_transport == 'raet' %}
       - pip: libnacl

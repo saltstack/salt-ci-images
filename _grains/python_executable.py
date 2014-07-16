@@ -15,6 +15,6 @@ import sys
 
 def python_executable():
     '''
-    Return the system's python binray
+    Return the system's python binary
     '''
     return {'pythonexecutable': sys.executable}

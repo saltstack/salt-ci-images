@@ -36,6 +36,9 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - lxc
   {%- endif %}
+  {%- if grains['os'] == 'openSUSE' %}
+  - python-zypp
+  {%- endif %}
 
 /testing:
   file.directory
@@ -80,6 +83,9 @@ include:
       {%- endif %}
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
       - pkg: lxc
+      {%- endif %}
+      {%- if grains['os'] == 'openSUSE' %}
+      - cmd: python-zypp
       {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

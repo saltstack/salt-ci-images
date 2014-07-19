@@ -5,7 +5,7 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
   font-size: 12px;
 }
 
-#top-panel {
+#top-panel, #header {
   height: 48px;
   background-color: #F7F9F8;
   background-repeat: no-repeat;
@@ -16,12 +16,12 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
   color: #333;
 }
 
-#top-panel img:first-child {
+#top-panel img:first-child, img#jenkins-head-icon, img#jenkins-name-icon {
   background-image: none;
   display: none;
 }
 
-#top-panel table:first-child {
+#top-panel table:first-child, #header {
   height: 48px;
   border-bottom: 1px solid #BBB;
 }
@@ -38,7 +38,7 @@ body>table:last-child {
   font-family: 'Open Sans Extrabold';
 }
 
-#main-table > tbody > tr >  td:first-child {
+#main-table > tbody > tr >  td:first-child, #side-panel {
   background-image: url(../img/saltstack-logo-color.png);
   background-repeat: no-repeat;
   background-position: bottom center;

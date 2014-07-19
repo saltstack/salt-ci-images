@@ -43,3 +43,11 @@ body>table:last-child {
   background-repeat: no-repeat;
   background-position: bottom center;
 }
+
+a.task-link {
+  text-decoration: none;
+}
+
+#tasks {
+  font-size: smaller;
+}

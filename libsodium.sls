@@ -1,6 +1,8 @@
 {%- if grains['os'] == 'Gentoo' %}
   {% set libsodium = 'dev-libs/libsodium' %}
-{% else %}
+{% elif grains['os'] == 'openSUSE' %}
+  {% set libsodium = 'libsodium-devel' %}
+{%- else %}
   {% set libsodium = 'libsodium' %}
 {%- endif %}
 

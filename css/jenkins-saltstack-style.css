@@ -12,7 +12,7 @@ body, p, table, tr, td, strong, h1, h2, h3, h4, h5, h6, blockquote, li {
   background-image: url('../img/saltstack_logo.png');
 }
 
-#top-panel, #login-field SPAN, #login-field A, #header .login {
+#top-panel, #login-field SPAN, #login-field A, #header .login, #header .login a, #header .login a:visited {
   color: #333;
 }
 

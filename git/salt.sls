@@ -28,6 +28,8 @@ include:
   - python.gnupg
   - python.cherrypy
   - python.gitpython
+  - python.boto
+  - python.moto
   {%- if test_transport == 'raet' %}
   - python.libnacl
   - python.ioflo
@@ -75,6 +77,8 @@ include:
       - pip: keyring
       - pip: gnupg
       - pip: cherrypy
+      - pip: boto
+      - pip: moto
       - cmd: gitpython
       {%- if test_transport == 'raet' %}
       - pip: libnacl

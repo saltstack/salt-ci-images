@@ -28,6 +28,7 @@ include:
   - python.gnupg
   - python.cherrypy
   - python.gitpython
+  - python.supervisor
   - python.boto
   - python.moto
   {%- if test_transport == 'raet' %}
@@ -77,6 +78,7 @@ include:
       - pip: keyring
       - pip: gnupg
       - pip: cherrypy
+      - pip: supervisor
       - pip: boto
       - pip: moto
       - cmd: gitpython

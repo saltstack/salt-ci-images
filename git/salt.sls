@@ -30,6 +30,7 @@ include:
   - python.gitpython
   - python.boto
   - python.moto
+  - python.dnsutils
   {%- if test_transport == 'raet' %}
   - python.libnacl
   - python.ioflo
@@ -80,6 +81,7 @@ include:
       - pip: boto
       - pip: moto
       - cmd: gitpython
+      - pkg: dnsutils
       {%- if test_transport == 'raet' %}
       - pip: libnacl
       - pip: ioflo

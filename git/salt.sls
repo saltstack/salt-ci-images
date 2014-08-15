@@ -31,6 +31,7 @@ include:
   - python.supervisor
   - python.boto
   - python.moto
+  - python.psutil
   {%- if test_transport == 'raet' %}
   - python.libnacl
   - python.ioflo
@@ -81,6 +82,7 @@ include:
       - pip: supervisor
       - pip: boto
       - pip: moto
+      - pip: pstuil
       - cmd: gitpython
       {%- if test_transport == 'raet' %}
       - pip: libnacl

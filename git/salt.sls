@@ -83,7 +83,7 @@ include:
       - pip: supervisor
       - pip: boto
       - pip: moto
-      - pip: pstuil
+      - pip: psutil
       - cmd: gitpython
       - pkg: dnsutils
       {%- if test_transport == 'raet' %}

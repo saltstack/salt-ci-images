@@ -44,6 +44,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
+  - mysqldb
 
 /testing:
   file.directory
@@ -86,6 +87,7 @@ include:
       - pip: psutil
       - cmd: gitpython
       - pkg: dnsutils
+      - pkg: mysqldb
       {%- if test_transport == 'raet' %}
       - pip: libnacl
       - pip: ioflo

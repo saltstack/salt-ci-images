@@ -20,3 +20,10 @@ test_cmd:
     {%- endif %}
     - env:
       - XML_TESTS_OUTPUT_DIR: /tmp/xml-unitests-output
+
+sdist_cmd:
+  cmd.run:
+    - name: '{{ python }} setup.py sdist'
+    - cwd: '/testing'
+    - require:
+      - cmd: test_cmd

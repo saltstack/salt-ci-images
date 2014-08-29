@@ -5,7 +5,7 @@
 {% elif grains['os_family'] == 'Suse' %}
   {% set mysqldb = 'python-mysql' %}
 {% elif grains['os_family'] == 'FreeBSD' %}
-  {% set mysqldb = 'databases/py-MySQLdb' %}
+  {% set mysqldb = 'py27-MySQLdb' %}
 {% else %}
   {% set mysqldb = 'python-mysqldb' %}
 {% endif %}

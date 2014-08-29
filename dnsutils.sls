@@ -4,7 +4,7 @@
 {% elif grains['os'] == 'Gentoo' %}
   {% set dnsutils = 'bind-tools' %}
 {% elif grains['os_family'] == 'FreeBSD' %}
-  {% set dnsutils = 'dns/bind-tools' %}
+  {% set dnsutils = 'bind-tools' %}
 {% else %}
   {% set dnsutils = 'dnsutils' %}
 {% endif %}

@@ -32,7 +32,7 @@ include:
   - python.boto
   - python.moto
   - python.psutil
-  - python.dnsutils
+  - dnsutils
   {%- if test_transport == 'raet' %}
   - python.libnacl
   - python.ioflo
@@ -44,7 +44,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
-  - mysqldb
+  - python.mysqldb
 
 /testing:
   file.directory

@@ -4,6 +4,8 @@
   {% set mysqldb = 'MySQL-python' %}
 {% elif grains['os_family'] == 'Suse' %}
   {% set mysqldb = 'python-mysql' %}
+{% elif grains['os_family'] == 'FreeBSD' %}
+  {% set mysqldb = 'databases/py-MySQLdb' %}
 {% else %}
   {% set mysqldb = 'python-mysqldb' %}
 {% endif %}

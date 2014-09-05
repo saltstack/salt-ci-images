@@ -1,3 +1,3 @@
 sshpass:
   pkg.installed:
-    - name: sshpas
+    - name: sshpass

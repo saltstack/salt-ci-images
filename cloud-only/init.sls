@@ -13,6 +13,7 @@ include:
   - python.libcloud
   - python.requests
   - python.keyring
+  - cloud-only.sshpass
 
 /testing:
   file.directory
@@ -36,6 +37,7 @@ include:
       - pip: apache-libcloud
       - pip: requests
       - pip: keyring
+      - pkg: sshpass
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

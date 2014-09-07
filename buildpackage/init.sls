@@ -6,6 +6,7 @@
 
 {% set source_dir = "/testing" %}
 {% set additional_args = "" %}
+{% set python = "python" %}
 
 {% if grains["os"] in run_on %}
 
@@ -24,9 +25,8 @@
 
 
 {% if platform is not None %}
-
 run_buildpackage:
   cmd:
     - run
-    - name: '{{ source_dir }}/tests/buildpackage.py --platform={{ platform }} --log-level=debug --source-dir={{ source_dir }} --dest-dir=/tmp/saltpkg {{ additional_args }}'
+    - name: '{{ python }} {{ source_dir }}/tests/buildpackage.py --platform={{ platform }} --log-level=debug --source-dir={{ source_dir }} --dest-dir=/tmp/saltpkg {{ additional_args }}'
 {% endif %}

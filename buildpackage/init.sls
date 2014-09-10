@@ -4,6 +4,7 @@
   }
 %}
 
+{% set platform = None %}
 {% set source_dir = "/testing" %}
 {% set additional_args = "" %}
 {% set python = "python" %}

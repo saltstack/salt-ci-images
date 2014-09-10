@@ -24,7 +24,7 @@
 {% endif %}
 
 
-{% if platform is not None %}
+{% if platform != None %}
 run_buildpackage:
   cmd:
     - run

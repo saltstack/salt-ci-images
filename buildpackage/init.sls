@@ -1,5 +1,5 @@
 {%
-  run_on = {
+  set run_on = {
     "CentOS": ("6",)
   }
 %}

@@ -1,6 +1,6 @@
 {%
   set run_on = {
-    "CentOS": ("6",)
+    "CentOS": (6,)
   }
 %}
 
@@ -13,12 +13,7 @@
 
   {% if grains["os"] == "CentOS" %}
 
-show_osmajorrelease:
-  cmd:
-    - run
-    - name: echo '...{{ grains["osmajorrelease"] }}...'
-
-    {% if grains["osmajorrelease"] in run_on[grains["os"]] %}
+    {% if grains["osrelease"]|int in run_on[grains["os"]] %}
 
     {% set platform = "CentOS" %}
     {% set additional_args = "--spec={{ source_dir }}/tests/pkg/rpm/salt.spec" %}

@@ -1,5 +1,4 @@
-{%
-  set run_on = {
+{% set run_on = {
     "CentOS": (6,)
   }
 %}
@@ -16,7 +15,7 @@
     {% if grains["osrelease"]|int in run_on[grains["os"]] %}
 
     {% set platform = "CentOS" %}
-    {% set additional_args = "--spec={{ source_dir }}/tests/pkg/rpm/salt.spec" %}
+    {% set additional_args = "--spec=" + source_dir + "/tests/pkg/rpm/salt.spec" %}
 
     {% endif %}
 

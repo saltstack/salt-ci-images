@@ -4,7 +4,7 @@
   }
 %}
 
-{% set platform = None %}
+{% set platform = "" %}
 {% set source_dir = "/testing" %}
 {% set additional_args = "" %}
 {% set python = "python" %}
@@ -12,6 +12,11 @@
 {% if grains["os"] in run_on %}
 
   {% if grains["os"] == "CentOS" %}
+
+show_osmajorrelease:
+  cmd:
+    - run
+    - name: echo '...{{ grains["osmajorrelease"] }}...'
 
     {% if grains["osmajorrelease"] in run_on[grains["os"]] %}
 
@@ -25,7 +30,7 @@
 {% endif %}
 
 
-{% if platform != None %}
+{% if platform %}
 run_buildpackage:
   cmd:
     - run

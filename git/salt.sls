@@ -13,6 +13,7 @@ include:
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
+  - python.argparse
   {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
@@ -71,6 +72,7 @@ include:
       - pip: virtualenv
       {%- if grains.get('pythonversion')[:2] < [2, 7] %}
       - pip: unittest2
+      - pip: argparse
       {%- endif %}
       - pip: mock
       - pip: timelib

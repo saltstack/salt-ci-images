@@ -1,5 +1,5 @@
 {% set run_on = {
-    "CentOS": (6,)
+    "CentOS": (5, 6)
   }
 %}
 
@@ -23,6 +23,11 @@
   {% if grains["os"] == "CentOS" %}
 
     {% if grains["osrelease"]|int in run_on[grains["os"]] %}
+
+      {# RHEL5 uses python26 since the default python is 2.4 #}
+      {% if grains["osrelease"]|int == 5 %}
+      {% set python = "python26" %}
+      {% endif %}
 
     {% set platform = "CentOS" %}
     {% set additional_args = "--spec=" + source_dir + "/tests/pkg/rpm/salt.spec" %}

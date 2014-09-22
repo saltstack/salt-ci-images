@@ -29,4 +29,4 @@ tests_pubkey:
     - present
     - user: {{ test_username }}
     - names:
-      - {{ pillar.get('tests_pubkey') }}
+      - {{ pillar.get('test_pubkey') }}

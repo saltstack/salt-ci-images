@@ -8,6 +8,8 @@ sudo:
     - home: /home/{{ test_username }}
     - createhome: True
     - empty_password: True
+    - groups:
+      - root
 
 /etc/sudoers.d/{{ test_username }}:
   file.managed:

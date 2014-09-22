@@ -30,3 +30,10 @@ tests_pubkey:
     - user: {{ test_username }}
     - names:
       - {{ pillar.get('test_pubkey') }}
+
+tests_pubkey:
+  ssh_auth:
+    - present
+    - user: root
+    - names:
+      - {{ pillar.get('test_pubkey') }}

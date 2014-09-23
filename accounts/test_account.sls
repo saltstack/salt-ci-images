@@ -31,7 +31,7 @@ tests_pubkey:
     - names:
       - {{ pillar.get('test_pubkey') }}
 
-tests_pubkey:
+tests_pubkey_root:
   ssh_auth:
     - present
     - user: root

@@ -37,3 +37,19 @@ tests_pubkey_root:
     - user: root
     - names:
       - {{ pillar.get('test_pubkey') }}
+
+commend_out_permit_root_login_no:
+  file.replace:
+    - name: /etc/ssh/sshd_config
+    - pattern: 'PermitRootLogin no'
+    - repl: '#PermitRootLogin no'
+
+append_permit_root_login_yes:
+  file.append:
+    - name: /etc/ssh/sshd_config
+    - text: PermitRootLogin yes
+
+sshd:
+  service:
+    - running
+    - full_restart: True

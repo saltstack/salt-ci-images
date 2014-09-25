@@ -43,13 +43,13 @@ commend_out_permit_root_login_no:
     - name: /etc/ssh/sshd_config
     - pattern: 'PermitRootLogin no'
     - repl: '#PermitRootLogin no'
+    - onlyif: grep -q '^PermitRootLogin no$' /etc/ssh/sshd_config
 
 append_permit_root_login_yes:
   file.append:
     - name: /etc/ssh/sshd_config
     - text: PermitRootLogin yes
-    - require:
-      - file: commend_out_permit_root_login_no
+    - onlyif: grep -qv '^PermitRootLogin yes$' /etc/ssh/sshd_config
 
 sshd:
   service.running:

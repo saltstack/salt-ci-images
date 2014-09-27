@@ -1,6 +1,10 @@
 {% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
+{% if grains['osfinger'] == 'CentOS-5' %}
+  {% set test_git_url = test_git_url.replace('https://', 'git://') %}
+{% endif %}
+
 include:
   - git
   - patch

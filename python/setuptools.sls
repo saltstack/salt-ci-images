@@ -23,7 +23,7 @@ python-setuptools:
   cmd:
     - run
     - cwd: /
-    - name: curl -L {{ ez_setup_url }} {% if grains['osfinger'] == 'CentOS-5' %}--insecure{% endif %} | {{ python }}
+    - name: curl -L {{ ez_setup_url }} {% if grains['osfinger'] == 'CentOS-5' %}--insecure{% endif %} | {{ python }}{% if grains['osfinger'] == 'CentOS-5' %} - --insecure{% endif %}
     - require:
       - pkg: curl
       {%- if grains['osfinger'] == 'CentOS-5' %}

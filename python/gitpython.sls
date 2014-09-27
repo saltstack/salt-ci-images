@@ -1,3 +1,5 @@
+{% from 'python/setuptools.sls' import easy_install with context %}
+
 include:
   - git
   - python.setuptools
@@ -9,9 +11,9 @@ gitpython:
     - cwd: /
     {% if grains['os'] == 'SmartOS' %}
     {#- Adapt to SmartOS's script directory #}
-    - name: easy_install --script-dir=/opt/local/bin -U 'GitPython>=0.3.2rc1'
+    - name: {{ easy_install }} --script-dir=/opt/local/bin -U 'GitPython>=0.3.2rc1'
     {%- else %}
-    - name: easy_install --script-dir=/usr/bin -U 'GitPython>=0.3.2rc1'
+    - name: {{ easy_install }} --script-dir=/usr/bin -U 'GitPython>=0.3.2rc1'
     {%- endif %}
     - require:
       - pkg: git

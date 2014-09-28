@@ -1,5 +1,3 @@
-{% from 'python/setuptools.sls' import easy_install with context %}
-
 include:
   - python.setuptools
   {%- if grains['os'] == 'openSUSE' %}
@@ -24,9 +22,9 @@ python-pip:
     - cwd: /
     {% if grains['os'] == 'SmartOS' %}
     {#- Adapt to SmartOS's script directory #}
-    - name: {{ easy_install }} --script-dir=/opt/local/bin -U distribute pip virtualenv==1.10
+    - name: easy_install --script-dir=/opt/local/bin -U distribute pip virtualenv==1.10
     {%- else %}
-    - name: {{ easy_install }} --script-dir=/usr/bin -U pip distribute virtualenv==1.10
+    - name: easy_install --script-dir=/usr/bin -U pip distribute virtualenv==1.10
     {%- endif %}
     - reload_modules: true
     - require:

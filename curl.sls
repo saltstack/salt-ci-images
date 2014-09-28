@@ -19,7 +19,12 @@ curl:
 
 
 {% if grains['osfinger'] == 'CentOS-5' %}
-openssl:
+{#- openssl:
   pkg.latest:
     - fromrepo: epel-testing
+#}
+update-openssl:
+  cmd:
+    - run
+    - name: yum update -y --enablerepo=epel openssl
 {% endif %}

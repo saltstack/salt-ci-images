@@ -16,3 +16,14 @@ curl:
     - require:
       - pkg: ca-certificates-mozilla
     {%- endif %}
+
+
+{% if grains['osfinger'] == 'CentOS-5' %}
+update-certs:
+  cmd:
+    - run
+    - cwd: /
+    - name: curl http://curl.haxx.se/ca/cacert.pem -o /etc/pki/tls/certs/ca-bundle.crt
+    - require:
+      - pkg: curl
+{% endif %}

@@ -106,11 +106,15 @@ include:
       - cmd: python-zypp
       {%- endif %}
 
-{% if test_git_url != "https://github.com/saltstack/salt.git" %}
+{% if test_git_url not in ("https://github.com/saltstack/salt.git", "git://github.com/saltstack/salt.git") %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
+    {%- if grains['osfinger'] == 'CentOS-5' %}
+    - name: git remote add upstream git://github.com/saltstack/salt.git
+    {%. else %}
     - name: git remote add upstream https://github.com/saltstack/salt.git
+    {% endif %}
     - cwd: /testing
     - require:
       - git: {{ test_git_url }}

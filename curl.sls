@@ -21,5 +21,5 @@ curl:
 {% if grains['osfinger'] == 'CentOS-5' %}
 openssl:
   pkg.latest:
-    - repo: epel-testing
+    - fromrepo: epel-testing
 {% endif %}

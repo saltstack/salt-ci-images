@@ -112,9 +112,9 @@ add-upstream-repo:
   cmd.run:
     {%- if grains['osfinger'] == 'CentOS-5' %}
     - name: git remote add upstream git://github.com/saltstack/salt.git
-    {%. else %}
+    {%- else %}
     - name: git remote add upstream https://github.com/saltstack/salt.git
-    {% endif %}
+    {%- endif %}
     - cwd: /testing
     - require:
       - git: {{ test_git_url }}

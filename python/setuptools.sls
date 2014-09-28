@@ -10,7 +10,7 @@
 
 include:
   - curl
-  {%- if grains['osfinger'] == 'CentOS-5' %}
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
   - python26
   {%- endif %}
 
@@ -23,7 +23,7 @@ python-setuptools:
   cmd:
     - run
     - cwd: /
-    - name: curl -L {{ ez_setup_url }} {% if grains['osfinger'] == 'CentOS-5' %}--insecure{% endif %} | {{ python }}
+    - name: curl -L {{ ez_setup_url }} | {{ python }}{% if grains['osfinger'] == 'CentOS-5' %} - --insecure{% endif %}
     - require:
       - pkg: curl
       {%- if grains['osfinger'] == 'CentOS-5' %}

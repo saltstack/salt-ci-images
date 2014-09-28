@@ -20,6 +20,6 @@ curl:
 
 {% if grains['osfinger'] == 'CentOS-5' %}
 openssl:
-  pkg.installed:
+  pkg.latest:
     - repo: epel-testing
 {% endif %}

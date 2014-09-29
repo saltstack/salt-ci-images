@@ -18,7 +18,7 @@ curl:
     {%- endif %}
 
 
-{% if grains['osfinger'] == 'CentOS-5' %}
+{% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
 openssl:
   pkg.latest
 

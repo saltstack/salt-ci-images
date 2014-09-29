@@ -1,6 +1,7 @@
 {% from '_python.sls' import python with context %}
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 {% set cloud_only = pillar.get('cloud_only', False) %}
+{% set git_branch = pillar.get('git_branch', '') %}
 
 test_cmd:
 {%- if 'runtests.run' in salt %}
@@ -11,7 +12,7 @@ test_cmd:
 {% if cloud_only == True %}
     - name: '{{ python }} /testing/tests/runtests.py -v --cloud-provider-tests --run-destructive --sysinfo --no-colors --xml=/tmp/xml-unitests-output --coverage-xml=/tmp/coverage.xml --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
 {% else %}
-    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors --ssh --xml=/tmp/xml-unitests-output --coverage-xml=/tmp/coverage.xml --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
+    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors{% if git_branch not in ('2014.1',) %} --ssh{% endif %} --xml=/tmp/xml-unitests-output --coverage-xml=/tmp/coverage.xml --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
 {% endif %}
     - order: last
     - env:

@@ -3,12 +3,6 @@
 
 include:
   - git
-  - patch
-  {#-
-  {%- if grains['os_family'] not in ('FreeBSD',) %}
-  - subversion
-  {%- endif %}
-  #}
   - python.salttesting
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
@@ -20,16 +14,6 @@ include:
   {%- endif %}
   - python.mock
   - python.unittest-xml-reporting
-  - python.libcloud
-  - python.requests
-  {%- if test_transport == 'raet' %}
-  - python.libnacl
-  - python.ioflo
-  - python.raet
-  {%- endif %}
-  {%- if grains['os'] == 'openSUSE' %}
-  - python-zypp
-  {%- endif %}
 
 /testing:
   file.directory
@@ -59,15 +43,6 @@ include:
       {%- endif %}
       - pip: mock
       - pip: unittest-xml-reporting
-      - pip: requests
-      {%- if test_transport == 'raet' %}
-      - pip: libnacl
-      - pip: ioflo
-      - pip: raet
-      {%- endif %}
-      {%- if grains['os'] == 'openSUSE' %}
-      - cmd: python-zypp
-      {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt-boostrap.git" %}
 {#- Add Salt Upstream Git Repo #}

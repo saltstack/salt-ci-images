@@ -26,12 +26,6 @@ include:
     - require:
       - file: /testing
       - pkg: git
-      - pkg: patch
-      {#-
-      {%- if grains['os_family'] not in ('FreeBSD',) %}
-      - pkg: subversion
-      {%- endif %}
-      #}
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml

@@ -1,3 +1,4 @@
+{#-
 {% set test_username = pillar.get('test_username', 'testuser') %}
 sudo:
   pkg.installed
@@ -30,6 +31,8 @@ tests_pubkey:
     - user: {{ test_username }}
     - names:
       - {{ pillar.get('test_pubkey') }}
+
+-#}
 
 tests_pubkey_root:
   ssh_auth:

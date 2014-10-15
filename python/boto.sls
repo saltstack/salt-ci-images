@@ -3,6 +3,7 @@ include:
 
 boto:
   pip.installed:
+    - name: boto >= 2.33.0
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

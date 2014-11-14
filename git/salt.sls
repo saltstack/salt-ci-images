@@ -33,6 +33,7 @@ include:
   - python.boto
   - python.moto
   - python.psutil
+  - python.tornado
   - dnsutils
   {%- if test_transport == 'raet' %}
   - python.libnacl
@@ -87,6 +88,7 @@ include:
       - pip: boto
       - pip: moto
       - pip: psutil
+      - pip: tornado
       - cmd: gitpython
       - pkg: dnsutils
       - pkg: mysqldb

@@ -77,6 +77,3 @@ sshd:
   service.running:
     - watch:
       - file: append_permit_root_login_yes
-      - file: commend_out_permit_root_login_no
-      - file: debug_sshd_logging_append
-      - file: debug_sshd_logging_replace

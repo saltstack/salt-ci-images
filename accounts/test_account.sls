@@ -44,15 +44,15 @@ tests_pubkey_root:
 debug_sshd_logging_replace:
   file.replace:
     - name: /etc/ssh/sshd_config
-    - pattern: 'LogLevel INFO'
+    - pattern: 'LogLevel (.*)'
     - repl: 'LogLevel DEBUG3'
-    - onlyif: grep -q '^LogLevel INFO$' /etc/ssh/sshd_config
+    - onlyif: grep -Eq '^LogLevel (.*)$' /etc/ssh/sshd_config
 
 debug_sshd_logging_append:
   file.append:
     - name: /etc/ssh/sshd_config
     - text: LogLevel DEBUG3
-    - onlyif: grep -q '^#LogLevel .*$' /etc/ssh/sshd_config
+    - onlyif: grep -Eq '^#LogLevel (.*)$' /etc/ssh/sshd_config
 
 append_permit_root_login_yes:
   file.append:

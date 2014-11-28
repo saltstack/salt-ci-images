@@ -54,12 +54,6 @@ debug_sshd_logging_append:
     - text: LogLevel DEBUG3
     - onlyif: grep -Eq '^#LogLevel (.*)$' /etc/ssh/sshd_config
 
-append_permit_root_login_yes:
-  file.append:
-    - name: /etc/ssh/sshd_config
-    - text: PermitRootLogin yes
-    - onlyif: grep -qv '^PermitRootLogin yes$' /etc/ssh/sshd_config
-
 commend_out_permit_root_login_no:
   file.replace:
     - name: /etc/ssh/sshd_config

@@ -3,7 +3,7 @@ include:
 
 unittest-xml-reporting:
   pip.installed:
-    - name: https://github.com/xmlrunner/unittest-xml-reporting.git#egg=unittest-xml-reporting
+    - name: git+https://github.com/xmlrunner/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

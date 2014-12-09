@@ -1,7 +1,7 @@
 {%- if grains['os'] == 'Ubuntu' %}
   {% set ssh_service = 'ssh' %}
 {%- else %}
-  {% set ssh_service = 'ssh' %}
+  {% set ssh_service = 'sshd' %}
 {%- endif %}
 
 tests_pubkey_root:

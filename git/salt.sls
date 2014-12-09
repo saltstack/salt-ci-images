@@ -51,7 +51,7 @@ include:
 /testing:
   file.directory
 
-{{ test_git_url }}:
+clone_salt:
   git.latest:
     - name: {{ test_git_url }}
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
@@ -111,7 +111,7 @@ add-upstream-repo:
     - name: git remote add upstream https://github.com/saltstack/salt.git
     - cwd: /testing
     - require:
-      - git: {{ test_git_url }}
+      - git: clone_salt
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:

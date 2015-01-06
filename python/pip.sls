@@ -31,6 +31,7 @@ python-pip:
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml
+      - pkg: ca-certificates
       {%- endif %}
       {%- if grains['os'] == 'Fedora' %}
       - pkg: openssl-dev-libs

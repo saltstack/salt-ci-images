@@ -3,7 +3,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
-  - ca-certificates
+  - python.ca-certificates
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
   - openssl-dev

@@ -1,2 +1,2 @@
 ca-certificates:
-  pkg.installed
+  pkg.latest

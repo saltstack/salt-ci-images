@@ -37,6 +37,9 @@ body>table:last-child {
 #footer {
   font-family: 'Open Sans Extrabold';
 }
+#footer-container {
+  display: none;
+}
 
 #main-table > tbody > tr >  td:first-child, #side-panel {
   background-image: url(../img/saltstack-logo-color.png);

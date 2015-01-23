@@ -4,6 +4,7 @@
 include:
   - git
   - patch
+  - sed
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
@@ -61,6 +62,7 @@ clone-salt-repo:
       - file: /testing
       - pkg: git
       - pkg: patch
+      - pkg: sed
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion

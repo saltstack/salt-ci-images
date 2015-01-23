@@ -47,6 +47,7 @@ include:
   - python-zypp
   {%- endif %}
   - python.mysqldb
+  - python.dns
 
 /testing:
   file.directory
@@ -103,6 +104,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'openSUSE' %}
       - cmd: python-zypp
       {%- endif %}
+      - pip: dnspython
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

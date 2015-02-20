@@ -109,6 +109,8 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
+      - pkg: npm
+      - npm: bower
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

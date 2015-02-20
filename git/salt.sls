@@ -49,6 +49,8 @@ include:
   {%- endif %}
   - python.mysqldb
   - python.dns
+  - npm
+  - bower
 
 /testing:
   file.directory

@@ -7,7 +7,8 @@
   {%- set npm = 'npm' %}
 {% endif %}
 
-{{ npm }}:
-  pkg.installed
+npm:
+  pkg.installed:
+    - name: {{ npm }}
 
 {% endif %}

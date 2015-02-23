@@ -49,8 +49,10 @@ include:
   {%- endif %}
   - python.mysqldb
   - python.dns
+  {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('14.') %}
   - npm
   - bower
+  {%- endif %}
 
 /testing:
   file.directory

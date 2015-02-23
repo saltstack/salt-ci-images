@@ -49,7 +49,7 @@ include:
   {%- endif %}
   - python.mysqldb
   - python.dns
-  {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if grains['os'] != 'Debian' or grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}
@@ -111,7 +111,7 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if grains['os'] != 'Debian' or grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
       - pkg: npm
       - npm: bower
       {%- endif %}

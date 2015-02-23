@@ -49,8 +49,10 @@ include:
   {%- endif %}
   - python.mysqldb
   - python.dns
+  {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
+  {%- endif %}
 
 /testing:
   file.directory
@@ -109,8 +111,10 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
+      {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
       - pkg: npm
       - npm: bower
+      {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

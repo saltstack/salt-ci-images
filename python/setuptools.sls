@@ -6,7 +6,7 @@
   {% set python = 'python' %}
 {% endif %}
 
-{% set ez_setup_url = 'https://www.dropbox.com/s/r0ypau3mx4spspw/ez_setup.py' %}
+{% set ez_setup_url = 'https://dl.dropboxusercontent.com/u/44447377/setuptools/ez_setup.py' %}
 
 include:
   - curl

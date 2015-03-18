@@ -3,7 +3,7 @@ include:
 
 azure:
   pip.installed:
-    {%- if (grains['os'] != 'CentOS' %}
+    {%- if (grains['os'] == 'CentOS') %}
     - name: azure==0.8.3
     {%- else %}
     - name: azure

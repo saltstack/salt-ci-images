@@ -61,6 +61,7 @@ clone-salt-repo:
   git.latest:
     - name: {{ test_git_url }}
     - always_fetch: True
+    - force_checkout: True
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:

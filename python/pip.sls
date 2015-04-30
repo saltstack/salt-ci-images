@@ -1,40 +1,24 @@
+{% if grains['os'] == 'Arch' %}
+  {% set python = 'python2' %}
+{% elif grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+  {% set python = 'python26' %}
+{% else %}
+  {% set python = 'python' %}
+{% endif %}
+
+
 include:
-  - python.setuptools
-  {%- if grains['os'] == 'openSUSE' %}
-  {#- Yes! openSuse ships xml as separate package #}
-  - python.xml
-  - python.ca-certificates
-  {%- endif %}
-  {%- if grains['os'] == 'Fedora' %}
-  - openssl-dev
-  {%- endif %}
+  - curl
+  {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+  - python26
+  {% endif %}
 
-python-pip:
-  {#
-    I'm installing pip this way since I want the most up to date version
-    for all distributions. This avoids trying to handle different versions
-    accepting different CLI options.
-
-    This was originally needed because the pip package installed in RHEL/CentOS 5
-    was for python 2.4 and I could not find a python 2.6 pacakge of it.
-  -#}
-  cmd:
-    - run
+pip-install:
+  cmd.run:
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' | python
     - cwd: /
-    {% if grains['os'] == 'SmartOS' %}
-    {#- Adapt to SmartOS's script directory #}
-    - name: easy_install --script-dir=/opt/local/bin -U distribute pip virtualenv==1.10
-    {%- else %}
-    - name: easy_install --script-dir=/usr/bin -U pip distribute virtualenv==1.10
-    {%- endif %}
-    - reload_modules: true
     - require:
-      {%- if grains['os'] == 'openSUSE' %}
-      {#- Yes! openSuse ships xml as separate package #}
-      - pkg: python-xml
-      - pkg: ca-certificates
-      {%- endif %}
-      {%- if grains['os'] == 'Fedora' %}
-      - pkg: openssl-dev-libs
-      {%- endif %}
-      - cmd: python-setuptools
+      - pkg: curl
+      {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+      - python26
+      {% endif %}

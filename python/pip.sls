@@ -15,7 +15,7 @@ include:
 
 pip-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' | python
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' | {{ python }}
     - cwd: /
     - require:
       - pkg: curl

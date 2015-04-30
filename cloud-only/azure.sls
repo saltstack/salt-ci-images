@@ -12,4 +12,4 @@ azure:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - require:
-      - cmd: pip
+      - cmd: pip-install

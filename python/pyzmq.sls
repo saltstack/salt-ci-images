@@ -14,5 +14,5 @@ pyzmq:
     - install-options:
       - --zmq=bundled
     - require:
-      - cmd: pip
+      - cmd: pip-install
       - pkg: gcc

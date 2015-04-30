@@ -10,4 +10,4 @@ keyring:
     - extra_index_url: https://pypi.python.org/simple
     - upgrade: True
     - require:
-      - cmd: pip
+      - cmd: pip-install

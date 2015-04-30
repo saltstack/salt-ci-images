@@ -21,4 +21,4 @@ psutil:
         {#- FreeBSD always ships with gcc #}
       - pkg: gcc
       {%- endif %}
-      - cmd: pip
+      - cmd: pip-install

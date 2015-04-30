@@ -9,4 +9,4 @@ webtest:
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
     - require:
-      - cmd: pip
+      - cmd: pip-install

@@ -30,7 +30,7 @@ halite-pkg:
   pip.installed:
     - editable: '/root/halite'
     - require:
-      - cmd: python-pip
+      - cmd: pip
     - failhard: True
 
 

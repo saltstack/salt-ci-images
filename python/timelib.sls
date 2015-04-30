@@ -24,4 +24,4 @@ timelib:
         {#- FreeBSD always ships with gcc #}
       - pkg: gcc
       {%- endif %}
-      - cmd: python-pip
+      - cmd: pip

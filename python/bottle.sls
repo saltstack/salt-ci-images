@@ -7,4 +7,4 @@ bottle:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - require:
-      - cmd: python-pip
+      - cmd: pip

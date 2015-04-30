@@ -11,6 +11,6 @@ m2crypto:
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
     - require:
-      - cmd: python-pip
+      - cmd: pip
       - pkg: gcc
       - pkg: swig

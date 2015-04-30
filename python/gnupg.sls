@@ -18,4 +18,4 @@ gnupg:
       {%- if grains['os'] == 'Fedora' %}
       - pkg: python-gnupg
       {%- endif %}
-      - cmd: python-pip
+      - cmd: pip

@@ -15,7 +15,11 @@ include:
 
 pip-install:
   cmd.run:
+    {% if grains['os'] == 'Arch' %}
+    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ python }} get-pip.py
+    {% else %}
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' | {{ python }}
+    {% endif %}
     - cwd: /
     - reload_modules: True
     - require:

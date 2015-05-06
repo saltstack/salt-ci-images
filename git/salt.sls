@@ -2,9 +2,6 @@
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
-  {%- if grains['os'] == 'Arch' or grains['os'] == 'openSUSE' %}
-  - update
-  {%- endif %}
   - git
   - patch
   - sed

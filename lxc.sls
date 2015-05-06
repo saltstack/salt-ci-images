@@ -5,7 +5,7 @@
 {% else %}
 {% set cgmanager = 'libcgmanager' %}
 {% endif %}
-lxc:
+mypkgs:
   pkg.latest:
     - pkgs:
       - lxc

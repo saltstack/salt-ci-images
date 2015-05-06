@@ -53,6 +53,9 @@ include:
   - npm
   - bower
   {%- endif %}
+  {%- if grains['os'] == 'Arch' or grains['os'] == 'openSUSE' %}
+  - update
+  {%- endif %}
 
 /testing:
   file.directory

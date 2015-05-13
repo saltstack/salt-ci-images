@@ -13,6 +13,7 @@ include:
   - python.libcloud
   - python.requests
   - python.keyring
+  - python.tornado
   - cloud-only.azure
   - cloud-only.sshpass
 
@@ -39,6 +40,7 @@ include:
       - pip: requests
       - pip: keyring
       - pip: azure
+      - pip: tornado
       - pkg: sshpass
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

@@ -27,3 +27,8 @@ update-openssl:
     - run
     - name: yum update -y --enablerepo=epel openssl
 {% endif %}
+
+{% if grains['os'] == 'Arch' %}
+openssl:
+  pkg.latest
+{% endif %}

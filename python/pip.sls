@@ -12,7 +12,7 @@ include:
   {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
   - python26
   {% endif %}
-{%- if grains['os_family'] == 'Debian' and grains['osmajorrelease'][0] == '7' %}
+{%- if grains['os'] == 'Debian' and grains['osmajorrelease'][0] == '7' %}
   - python.headers
 {% endif %}
 
@@ -30,6 +30,6 @@ pip-install:
       {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
       - python26
       {% endif %}
-      {% if grains['os_family'] == 'Debian' and grains['osmajorrelease'][0] == '7' %}
+      {% if grains['os'] == 'Debian' and grains['osmajorrelease'][0] == '7' %}
       - python-dev
       {% endif %}

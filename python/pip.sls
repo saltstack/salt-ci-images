@@ -1,16 +1,20 @@
-{% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
+{% set distro = salt['grains.get']('oscodename', '')  %}
+{% set os_family = salt['grains.get']('os_family', '') %}
+{% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+
+{% if os_family == 'RedHat' and os_major_release == '5' %}
   {% set on_redhat_5 = True %}
 {% else %}
   {% set on_redhat_5 = False %}
 {% endif %}
 
-{% if grains['os'] == 'Debian' and grains['osmajorrelease'][0] == '7' %}
+{% if os_family == 'Debian' and distro == 'wheezy' %}
   {% set on_debian_7 = True %}
 {% else %}
   {% set on_debian_7 = False %}
 {% endif %}
 
-{% if grains['os'] == 'Arch' %}
+{% if os_family == 'Arch' %}
   {% set on_arch = True %}
 {% else %}
   {% set on_arch = False %}

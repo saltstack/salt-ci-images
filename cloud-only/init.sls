@@ -14,6 +14,9 @@ include:
   - python.requests
   - python.keyring
   - python.tornado
+  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  - python.futures
+  {%- endif %}
   - cloud-only.azure
   - cloud-only.sshpass
 
@@ -41,6 +44,9 @@ include:
       - pip: keyring
       - pip: azure
       - pip: tornado
+      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      - pip: futures
+      {%- endif %}
       - pkg: sshpass
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

@@ -35,6 +35,9 @@ include:
   - python.moto
   - python.psutil
   - python.tornado
+  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  - python.futures
+  {%- endif %}
   - dnsutils
   {%- if test_transport == 'raet' %}
   - python.libnacl
@@ -98,6 +101,9 @@ clone-salt-repo:
       - pip: moto
       - pip: psutil
       - pip: tornado
+      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      - pip: futures
+      {%- endif %}
       - cmd: gitpython
       - pkg: dnsutils
       - pkg: mysqldb

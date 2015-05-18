@@ -1,5 +1,5 @@
 {% set os = salt['grains.get']('os_family', '') %}
-% set distro = salt['grains.get']('oscodename', '')  %}
+{% set distro = salt['grains.get']('oscodename', '')  %}
 {% set os_family = salt['grains.get']('os_family', '') %}
 {% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 

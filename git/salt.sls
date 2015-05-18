@@ -19,6 +19,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
+  - python.hgtools
   {%- endif %}
   - python.mock
   - python.timelib
@@ -80,6 +81,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'openSUSE' %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml
+      - pip: hgtools
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

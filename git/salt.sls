@@ -26,6 +26,9 @@ include:
   - python.unittest-xml-reporting
   - python.libcloud
   - python.requests
+  {%- if grains['os'] == 'openSUSE' %}
+  - python.hgtools
+  {%- endif %}
   - python.keyring
   - python.gnupg
   - python.cherrypy
@@ -93,6 +96,9 @@ clone-salt-repo:
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
       - pip: requests
+      {%- if grains['os'] == 'openSUSE' %}
+      - python.hgtools
+      {%- endif %}
       - pip: keyring
       - pip: gnupg
       - pip: cherrypy

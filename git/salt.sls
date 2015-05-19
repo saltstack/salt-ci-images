@@ -53,7 +53,7 @@ include:
   {%- endif %}
   - python.mysqldb
   - python.dns
-  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE']) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}

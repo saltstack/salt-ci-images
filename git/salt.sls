@@ -106,7 +106,7 @@ clone-salt-repo:
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
-      - cmd: gitpython
+      - pip: gitpython
       - pkg: dnsutils
       - pkg: mysqldb
       {%- if test_transport == 'raet' %}

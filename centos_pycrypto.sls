@@ -3,10 +3,5 @@
 uninstall_system_pycrypto:
   pkg.removed:
     - name: python-crypto
-
-new_pycrypto:
-  pip.installed:
-    - name: pycrypto >= 2.6.1
-    - require:
-      - pkg: uninstall_system_pycrypto
-      - cmd: pip-install
+    - require_in:
+      - pip: pycrypto

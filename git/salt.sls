@@ -36,6 +36,7 @@ include:
   - python.moto
   - python.psutil
   - python.tornado
+  - python.pycrypto
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
@@ -106,6 +107,7 @@ clone-salt-repo:
       - pip: moto
       - pip: psutil
       - pip: tornado
+      - pip: pycrypto
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}

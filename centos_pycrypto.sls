@@ -8,4 +8,5 @@ new_pycrypto:
   pip.installed:
     - name: pycrypto >= 2.6.1
     - require:
+      - pkg: uninstall_system_pycrypto
       - cmd: pip-install

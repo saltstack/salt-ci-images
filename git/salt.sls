@@ -57,7 +57,7 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] <= 6 %}
+  {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
   - centos_pycrypto
   {%- endif %}
 
@@ -128,7 +128,7 @@ clone-salt-repo:
       - pkg: npm
       - npm: bower
       {%- endif %}
-      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] <= 6 %}
+  {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       pkg: uninstall_system_pycrypto
       pip: new_pycrypto
       {%- endif %}

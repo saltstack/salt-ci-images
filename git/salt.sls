@@ -36,6 +36,7 @@ include:
   - python.moto
   - python.psutil
   - python.tornado
+  - python.pycrypto
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
@@ -106,6 +107,7 @@ clone-salt-repo:
       - pip: moto
       - pip: psutil
       - pip: tornado
+      - pip: pycrypto
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
@@ -130,7 +132,6 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       - pkg: uninstall_system_pycrypto
-      - pip: new_pycrypto
       {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

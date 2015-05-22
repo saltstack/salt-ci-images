@@ -4,6 +4,7 @@ include:
 
 pycrypto:
   pip.installed:
+    - name: pycrypto >= 2.6.1
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

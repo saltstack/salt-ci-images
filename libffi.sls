@@ -1,11 +1,11 @@
 {%- if grains['os_family'] == 'Debian' %}
-  {% set libffi = 'libffi-dev' %}
+  {% set ffi = 'libffi-dev' %}
 {%- elif grains['os_family'] == 'RedHat' %}
-  {% set libffi = 'libffi-devel' %}
+  {% set ffi = 'libffi-devel' %}
 {%- else %}
-  {% set libffi = 'libffi' %}
-{% endif %}
+  {% set ffi = 'libffi' %}
+{%- endif %}
 
 libffi:
   pkg.installed
-    - name: {{ libffi }}
+    - name: {{ ffi }}

@@ -109,6 +109,7 @@ clone-salt-repo:
       - pip: psutil
       - pip: tornado
       - pip: pycrypto
+      - pip: pyopenssl
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
@@ -134,7 +135,6 @@ clone-salt-repo:
       {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       - pkg: uninstall_system_pycrypto
       {%- endif %}
-      - pip: pyopenssl
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

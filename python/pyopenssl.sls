@@ -1,5 +1,5 @@
 include:
-  - libffi-devel
+  - libffi
   - python.pip
 
 pyopenssl:

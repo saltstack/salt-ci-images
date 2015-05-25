@@ -4,6 +4,7 @@
   {% set libffi = 'libffi-devel' %}
 {%- else %}
   {% set libffi = 'libffi' %}
+{% endif %}
 
 libffi:
   pkg.installed

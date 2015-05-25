@@ -7,5 +7,5 @@
 {%- endif %}
 
 libffi:
-  pkg.installed
+  pkg.installed:
     - name: {{ ffi }}

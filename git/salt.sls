@@ -61,6 +61,7 @@ include:
   {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
   - centos_pycrypto
   {%- endif %}
+  - python.pyopenssl
 
 /testing:
   file.directory
@@ -133,6 +134,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       - pkg: uninstall_system_pycrypto
       {%- endif %}
+      - pip: pyopenssl
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

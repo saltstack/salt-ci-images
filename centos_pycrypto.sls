@@ -2,8 +2,16 @@
 include:
   - python.pycrypto
 
+{% set os_version = salt['grains.get']('osmajorrelease', '') %}
+
+{% if os_version == '5' %}
+  {% set crypto_pkg_name = 'python26-crypto' %}
+{% else %}
+  {% set crypto_pkg_name = 'python-crypto' %}
+{% endif %}
+
 uninstall_system_pycrypto:
   pkg.removed:
-    - name: python-crypto
+    - name: {{ crypto_pkg_name }}
     - require_in:
       - pip: pycrypto

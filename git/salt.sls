@@ -37,6 +37,7 @@ include:
   - python.psutil
   - python.tornado
   - python.pycrypto
+  - python.pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
@@ -61,7 +62,6 @@ include:
   {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
   - centos_pycrypto
   {%- endif %}
-  - python.pyopenssl
 
 /testing:
   file.directory
@@ -109,7 +109,7 @@ clone-salt-repo:
       - pip: psutil
       - pip: tornado
       - pip: pycrypto
-      - pip: pyopenssl
+      - pkg: pyopenssl
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}

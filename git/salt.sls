@@ -37,7 +37,7 @@ include:
   - python.psutil
   - python.tornado
   - python.pycrypto
-  - python.pyopenssl
+  - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}

@@ -37,6 +37,7 @@ include:
   - python.psutil
   - python.tornado
   - python.pycrypto
+  - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
@@ -108,10 +109,11 @@ clone-salt-repo:
       - pip: psutil
       - pip: tornado
       - pip: pycrypto
+      - pkg: pyopenssl
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
-      - cmd: gitpython
+      - pip: gitpython
       - pkg: dnsutils
       - pkg: mysqldb
       {%- if test_transport == 'raet' %}

@@ -3,7 +3,6 @@ include:
 
 apache-libcloud:
   pip.installed:
-    - name: apache-libcloud==0.15.1
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

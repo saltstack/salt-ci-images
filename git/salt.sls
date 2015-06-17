@@ -112,7 +112,7 @@ clone-salt-repo:
       - pip: tornado
       - pip: pycrypto
       - pip: pyinotify
-      - pip: python-msgpack
+      - pip: msgpack
       - pkg: pyopenssl
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures

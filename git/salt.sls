@@ -38,6 +38,7 @@ include:
   - python.tornado
   - python.pycrypto
   - python.pyinotify
+  - python.msgpack
   - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
@@ -111,6 +112,7 @@ clone-salt-repo:
       - pip: tornado
       - pip: pycrypto
       - pip: pyinotify
+      - pip: python-msgpack
       - pkg: pyopenssl
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures

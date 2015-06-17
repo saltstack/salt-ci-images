@@ -38,6 +38,7 @@ include:
   - python.tornado
   - python.pycrypto
   - python.pyinotify
+  - python.msgpack
   - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures

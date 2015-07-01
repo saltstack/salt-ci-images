@@ -39,6 +39,9 @@ include:
   - python.pycrypto
   - python.pyinotify
   - python.msgpack
+  - python.jsonschema
+  - python.rfc3987
+  - python.strict_rfc3339
   - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures

@@ -2,7 +2,7 @@
 {% set os_family = salt['grains.get']('os_family', '') %}
 {% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
-{% if os_family == 'RedHat' and os_major_release == '5' %}
+{% if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {% set on_redhat_5 = True %}
 {% else %}
   {% set on_redhat_5 = False %}

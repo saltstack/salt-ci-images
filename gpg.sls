@@ -4,6 +4,6 @@
   {% set gpg = 'gnupg' %}
 {% endif %}
 
-gnupg:
+gpg:
   pkg.installed:
     - name: {{ gpg }}

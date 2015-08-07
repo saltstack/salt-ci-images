@@ -145,7 +145,7 @@ clone-salt-repo:
       - pkg: uninstall_system_pycrypto
       {%- endif %}
       {%- if grains['os'] == 'Fedora' %}
-      - pkg: gpg
+      - pkg: gnupg
       {%- endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

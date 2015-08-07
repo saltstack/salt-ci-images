@@ -67,7 +67,7 @@ include:
   {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
   - centos_pycrypto
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' %}
+  {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}
 

@@ -144,7 +144,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       - pkg: uninstall_system_pycrypto
       {%- endif %}
-      {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5' %}
+      {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}
 

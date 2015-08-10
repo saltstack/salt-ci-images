@@ -70,6 +70,9 @@ include:
   {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
+  - versionlock
+  {% endif %}
 
 /testing:
   file.directory

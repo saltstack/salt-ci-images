@@ -70,6 +70,9 @@ include:
   {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
+  - versionlock
+  {% endif %}
 
 /testing:
   file.directory
@@ -144,7 +147,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'CentOS' and (grains['osmajorrelease'] == '6' or grains['osmajorrelease'] == '5') %}
       - pkg: uninstall_system_pycrypto
       {%- endif %}
-      {%- if grains['os'] == 'Fedora' %}
+      {%- if grains['os'] == 'Fedora' and (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}
 

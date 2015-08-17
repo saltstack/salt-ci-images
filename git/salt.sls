@@ -99,7 +99,7 @@ clone-salt-repo:
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml
       - pip: hgtools
-      - pip: setuptools
+      - pip: python.setuptools
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

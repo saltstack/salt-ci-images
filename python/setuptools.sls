@@ -1,2 +1,2 @@
 setuptools-scm:
-  pkg.latest
+  pip.installed

@@ -1,2 +1,3 @@
-setuptools-scm:
-  pip.installed
+setuptoolss:
+  pip.installed:
+    - name: setuptools-scm

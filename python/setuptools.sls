@@ -1,0 +1,2 @@
+setuptools-scm:
+  pkg.latest

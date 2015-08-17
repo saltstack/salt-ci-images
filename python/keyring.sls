@@ -11,3 +11,6 @@ keyring:
     - upgrade: True
     - require:
       - cmd: pip-install
+      {%- if grains['os'] == 'OpenSUSE' %}
+      - pip: setuptools-scm
+      {% endif %}

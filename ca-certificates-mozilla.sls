@@ -1,2 +1,2 @@
 ca-certificates-mozilla:
-  pkg.installed
+  pkg.latest

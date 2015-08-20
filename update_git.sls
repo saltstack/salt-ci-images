@@ -17,7 +17,7 @@ rpm-key:
     - group: root
     - mode: 644
 
-git:
+update_git:
   pkg.latest:
     - name: git
     - require: 

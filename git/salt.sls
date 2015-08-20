@@ -37,6 +37,7 @@ include:
   - python.moto
   - python.psutil
   - python.tornado
+  - python.pyvmomi
   - python.pycrypto
   - python.pyinotify
   - python.msgpack
@@ -121,6 +122,7 @@ clone-salt-repo:
       - pip: moto
       - pip: psutil
       - pip: tornado
+      - pip: pyvmomi
       - pip: pycrypto
       - pip: pyinotify
       - pkg: pyopenssl

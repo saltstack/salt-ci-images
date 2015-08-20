@@ -12,7 +12,7 @@ rpm-key:
 
 /etc/yum.repos.d/rpmforge.repo:
   file.managed:
-    - source: rpmforge.repo
+    - source: salt://rpmforge.repo
     - user: root
     - group: root
     - mode: 644

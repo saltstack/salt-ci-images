@@ -8,7 +8,7 @@ rpm-key:
   cmd.run: 
     - name: "rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt"
     - require: 
-      - rpm-forge
+      - cmd: rpm-forge
 
 /etc/yum.repos.d/rpmforge.repo:
   file.managed:
@@ -21,4 +21,4 @@ git:
   pkg.latest:
     - name: git
     - require: 
-      - rpm-key
+      - cmd: rpm-key

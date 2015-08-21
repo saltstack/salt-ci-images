@@ -7,17 +7,21 @@ rpm-forge:
 rpm-key:
   cmd.run: 
     - name: "rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt"
+    - require: 
+      - cmd: rpm-forge
 
-/etc/yum.repos.d/rpmforge.repo:
+rpmforge_repo:
   file.managed:
-    - source: rpmforge.repo
+    - name: /etc/yum.repos.d/rpmforge.repo
+    - source: salt://rpmforge.repo
     - user: root
     - group: root
     - mode: 644
+    - require:
+      - cmd: rpm-key
 
-git:
+update_git:
   pkg.latest:
     - name: git
     - require: 
-      - rpm-forge
-      - rpm-key
+      - file: rpmforge_repo

@@ -10,15 +10,18 @@ rpm-key:
     - require: 
       - cmd: rpm-forge
 
-/etc/yum.repos.d/rpmforge.repo:
+rpmforge.repo:
   file.managed:
+    - name: /etc/yum.repos.d/rpmforge.repo
     - source: salt://rpmforge.repo
     - user: root
     - group: root
     - mode: 644
+    - require:
+      - cmd: rpm-key
 
 update_git:
   pkg.latest:
     - name: git
     - require: 
-      - cmd: rpm-key
+      - cmd: rpmforge.repo

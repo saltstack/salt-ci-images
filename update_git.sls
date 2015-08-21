@@ -24,4 +24,4 @@ update_git:
   pkg.latest:
     - name: git
     - require: 
-      - cmd: rpmforge_repo
+      - file: rpmforge_repo

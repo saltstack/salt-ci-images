@@ -11,9 +11,9 @@ test_cmd:
   cmd.run:
 {%- endif %}
 {% if cloud_only == True %}
-    - name: '{{ python }} /testing/tests/runtests.py -v --cloud-provider-tests --run-destructive --sysinfo --no-colors --xml=/tmp/xml-unittests-output{% if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
+    - name: '{{ python }} /testing/tests/runtests.py -v --cloud-provider-tests --run-destructive --no-colors --xml=/tmp/xml-unittests-output{% if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
 {% else %}
-    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors{% if git_branch not in ('2014.1',) %} --ssh{% endif %} --xml=/tmp/xml-unittests-output{% if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
+    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --no-colors{% if git_branch not in ('2014.1',) %} --ssh{% endif %} --xml=/tmp/xml-unittests-output{% if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
 {% endif %}
     - order: last
     - env:

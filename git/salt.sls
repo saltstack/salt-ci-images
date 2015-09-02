@@ -75,9 +75,6 @@ include:
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
   - versionlock
   {% endif %}
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
-  - update_git
-  {%- endif %}
 
 /testing:
   file.directory

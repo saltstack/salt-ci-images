@@ -1,5 +1,3 @@
-{% if grains['kernel'] == 'Linux' %}
-
 {% if grains['os'] == 'Ubuntu' %}
 nodejs-legacy:
     pkg.installed
@@ -13,5 +11,3 @@ bower:
       {% if grains['os'] == 'Ubuntu' %}
       - pkg: nodejs-legacy
       {% endif %}
-
-{% endif %}

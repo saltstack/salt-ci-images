@@ -1,5 +1,3 @@
-{% if grains['kernel'] in ['Linux, FreeBSD'] %}
-
 # Suse does not package npm separately
 {% if grains['os_family'] == 'Suse' %}
   {%- set npm = 'nodejs' %}
@@ -14,4 +12,3 @@ npm:
   pkg.installed:
     - name: {{ npm }}
 
-{% endif %}

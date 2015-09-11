@@ -1,4 +1,4 @@
-{% if grains['kernel'] == 'Linux' %}
+{% if grains['kernel'] in ['Linux, FreeBSD'] %}
 
 # Suse does not package npm separately
 {% if grains['os_family'] == 'Suse' %}

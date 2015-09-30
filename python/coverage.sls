@@ -3,6 +3,7 @@ include:
 
 coverage:
   pip.installed:
+    - name: 'coverage==3.7.1'
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

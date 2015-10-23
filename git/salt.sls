@@ -49,9 +49,9 @@ include:
   - python.futures
   {%- endif %}
   - dnsutils
+  - python.ioflo
   {%- if test_transport == 'raet' %}
   - python.libnacl
-  - python.ioflo
   - python.raet
   {%- endif %}
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
@@ -132,9 +132,9 @@ clone-salt-repo:
       - pip: gitpython
       - pkg: dnsutils
       - pkg: mysqldb
+      - pip: ioflo
       {%- if test_transport == 'raet' %}
       - pip: libnacl
-      - pip: ioflo
       - pip: raet
       {%- endif %}
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}

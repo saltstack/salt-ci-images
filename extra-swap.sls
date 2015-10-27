@@ -1,4 +1,4 @@
-{% set swapfile = '/testing/.salt-runtests.swapfile' %}
+{% set swapfile = '/.salt-runtests.swapfile' %}
 
 create-swap-file:
   {# because everytime a new subprocess.Popen() is instantiated, a copy of the current python

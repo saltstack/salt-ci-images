@@ -13,9 +13,13 @@ create-swap-file:
 make-swap:
   cmd.run:
     - name: mkswap {{ swapfile }}
+    - require:
+      - cmd: create-swap-file
 
 
 add-extra-swap:
   mount.swap:
     - name: {{ swapfile }}
     - persist: False
+    - require:
+      - cmd: make-swap

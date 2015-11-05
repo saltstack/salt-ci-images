@@ -75,6 +75,7 @@ include:
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
   - versionlock
   {% endif %}
+  - extra-swap
 
 /testing:
   file.directory
@@ -88,6 +89,7 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
+      - mount: add-extra-swap
       - pkg: git
       - pkg: patch
       - pkg: sed

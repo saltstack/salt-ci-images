@@ -31,6 +31,7 @@ include:
   - python.keyring
   - python.gnupg
   - python.cherrypy
+  - python.etcd
   - python.gitpython
   - python.supervisor
   - python.boto
@@ -119,6 +120,7 @@ clone-salt-repo:
       - pip: keyring
       - pip: gnupg
       - pip: cherrypy
+      - pip: etcd
       - pip: supervisor
       - pip: boto
       - pip: moto

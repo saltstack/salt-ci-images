@@ -120,7 +120,7 @@ clone-salt-repo:
       - pip: keyring
       - pip: gnupg
       - pip: cherrypy
-      - pip: etcd
+      - pip: python-etcd
       - pip: supervisor
       - pip: boto
       - pip: moto

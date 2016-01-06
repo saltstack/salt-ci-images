@@ -3,6 +3,7 @@ include:
 
 keyring:
   pip.installed:
+    - name: keyring==5.7.1
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

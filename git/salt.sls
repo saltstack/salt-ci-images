@@ -24,6 +24,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
+  - python.six
   {%- endif %}
   - python.mock
   - python.timelib
@@ -110,6 +111,7 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] == 'Arch' %}
       - pip: setuptools
+      - pip: six
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

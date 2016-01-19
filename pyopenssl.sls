@@ -10,12 +10,6 @@
   {% set pyopenssl = 'security/py-openssl' %}
 {% endif %}
 
-{% if grains['os'] == 'Arch' %}
-six:
-  pip.removed:
-    - name: six
-{% endif %} 
-
 pyopenssl:
   pkg.installed:
     - name: {{ pyopenssl }}

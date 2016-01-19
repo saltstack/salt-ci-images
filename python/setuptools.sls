@@ -1,3 +1,3 @@
 setuptools:
   pip.installed:
-    - name: setuptools-scm
+    - name: setuptools==19.3

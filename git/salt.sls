@@ -20,6 +20,9 @@ include:
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   - python.hgtools
+  - python.setuptools-scm
+  {%- endif %}
+  {%- if grains['os'] == 'Arch' %}
   - python.setuptools
   {%- endif %}
   - python.mock
@@ -104,6 +107,9 @@ clone-salt-repo:
       - pkg: python-xml
       - pip: hgtools
       - pip: setuptools-scm
+      {%- endif %}
+      {%- if grains['os'] == 'Arch' %}
+      - pip: setuptools
       {%- endif %}
       - pip: SaltTesting
       - pip: virtualenv

@@ -43,9 +43,9 @@ include:
 pip-install:
   cmd.run:
     {% if on_arch %}
-    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get-pip }}
+    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get_pip }}
     {% else %}
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get-pip }}
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }}
     {% endif %}
     - cwd: /
     - reload_modules: True

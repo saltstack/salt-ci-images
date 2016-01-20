@@ -24,8 +24,8 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
-  - python.six
   {%- endif %}
+  - python.six
   - python.mock
   - python.timelib
   - python.coverage

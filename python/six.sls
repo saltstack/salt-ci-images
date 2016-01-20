@@ -3,6 +3,7 @@ include:
 
 six:
   pip.installed:
+    - upgrade: true
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

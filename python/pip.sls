@@ -38,12 +38,14 @@ include:
   - python.headers
   {% endif %}
 
+{% set get-pip = '{0} get-pip.py pip==7.1.2'.format(python) %}
+
 pip-install:
   cmd.run:
     {% if on_arch %}
-    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ python }} get-pip.py pip==7.1.2
+    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get-pip }}
     {% else %}
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ python }} get-pip.py pip==7.1.2
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get-pip }}
     {% endif %}
     - cwd: /
     - reload_modules: True

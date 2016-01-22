@@ -79,6 +79,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
   - versionlock
+  - dnf-plugins
   {% endif %}
   - extra-swap
 

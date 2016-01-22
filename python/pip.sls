@@ -38,7 +38,7 @@ include:
   - python.headers
   {% endif %}
 
-{% set get_pip = '{0} get-pip.py pip==7.1.2'.format(python) %}
+{% set get_pip = '{0} get-pip.py'.format(python) %}
 
 pip-install:
   cmd.run:

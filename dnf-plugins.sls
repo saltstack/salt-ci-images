@@ -1,5 +1,3 @@
 dnf-plugins:
-  pkg.latest:
-    - pkgs:
-      - dnf-plugins-core
-      - python-dnf-plugins-core
+  cmd.run:
+    - name: dnf upgrade --assumeyes dnf-plugins-core

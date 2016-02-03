@@ -49,6 +49,7 @@ include:
   - python.jsonschema
   - python.rfc3987
   - python.strict_rfc3339
+  - python.docker
   - pyopenssl
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures

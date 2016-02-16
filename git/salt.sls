@@ -83,6 +83,7 @@ include:
   - dnf-plugins
   {% endif %}
   - extra-swap
+  - dmidecode
 
 /testing:
   file.directory
@@ -168,6 +169,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}
+      - pkg: dmidecode
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

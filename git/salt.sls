@@ -2,9 +2,12 @@
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
+  {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
+  {% if grains.get('os', '') != 'MacOS' %}
   - git
   - patch
   - sed
+  {% endif %}
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
@@ -97,10 +100,12 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
+      {% if grains['os'] != 'MacOS' %}
       - mount: add-extra-swap
       - pkg: git
       - pkg: patch
       - pkg: sed
+      {% endif %}
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion

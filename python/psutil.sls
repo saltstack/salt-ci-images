@@ -3,7 +3,7 @@ include:
   - gcc
   {%- endif %}
   - python.pip
-{%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo') %}
+{%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
 {#- These distributions don't ship the develop headers separately #}
   - python.headers
 {% endif %}
@@ -13,7 +13,7 @@ psutil:
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
     - require:
-      {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo') %}
+      {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
       {#- These distributions don't ship the develop headers separately #}
       - pkg: python-dev
       {%- endif %}

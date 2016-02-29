@@ -2,9 +2,12 @@
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
+  {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
+  {% if grains.get('os', '') != 'MacOS' %}
   - git
   - patch
   - sed
+  {% endif %}
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
@@ -44,7 +47,9 @@ include:
   - python.tornado
   - python.pyvmomi
   - python.pycrypto
+  {% if grains['os'] != 'MacOS' %}
   - python.pyinotify
+  {% endif %}
   - python.msgpack
   - python.jsonschema
   - python.rfc3987
@@ -54,7 +59,9 @@ include:
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
+  {% if grains['os'] != 'MacOS' %}
   - dnsutils
+  {% endif %}
   - python.ioflo
   {%- if test_transport == 'raet' %}
   - python.libnacl
@@ -66,7 +73,9 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
+  {% if grains['os'] != 'MacOS' %}
   - python.mysqldb
+  {% endif %}
   - python.dns
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
@@ -82,8 +91,10 @@ include:
   - versionlock
   - dnf-plugins
   {% endif %}
+  {% if grains['os'] != 'MacOS' %}
   - extra-swap
   - dmidecode
+  {% endif %}
 
 /testing:
   file.directory
@@ -97,10 +108,12 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
+      {% if grains['os'] != 'MacOS' %}
       - mount: add-extra-swap
       - pkg: git
       - pkg: patch
       - pkg: sed
+      {% endif %}
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
@@ -139,14 +152,18 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
+      {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl
+      {% endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
       - pip: gitpython
+      {% if grains['os'] != 'MacOS' %}
       - pkg: dnsutils
       - pkg: mysqldb
+      {%- endif %}
       - pip: ioflo
       {%- if test_transport == 'raet' %}
       - pip: libnacl
@@ -169,7 +186,9 @@ clone-salt-repo:
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}
+      {% if grains['os'] != 'MacOS' %}
       - pkg: dmidecode
+      {% endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}

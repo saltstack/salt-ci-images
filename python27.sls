@@ -1,2 +1,2 @@
 python2:
-  pkg.installed
+  pkg.latest

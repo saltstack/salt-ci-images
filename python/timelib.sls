@@ -1,3 +1,13 @@
+{% if grains['osfinger'] == 'Fedora-23' %}
+  {% set fedora23 = True %}
+{% endif %}
+
+{% if fedora23 %}
+  {%- set python-dev = 'python-devel' %}
+{% else %}
+  {%- set python-dev = 'python-dev' %}
+{% endif %}
+
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -20,6 +30,9 @@ timelib:
       {#- These distributions don't ship the develop headers separately #}
       - pkg: python-dev
       {%- endif %}
+      {% if fedora23 %}
+      - pkg: redhat-rpm-config
+      {% endif %}
       {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
         {#- FreeBSD always ships with gcc #}
       - pkg: gcc

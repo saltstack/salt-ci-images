@@ -91,6 +91,9 @@ include:
   - versionlock
   - dnf-plugins
   {% endif %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
+  - redhat-rpm-config
+  {% endif %}
   {% if grains['os'] != 'MacOS' %}
   - extra-swap
   - dmidecode
@@ -188,6 +191,9 @@ clone-salt-repo:
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}
       - pkg: dmidecode
+      {% endif %}
+      {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
+      - pkg: redhat-rpm-config
       {% endif %}
 
 {% if test_git_url != "https://github.com/saltstack/salt.git" %}

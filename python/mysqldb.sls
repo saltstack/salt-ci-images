@@ -6,10 +6,14 @@
   {% set mysqldb = 'python-mysql' %}
 {% elif grains['os_family'] == 'FreeBSD' %}
   {% set mysqldb = 'py27-MySQLdb' %}
-{% elif grains['os'] == 'Fedora' and grains['osmajorrelease'] == '23' %}
+{% elif grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   {% set mysqldb = 'python2-mysql' %}
 {% else %}
   {% set mysqldb = 'python-mysqldb' %}
+{% endif %}
+
+{% if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
+  {% set mysqldb = 'python2-mysql' %}
 {% endif %}
 
 mysqldb:

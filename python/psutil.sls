@@ -1,4 +1,5 @@
-{% set fedora23 = True if grains['osfinger'] == 'Fedora-23' else False %}
+{% set fedora = True if grains['os'] == 'Fedora' %}
+{% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
 
 {% if fedora23 %}
   {%- set python_dev = 'python-devel' %}

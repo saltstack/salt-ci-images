@@ -1,4 +1,4 @@
-{% set fedora = True if grains['os'] == 'Fedora' %}
+{% set fedora = True if grains['os'] == 'Fedora' else False %}
 {% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
 
 {% if fedora23 %}

@@ -1,5 +1,5 @@
 {% if grains['osfinger'] == 'Fedora-23' %}
-  {% set fedora23 = True %}
+  {% set fedora23 = True else False%}
 {% endif %}
 
 {% if fedora23 %}

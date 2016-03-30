@@ -1,5 +1,10 @@
-{% if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
+{% set fedora = True if grains['os'] == 'Fedora' else False %}
+{% set fedora22 = True if fedora and grains['osrelease'] == '22' else False %}
+{% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
 versionlock:
   cmd.run:
+    {% if fedora22 %}
     - name: "dnf install -y 'dnf-command(versionlock)'"
-{% endif %}
+    {% elif fedora23 %}
+    - name "dnf install -y python-dnf-plugins-extras-versionlock"
+    {% endif %}

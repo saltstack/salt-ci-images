@@ -87,8 +87,10 @@ include:
   {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' or '23' %}
   - versionlock
+  {% endif %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
   - dnf-plugins
   {% endif %}
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}

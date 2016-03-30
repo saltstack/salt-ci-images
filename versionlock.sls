@@ -5,7 +5,7 @@
 {% if fedora %}
 versionlock:
   cmd.run:
-    {% elif fedora22 %}
+    {% if fedora22 %}
     - name: "dnf install -y 'dnf-command(versionlock)'"
     {% elif fedora23 %}
     - name: "dnf install -y python-dnf-plugins-extras-versionlock"

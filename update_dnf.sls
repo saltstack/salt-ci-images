@@ -5,5 +5,5 @@
 {% if fedora23 %}
 update_dnf:
   cmd.run:
-    - name: 'dnf upgrade dnf'
+    - name: 'dnf upgrade -y dnf'
 {% endif %}

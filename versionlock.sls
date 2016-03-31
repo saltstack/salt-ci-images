@@ -9,5 +9,14 @@ versionlock:
     - name: "dnf install -y 'dnf-command(versionlock)'"
     {% elif fedora23 %}
     - name: "dnf install -y python-dnf-plugins-extras-versionlock"
+    - require:
+      - cmd: update_dnf
     {% endif %}
+
+{% endif %}
+
+{% if fedora23 %}
+update_dnf:
+  cmd.run:
+    - name: 'dnf upgrade dnf'
 {% endif %}

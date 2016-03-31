@@ -4,7 +4,7 @@
 
 {% if fedora23 %}
 include:
-  update_dnf
+  - update_dnf
 {% endif %}
 
 {% if fedora %}

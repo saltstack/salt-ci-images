@@ -1,4 +1,5 @@
-{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
+{% set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
+{% set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
@@ -198,14 +199,15 @@ clone-salt-repo:
       - pkg: redhat-rpm-config
       {% endif %}
 
-{% if test_git_url != "https://github.com/saltstack/salt.git" %}
+{% if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
-    - name: git remote add upstream https://github.com/saltstack/salt.git
+    - name: git remote add upstream {{ default_test_git_url }}
     - cwd: /testing
     - require:
       - git: clone-salt-repo
+    - unless: 'cd /testing ; git remote -v | grep {{ default_test_git_url }}'
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:

@@ -1,5 +1,7 @@
 {%- if grains['os'] == 'Ubuntu' %}
   {% set ssh_service = 'ssh' %}
+{%- elif grains['os'] == 'MacOS' %}
+  {% set ssh_service = 'com.openssh.sshd' %}
 {%- else %}
   {% set ssh_service = 'sshd' %}
 {%- endif %}

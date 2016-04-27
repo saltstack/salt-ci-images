@@ -48,6 +48,7 @@ include:
   - python.tornado
   - python.pyvmomi
   - python.pycrypto
+  - python.setproctitle
   {% if grains['os'] != 'MacOS' %}
   - python.pyinotify
   {% endif %}

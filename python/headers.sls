@@ -16,6 +16,10 @@
   {% set python_dev = 'python-dev' %}
 {% endif %}
 
+{% set py3 = pillar.get('py3', False) %}
+{% if py3 and grains['os'] == 'CentOS' and grains['osrelease'].startswith('7') %}
+  {% set python_dev = 'python34-devel' %}
+{% endif %}
 
 python-dev:
   pkg.installed:

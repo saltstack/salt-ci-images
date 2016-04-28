@@ -1,2 +1,2 @@
 python3:
-  pkg.latest
+  pkg.installed

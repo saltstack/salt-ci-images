@@ -61,7 +61,7 @@ pip-install:
     - require:
       - pkg: curl
       {% if py3 %}
-      - pkg: python3
+      - pkg: install_python3
       {% endif %}
       {% if on_redhat_5 %}
       - pkg: python26

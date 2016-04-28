@@ -1,6 +1,7 @@
 {% set distro = salt['grains.get']('oscodename', '')  %}
 {% set os_family = salt['grains.get']('os_family', '') %}
 {% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{% set py3 = pillar.get('py3', False) %}
 
 {% if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {% set on_redhat_5 = True %}
@@ -24,6 +25,8 @@
   {% set python = 'python2' %}
 {% elif on_redhat_5 %}
   {% set python = 'python26' %}
+{% if on_arch and py3 %}
+  {% set python = 'python3' %}
 {% else %}
   {% set python = 'python' %}
 {% endif %}

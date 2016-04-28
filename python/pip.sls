@@ -21,12 +21,12 @@
   {% set on_arch = False %}
 {% endif %}
 
-{% if on_arch %}
+{% if py3 %}
+  {% set python = 'python3' %}
+{% elif on_arch %}
   {% set python = 'python2' %}
 {% elif on_redhat_5 %}
   {% set python = 'python26' %}
-{% elif on_arch and py3 %}
-  {% set python = 'python3' %}
 {% else %}
   {% set python = 'python' %}
 {% endif %}
@@ -37,7 +37,7 @@ include:
   {% if on_redhat_5 %}
   - python26
   {% endif %}
-  {% if on_arch %}
+  {% if on_arch and not py3 %}
   - python27
   {% endif %}
   {%- if on_debian_7 %}

@@ -4,6 +4,8 @@
 
 {% if os_family == 'RedHat' and os_major_release[0] == '7' %}
   {% set python3 = 'python34' %}
+{% elif os_family == 'Arch' %}
+  {% set python3 = 'python' %}
 {% else %}
   {% set python3 = 'python3' %}
 {% endif %}

@@ -23,7 +23,7 @@
 
 {% if py3 %}
   {% set python = 'python3' %}
-{% elif on_arch %}
+{% elif on_arch and not py3 %}
   {% set python = 'python2' %}
 {% elif on_redhat_5 %}
   {% set python = 'python26' %}
@@ -39,6 +39,9 @@ include:
   {% endif %}
   {% if on_arch and not py3 %}
   - python27
+  {% endif %}
+  {% if py3 %}
+  - python3
   {% endif %}
   {%- if on_debian_7 %}
   - python.headers

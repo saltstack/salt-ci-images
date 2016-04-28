@@ -25,7 +25,7 @@
   {% set python = 'python2' %}
 {% elif on_redhat_5 %}
   {% set python = 'python26' %}
-{% if on_arch and py3 %}
+{% elif on_arch and py3 %}
   {% set python = 'python3' %}
 {% else %}
   {% set python = 'python' %}

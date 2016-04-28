@@ -60,6 +60,9 @@ pip-install:
     - reload_modules: True
     - require:
       - pkg: curl
+      {% if py3 %}
+      - pkg: python3
+      {% endif %}
       {% if on_redhat_5 %}
       - pkg: python26
       {% endif %}

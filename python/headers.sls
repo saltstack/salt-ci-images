@@ -3,7 +3,7 @@
     {% set python_dev = 'python-devel' %}
   {% elif grains['os'] == 'CentOS' %}
     {% if grains['osrelease'].startswith('5') %}
-      {% set python_dev = 'python26-devel' %}
+      {% set python_dev = 'python26-devel-2.6.8-3.el5' %}
     {% else %}
       {% set python_dev = 'python-devel' %}
     {% endif %}

@@ -24,3 +24,6 @@
 python-dev:
   pkg.installed:
     - name: {{ python_dev }}
+    {% if grains['os'] == 'CentOS' and grains['osrelease'].startswith('5') %}
+    - version: 0:2.6.8-3.el5
+    {% endif %}

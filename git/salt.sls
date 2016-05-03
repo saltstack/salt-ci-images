@@ -98,8 +98,10 @@ include:
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   - redhat-rpm-config
   {% endif %}
-  {% if grains['os'] not in ['FreeBSD', 'MacOS'] %}
+  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] != 'FreeBSD' %}
   - extra-swap
+  {% endif %}
   - dmidecode
   {% endif %}
 

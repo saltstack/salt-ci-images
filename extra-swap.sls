@@ -1,6 +1,3 @@
-{% set freebsd = True if grains['os'] == 'FreeBSD' else False %}
-
-{% if not freebsd %}
 {% set swapfile = '/.salt-runtests.swapfile' %}
 
 create-swap-file:
@@ -26,4 +23,3 @@ add-extra-swap:
     - persist: False
     - require:
       - cmd: make-swap
-{% endif %}

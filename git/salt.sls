@@ -98,7 +98,7 @@ include:
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   - redhat-rpm-config
   {% endif %}
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ['FreeBSD', 'MacOS'] %}
   - extra-swap
   - dmidecode
   {% endif %}
@@ -115,7 +115,7 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
-      {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] not in ['FreeBSD', 'MacOS'] %}
       - mount: add-extra-swap
       - pkg: git
       - pkg: patch

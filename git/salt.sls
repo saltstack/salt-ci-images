@@ -104,6 +104,9 @@ include:
   {% endif %}
   - dmidecode
   {% endif %}
+  {% if grains['os'] != 'MacOS' %}
+  - openssl
+  {% endif %}
 
 /testing:
   file.directory
@@ -200,6 +203,9 @@ clone-salt-repo:
       {% endif %}
       {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
       - pkg: redhat-rpm-config
+      {% endif %}
+      {% if grains['os'] != 'MacOS' %}
+      - pkg: openssl
       {% endif %}
 
 {% if test_git_url != default_test_git_url %}

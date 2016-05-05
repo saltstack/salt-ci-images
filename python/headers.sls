@@ -25,5 +25,5 @@ python-dev:
   pkg.installed:
     - name: {{ python_dev }}
     {% if grains['os'] == 'CentOS' and grains['osrelease'].startswith('5') %}
-    - version: latest
+    - fromrepo: saltstack
     {% endif %}

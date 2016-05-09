@@ -20,7 +20,7 @@ install-pip3:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }}
     {% endif %}
     - require:
-      - pkg: python3
+      - pkg: install_python3
 
 install-pip3-packages:
   cmd.run:
@@ -33,5 +33,5 @@ install-python3-dev:
   pkg.installed:
     - name: python34-devel
     - require:
-      - pkg: python3
+      - pkg: install_python3
 {% endif %}

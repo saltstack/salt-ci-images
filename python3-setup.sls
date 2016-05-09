@@ -9,7 +9,7 @@
 {% set cent7 = True if grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 else False %}
 
 include:
-  - pkg: python3
+  - python3
 
 {% if arch %}
   {% set python = 'python' %}
@@ -26,12 +26,14 @@ install-pip3:
     {% else %}
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }}
     {% endif %}
+    - require:
+      - pkg: python3
 
 install-pip3-packages:
   - cmd.run:
     - name: 'pip3 install salt salttesting mock magicmock'
     - require:
-      - pkg: python3
+      - pkg: install-pip3
 
 {% if cent7 %}
 install-python3-dev:

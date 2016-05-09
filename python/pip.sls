@@ -1,7 +1,6 @@
 {% set distro = salt['grains.get']('oscodename', '')  %}
 {% set os_family = salt['grains.get']('os_family', '') %}
 {% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
-{% set py3 = pillar.get('py3', False) %}
 
 {% if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {% set on_redhat_5 = True %}
@@ -21,9 +20,7 @@
   {% set on_arch = False %}
 {% endif %}
 
-{% if py3 %}
-  {% set python = 'python3' %}
-{% elif on_arch and not py3 %}
+{% if on_arch %}
   {% set python = 'python2' %}
 {% elif on_redhat_5 %}
   {% set python = 'python26' %}
@@ -37,11 +34,8 @@ include:
   {% if on_redhat_5 %}
   - python26
   {% endif %}
-  {% if on_arch and not py3 %}
+  {% if on_arch %}
   - python27
-  {% endif %}
-  {% if py3 %}
-  - python3
   {% endif %}
   {%- if on_debian_7 %}
   - python.headers
@@ -60,9 +54,6 @@ pip-install:
     - reload_modules: True
     - require:
       - pkg: curl
-      {% if py3 %}
-      - pkg: install_python3
-      {% endif %}
       {% if on_redhat_5 %}
       - pkg: python26
       {% endif %}

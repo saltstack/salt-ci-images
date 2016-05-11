@@ -30,7 +30,7 @@ install-pip3-packages:
 
 install-salttesting:
   cmd.run:
-    - name 'pip3 install salttesting'
+    - name: 'pip3 install salttesting'
     - require:
       - cmd: install-pip3-packages
 

@@ -15,9 +15,9 @@ include:
 install-pip3:
   cmd.run:
     {% if arch %}
-    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get_pip }}
+    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get_pip }} -U 'pip<8.1.2'
     {% else %}
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }}
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U 'pip<8.1.2'
     {% endif %}
     - require:
       - pkg: install_python3
@@ -27,12 +27,6 @@ install-pip3-packages:
     - name: 'pip3 install salt mock magicmock salttesting'
     - require:
       - cmd: install-pip3
-
-install-salttesting:
-  cmd.run:
-    - name: 'pip3 install salttesting'
-    - require:
-      - cmd: install-pip3-packages
 
 {% if cent7 %}
 install-python3-dev:

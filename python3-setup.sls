@@ -24,7 +24,7 @@ install-pip3:
 
 install-pip3-packages:
   cmd.run:
-    - name: 'pip3 install salt salttesting mock magicmock'
+    - name: 'pip3 install salt mock magicmock salttesting'
     - require:
       - cmd: install-pip3
 

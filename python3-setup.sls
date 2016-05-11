@@ -28,6 +28,12 @@ install-pip3-packages:
     - require:
       - cmd: install-pip3
 
+install-salttesting:
+  cmd.run:
+    - name 'pip3 install salttesting'
+    - require:
+      - cmd: install-pip3-packages
+
 {% if cent7 %}
 install-python3-dev:
   pkg.installed:

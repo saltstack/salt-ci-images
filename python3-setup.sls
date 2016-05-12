@@ -28,6 +28,12 @@ install-pip3-packages:
     - require:
       - cmd: install-pip3
 
+install-coverage:
+  cmd.run:
+    - name: 'pip3 install coverage>=3.5.3'
+    - require:
+      - cmd: install-pip3
+
 {% if cent7 %}
 install-python3-dev:
   pkg.installed:

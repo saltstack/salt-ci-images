@@ -50,7 +50,6 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  - python.shade
   {% if grains['os'] != 'MacOS' %}
   - python.pyinotify
   {% endif %}
@@ -169,7 +168,6 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
-      - pip: shade
       {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl

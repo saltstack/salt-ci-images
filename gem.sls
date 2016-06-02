@@ -1,3 +1,3 @@
-install_gem:
+install_ruby:
   pkg.install:
-    - name: rubygems
+    - name: ruby

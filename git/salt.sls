@@ -50,7 +50,6 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  - python.shade
   {% if grains['os'] != 'MacOS' %}
   - python.pyinotify
   {% endif %}
@@ -60,6 +59,7 @@ include:
   - python.strict_rfc3339
   - python.docker
   - pyopenssl
+  - gem
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
@@ -169,7 +169,6 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
-      - pip: shade
       {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl

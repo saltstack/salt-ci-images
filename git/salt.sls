@@ -59,6 +59,7 @@ include:
   - python.strict_rfc3339
   - python.docker
   - pyopenssl
+  - gem
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}

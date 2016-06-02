@@ -21,6 +21,9 @@ include:
   - python.unittest2
   - python.argparse
   {%- endif %}
+  {%- if grains.get('pythonversion')[:2] > [2, 6] %}
+  - python.shade
+  {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
@@ -50,7 +53,6 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  - python.shade
   {% if grains['os'] != 'MacOS' %}
   - python.pyinotify
   {% endif %}
@@ -152,6 +154,9 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
+      {%- if grains.get('pythonversion')[:2] > [2, 6] %}
+      - pip: shade
+      {%- endif %}
       - pip: mock
       - pip: timelib
       - pip: coverage
@@ -169,7 +174,6 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
-      - pip: shade
       {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl

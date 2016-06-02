@@ -1,3 +1,3 @@
 install_ruby:
-  pkg.install:
+  pkg.installed:
     - name: ruby

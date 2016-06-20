@@ -10,3 +10,4 @@ shade:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+      - pkg: gcc

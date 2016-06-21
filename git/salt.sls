@@ -58,6 +58,9 @@ include:
   - python.rfc3987
   - python.strict_rfc3339
   - python.docker
+  {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+  - python.jinja2
+  {%- endif %}
   - pyopenssl
   - gem
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
@@ -169,6 +172,9 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
+      {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+      - pip: jinja2
+      {%- endif %}
       {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl

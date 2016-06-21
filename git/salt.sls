@@ -21,9 +21,6 @@ include:
   - python.unittest2
   - python.argparse
   {%- endif %}
-  {%- if grains.get('pythonversion')[:2] > [2, 6] %}
-  - python.shade
-  {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
@@ -61,6 +58,9 @@ include:
   - python.rfc3987
   - python.strict_rfc3339
   - python.docker
+  {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+  - python.jinja2
+  {%- endif %}
   - pyopenssl
   - gem
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
@@ -155,9 +155,6 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
-      {%- if grains.get('pythonversion')[:2] > [2, 6] %}
-      - pip: shade
-      {%- endif %}
       - pip: mock
       - pip: timelib
       - pip: coverage
@@ -175,6 +172,9 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
+      {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+      - pip: jinja2
+      {%- endif %}
       {% if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       - pkg: pyopenssl

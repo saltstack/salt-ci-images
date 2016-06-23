@@ -58,7 +58,7 @@ include:
   - python.rfc3987
   - python.strict_rfc3339
   - python.docker
-  {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+  {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - python.jinja2
   {%- endif %}
   - pyopenssl
@@ -172,7 +172,7 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
-      {%- if grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.') %}
+      {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pip: jinja2
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}

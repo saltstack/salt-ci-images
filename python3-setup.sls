@@ -14,11 +14,7 @@ include:
 
 install-pip3:
   cmd.run:
-    {% if arch %}
-    - name: wget 'https://bootstrap.pypa.io/get-pip.py' && {{ get_pip }} -U 'pip<8.1.2'
-    {% else %}
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U 'pip<8.1.2'
-    {% endif %}
     - require:
       - pkg: install_python3
 

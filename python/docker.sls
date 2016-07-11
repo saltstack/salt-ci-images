@@ -1,3 +1,4 @@
+{%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
 include:
   - python.pip
 
@@ -13,3 +14,4 @@ docker-py:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+{%- endif %}

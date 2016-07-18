@@ -29,7 +29,7 @@ install-pip3-packages:
     - name: 'pip3 install salt mock magicmock gitpython salttesting unittest-xml-reporting'
     - require:
       - cmd: install-pip3
-      - cmd: install-python3-dev
+      - pkg: install-python3-dev
 
 install-coverage:
   cmd.run:

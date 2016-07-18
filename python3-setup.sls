@@ -1,17 +1,18 @@
-{% set arch = True if grains['os'] == 'Arch' else False %}
 {% set cent7 = True if grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 else False %}
+{% set debian = True if grains['os_family'] == 'Debian' %}
+
+{% set python = 'python3' %}
+{% set get_pip = '{0} get-pip.py'.format(python) %}
+
+{% if cent7 %}
+  {% set python3_devel = 'python34-devel' %}
+{% elif debian %}
+  {% set python3_devel = 'python3-dev' %}
+{% elif %}
 
 include:
   - python3
   - gcc
-
-{% if arch %}
-  {% set python = 'python' %}
-{% else %}
-  {% set python = 'python3' %}
-{% endif %}
-
-{% set get_pip = '{0} get-pip.py'.format(python) %}
 
 install-pip3:
   cmd.run:
@@ -21,7 +22,7 @@ install-pip3:
 
 install-python3-dev:
   pkg.installed:
-    - name: python34-devel
+    - name: {{ python3_devel }}
     - require:
       - pkg: install_python3
 

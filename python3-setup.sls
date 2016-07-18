@@ -18,12 +18,18 @@ install-pip3:
     - require:
       - pkg: install_python3
 
+install-python3-dev:
+  pkg.installed:
+    - name: python34-devel
+    - require:
+      - pkg: install_python3
+
 install-pip3-packages:
   cmd.run:
     - name: 'pip3 install salt mock magicmock gitpython salttesting unittest-xml-reporting'
     - require:
       - cmd: install-pip3
-      {% if cent7 %}
+      {% if not arch %}
       - cmd: install-python3-dev
       {% endif %}
 
@@ -32,11 +38,3 @@ install-coverage:
     - name: 'pip3 install coverage>=3.5.3'
     - require:
       - cmd: install-pip3
-
-{% if cent7 %}
-install-python3-dev:
-  pkg.installed:
-    - name: python34-devel
-    - require:
-      - pkg: install_python3
-{% endif %}

@@ -31,7 +31,6 @@ install-pip3-packages:
     - require:
       - cmd: install-pip3
       - pkg: install-python3-dev
-      - pkg: gcc
 
 install-coverage:
   cmd.run:

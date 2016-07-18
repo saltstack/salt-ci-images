@@ -3,6 +3,7 @@
 
 include:
   - python3
+  - gcc
 
 {% if arch %}
   {% set python = 'python' %}

@@ -18,6 +18,10 @@ install-pip3:
     - require:
       - pkg: install_python3
 
+install-gcc:
+  pkg.install:
+    - name: gcc
+
 install-python3-dev:
   pkg.installed:
     - name: python34-devel
@@ -30,6 +34,7 @@ install-pip3-packages:
     - require:
       - cmd: install-pip3
       - pkg: install-python3-dev
+      - pkg: gcc
 
 install-coverage:
   cmd.run:

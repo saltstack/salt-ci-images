@@ -8,7 +8,7 @@
   {% set python3_devel = 'python34-devel' %}
 {% elif debian %}
   {% set python3_devel = 'python3-dev' %}
-{% elif %}
+{% endif %}
 
 include:
   - python3

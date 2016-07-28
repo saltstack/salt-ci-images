@@ -3,7 +3,7 @@
 {% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
 {% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
 
-{% if fedora23 %}
+{% if fedora23 or fedora24 %}
 include:
   - update_dnf
 {% endif %}

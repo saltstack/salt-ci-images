@@ -1,3 +1,5 @@
+{% set fedora = True if grains['os'] == 'Fedora' else False %}
+{% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
 include:
   - python.pip
 
@@ -10,3 +12,6 @@ setproctitle:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+      {%- if fedora24 %}
+      - pkg: redhat-rpm-config
+      {% endif %}

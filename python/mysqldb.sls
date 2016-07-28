@@ -10,7 +10,7 @@
   {% set mysqldb = 'python-mysqldb' %}
 {% endif %}
 
-{% if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
+{% if grains['os'] == 'Fedora' and grains['osrelease'] in ['23', '24'] %}
   {% set mysqldb = 'python2-mysql' %}
 {% endif %}
 

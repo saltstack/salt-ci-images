@@ -1,5 +1,5 @@
 {% set cent7 = True if grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 else False %}
-{% set debian = True if grains['os_family'] == 'Debian' %}
+{% set debian = True if grains['os_family'] == 'Debian' else False %}
 
 {% set python = 'python3' %}
 {% set get_pip = '{0} get-pip.py'.format(python) %}

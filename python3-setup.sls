@@ -1,4 +1,4 @@
-{% set cent7 = True if grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 else False %}
+{% set cent7 = True if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' else False %}
 {% set debian = True if grains['os_family'] == 'Debian' else False %}
 
 {% set python = 'python3' %}

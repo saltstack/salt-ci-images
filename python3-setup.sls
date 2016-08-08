@@ -28,7 +28,7 @@ install-python3-dev:
 
 install-python3-salt:
   cmd.run:
-    - name: 'pip3 installgit+https://github.com/saltstack/salt.git'
+    - name: 'pip3 install git+https://github.com/saltstack/salt.git'
     - require:
       - pkg: install-python3-dev
 

@@ -26,11 +26,18 @@ install-python3-dev:
     - require:
       - pkg: install_python3
 
+install-python3-salt:
+  cmd.run:
+    - name: 'pip3 installgit+https://github.com/saltstack/salt.git'
+    - require:
+      - pkg: install-python3-dev
+
 install-pip3-packages:
   cmd.run:
-    - name: 'pip3 install salt mock magicmock gitpython salttesting unittest-xml-reporting'
+    - name: 'pip3 install mock magicmock gitpython salttesting unittest-xml-reporting'
     - require:
       - cmd: install-pip3
+      - cmd: install-python3-salt
       - pkg: install-python3-dev
 
 install-coverage:

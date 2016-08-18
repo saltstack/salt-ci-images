@@ -10,6 +10,8 @@
   {% set python3_devel = 'python3-dev' %}
 {% endif %}
 
+{% set salttesting = 'salttesting==2016.7.22' %}
+
 include:
   - python3
   - gcc
@@ -34,7 +36,7 @@ install-python3-salt:
 
 install-pip3-packages:
   cmd.run:
-    - name: 'pip3 install mock magicmock gitpython salttesting unittest-xml-reporting'
+    - name: 'pip3 install setproctitle mock magicmock gitpython {{ salttesting }} unittest-xml-reporting'
     - require:
       - cmd: install-pip3
       - cmd: install-python3-salt

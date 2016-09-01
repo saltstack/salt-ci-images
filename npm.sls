@@ -6,7 +6,7 @@
 {% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
 
 # Suse does not package npm separately
-{% if suse or fedora24 %}
+{% if suse %}
   {%- set npm = 'nodejs' %}
 {% elif freebsd %}
   {%- set npm = 'www/npm' %}

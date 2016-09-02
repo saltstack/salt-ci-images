@@ -1,0 +1,23 @@
+{%- load_yaml as rawmap %}
+Ubuntu:
+  package: keystone
+  service: keystone
+  apache: apache2
+  apache_dir: /etc/apache2/sites-enabled/
+  wsgi: libapache2-mod-wsgi
+  server: apache2
+RedHat:
+  package: openstack-keystone
+  service: openstack-keystone
+  apache: httpd
+  apache_dir: /etc/httpd/conf.d
+  wsgi: mod_wsgi
+  server: httpd
+CentOS:
+  package: openstack-keystone
+  apache: httpd
+  apache_dir: /etc/httpd/conf.d
+  service: openstack-keystone
+  wsgi: mod_wsgi
+  server: httpd
+{%- endload %}

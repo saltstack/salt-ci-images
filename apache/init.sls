@@ -15,7 +15,7 @@
     - require:
       - pkg: {{ apache }}
 
-{%- if grains['os_family'] == 'RedHat' %}
+{%- if grains['os_family'] == 'RedHat' and not grains['osmajorrelease'].startswith('7') %}
 /etc/httpd/conf/httpd.conf:
   file.managed:
     - source: salt://apache/httpd.conf

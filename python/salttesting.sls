@@ -14,6 +14,6 @@ SaltTesting:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
-      - pkg: python-dev
+      - cmd: python-dev
       - pkg: gcc
 

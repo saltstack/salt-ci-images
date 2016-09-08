@@ -1,5 +1,6 @@
 include:
   - python.pip
+  - python.headers
   - gcc
 
 SaltTesting:
@@ -13,5 +14,6 @@ SaltTesting:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+      - pkg: python-dev
       - pkg: gcc
 

@@ -30,6 +30,9 @@ include:
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
   {%- endif %}
+  {% if grains['os_family'] == 'Suse' %}
+  - pip: certifi
+  {% endif %}
   - python.six
   - python.mock
   - python.timelib
@@ -155,6 +158,9 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
+      {% if grains['os_family'] == 'Suse' %}
+      - pip: certifi
+      {% endif %}
       - pip: mock
       - pip: timelib
       - pip: coverage

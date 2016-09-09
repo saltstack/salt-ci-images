@@ -31,7 +31,7 @@ include:
   - python.setuptools
   {%- endif %}
   {% if grains['os_family'] == 'Suse' %}
-  - pip: certifi
+  - python.certifi
   {% endif %}
   - python.six
   - python.mock

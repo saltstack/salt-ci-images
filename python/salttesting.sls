@@ -1,6 +1,5 @@
 include:
   - python.pip
-  - python.headers
   - gcc
 
 SaltTesting:

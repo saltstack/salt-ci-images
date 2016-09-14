@@ -16,9 +16,11 @@
   {% set python_dev = 'python-dev' %}
 {% endif %}
 
+{%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
 python-dev:
   pkg.installed:
     - name: {{ python_dev }}
     {% if grains['os'] == 'CentOS' and grains['osrelease'].startswith('5') %}
     - fromrepo: saltstack
     {% endif %}
+{%- endif %}

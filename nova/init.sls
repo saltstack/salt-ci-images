@@ -1,4 +1,5 @@
 include:
   - keystone
   - glance
-  - nova
+  - rabbitmq
+  - .services

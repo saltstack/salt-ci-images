@@ -178,7 +178,7 @@ clone-salt-repo:
       - pip: supervisor
       - pip: boto
       - pip: moto
-      - pip: psutil
+      - pkg: psutil
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto

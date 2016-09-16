@@ -27,19 +27,29 @@ include:
   - apache
   - openstack.repo
 
+install six:
+  pkg.latest:
+    - refresh: True
+    - force_yes: True
+    - name: python-six
+    - reload_modules: True
+{%- if grains['os_family'] == 'RedHat' or (grains['os'] == 'Ubuntu' and grains['osrelease'] == '14.04') %}
+    - require:
+      - pkgrepo: openstack repo
+{%- endif %}
+
 keystone packages:
   pkg.latest:
     - force_yes: True
+    - refresh: True
     - pkgs:
       - {{ keystone.package }}
       - {{ keystone.wsgi }}
       - {{ keystone.apache }}
       - python-keystoneclient
     - reload_modules: True
-{%- if grains['os_family'] == 'RedHat' or (grains['os'] == 'Ubuntu' and grains['osrelease'] == '14.04') %}
     - require:
-      - pkgrepo: openstack repo
-{%- endif %}
+      - pkg: install six
 
   service.dead:
     - name: {{keystone.service}}

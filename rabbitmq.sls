@@ -2,6 +2,7 @@ rabbitmq server:
   pkg.latest:
     - pkgs:
       - rabbitmq-server
+    - force_yes: True
 
   service.running:
     - name: rabbitmq-server

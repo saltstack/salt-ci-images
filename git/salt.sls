@@ -13,7 +13,7 @@ include:
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
-  {%- endif %}
+  {%- endif or grains['os'] == 'Debian' %}
   #}
   - python.salttesting
   - python.virtualenv
@@ -112,7 +112,7 @@ include:
   {% endif %}
   - dmidecode
   {% endif %}
-  {% if grains['os'] == 'MacOS' %}
+  {% if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {% endif %}
   {% if python3 %}
@@ -226,7 +226,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
       - pkg: redhat-rpm-config
       {% endif %}
-      {% if grains['os'] == 'MacOS' %}
+      {% if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
       {% endif %}
 

@@ -2,9 +2,10 @@
 {% set debian = True if grains['os'] == 'Debian' else False %}
 
 {% if debian %}
-  {% set install_method == 'pkg.latest' %}
+  {% set install_method = 'pkg.latest' %}
 {% else %}
-  {% set install_method == 'pkg.installed' %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
 
 {%- if mac or debian %}
 openssl:

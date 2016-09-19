@@ -13,7 +13,7 @@ include:
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
-  {%- endif or grains['os'] == 'Debian' %}
+  {%- endif %}
   #}
   - python.salttesting
   - python.virtualenv

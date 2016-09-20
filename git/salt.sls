@@ -107,7 +107,6 @@ include:
   - redhat-rpm-config
   {% endif %}
   {% if grains['os'] != 'MacOS' %}
-  {% if grains['os'] != 'FreeBSD' %}
   - extra-swap
   {% endif %}
   - dmidecode
@@ -135,7 +134,7 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
-      {% if grains['os'] not in ['FreeBSD', 'MacOS'] %}
+      {% if grains['os'] not in ('MacOS',) %}
       - mount: add-extra-swap
       - pkg: git
       - pkg: patch

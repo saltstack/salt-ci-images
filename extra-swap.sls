@@ -9,10 +9,12 @@ create-swap-file:
   #}
   cmd.run:
     - name: dd if=/dev/zero of={{ swapfile }} bs=1024 count=1M
+    - unless: grep -q {{ swapfile }} /proc/swaps
 
 make-swap:
   cmd.run:
     - name: mkswap {{ swapfile }}
+    - unless: grep -q {{ swapfile }} /proc/swaps
     - require:
       - cmd: create-swap-file
 
@@ -23,3 +25,4 @@ add-extra-swap:
     - persist: False
     - require:
       - cmd: make-swap
+    - unless: grep -q {{ swapfile }} /proc/swaps

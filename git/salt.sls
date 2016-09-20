@@ -120,7 +120,7 @@ include:
   {% endif %}
   {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
         (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
-  - keystone
+  - openstack 
   {% endif %}
 
 /testing:
@@ -129,7 +129,6 @@ include:
 clone-salt-repo:
   git.latest:
     - name: {{ test_git_url }}
-    - always_fetch: True
     - force_checkout: True
     - force_reset: True
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
@@ -179,7 +178,12 @@ clone-salt-repo:
       - pip: supervisor
       - pip: boto
       - pip: moto
+      {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
+            (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
+      - pkg: psutil
+      {%- else %}
       - pip: psutil
+      {% endif %}
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto

@@ -11,13 +11,30 @@ create-swap-file:
     - name: dd if=/dev/zero of={{ swapfile }} bs=1024 count=1M
     - unless: grep -q {{ swapfile }} /proc/swaps
 
+{% if grains['os'] == 'FreeBSD' %}
+chmod-swap:
+  cmd.run:
+    - name: chmod 0600 {{ swapfile }}
+    - unless: grep -q {{ swapfile }} /proc/swaps
+    - require:
+      - cmd: create-swap-file
+
+add_to_fstab:
+  file.append:
+    - name: /etc/fstab
+    - text:
+      - "md99                    none    swap    sw,file={{ swapfile }},late 0       0"
+
+swapon:
+  cmd.run:
+    - name: swapon -aL
+{% else %}
 make-swap:
   cmd.run:
     - name: mkswap {{ swapfile }}
     - unless: grep -q {{ swapfile }} /proc/swaps
     - require:
       - cmd: create-swap-file
-
 
 add-extra-swap:
   mount.swap:
@@ -26,3 +43,4 @@ add-extra-swap:
     - require:
       - cmd: make-swap
     - unless: grep -q {{ swapfile }} /proc/swaps
+{% endif %}

@@ -108,7 +108,6 @@ include:
   {% endif %}
   {% if grains['os'] != 'MacOS' %}
   - extra-swap
-  {% endif %}
   - dmidecode
   {% endif %}
   {% if grains['os'] in ('MacOS', 'Debian') %}

@@ -19,15 +19,17 @@ chmod-swap:
     - require:
       - cmd: create-swap-file
 
-add_to_fstab:
-  file.append:
-    - name: /etc/fstab
-    - text:
-      - "md99                    none    swap    sw,file={{ swapfile }},late 0       0"
+mdconfig:
+  cmd.run:
+    - name: mdconfig -a -t vnode -f {{ swapfile }}
+    - require:
+      - cmd: chmod-swap
 
 swapon:
   cmd.run:
-    - name: swapon -aL
+    - name: swapon /dev/md0
+    - require:
+      - cmd: mdconfig
 {% else %}
 make-swap:
   cmd.run:

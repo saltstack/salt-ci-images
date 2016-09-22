@@ -134,7 +134,11 @@ clone-salt-repo:
     - require:
       - file: /testing
       {% if grains['os'] not in ('MacOS',) %}
+      {% if grains['os'] == 'FreeBSD' %}
+      - cmd: add-extra-swap
+      {% else %}
       - mount: add-extra-swap
+      {% endif %}
       - pkg: git
       - pkg: patch
       - pkg: sed

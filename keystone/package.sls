@@ -37,11 +37,13 @@ install six:
     - require:
       - pkgrepo: openstack repo
 {%- endif %}
+{% if not (grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '7') %}
   module.run:
     - m_name: six
     - name: six.delete
     - require:
       - pkg: install six
+{% endif %}
 
 keystone packages:
   pkg.latest:
@@ -54,7 +56,11 @@ keystone packages:
       - python-keystoneclient
     - reload_modules: True
     - require:
+      {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '7' %}
+      - pkg: install six
+      {% else %}
       - module: install six
+      {% endif %}
 
   service.dead:
     - name: {{keystone.service}}

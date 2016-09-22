@@ -81,7 +81,7 @@ include:
   - python.libnacl
   - python.raet
   {%- endif %}
-  {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if grains['os'] == 'Arch' %}
   - lxc
   {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}

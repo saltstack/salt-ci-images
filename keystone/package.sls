@@ -37,11 +37,11 @@ install six:
     - require:
       - pkgrepo: openstack repo
 {%- endif %}
-  module.run:
-    - m_name: six
-    - name: six.delete
-    - require:
-      - pkg: install six
+  # module.run:
+  #   - m_name: six
+  #   - name: six.delete
+  #   - require:
+  #     - pkg: install six
 
 keystone packages:
   pkg.latest:

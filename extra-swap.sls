@@ -25,7 +25,7 @@ mdconfig:
     - require:
       - cmd: chmod-swap
 
-swapon:
+add-extra-swap:
   cmd.run:
     - name: swapon /dev/md0
     - require:

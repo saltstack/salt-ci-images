@@ -27,17 +27,15 @@ include:
   - apache
   - openstack.repo
 
+{%- if grains.os == 'Ubuntu' and grains.osrelease == '14.04' %}
 install six:
   pkg.latest:
     - refresh: True
     - force_yes: True
     - name: python-six
     - reload_modules: True
-{%- if grains['os_family'] == 'RedHat' or (grains['os'] == 'Ubuntu' and grains['osrelease'] == '14.04') %}
     - require:
       - pkgrepo: openstack repo
-{%- endif %}
-{% if not (grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '7') %}
   module.run:
     - m_name: six
     - name: six.delete
@@ -56,9 +54,8 @@ keystone packages:
       - python-keystoneclient
     - reload_modules: True
     - require:
-      {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '7' %}
-      - pkg: install six
-      {% else %}
+      - pkgrepo: openstack repo
+      {%- if grains.os == 'Ubuntu' and grains.osrelease == '14.04' %}
       - module: install six
       {% endif %}
 

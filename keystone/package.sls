@@ -13,19 +13,9 @@ keystone packages:
       - {{ keystone.wsgi }}
       - {{ keystone.apache }}
       - python-keystoneclient
-    - reload_modules: True
-    - require:
-      - pkgrepo: openstack repo
 
   service.dead:
     - name: {{keystone.service}}
-
-{%- if grains['os'] == 'Ubuntu' %}
-  apache_module.enabled:
-    - name: wsgi
-    - watch_in:
-      - service: {{keystone.apache}}
-{%- endif %}
 
   file.managed:
     - name: {{keystone.apache_dir}}/keystone.conf
@@ -63,7 +53,12 @@ keystone packages:
                 Require all granted
             </Directory>
         </VirtualHost>
-    - require:
-      - pkg: keystone packages
-    - watch_in:
+    - listen_in:
       - service: {{keystone.apache}}
+
+{%- if grains['os'] == 'Ubuntu' %}
+  apache_module.enabled:
+    - name: wsgi
+    - listen_in:
+      - service: {{keystone.apache}}
+{%- endif %}

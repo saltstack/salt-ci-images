@@ -118,7 +118,7 @@ include:
   {% endif %}
   {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
         (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
-  - openstack 
+  - keystone
   {% endif %}
 
 /testing:

@@ -1,4 +1,3 @@
 include:
   - keystone
   - glance
-  - nova

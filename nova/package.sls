@@ -32,12 +32,6 @@ CentOS:
 include:
   - openstack.repo
 
-mask iscsid service for ubuntu 16.04:
-  file.symlink:
-    - name: /etc/systemd/system/iscsid.service
-    - target: /dev/null
-    - force: True
-
 nova packages:
   pkg.latest:
     - force_yes: True

@@ -1,3 +1,12 @@
+{% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
+    (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
+
+psutil:
+  pkg.installed:
+    - name: python-psutil
+
+{%- else %}
+
 {% set fedora = True if grains['os'] == 'Fedora' else False %}
 {% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
 {% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
@@ -38,3 +47,5 @@ psutil:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
+
+{%- endif %}

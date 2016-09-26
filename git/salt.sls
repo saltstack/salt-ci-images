@@ -116,6 +116,10 @@ include:
   {% if python3 %}
   - python3-setup
   {% endif %}
+  {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
+        (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
+  - openstack 
+  {% endif %}
 
 /testing:
   file.directory
@@ -176,7 +180,12 @@ clone-salt-repo:
       - pip: supervisor
       - pip: boto
       - pip: moto
+      {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
+            (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
+      - pkg: psutil
+      {%- else %}
       - pip: psutil
+      {% endif %}
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
@@ -225,10 +234,6 @@ clone-salt-repo:
       {% endif %}
       {% if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
-      {% endif %}
-      {% if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or
-            (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) %}
-      - keystone
       {% endif %}
 
 {% if test_git_url != default_test_git_url %}

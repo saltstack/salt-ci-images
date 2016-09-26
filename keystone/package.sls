@@ -15,11 +15,6 @@ install six:
     - require:
       - pkgrepo: openstack repo
 {%- endif %}
-  module.run:
-    - m_name: six
-    - name: six.delete
-    - require:
-      - pkg: install six
 
 keystone packages:
   pkg.latest:
@@ -32,7 +27,7 @@ keystone packages:
       - python-keystoneclient
     - reload_modules: True
     - require:
-      - module: install six
+      - pkg: install six
 
   service.dead:
     - name: {{keystone.service}}

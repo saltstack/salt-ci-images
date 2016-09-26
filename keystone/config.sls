@@ -5,10 +5,9 @@ keystone config:
   file.managed:
     - name: /etc/keystone/keystone.conf
     - makedirs: True
-    - contents: |
-        [DEFAULT]
-        admin_token = administrator
-        [database]
-        connection = sqlite:////var/lib/keystone/keystone.sqlite
-        [token]
-        provider = fernet
+    - template: jinja
+    - source: salt://keystone/files/keystone.conf.jinja
+
+  grains.present:
+    - name: keystone.endpoint
+    - value: http://127.0.0.1:35357/v2.0

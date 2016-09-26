@@ -54,8 +54,7 @@ keystone packages:
       - python-keystoneclient
     - reload_modules: True
     - require:
-      #- module: install six
-      - pkg: install six
+      - module: install six
 
   service.dead:
     - name: {{keystone.service}}

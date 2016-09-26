@@ -14,8 +14,7 @@ nova config:
             my_ip = 127.0.0.1
             use_neutron = True
             firewall_driver = nova.virt.firewall.NoopFirewallDriver
-            compute_driver = libvirt.LibvirtDriver
-            state_path = /var/lib/nova
+            keys_path = /var/lib/nova/keys
             [api_database]
             connection = sqlite:////var/lib/nova/nova_api.sqlite
             [database]
@@ -43,13 +42,3 @@ nova config:
             lock_path = /var/lib/nova/tmp
             [libvirt]
             virt_type = qemu
-
-compute config:
-  file.symlink:
-    - name: /etc/nova/nova-compute.conf
-    - target: /etc/nova/nova.conf
-    - force: True
-
-ubuntu 14.04 container thing:
-  file.touch:
-    - name: /run/container_type

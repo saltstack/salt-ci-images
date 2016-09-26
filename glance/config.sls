@@ -1,8 +1,8 @@
 {%- load_yaml as rawmap %}
 Ubuntu:
   services:
-    - glance-api
-    - glance-registry
+    - openstack-glance-api
+    - openstack-glance-registry
 RedHat:
   services:
     - openstack-glance-api

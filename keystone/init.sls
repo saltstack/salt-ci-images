@@ -1,2 +1,2 @@
 include:
-  - .setup_keystone
+  - .setup_db

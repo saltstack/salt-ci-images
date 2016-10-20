@@ -18,6 +18,8 @@ include:
   - python.futures
   {%- endif %}
   - cloud-only.azure
+  - cloud-only.netaddr
+  - cloud-only.profitbricks
   - cloud-only.sshpass
 
 /testing:

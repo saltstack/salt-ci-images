@@ -1,13 +1,9 @@
 include:
   - python.pip
 
-azure:
+netaddr:
   pip.installed:
-    {%- if (grains['os'] == 'CentOS') %}
-    - name: azure==1.0.2
-    {%- else %}
-    - name: azure
-    {%- endif %}
+    - name: netaddr
     {%- if salt['config.get']('virtualenv_path', None) %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

@@ -4,7 +4,7 @@ include:
 
 SaltTesting:
   pip.installed:
-    - name: salttesting==2016.7.22
+    - name: {{ pillar.get('salttesting_namespec', 'salttesting==2016.7.22') }}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

@@ -4,7 +4,7 @@ include:
 
 SaltTesting:
   pip.installed:
-    - name: salttesting==2016.9.7
+    - name: salttesting==2016.10.26
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

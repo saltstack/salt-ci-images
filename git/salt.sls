@@ -18,7 +18,6 @@ include:
   {# if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) #}
   #- openstack
   {# endif #}
-  - python.salttesting
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
@@ -119,6 +118,7 @@ include:
   {% if python3 %}
   - python3-setup
   {% endif %}
+  - python.salttesting
 
 /testing:
   file.directory

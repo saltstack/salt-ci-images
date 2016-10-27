@@ -10,6 +10,8 @@ include:
   - patch
   - sed
   {% endif %}
+  # Apply locales to some system that incorrectly default to ASCII
+  - locale
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion

@@ -3,9 +3,7 @@
 #
 # This will cause  integration.shell.matcher.MatchTest.test_salt_documentation_arguments_not_assumed
 # to fail if not set correctly.
-{% if grains.get('os') == 'Arch' %}
 set utf8:
   locale.system:
     - name: en_US.UTF-8
-{% endif %}
 

@@ -11,7 +11,7 @@ include:
   - sed
   {% endif %}
   # Apply locales to some system that incorrectly default to ASCII
-  {% if grains.get{'os', '') == 'Arch' %}
+  {% if grains.get('os', '') == 'Arch' %}
   - locale
   {% endif %}
   {#-

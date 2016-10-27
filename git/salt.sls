@@ -10,6 +10,10 @@ include:
   - patch
   - sed
   {% endif %}
+  # Apply locales to some system that incorrectly default to ASCII
+  {% if grains.get{'os', '') == 'Arch' %}
+  - locale
+  {% endif %}
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion

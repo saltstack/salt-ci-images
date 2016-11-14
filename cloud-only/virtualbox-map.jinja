@@ -1,0 +1,24 @@
+{% set vbox = salt['grains.filter_by']({
+    '7': {
+        'epel': 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm',
+        'pkgdeps': ['binutils', 'gcc', 'make', 'patch', 'libgomp', 'glibc-headers', 'glibc-devel', 'kernel-headers', 'kernel-PAE-devel', 'dkms']
+    },
+    '6': {
+        'epel': 'http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm',
+        'pkgdeps': ['binutils', 'gcc', 'make', 'patch', 'libgomp', 'glibc-headers', 'glibc-devel', 'kernel-headers', 'kernel-PAE-devel', 'dkms']
+    },
+    '5': {
+        'epel': 'http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm',
+        'pkgdeps': ['binutils', 'gcc', 'make', 'patch', 'libgomp', 'glibc-headers', 'glibc-devel', 'kernel-headers', 'kernel-PAE-devel', 'dkms']
+    },
+    '14': {
+        'vboxrepo': 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib'
+    },
+    '15': {
+        'vboxrepo': 'deb http://download.virtualbox.org/virtualbox/debian wily contrib'
+    },
+    '16': {
+        'vboxrepo': 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib'
+    },
+
+}, grain='osmajorrelease', merge=salt['pillar.get']('vbox:lookup')) %}

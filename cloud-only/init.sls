@@ -21,6 +21,7 @@ include:
   - cloud-only.netaddr
   - cloud-only.profitbricks
   - cloud-only.sshpass
+  - cloud-only.virtualbox
 
 /testing:
   file.directory

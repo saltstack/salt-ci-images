@@ -21,6 +21,7 @@ include:
   - cloud-only.netaddr
   - cloud-only.profitbricks
   - cloud-only.sshpass
+  - openstack
 
 /testing:
   file.directory

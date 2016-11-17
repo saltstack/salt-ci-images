@@ -1,4 +1,6 @@
 {% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
+{% set os_family = grains.get('os_family', '')  %}
+{% set on_redhat = True if os_family == 'RedHat' else False %}
 
 include:
   - git
@@ -17,6 +19,9 @@ include:
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
+  {% if on_redhat %}
+  - selinux.permissive
+  {% endif %}
   - cloud-only.azure
   - cloud-only.netaddr
   - cloud-only.profitbricks

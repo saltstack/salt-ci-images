@@ -42,4 +42,3 @@ nova packages:
   pkg.latest:
     - force_yes: True
     - pkgs: {{ nova.packages }}
-

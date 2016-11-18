@@ -21,6 +21,7 @@ include:
   {%- endif %}
   {% if on_redhat %}
   - selinux.permissive
+  - nova.pip-workaround
   {% endif %}
   - cloud-only.azure
   - cloud-only.netaddr

@@ -1,3 +1,5 @@
+{% set on_redhat = True if grains['os_family'] == 'RedHat' else False %}
+
 {%- load_yaml as rawmap %}
 Ubuntu:
   packages:
@@ -42,3 +44,9 @@ nova packages:
   pkg.latest:
     - force_yes: True
     - pkgs: {{ nova.packages }}
+
+{% if on_redhat %}
+python-psutils:
+  pip.installed:
+    - name: psutil==2.2.1
+{% endif %}

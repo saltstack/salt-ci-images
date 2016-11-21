@@ -1,3 +1,4 @@
+{% set on_redhat_7 = True if grains.get('osmajorrelease', '') == '7' else False %}
 {%- load_yaml as rawmap %}
 Ubuntu:
   packages:
@@ -16,7 +17,7 @@ RedHat:
     - openstack-nova-novncproxy
     - openstack-nova-scheduler
     - openstack-nova-compute
-    - python2-novaclient
+    - python-novaclient
 CentOS:
   packages:
     - openstack-nova-api
@@ -25,7 +26,11 @@ CentOS:
     - openstack-nova-novncproxy
     - openstack-nova-scheduler
     - openstack-nova-compute
+    {% if on_redhat_7 %}
     - python2-novaclient
+    {% else %}
+    - python-novaclient
+    {% endif %}
 {%- endload %}
 {%- set nova = salt['grains.filter_by'](rawmap, grain='os') %}
 

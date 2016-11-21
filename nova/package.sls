@@ -16,7 +16,7 @@ RedHat:
     - openstack-nova-novncproxy
     - openstack-nova-scheduler
     - openstack-nova-compute
-    - python-novaclient
+    - python2-novaclient
 CentOS:
   packages:
     - openstack-nova-api
@@ -25,7 +25,7 @@ CentOS:
     - openstack-nova-novncproxy
     - openstack-nova-scheduler
     - openstack-nova-compute
-    - python-novaclient
+    - python2-novaclient
 {%- endload %}
 {%- set nova = salt['grains.filter_by'](rawmap, grain='os') %}
 

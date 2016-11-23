@@ -19,15 +19,10 @@ include:
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
-  {% if on_redhat %}
-  - selinux.permissive
-  - nova.pip-workaround
-  {% endif %}
   - cloud-only.azure
   - cloud-only.netaddr
   - cloud-only.profitbricks
   - cloud-only.sshpass
-  - openstack
 
 /testing:
   file.directory

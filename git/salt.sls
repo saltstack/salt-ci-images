@@ -141,11 +141,18 @@ clone-salt-repo:
       {% if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {% else %}
+      {% if grains['os'] != 'Windows' %}
       - mount: add-extra-swap
       {% endif %}
+      {% endif %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: patch
+      - pip: sed
+      {% else %}
       - pkg: git
       - pkg: patch
       - pkg: sed
+      {% endif %}
       {% endif %}
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
@@ -204,8 +211,13 @@ clone-salt-repo:
       {%- endif %}
       - pip: gitpython
       {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: dnsutils
+      - pip: mysqldb
+      {% else %}
       - pkg: dnsutils
       - pkg: mysqldb
+      {% endif %}
       {%- endif %}
       - pip: ioflo
       {%- if test_transport == 'raet' %}
@@ -219,7 +231,7 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) or (grains['os'] == 'Windows') %}
       - pkg: npm
       - npm: bower
       {%- endif %}
@@ -230,7 +242,11 @@ clone-salt-repo:
       - pkg: gpg
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: dmidecode
+      {% else %}
       - pkg: dmidecode
+      {% endif %}
       {% endif %}
       {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
       - pkg: redhat-rpm-config

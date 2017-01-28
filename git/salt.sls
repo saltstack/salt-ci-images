@@ -198,6 +198,7 @@ clone-salt-repo:
       {% else %}
       - pkg: pyopenssl
       {% endif %}
+      {% endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}

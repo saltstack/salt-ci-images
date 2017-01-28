@@ -214,10 +214,10 @@ clone-salt-repo:
       {%- endif %}
       - pip: gitpython
       {% if grains['os'] != 'MacOS' %}
-      - pkg: dnsutils
       {% if grains['os'] == 'Windows' %}
       - pip: mysqldb
       {% else %}
+      - pkg: dnsutils
       - pkg: mysqldb
       {% endif %}
       {%- endif %}
@@ -233,9 +233,11 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) or (grains['os'] != 'Windows') %}
+      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if grains['os'] != 'Windows' %}
       - pkg: npm
       - npm: bower
+      {%- endif %}
       {%- endif %}
       {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
       - pkg: uninstall_system_pycrypto

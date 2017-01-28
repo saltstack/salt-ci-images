@@ -25,6 +25,7 @@ include:
 
 timelib:
   pip.installed:
+    - name: timelib
 {% if grains['os'] not in ('Windows') %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}

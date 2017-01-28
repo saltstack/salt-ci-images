@@ -11,7 +11,6 @@ include:
   {% endif %}
   - patch
   - sed
-  - mock
   {% endif %}
   # Apply locales to some system that incorrectly default to ASCII
   {% if grains.get('os', '') == 'Arch' %}
@@ -42,6 +41,7 @@ include:
   {% if grains['os_family'] == 'Suse' %}
   - python.certifi
   {% endif %}
+  - python.mock
   - python.six
   - python.timelib
   - python.coverage

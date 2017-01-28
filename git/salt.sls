@@ -61,7 +61,7 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ('MacOS', 'Windows') %}
   - python.pyinotify
   {% endif %}
   - python.msgpack
@@ -204,10 +204,10 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}
-      - pip: pyinotify
       {% if grains['os'] == 'Windows' %}
       - pip: pyopenssl
       {% else %}
+      - pip: pyinotify
       - pkg: pyopenssl
       {% endif %}
       {% endif %}

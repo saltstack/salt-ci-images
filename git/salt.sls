@@ -11,6 +11,7 @@ include:
   {% endif %}
   - patch
   - sed
+  - mock
   {% endif %}
   # Apply locales to some system that incorrectly default to ASCII
   {% if grains.get('os', '') == 'Arch' %}
@@ -113,8 +114,10 @@ include:
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   - redhat-rpm-config
   {% endif %}
-  {% if grains['os'] not in ('MacOS', 'Windows') %}
+  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] != 'Windows' %}
   - extra-swap
+  {% endif %}
   - dmidecode
   {% endif %}
   {% if grains['os'] in ('MacOS', 'Debian') %}
@@ -211,11 +214,10 @@ clone-salt-repo:
       {%- endif %}
       - pip: gitpython
       {% if grains['os'] != 'MacOS' %}
+      - pkg: dnsutils
       {% if grains['os'] == 'Windows' %}
-      - pip: dnsutils
       - pip: mysqldb
       {% else %}
-      - pkg: dnsutils
       - pkg: mysqldb
       {% endif %}
       {%- endif %}
@@ -231,7 +233,7 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) or (grains['os'] == 'Windows') %}
+      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) or (grains['os'] != 'Windows') %}
       - pkg: npm
       - npm: bower
       {%- endif %}

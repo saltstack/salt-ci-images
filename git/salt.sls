@@ -73,7 +73,9 @@ include:
   - python.jinja2
   {%- endif %}
   - pyopenssl
+  {% if grains['os'] != 'Windows' %}
   - gem
+  {% endif %}
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}

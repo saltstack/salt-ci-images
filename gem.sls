@@ -11,6 +11,9 @@ include:
 install_ruby:
   pkg.installed:
     - name: {{ pkg_name }}
+    {% if grains['os'] in ('Windows') %}
+    - refresh: True
+    {% endif %}
     {% if debian %}
     - require:
       - pkg: openssl

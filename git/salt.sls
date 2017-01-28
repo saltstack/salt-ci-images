@@ -91,7 +91,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ('MacOS', 'Windows') %}
   - python.mysqldb
   {% endif %}
   - python.dns
@@ -213,14 +213,10 @@ clone-salt-repo:
       - pip: futures
       {%- endif %}
       - pip: gitpython
-      {% if grains['os'] != 'MacOS' %}
-      {% if grains['os'] == 'Windows' %}
-      - pip: mysqldb
-      {% else %}
+      {% if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: dnsutils
       - pkg: mysqldb
       {% endif %}
-      {%- endif %}
       - pip: ioflo
       {%- if test_transport == 'raet' %}
       - pip: libnacl

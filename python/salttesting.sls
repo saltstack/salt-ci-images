@@ -1,6 +1,8 @@
+{% if grains['os'] not in ('Windows') %}
 include:
   - python.pip
   - gcc
+{% endif %}
 
 SaltTesting:
   pip.installed:
@@ -11,7 +13,8 @@ SaltTesting:
     - upgrade: true
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
+{% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install
       - pkg: gcc
-
+{% endif %}

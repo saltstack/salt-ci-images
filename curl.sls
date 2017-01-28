@@ -4,13 +4,19 @@
   {% set curl = 'curl' %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip.installed' %}
+{% else %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
+
 {%- if grains['os'] == 'openSUSE' %}
 include:
   - ca-certificates-mozilla
 {%- endif %}
 
 curl:
-  pkg.installed:
+  {{ install_method }}:
     - name: {{ curl }}
     {%- if grains['os'] == 'openSUSE' %}
     - require:

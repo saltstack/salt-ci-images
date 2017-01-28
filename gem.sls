@@ -1,5 +1,8 @@
 {% set debian = True if grains['os'] == 'Debian' else False %}
 
+{% set pkg_name = 'rubyinstaller_x64' if grains['os'] == 'Windows' else 'ruby' %}
+
+
 {% if debian %}
 include:
   - openssl
@@ -7,7 +10,7 @@ include:
 
 install_ruby:
   pkg.installed:
-    - name: ruby
+    - name: {{ pkg_name }}
     {% if debian %}
     - require:
       - pkg: openssl

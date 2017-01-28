@@ -1,5 +1,7 @@
+{% if grains['os'] not in ('Windows') %}
 include:
   - python.pip
+{% endif %}
 
 keyring:
   pip.installed:
@@ -10,8 +12,10 @@ keyring:
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
     - upgrade: True
+{% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install
       {%- if grains['os'] == 'OpenSUSE' %}
       - pip: setuptools-scm
       {% endif %}
+{% endif %}

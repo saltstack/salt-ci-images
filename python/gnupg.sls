@@ -1,6 +1,7 @@
 {% if grains['os'] not in ('Windows') %}
 include:
   - python.pip
+{% endif %}
 
 {%- if grains['os'] == 'Fedora' %}
 python-gnupg:

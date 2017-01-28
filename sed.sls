@@ -11,5 +11,5 @@
 {% endif %}
 
 sed:
-  {{ install_method }}
+  {{ install_method }}:
     - name: {{ sed }}

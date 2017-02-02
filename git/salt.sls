@@ -1,4 +1,4 @@
-{% set default_test_git_url = 'https://github.com/twangboy/salt.git' %}
+{% set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {% set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
 {% set python3 = pillar.get('py3', False) %}

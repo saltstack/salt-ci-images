@@ -6,7 +6,9 @@
 include:
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {% if grains.get('os', '') != 'MacOS' %}
+  {% if grains.get('os', '') != 'Windows' %}
   - git
+  {% endif %}
   - patch
   - sed
   {% endif %}
@@ -39,8 +41,8 @@ include:
   {% if grains['os_family'] == 'Suse' %}
   - python.certifi
   {% endif %}
-  - python.six
   - python.mock
+  - python.six
   - python.timelib
   - python.coverage
   - python.unittest-xml-reporting
@@ -59,7 +61,7 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ('MacOS', 'Windows') %}
   - python.pyinotify
   {% endif %}
   - python.msgpack
@@ -71,11 +73,13 @@ include:
   - python.jinja2
   {%- endif %}
   - pyopenssl
+  {% if grains['os'] != 'Windows' %}
   - gem
+  {% endif %}
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
   {% endif %}
   - python.ioflo
@@ -89,11 +93,11 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
-  {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] not in ('MacOS', 'Windows') %}
   - python.mysqldb
   {% endif %}
   - python.dns
-  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}
@@ -113,7 +117,9 @@ include:
   - redhat-rpm-config
   {% endif %}
   {% if grains['os'] != 'MacOS' %}
+  {% if grains['os'] != 'Windows' %}
   - extra-swap
+  {% endif %}
   - dmidecode
   {% endif %}
   {% if grains['os'] in ('MacOS', 'Debian') %}
@@ -140,11 +146,18 @@ clone-salt-repo:
       {% if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {% else %}
+      {% if grains['os'] != 'Windows' %}
       - mount: add-extra-swap
       {% endif %}
+      {% endif %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: patch
+      - pip: sed
+      {% else %}
       - pkg: git
       - pkg: patch
       - pkg: sed
+      {% endif %}
       {% endif %}
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
@@ -191,17 +204,21 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: pyopenssl
+      {% else %}
       - pip: pyinotify
       - pkg: pyopenssl
+      {% endif %}
       {% endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
       - pip: gitpython
-      {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: dnsutils
       - pkg: mysqldb
-      {%- endif %}
+      {% endif %}
       - pip: ioflo
       {%- if test_transport == 'raet' %}
       - pip: libnacl
@@ -215,8 +232,10 @@ clone-salt-repo:
       {%- endif %}
       - pip: dnspython
       {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if grains['os'] != 'Windows' %}
       - pkg: npm
       - npm: bower
+      {%- endif %}
       {%- endif %}
       {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
       - pkg: uninstall_system_pycrypto
@@ -225,7 +244,11 @@ clone-salt-repo:
       - pkg: gpg
       {%- endif %}
       {% if grains['os'] != 'MacOS' %}
+      {% if grains['os'] == 'Windows' %}
+      - pip: dmidecode
+      {% else %}
       - pkg: dmidecode
+      {% endif %}
       {% endif %}
       {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
       - pkg: redhat-rpm-config

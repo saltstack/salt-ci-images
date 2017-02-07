@@ -8,11 +8,11 @@
   {% set pyopenssl = 'python2-pyopenssl' %}
 {% elif grains['os'] == 'FreeBSD' %}
   {% set pyopenssl = 'security/py-openssl' %}
-{% elif grains['os'] == 'MacOS' %}
+{% elif grains['os'] in ('MacOS', 'Windows') %}
   {% set pyopenssl = 'pyOpenSSL' %}
 {% endif %}
 
-{% if grains['os'] == 'MacOS' %}
+{% if grains['os'] in ('MacOS', 'Windows') %}
   {# brew does not have pyopenssl, so install with pip #}
   {% set install_method = 'pip.installed' %}
 {% else %}

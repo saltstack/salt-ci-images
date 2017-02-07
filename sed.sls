@@ -4,6 +4,12 @@
   {%- set sed = 'sed' %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip.installed' %}
+{% else %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
+
 sed:
-  pkg.installed:
+  {{ install_method }}:
     - name: {{ sed }}

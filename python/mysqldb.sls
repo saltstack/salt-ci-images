@@ -10,10 +10,17 @@
   {% set mysqldb = 'python-mysqldb' %}
 {% endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip.installed' %}
+  {% set mysqldb = 'pymysqldb' %}
+{% else %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
+
 {% if grains['os'] == 'Fedora' and grains['osrelease'] in ['23', '24'] %}
   {% set mysqldb = 'python2-mysql' %}
 {% endif %}
 
 mysqldb:
-  pkg.installed:
+  {{ install_method }}:
     - name: {{ mysqldb }}

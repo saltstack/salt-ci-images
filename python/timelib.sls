@@ -8,6 +8,7 @@
   {%- set python_dev = 'python-dev' %}
 {% endif %}
 
+{% if grains['os'] not in ('Windows') %}
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -20,9 +21,12 @@ include:
   {#- These distributions don't ship the develop headers separately #}
   - python.headers
   {% endif %}
+{% endif %}
 
 timelib:
   pip.installed:
+    - name: timelib
+{% if grains['os'] not in ('Windows') %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
@@ -41,3 +45,4 @@ timelib:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
+{% endif %}

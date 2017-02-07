@@ -8,6 +8,7 @@
   {%- set python_dev = 'python-dev' %}
 {% endif %}
 
+{% if grains['os'] not in ('Windows') %}
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -20,12 +21,14 @@ include:
 {#- These distributions don't ship the develop headers separately #}
   - python.headers
 {% endif %}
+{% endif %}
 
 psutil:
   pip.installed:
     - upgrade: True
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
+{% if grains['os'] not in ('Windows') %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
       {#- These distributions don't ship the develop headers separately #}
@@ -39,3 +42,4 @@ psutil:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
+{% endif %}

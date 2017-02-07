@@ -4,6 +4,12 @@
   {% set patch = 'patch' %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip.installed' %}
+{% else %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
+
 patch:
-  pkg.installed:
+  {{ install_method }}:
     - name: {{ patch }}

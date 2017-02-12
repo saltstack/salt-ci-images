@@ -8,7 +8,7 @@ create-swap-file:
      Let's see if this solves that issue.
   #}
   cmd.run:
-    - name: dd if=/dev/zero of={{ swapfile }} bs=1024 count=1M
+    - name: dd if=/dev/zero of={{ swapfile }} bs=2048 count=1M
     - unless: grep -q {{ swapfile }} /proc/swaps
 
 {% if grains['os'] == 'FreeBSD' %}

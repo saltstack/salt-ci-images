@@ -15,7 +15,7 @@ git:
   pkg.installed:
     - name: {{ git }}
     - refresh: True  # Ensure that pacman runs the first time with -Syu
-    {%- if grains['os_family'] %}
+    {%- if grains['os_family'] == 'RedHat' %}
     - require:
       - pkg: ca-certificates
     {%- endif %}

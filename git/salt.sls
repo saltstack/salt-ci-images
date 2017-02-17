@@ -129,6 +129,10 @@ include:
   - python3-setup
   {% endif %}
   - python.salttesting
+  - python.pytest
+  - python.pytest-tempdir
+  - python.pytest-catchlog
+  - python.pytest-helpers-namespace
 
 /testing:
   file.directory

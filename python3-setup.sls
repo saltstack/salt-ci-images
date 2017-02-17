@@ -47,3 +47,17 @@ install-coverage:
     - name: 'pip3 install coverage>=3.5.3'
     - require:
       - cmd: install-pip3
+
+
+install-pytest:
+  cmd.run:
+    - name: 'pip3 install pytest pytest-tempdir pytest-helpers-namespace'
+    - require:
+      - cmd: install-pip3
+
+
+install-pytest-catchlog:
+  cmd.run:
+    - name: 'pip3 install git+https://github.com/s0undt3ch/pytest-catchlog.git@features/full-logging#egg=Pytest-catchlog'
+    - require:
+      - cmd: install-pip3

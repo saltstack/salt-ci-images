@@ -133,6 +133,7 @@ include:
   - python.pytest-tempdir
   - python.pytest-catchlog
   - python.pytest-helpers-namespace
+  - python.pytest-salt
 
 /testing:
   file.directory

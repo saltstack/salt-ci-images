@@ -3,7 +3,7 @@ include:
   - python.pip
 {% endif %}
 
-pytest-catchlog:
+pytest-salt:
   pip.installed:
     - name: git+https://github.com/saltstack/pytest-salt.git@master#egg=pytest-salt
     {%- if salt['config.get']('virtualenv_path', None)  %}

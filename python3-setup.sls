@@ -61,3 +61,10 @@ install-pytest-catchlog:
     - name: 'pip3 install git+https://github.com/s0undt3ch/pytest-catchlog.git@features/full-logging#egg=Pytest-catchlog'
     - require:
       - cmd: install-pip3
+
+
+install-pytest-salt:
+  cmd.run:
+    - name: 'pip3 install -U git+https://github.com/saltstack/pytest-salt.git@master#egg=pytest-salt'
+    - require:
+      - cmd: install-pip3

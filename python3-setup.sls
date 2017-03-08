@@ -36,7 +36,7 @@ install-python3-salt:
 
 install-pip3-packages:
   cmd.run:
-    - name: 'pip3 install psutil setproctitle mock magicmock gitpython {{ salttesting }} unittest-xml-reporting pysqlcipher3'
+    - name: 'pip3 install psutil setproctitle mock magicmock gitpython {{ salttesting }} unittest-xml-reporting pysqlcipher3 unittest2'
     - require:
       - cmd: install-pip3
       - cmd: install-python3-salt

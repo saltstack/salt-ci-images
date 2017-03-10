@@ -1,7 +1,6 @@
 {% set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {% set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {% set test_transport = pillar.get('test_transport', 'zeromq') %}
-{% set python3 = pillar.get('py3', False) %}
 
 include:
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
@@ -124,9 +123,6 @@ include:
   {% endif %}
   {% if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
-  {% endif %}
-  {% if python3 %}
-  - python3-setup
   {% endif %}
   - python.salttesting
   - python.pytest

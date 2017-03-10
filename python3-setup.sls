@@ -43,7 +43,7 @@ install-pip3-packages:
       - pkg: install-python3-dev
 
 
-unittest-xml-reporting:
+unittest-xml-reporting-py3:
   pip.installed:
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- if salt['config.get']('virtualenv_path', None)  %}

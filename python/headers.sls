@@ -1,19 +1,39 @@
 {% if grains['os_family'] == 'RedHat' %}
   {% if grains['os'] in ('Fedora', 'Amazon') %}
-    {% set python_dev = 'python-devel' %}
+    {%- if pillar.get('py3', False) %}
+      {% set python_dev = 'python34-devel' %}
+    {%- else %}
+      {% set python_dev = 'python-devel' %}
+    {%- endif %}
   {% elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
     {% if grains['osrelease'].startswith('5') %}
       {% set python_dev = 'python26-devel' %}
     {% else %}
-      {% set python_dev = 'python-devel' %}
+      {%- if pillar.get('py3', False) %}
+        {% set python_dev = 'python34-devel' %}
+      {%- else %}
+        {% set python_dev = 'python-devel' %}
+      {%- endif %}
     {% endif %}
   {% else %}
-    {% set python_dev = 'libpython-devel' %}
+    {%- if pillar.get('py3', False) %}
+      {% set python_dev = 'libpython34-devel' %}
+    {%- else %}
+      {% set python_dev = 'libpython-devel' %}
+    {%- endif %}
   {% endif %}
 {% elif grains['os_family'] == 'Suse' %}
-  {% set python_dev = 'python-devel' %}
+  {%- if pillar.get('py3', False) %}
+    {% set python_dev = 'python34-devel' %}
+  {%- else %}
+    {% set python_dev = 'python-devel' %}
+  {%- endif %}
 {% else %}
-  {% set python_dev = 'python-dev' %}
+  {%- if pillar.get('py3', False) %}
+    {% set python_dev = 'python34-dev' %}
+  {%- else %}
+    {% set python_dev = 'python-dev' %}
+  {%- endif %}
 {% endif %}
 
 {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}

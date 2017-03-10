@@ -3,7 +3,8 @@ include:
   - python.pip
 
 docker:
-  pkg.installed
+  pkg.installed:
+    - aggregate: True
 
 docker-py:
   pip.installed:

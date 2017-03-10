@@ -9,3 +9,4 @@
 libsodium:
   pkg.installed:
     - name: {{ libsodium }}
+    - aggregate: True

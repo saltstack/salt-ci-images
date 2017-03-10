@@ -11,4 +11,7 @@
 openssl:
   {{ install_method }}:
     - name: openssl
+    {%- if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}
 {%- endif %}

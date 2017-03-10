@@ -1,2 +1,3 @@
 python26:
-  pkg.installed
+  pkg.installed:
+    - aggregate: True

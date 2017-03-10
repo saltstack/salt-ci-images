@@ -22,3 +22,6 @@
 pyopenssl:
   {{ install_method }}:
     - name: {{ pyopenssl }}
+    {%- if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}

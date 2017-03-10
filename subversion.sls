@@ -7,3 +7,4 @@
 subversion:
   pkg.installed:
     - name: {{ subversion }}
+    - aggregate: True

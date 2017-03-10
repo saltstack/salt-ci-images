@@ -13,3 +13,6 @@
 sed:
   {{ install_method }}:
     - name: {{ sed }}
+    {% if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}

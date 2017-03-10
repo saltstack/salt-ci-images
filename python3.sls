@@ -14,3 +14,4 @@
 install_python3:
   pkg.installed:
     - name: {{ python3 }}
+    - aggregate: True

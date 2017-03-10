@@ -60,7 +60,6 @@ pip-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
-      - cmd: pip2-install
       - pkg: install_python3
     {%- else %}
       {% if on_redhat_5 %}

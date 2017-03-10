@@ -60,6 +60,7 @@ pip-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
+      - cmd: pip2-install
       - pkg: install_python3
     {%- else %}
       {% if on_redhat_5 %}
@@ -69,3 +70,20 @@ pip-install:
       - pkg: python-dev
       {% endif %}
     {%- endif %}
+
+
+{%- if pillar.get('py3', False) is False %}
+pip2-install:
+  cmd.run:
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py }} -U pip
+    - cwd: /
+    - reload_modules: True
+    - require:
+      - pkg: curl
+    {% if on_redhat_5 %}
+    - pkg: python26
+    {% endif %}
+    {% if on_debian_7 %}
+    - pkg: python-dev
+    {% endif %}
+{%- endif %}

@@ -41,11 +41,12 @@ install-pip3-packages:
       - cmd: install-pip3
       - cmd: install-python3-salt
       - pkg: install-python3-dev
-
+      - cmd: unittest-xml-reporting-py3
 
 unittest-xml-reporting-py3:
   pip.installed:
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
+    - update: True
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
@@ -53,7 +54,6 @@ unittest-xml-reporting-py3:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: install-pip3
-      - cmd: install-pip3-packages
 
 
 install-coverage:

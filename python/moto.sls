@@ -10,6 +10,8 @@ moto:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
+    - env_vars:
+      LC_ALL: en_US.UTF-8
 {% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install

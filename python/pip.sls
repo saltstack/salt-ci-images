@@ -61,6 +61,7 @@ pip-install:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
       - pkg: install_python3
+      - cmd: pip2-install
     {%- else %}
       {% if on_redhat_5 %}
       - pkg: python26
@@ -71,7 +72,7 @@ pip-install:
     {%- endif %}
 
 
-{%- if not pillar.get('py3', False) %}
+{%- if pillar.get('py3', False) %}
 pip2-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py }} -U pip

@@ -14,6 +14,7 @@ import types
 
 # Import salt libs
 from salt.utils import namespaced_function
+from salt.exceptions import CommandNotFoundError
 import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.modules.pip import install as pip_install
@@ -43,12 +44,12 @@ def __virtual__():
     return True
 
 
-def _get_pip_bin(bin_env, py3=False):
+def get_pip_bin(bin_env):
     '''
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
     executable itself, or from searching conventional filesystem locations
     '''
-    pip_bin_name = 'pip3' if py3 else 'pip2'
+    pip_bin_name = 'pip3' if __pillar__.get('py3', False) else 'pip2'
     if not bin_env:
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
@@ -76,8 +77,12 @@ def _get_pip_bin(bin_env, py3=False):
         raise CommandNotFoundError('Could not find a `pip` binary')
 
 
+# An alias to the old private function
+_get_pip_bin = get_pip_bin
+
+
 def install(*args, **kwargs):  # pylint: disable=function-redefined
-    pip_binary = _get_pip_bin(kwargs.get('bin_env'), py3=__pillar__.get('py3', False))
+    pip_binary = _get_pip_bin(kwargs.get('bin_env'))
     kwargs['bin_env'] = pip_binary
     return pip_install(*args, **kwargs)
 

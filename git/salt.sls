@@ -217,7 +217,7 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
-      - pip: supervisor
+      - pip2: supervisor
       - pip: boto
       - pip: moto
       - pip: psutil

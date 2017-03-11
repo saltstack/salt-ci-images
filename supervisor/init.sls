@@ -7,3 +7,4 @@
 supervisor:
   pkg.installed:
     - name: {{ supervisor }}
+    - aggregate: True

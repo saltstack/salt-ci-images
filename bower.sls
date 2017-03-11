@@ -1,6 +1,7 @@
 {% if grains['os'] == 'Ubuntu' %}
 nodejs-legacy:
-    pkg.installed
+    pkg.installed:
+      - aggregate: True
 {% endif %}
 
 bower:

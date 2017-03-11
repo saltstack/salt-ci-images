@@ -24,3 +24,6 @@
 mysqldb:
   {{ install_method }}:
     - name: {{ mysqldb }}
+    {% if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}

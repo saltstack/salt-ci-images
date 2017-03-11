@@ -7,3 +7,6 @@
 install-dmidecode:
   {{ install_method }}:
     - name: dmidecode
+    {% if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}

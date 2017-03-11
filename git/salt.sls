@@ -1,21 +1,32 @@
-{% set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
-{% set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
-{% set test_transport = pillar.get('test_transport', 'zeromq') %}
-{% set python3 = pillar.get('py3', False) %}
+{%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
+{%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
+{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
+
+{%- if pillar.get('py3', False) %}
+  {%- set python = 'python3' %}
+{%- else %}
+  {%- if on_arch %}
+    {%- set python = 'python2' %}
+  {%- elif on_redhat_5 %}
+    {%- set python = 'python26' %}
+  {%- else %}
+    {%- set python = 'python' %}
+  {%- endif %}
+{%- endif %}
 
 include:
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
-  {% if grains.get('os', '') != 'MacOS' %}
-  {% if grains.get('os', '') != 'Windows' %}
+  {%- if grains.get('os', '') != 'MacOS' %}
+  {%- if grains.get('os', '') != 'Windows' %}
   - git
-  {% endif %}
+  {%- endif %}
   - patch
   - sed
-  {% endif %}
+  {%- endif %}
   # Apply locales to some system that incorrectly default to ASCII
-  {% if grains.get('os', '') == 'Arch' %}
+  {%- if grains.get('os', '') == 'Arch' %}
   - locale
-  {% endif %}
+  {%- endif %}
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}
   - subversion
@@ -38,9 +49,9 @@ include:
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
   {%- endif %}
-  {% if grains['os_family'] == 'Suse' %}
+  {%- if grains['os_family'] == 'Suse' %}
   - python.certifi
-  {% endif %}
+  {%- endif %}
   - python.mock
   - python.six
   - python.timelib
@@ -61,9 +72,9 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
-  {% if grains['os'] not in ('MacOS', 'Windows') %}
+  {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.pyinotify
-  {% endif %}
+  {%- endif %}
   - python.msgpack
   - python.jsonschema
   - python.rfc3987
@@ -73,15 +84,15 @@ include:
   - python.jinja2
   {%- endif %}
   - pyopenssl
-  {% if grains['os'] != 'Windows' %}
+  {%- if grains['os'] != 'Windows' %}
   - gem
-  {% endif %}
+  {%- endif %}
   {%- if grains.get('pythonversion')[:2] < [3, 2] %}
   - python.futures
   {%- endif %}
-  {% if grains['os'] not in ('MacOS', 'Windows') %}
+  {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
-  {% endif %}
+  {%- endif %}
   - python.ioflo
   {%- if test_transport == 'raet' %}
   - python.libnacl
@@ -93,9 +104,9 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
   {%- endif %}
-  {% if grains['os'] not in ('MacOS', 'Windows') %}
+  {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.mysqldb
-  {% endif %}
+  {%- endif %}
   - python.dns
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
@@ -109,25 +120,22 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' or '23' %}
   - versionlock
-  {% endif %}
+  {%- endif %}
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
   - dnf-plugins
-  {% endif %}
+  {%- endif %}
   {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   - redhat-rpm-config
-  {% endif %}
-  {% if grains['os'] != 'MacOS' %}
-  {% if grains['os'] != 'Windows' %}
+  {%- endif %}
+  {%- if grains['os'] != 'MacOS' %}
+  {%- if grains['os'] != 'Windows' %}
   - extra-swap
-  {% endif %}
+  {%- endif %}
   - dmidecode
-  {% endif %}
-  {% if grains['os'] in ('MacOS', 'Debian') %}
+  {%- endif %}
+  {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
-  {% endif %}
-  {% if python3 %}
-  - python3-setup
-  {% endif %}
+  {%- endif %}
   - python.salttesting
   - python.pytest
   - python.pytest-tempdir
@@ -147,23 +155,23 @@ clone-salt-repo:
     - target: /testing
     - require:
       - file: /testing
-      {% if grains['os'] not in ('MacOS',) %}
-      {% if grains['os'] == 'FreeBSD' %}
+      {%- if grains['os'] not in ('MacOS',) %}
+      {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
-      {% else %}
-      {% if grains['os'] != 'Windows' %}
+      {%- else %}
+      {%- if grains['os'] != 'Windows' %}
       - mount: add-extra-swap
-      {% endif %}
-      {% endif %}
-      {% if grains['os'] == 'Windows' %}
+      {%- endif %}
+      {%- endif %}
+      {%- if grains['os'] == 'Windows' %}
       - pip: patch
       - pip: sed
-      {% else %}
+      {%- else %}
       - pkg: git
       - pkg: patch
       - pkg: sed
-      {% endif %}
-      {% endif %}
+      {%- endif %}
+      {%- endif %}
       {#-
       {%- if grains['os_family'] not in ('FreeBSD',) %}
       - pkg: subversion
@@ -185,9 +193,9 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
-      {% if grains['os_family'] == 'Suse' %}
+      {%- if grains['os_family'] == 'Suse' %}
       - pip: certifi
-      {% endif %}
+      {%- endif %}
       - pip: mock
       - pip: timelib
       - pip: coverage
@@ -208,22 +216,22 @@ clone-salt-repo:
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pip: jinja2
       {%- endif %}
-      {% if grains['os'] != 'MacOS' %}
-      {% if grains['os'] == 'Windows' %}
+      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] == 'Windows' %}
       - pip: pyopenssl
-      {% else %}
+      {%- else %}
       - pip: pyinotify
       - pkg: pyopenssl
-      {% endif %}
-      {% endif %}
+      {%- endif %}
+      {%- endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures
       {%- endif %}
       - pip: gitpython
-      {% if grains['os'] not in ('MacOS', 'Windows') %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: dnsutils
       - pkg: mysqldb
-      {% endif %}
+      {%- endif %}
       - pip: ioflo
       {%- if test_transport == 'raet' %}
       - pip: libnacl
@@ -248,21 +256,21 @@ clone-salt-repo:
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}
-      {% if grains['os'] != 'MacOS' %}
-      {% if grains['os'] == 'Windows' %}
+      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] == 'Windows' %}
       - pip: dmidecode
-      {% else %}
+      {%- else %}
       - pkg: dmidecode
-      {% endif %}
-      {% endif %}
+      {%- endif %}
+      {%- endif %}
       {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
       - pkg: redhat-rpm-config
-      {% endif %}
-      {% if grains['os'] in ('MacOS', 'Debian') %}
+      {%- endif %}
+      {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
-      {% endif %}
+      {%- endif %}
 
-{% if test_git_url != default_test_git_url %}
+{%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
@@ -279,4 +287,22 @@ fetch-upstream-tags:
     - cwd: /testing
     - require:
       - cmd: add-upstream-repo
-{% endif %}
+{%- endif %}
+
+{%- if pillar.get('py3', False) %}
+{#- Install Salt Dev Dependencies #}
+install-salt-pip-deps:
+  pip.installed:
+    - requirements: /testing/requirements/{{ test_transport }}.txt
+    - onlyif: '[ -f /testing/requirements/{{ test_transport }}.txt ]'
+
+install-salt-dev-pip-deps:
+  pip.installed:
+    - requirements: /testing/requirements/dev_{{ python }}.txt
+    - onlyif: '[ -f /testing/requirements/dev_{{ python }}.txt ]'
+
+install-salt-pytest-pip-deps:
+  pip.installed:
+    - requirements: /testing/requirements/pytest.txt
+    - onlyif: '[ -f /testing/requirements/pytest.txt ]'
+{%- endif %}

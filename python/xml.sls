@@ -1,2 +1,3 @@
 python-xml:
-  pkg.installed
+  pkg.installed:
+    - aggregate: True

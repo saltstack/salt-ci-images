@@ -11,6 +11,7 @@ include:
 install_ruby:
   pkg.installed:
     - name: {{ pkg_name }}
+    - aggregate: True
     {% if grains['os'] in ('Windows') %}
     - refresh: True
     {% endif %}

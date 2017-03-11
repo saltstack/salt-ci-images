@@ -20,4 +20,5 @@
 npm:
   pkg.installed:
     - name: {{ npm }}
+    - aggregate: True
 

@@ -1,14 +1,14 @@
-{% set fedora = True if grains['os'] == 'Fedora' else False %}
-{% set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
-{% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
+{%- set fedora = True if grains['os'] == 'Fedora' else False %}
+{%- set fedora23 = True if fedora and grains['osrelease'] == '23' else False %}
+{%- set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
 
-{% if fedora23 %}
+{%- if fedora23 %}
   {%- set python_dev = 'python-devel' %}
-{% else %}
+{%- else %}
   {%- set python_dev = 'python-dev' %}
-{% endif %}
+{%- endif %}
 
-{% if grains['os'] not in ('Windows') %}
+{%- if grains['os'] not in ('Windows') %}
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -20,8 +20,8 @@ include:
 {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
 {#- These distributions don't ship the develop headers separately #}
   - python.headers
-{% endif %}
-{% endif %}
+{%- endif %}
+{%- endif %}
 
 psutil:
   pip.installed:

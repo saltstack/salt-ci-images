@@ -13,3 +13,6 @@
 patch:
   {{ install_method }}:
     - name: {{ patch }}
+    {%- if install_method == 'pkg.installed' %}
+    - aggregate: True
+    {%- endif %}

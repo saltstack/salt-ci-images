@@ -14,6 +14,7 @@ include:
 git:
   pkg.installed:
     - name: {{ git }}
+    - aggregate: True
     - refresh: True  # Ensure that pacman runs the first time with -Syu
     {%- if grains['os_family'] == 'RedHat' %}
     - require:

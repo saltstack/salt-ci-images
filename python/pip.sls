@@ -1,58 +1,93 @@
-{% set distro = salt['grains.get']('oscodename', '')  %}
-{% set os_family = salt['grains.get']('os_family', '') %}
-{% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set distro = salt['grains.get']('oscodename', '')  %}
+{%- set os_family = salt['grains.get']('os_family', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
-{% if os_family == 'RedHat' and os_major_release[0] == '5' %}
-  {% set on_redhat_5 = True %}
-{% else %}
-  {% set on_redhat_5 = False %}
-{% endif %}
+{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
+  {%- set on_redhat_5 = True %}
+{%- else %}
+  {%- set on_redhat_5 = False %}
+{%- endif %}
 
-{% if os_family == 'Debian' and distro == 'wheezy' %}
-  {% set on_debian_7 = True %}
-{% else %}
-  {% set on_debian_7 = False %}
-{% endif %}
+{%- if os_family == 'Debian' and distro == 'wheezy' %}
+  {%- set on_debian_7 = True %}
+{%- else %}
+  {%- set on_debian_7 = False %}
+{%- endif %}
 
-{% if os_family == 'Arch' %}
-  {% set on_arch = True %}
-{% else %}
-  {% set on_arch = False %}
-{% endif %}
+{%- if os_family == 'Arch' %}
+  {%- set on_arch = True %}
+{%- else %}
+  {%- set on_arch = False %}
+{%- endif %}
 
-{% if on_arch %}
-  {% set python = 'python2' %}
-{% elif on_redhat_5 %}
-  {% set python = 'python26' %}
-{% else %}
-  {% set python = 'python' %}
-{% endif %}
+{%- if pillar.get('py3', False) %}
+  {%- set python = 'python3' %}
+{%- else %}
+  {%- if on_arch %}
+    {%- set python = 'python2' %}
+  {%- elif on_redhat_5 %}
+    {%- set python = 'python26' %}
+  {%- else %}
+    {%- set python = 'python' %}
+  {%- endif %}
+{%- endif %}
 
 
 include:
   - curl
-  {% if on_redhat_5 %}
+{%- if pillar.get('py3', False) %}
+  - python3
+{%- else %}
+  {%- if on_redhat_5 %}
   - python26
-  {% endif %}
-  {% if on_arch %}
+  {%- endif %}
+  {%- if on_arch %}
   - python27
-  {% endif %}
+  {%- endif %}
+{%- endif %}
+
   {%- if on_debian_7 %}
   - python.headers
-  {% endif %}
+  {%- endif %}
 
-{% set get_pip = '{0} get-pip.py'.format(python) %}
+{%- set get_pip = '{0} get-pip.py'.format(python) %}
+
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
 
 pip-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U 'pip<8.1.2'
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U pip
     - cwd: /
     - reload_modules: True
     - require:
       - pkg: curl
-      {% if on_redhat_5 %}
+    {%- if pillar.get('py3', False) %}
+      - pkg: install_python3
+      - cmd: pip2-install
+    {%- else %}
+      {%- if on_redhat_5 %}
       - pkg: python26
-      {% endif %}
-      {% if on_debian_7 %}
+      {%- endif %}
+      {%- if on_debian_7 %}
       - pkg: python-dev
-      {% endif %}
+      {%- endif %}
+    {%- endif %}
+
+
+{%- if pillar.get('py3', False) %}
+pip2-install:
+  cmd.run:
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
+    - cwd: /
+    - reload_modules: True
+    - require:
+      - pkg: curl
+    {%- if on_redhat_5 %}
+    - pkg: python26
+    {%- endif %}
+    {%- if on_debian_7 %}
+    - pkg: python-dev
+    {%- endif %}
+{%- endif %}

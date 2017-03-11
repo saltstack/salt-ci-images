@@ -2,6 +2,18 @@
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 
+{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
+  {%- set on_redhat_5 = True %}
+{%- else %}
+  {%- set on_redhat_5 = False %}
+{%- endif %}
+
+{%- if os_family == 'Arch' %}
+  {%- set on_arch = True %}
+{%- else %}
+  {%- set on_arch = False %}
+{%- endif %}
+
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
 {%- else %}

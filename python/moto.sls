@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows') %}
+{%- if grains['os'] not in ('Windows') %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 moto:
   pip.installed:
@@ -10,9 +10,11 @@ moto:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
+    {%- if pillar.get('py3', False) %}
     - env_vars:
       LC_ALL: en_US.UTF-8
-{% if grains['os'] not in ('Windows') %}
+    {%- endif %}
+{%- if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

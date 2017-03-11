@@ -1,24 +1,24 @@
-{% set distro = salt['grains.get']('oscodename', '')  %}
-{% set os_family = salt['grains.get']('os_family', '') %}
-{% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set distro = salt['grains.get']('oscodename', '')  %}
+{%- set os_family = salt['grains.get']('os_family', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
-{% if os_family == 'RedHat' and os_major_release[0] == '5' %}
+{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {%- set on_redhat_5 = True %}
-{% else %}
+{%- else %}
   {%- set on_redhat_5 = False %}
-{% endif %}
+{%- endif %}
 
-{% if os_family == 'Debian' and distro == 'wheezy' %}
+{%- if os_family == 'Debian' and distro == 'wheezy' %}
   {%- set on_debian_7 = True %}
-{% else %}
+{%- else %}
   {%- set on_debian_7 = False %}
-{% endif %}
+{%- endif %}
 
-{% if os_family == 'Arch' %}
+{%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
-{% else %}
+{%- else %}
   {%- set on_arch = False %}
-{% endif %}
+{%- endif %}
 
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
@@ -50,7 +50,7 @@ include:
   - python.headers
   {%- endif %}
 
-{% set get_pip = '{0} get-pip.py'.format(python) %}
+{%- set get_pip = '{0} get-pip.py'.format(python) %}
 
 force-sync-all:
   module.run:

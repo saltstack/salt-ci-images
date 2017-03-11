@@ -3,33 +3,33 @@
 {% set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
 {% if os_family == 'RedHat' and os_major_release[0] == '5' %}
-  {% set on_redhat_5 = True %}
+  {%- set on_redhat_5 = True %}
 {% else %}
-  {% set on_redhat_5 = False %}
+  {%- set on_redhat_5 = False %}
 {% endif %}
 
 {% if os_family == 'Debian' and distro == 'wheezy' %}
-  {% set on_debian_7 = True %}
+  {%- set on_debian_7 = True %}
 {% else %}
-  {% set on_debian_7 = False %}
+  {%- set on_debian_7 = False %}
 {% endif %}
 
 {% if os_family == 'Arch' %}
-  {% set on_arch = True %}
+  {%- set on_arch = True %}
 {% else %}
-  {% set on_arch = False %}
+  {%- set on_arch = False %}
 {% endif %}
 
 {%- if pillar.get('py3', False) %}
-  {% set python = 'python3' %}
+  {%- set python = 'python3' %}
 {%- else %}
-  {% if on_arch %}
-    {% set python = 'python2' %}
-  {% elif on_redhat_5 %}
-    {% set python = 'python26' %}
-  {% else %}
-    {% set python = 'python' %}
-  {% endif %}
+  {%- if on_arch %}
+    {%- set python = 'python2' %}
+  {%- elif on_redhat_5 %}
+    {%- set python = 'python26' %}
+  {%- else %}
+    {%- set python = 'python' %}
+  {%- endif %}
 {%- endif %}
 
 
@@ -38,19 +38,23 @@ include:
 {%- if pillar.get('py3', False) %}
   - python3
 {%- else %}
-  {% if on_redhat_5 %}
+  {%- if on_redhat_5 %}
   - python26
-  {% endif %}
-  {% if on_arch %}
+  {%- endif %}
+  {%- if on_arch %}
   - python27
-  {% endif %}
+  {%- endif %}
 {%- endif %}
 
   {%- if on_debian_7 %}
   - python.headers
-  {% endif %}
+  {%- endif %}
 
 {% set get_pip = '{0} get-pip.py'.format(python) %}
+
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
 
 pip-install:
   cmd.run:
@@ -63,12 +67,12 @@ pip-install:
       - pkg: install_python3
       - cmd: pip2-install
     {%- else %}
-      {% if on_redhat_5 %}
+      {%- if on_redhat_5 %}
       - pkg: python26
-      {% endif %}
-      {% if on_debian_7 %}
+      {%- endif %}
+      {%- if on_debian_7 %}
       - pkg: python-dev
-      {% endif %}
+      {%- endif %}
     {%- endif %}
 
 
@@ -80,10 +84,10 @@ pip2-install:
     - reload_modules: True
     - require:
       - pkg: curl
-    {% if on_redhat_5 %}
+    {%- if on_redhat_5 %}
     - pkg: python26
-    {% endif %}
-    {% if on_debian_7 %}
+    {%- endif %}
+    {%- if on_debian_7 %}
     - pkg: python-dev
-    {% endif %}
+    {%- endif %}
 {%- endif %}

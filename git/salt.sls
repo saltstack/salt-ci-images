@@ -2,6 +2,7 @@
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
 {%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {%- set on_redhat_5 = True %}

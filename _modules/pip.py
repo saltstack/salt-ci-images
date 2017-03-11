@@ -17,11 +17,13 @@ from salt.utils import namespaced_function
 import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.modules.pip import install as pip_install
+from salt.modules.pip import list_ as pip_list
 
 # Let's namespace the pip_install function
 pip_install = namespaced_function(pip_install, globals())  # pylint: disable=invalid-name
+pip_list = namespaced_function(pip_list, globals())  # pylint: disable=invalid-name
 
-# Let's namespace all other functions from the pip_state module
+# Let's namespace all other functions from the pip module
 for name in dir(salt.modules.pip):
     attr = getattr(salt.modules.pip, name)
     if isinstance(attr, types.FunctionType):
@@ -30,6 +32,11 @@ for name in dir(salt.modules.pip):
         if attr in globals():
             continue
         globals()[name] = namespaced_function(attr, globals())
+
+
+__func_alias__ = {
+    'list_': 'list'
+}
 
 
 def __virtual__():
@@ -73,3 +80,7 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
     pip_binary = _get_pip_bin(kwargs.get('bin_env'), py3=__pillar__.get('py3', False))
     kwargs['bin_env'] = pip_binary
     return pip_install(*args, **kwargs)
+
+
+def list_(*args, **kwargs):
+    return pip_list(*args, **kwargs)

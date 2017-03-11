@@ -29,6 +29,7 @@
 {%- endif %}
 
 include:
+  - locale
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}
   {%- if grains.get('os', '') != 'Windows' %}
@@ -36,10 +37,6 @@ include:
   {%- endif %}
   - patch
   - sed
-  {%- endif %}
-  # Apply locales to some system that incorrectly default to ASCII
-  {%- if grains.get('os', '') == 'Arch' %}
-  - locale
   {%- endif %}
   {#-
   {%- if grains['os_family'] not in ('FreeBSD',) %}

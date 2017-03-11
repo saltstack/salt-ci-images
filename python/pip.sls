@@ -22,7 +22,9 @@
 
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
+  {%- set pip = 'pip3' %}
 {%- else %}
+  {%- set pip = 'pip2' %}
   {%- if on_arch %}
     {%- set python = 'python2' %}
   {%- elif on_redhat_5 %}
@@ -61,6 +63,7 @@ pip-install:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U pip
     - cwd: /
     - reload_modules: True
+    - onlyif: '[ "$(which {{ pip }} 2>/dev/null)" = "" ]'
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
@@ -82,6 +85,7 @@ pip2-install:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
     - cwd: /
     - reload_modules: True
+    - onlyif: '[ "$(which pip2 2>/dev/null)" = "" ]'
     - require:
       - pkg: curl
     {%- if on_redhat_5 %}

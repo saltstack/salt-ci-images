@@ -75,7 +75,7 @@ pip-install:
 {%- if pillar.get('py3', False) %}
 pip2-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py }} -U pip
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
     - cwd: /
     - reload_modules: True
     - require:

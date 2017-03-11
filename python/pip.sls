@@ -78,10 +78,12 @@ pip-install:
       {%- endif %}
     {%- endif %}
 
-upgrade-pip:
+upgrade-installed-pip:
   pip.installed:
     - name: pip
     - upgrade: True
+    - require:
+      - cmd: pip-install
 
 {%- if pillar.get('py3', False) %}
 pip2-install:
@@ -99,8 +101,10 @@ pip2-install:
     - pkg: python-dev
     {%- endif %}
 
-upgrade-pip:
+upgrade-installed-pip2:
   pip2.installed:
     - name: pip
     - upgrade: True
+    - require:
+      - cmd: pip2-install
 {%- endif %}

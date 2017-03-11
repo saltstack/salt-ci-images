@@ -78,6 +78,10 @@ pip-install:
       {%- endif %}
     {%- endif %}
 
+upgrade-pip:
+  pip.installed:
+    - name: pip
+    - upgrade: True
 
 {%- if pillar.get('py3', False) %}
 pip2-install:
@@ -94,4 +98,9 @@ pip2-install:
     {%- if on_debian_7 %}
     - pkg: python-dev
     {%- endif %}
+
+upgrade-pip:
+  pip2.installed:
+    - name: pip
+    - upgrade: True
 {%- endif %}

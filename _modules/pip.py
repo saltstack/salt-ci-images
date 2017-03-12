@@ -84,6 +84,16 @@ _get_pip_bin = get_pip_bin
 def install(*args, **kwargs):  # pylint: disable=function-redefined
     pip_binary = _get_pip_bin(kwargs.get('bin_env'))
     kwargs['bin_env'] = pip_binary
+    env_vars = kwargs.pop('env_vars', None)
+    if not env_vars:
+        env_vars = {}
+    # Some packages are not really competent at handling systems with poorly setup locales
+    # Since this state tree properly configures the locale and yet, some packages, moto,
+    # still fail under Python 3, let's explicitly set PYTHONIOENCODING environment variable
+    # to utf-8
+    if 'PYTHONIOENCODING' not in env_vars:
+        env_vars['PYTHONIOENCODING'] = 'utf-8'
+    kwargs['env_vars'] = env_vars
     return pip_install(*args, **kwargs)
 
 

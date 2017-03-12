@@ -11,6 +11,7 @@
 from __future__ import absolute_import
 import os
 import types
+import logging
 
 # Import salt libs
 from salt.utils import namespaced_function
@@ -33,6 +34,9 @@ for name in dir(salt.modules.pip):
         if attr in globals():
             continue
         globals()[name] = namespaced_function(attr, globals())
+
+
+log = logging.getLogger(__name__)
 
 
 __func_alias__ = {
@@ -92,6 +96,7 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
     # still fail under Python 3, let's explicitly set PYTHONIOENCODING environment variable
     # to utf-8
     if 'PYTHONIOENCODING' not in env_vars:
+        log.debug('Explicitly setting environment variable "PYTHONIOENCODING=utf-8')
         env_vars['PYTHONIOENCODING'] = 'utf-8'
     kwargs['env_vars'] = env_vars
     return pip_install(*args, **kwargs)

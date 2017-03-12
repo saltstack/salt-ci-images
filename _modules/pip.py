@@ -98,6 +98,9 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
     if 'PYTHONIOENCODING' not in env_vars:
         log.debug('Explicitly setting environment variable "PYTHONIOENCODING=utf-8')
         env_vars['PYTHONIOENCODING'] = 'utf-8'
+    if 'LC_ALL' not in env_vars:
+        log.debug('Explicitly setting environment variable "LC_ALL=en_US.UTF-8"')
+        env_vars['LC_ALL'] = 'en_US.UTF-8'
     kwargs['env_vars'] = env_vars
     return pip_install(*args, **kwargs)
 

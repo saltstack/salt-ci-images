@@ -11,6 +11,7 @@
 from __future__ import absolute_import
 import os
 import types
+import logging
 
 # Import salt libs
 from salt.utils import namespaced_function
@@ -33,6 +34,9 @@ for name in dir(salt.modules.pip):
         if attr in globals():
             continue
         globals()[name] = namespaced_function(attr, globals())
+
+
+log = logging.getLogger(__name__)
 
 
 __func_alias__ = {
@@ -84,6 +88,20 @@ _get_pip_bin = get_pip_bin
 def install(*args, **kwargs):  # pylint: disable=function-redefined
     pip_binary = _get_pip_bin(kwargs.get('bin_env'))
     kwargs['bin_env'] = pip_binary
+    env_vars = kwargs.pop('env_vars', None)
+    if not env_vars:
+        env_vars = {}
+    # Some packages are not really competent at handling systems with poorly setup locales
+    # Since this state tree properly configures the locale and yet, some packages, moto,
+    # still fail under Python 3, let's explicitly set PYTHONIOENCODING environment variable
+    # to utf-8
+    if 'PYTHONIOENCODING' not in env_vars:
+        log.debug('Explicitly setting environment variable "PYTHONIOENCODING=utf-8')
+        env_vars['PYTHONIOENCODING'] = 'utf-8'
+    if 'LC_ALL' not in env_vars:
+        log.debug('Explicitly setting environment variable "LC_ALL=en_US.UTF-8"')
+        env_vars['LC_ALL'] = 'en_US.UTF-8'
+    kwargs['env_vars'] = env_vars
     return pip_install(*args, **kwargs)
 
 

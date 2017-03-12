@@ -28,9 +28,15 @@
   {%- else %}
     {%- set python_dev = 'python-devel' %}
   {%- endif %}
+{%- elif grains['os_family'] == 'Debian' %}
+  {%- if pillar.get('py3', False) %}
+    {%- set python_dev = 'python3-dev' %}
+  {%- else %}
+    {%- set python_dev = 'python-dev' %}
+  {%- endif %}
 {%- else %}
   {%- if pillar.get('py3', False) %}
-    {%- set python_dev = 'python34-dev' %}
+    {%- set python_dev = 'python3-dev' %}
   {%- else %}
     {%- set python_dev = 'python-dev' %}
   {%- endif %}

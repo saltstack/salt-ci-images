@@ -11,6 +11,7 @@
 from __future__ import absolute_import
 import os
 import types
+import logging
 
 # Import salt libs
 from salt.utils import namespaced_function
@@ -18,6 +19,8 @@ from salt.exceptions import CommandNotFoundError
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
+
+log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
 pip_state_installed = namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
@@ -84,6 +87,7 @@ def installed(name, **kwargs):
 
     sudo_user = os.environ.get('SUDO_USER')
     bin_env = _get_pip_bin(kwargs.get('bin_env'))
+    log.warning('pip2 binary found: %s', bin_env)
 
     kwargs.update(
         index_url=index_url,

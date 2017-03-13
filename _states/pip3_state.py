@@ -68,7 +68,7 @@ def _get_pip_bin(bin_env):
     else:
         raise CommandNotFoundError('Could not find a `pip` binary')
 
-__virtualname__ = 'pip2'
+__virtualname__ = 'pip3'
 
 
 def __virtual__():

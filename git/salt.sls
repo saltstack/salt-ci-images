@@ -29,6 +29,7 @@
 {%- endif %}
 
 include:
+  - docker
   - locale
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}

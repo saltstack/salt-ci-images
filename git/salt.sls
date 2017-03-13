@@ -219,9 +219,7 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
-      {%- if not pillar.get('py3', False) and grains['os'] == 'Debian' %}
       - pip2: supervisor
-      {%- endif %}
       - pip: boto
       - pip: moto
       - pip: psutil

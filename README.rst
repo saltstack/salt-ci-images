@@ -1,13 +1,25 @@
-salt-jenkins
-============
+=======================
+Salt Jenkins State Tree
+=======================
 
-Salt states used to run jenkins tests
+Salt states used to run Jenkins tests.
+
+The salt-jenkins state tree is used to configure and prepare the testing VMs used to run Salt's test suite on
+[Salt's Jenkins system](https://jenkins.saltstack.com/). These states install the testing requirements needed
+to execute the tests themselves, any packages and dependencies needed for particular module or state tests to
+run, set up configuration files, and clone Salt into the `/testing` directory.
+
+Occasionally, new packages need to be installed on the testing VMs to ensure that particular tests will run.
+For example, if a contributor adds a test file for Salt's docker execution module, the `docker` package needs
+to be installed on the test VMs. This repository is the place to perform that package installation by adding
+a state.
+
 
 Locally Running States
-----------------------
+======================
 
-You can clone this repository, and, as long as you already have salt installed, you can
-run this state tree directly (instead of using gitfs).
+You can clone this repository, and, as long as you already have salt installed, you can run this state tree
+directly (instead of using `gitfs`).
 
 For example:
 
@@ -15,5 +27,33 @@ For example:
 salt-call state.sls git.salt pillar="{py3: true, test_transport: zeromq, with_coverage: true}"
 ```
 
-This is possible due to the fact that included in this state tree repository there's a `Saltfile` and a `minion`
-configuration files which sets everything up in order to run salt-call locally against this state tree.
+This is possible due to the fact that included in this state tree repository there are `Saltfile` and `minion`
+configuration files which set everything up in order to run `salt-call` locally against this state tree.
+
+
+Contributing
+============
+
+The `salt-jenkins` project is welcome and open to contributions.
+
+The `salt-jenkins` repository has a few openly maintained branches. These correspond to the actively maintained
+release branches in the [Salt project](https://github.com/saltstack/salt). This helps stabilize the testing
+environments that the `salt-jenkins` states configure on the test VMs running at
+[jenkins.saltstack.com](https://jenkins.saltstack.com/).
+
+There is a node located in Salt's Jenkins installation configured to run the tests for each supported Salt
+release branch. In turn, each node is configured to run the `salt-jenkins` state tree based on the Salt release
+branch it supports.
+
+For example, the Jenkins node labeled `2016_3` runs tests against the HEAD of the `2016.3` branch of Salt. This
+same `2016_3` node is configured to run the `salt-jenkins` state tree using the `2016.3` branch of the
+`salt-jenkins` repository.
+
+**Note: The `master` branch of the `salt-jenkins` repository is used to test the `develop` branch of Salt.**
+
+Most contributions to this repository will likely be submitted against `master`, as most test environment changes
+will need to be submitted to accommodate tests for the new features that are added to Salt's `develop` branch.
+
+However, this will not always be the case. If a configuration needs to be added for tests to run properly on the
+`2016.11` branch of Salt, then the state changes in the `salt-jenkins` repo need to be made against the `2016.11`
+branch.

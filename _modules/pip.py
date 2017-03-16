@@ -58,15 +58,12 @@ def get_pip_bin(bin_env):
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
             raise CommandNotFoundError('Could not find a `pip` binary')
-        if salt.utils.is_windows():
-            return which_result
         return which_result
 
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
         if salt.utils.is_windows():
-            pip_bin = os.path.join(
-                bin_env, 'Scripts', 'pip.exe')
+            pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)
         if os.path.isfile(pip_bin):

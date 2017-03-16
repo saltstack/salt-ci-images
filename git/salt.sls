@@ -163,7 +163,7 @@ include:
 
 
 {% if grains['os'] == 'Windows' %}
-\\testing:
+C:\testing:
 {% else %}
 /testing:
 {% endif %}

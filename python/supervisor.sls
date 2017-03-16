@@ -4,7 +4,11 @@ include:
 {% endif %}
 
 supervisor:
+{% if grains['pythonversion][0] == 3 '%}
+  pip3.installed:
+{% else %}
   pip2.installed:
+{% endif %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

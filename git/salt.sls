@@ -237,7 +237,9 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
+      {% if grains['pythonversion'][0]|string not in ('3')  %}
       - pip2: supervisor
+      {% endif %}
       - pip: boto
       - pip: moto
       - pip: psutil

@@ -29,7 +29,9 @@
 {%- endif %}
 
 include:
+  {%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
   - docker
+  {%- endif %}
   - locale
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}
@@ -168,6 +170,11 @@ clone-salt-repo:
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:
+      {%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
+      - service: docker
+      - pkg: docker
+      - file: /usr/bin/busybox
+      {%- endif %}
       - file: /testing
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}

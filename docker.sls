@@ -1,4 +1,3 @@
-{%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
 /usr/bin/busybox:
   file.managed:
     - source: http://repo.saltstack.com/dev/testing/redhat/7/x86_64/archive/busybox/1.26.2/busybox-x86_64
@@ -12,4 +11,3 @@ docker:
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
-{%- endif %}

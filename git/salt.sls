@@ -185,7 +185,11 @@ clone-salt-repo:
       - pkg: docker
       - file: /usr/bin/busybox
       {%- endif %}
+      {% if grains['os'] == 'Windows' %}
+      - file: C:\testing
+      {% else %}
       - file: /testing
+      {% endif %}
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap

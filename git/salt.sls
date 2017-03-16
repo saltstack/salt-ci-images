@@ -161,7 +161,12 @@ include:
   - python.pytest-salt
   {%- endif %}
 
+
+{% if grains['os'] == 'Windows' %}
+\\testing:
+{% else %}
 /testing:
+{% endif %}
   file.directory
 
 clone-salt-repo:

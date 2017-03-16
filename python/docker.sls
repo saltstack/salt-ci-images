@@ -1,4 +1,4 @@
-{%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
+{%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
 include:
   - python.pip
 
@@ -6,7 +6,7 @@ docker:
   pkg.installed:
     - aggregate: True
 
-docker-py:
+docker:
   pip.installed:
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}

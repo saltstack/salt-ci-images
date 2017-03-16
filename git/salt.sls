@@ -29,7 +29,7 @@
 {%- endif %}
 
 include:
-  {%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
+  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
   - docker
   {%- endif %}
   - locale
@@ -170,7 +170,7 @@ clone-salt-repo:
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:
-      {%- if grains['os'] == 'CentOS' and grains['osrelease']|int == 7 %}
+      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
       - service: docker
       - pkg: docker
       - file: /usr/bin/busybox

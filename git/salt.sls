@@ -295,7 +295,9 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
+      {% if grains['pythonversion'][0]|string not in ('3')  %}
       - pip: dmidecode
+      {% endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}

@@ -51,9 +51,42 @@ same `2016_3` node is configured to run the `salt-jenkins` state tree using the 
 
 **Note: The `master` branch of the `salt-jenkins` repository is used to test the `develop` branch of Salt.**
 
-Most contributions to this repository will likely be submitted against `master`, as most test environment changes
-will need to be submitted to accommodate tests for the new features that are added to Salt's `develop` branch.
+Which Salt Jenkins Branch?
+--------------------------
 
-However, this will not always be the case. If a configuration needs to be added for tests to run properly on the
-`2016.11` branch of Salt, then the state changes in the `salt-jenkins` repo need to be made against the `2016.11`
-branch.
+GitHub will open pull requests against Salt Jenkins's main branch, `master`, by default. Contributions to the
+Salt Jenkins state tree should be added to the oldest supported branch that requires the change.
+
+For example, imagine a new execution module was added to the `develop` branch in Salt, along with tests for
+the new module. The new module requires a dependency that is not currently installed by the Salt Jenkins
+states. The new state(s) would need to be added to the `master` branch of Salt Jenkins.
+
+If new tests are written against an older release branch in Salt, such as the `2016.11` branch, then the
+change for the Salt Jenkins states needs to also be submitted against the `2016.11` branch in the
+`salt-jenkins` repository.
+
+Merge Forward Policy
+~~~~~~~~~~~~~~~~~~~~
+
+The Salt Jenkins repository follows a "Merge Forward" policy. The merge-forward behavior means that changes
+that are submitted to older "release" branches will automatically be merged forward into the newer branches.
+(The Salt repository follows this same behavior.) This makes is easy for contributors to make only one
+pull-request against an older branch, but allow the change to propagate to all `salt-jenkins` branches as the
+tests make their way forward in the Salt repository.
+
+Here's a simple example of changes merging forward from older branches to newer branches, where the `HEAD` of
+each branch is merged into the directly newer branch:
+
+```
+
+master    *---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*------------>
+                                                             /
+                                                            / (Merge Forward from 2016.11 to master)
+                                                           /
+2016.11   *---*---*---*---*---*---*---*---*---*---*---*---*
+                                     /
+                                    / (Merge Forward from 2016.3 to 2016.11)
+                                   /
+2016.3    *---*---*---*---*---*---*
+
+```

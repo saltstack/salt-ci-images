@@ -11,7 +11,7 @@
 {%- endif %}
 
 {%- if grains['os'] == 'Windows' %}
-  {%- set testing_dir = 'C:\testing' %}
+  {%- set testing_dir = 'C:\\testing' %}
 {%- else %}
   {%- set testing_dir = '/testing' %}
 {%- endif %}

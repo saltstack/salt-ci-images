@@ -10,6 +10,12 @@
   {%- set on_redhat_5 = False %}
 {%- endif %}
 
+{%- if grains['os'] == 'Windows' %}
+  {%- set testing_dir = 'C:\testing' %}
+{%- else %}
+  {%- set testing_dir = '/testing' %}
+{%- endif %}
+
 {%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
 {%- else %}
@@ -161,12 +167,7 @@ include:
   - python.pytest-salt
   {%- endif %}
 
-
-{% if grains['os'] == 'Windows' %}
-C:\testing:
-{% else %}
-/testing:
-{% endif %}
+{{ testing_dir }}:
   file.directory
 
 clone-salt-repo:
@@ -175,7 +176,7 @@ clone-salt-repo:
     - force_checkout: True
     - force_reset: True
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
-    - target: /testing
+    - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
@@ -185,11 +186,7 @@ clone-salt-repo:
       - pkg: docker
       - file: /usr/bin/busybox
       {%- endif %}
-      {% if grains['os'] == 'Windows' %}
-      - file: C:\testing
-      {% else %}
-      - file: /testing
-      {% endif %}
+      - file: {{ testing_dir }}
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
@@ -314,16 +311,16 @@ clone-salt-repo:
 add-upstream-repo:
   cmd.run:
     - name: git remote add upstream {{ default_test_git_url }}
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - git: clone-salt-repo
-    - unless: 'cd /testing ; git remote -v | grep {{ default_test_git_url }}'
+    - unless: 'cd {{ testing_dir }} ; git remote -v | grep {{ default_test_git_url }}'
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - cmd: add-upstream-repo
 {%- endif %}
@@ -332,16 +329,16 @@ fetch-upstream-tags:
 {#- Install Salt Dev Dependencies #}
 install-salt-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f /testing/requirements/{{ test_transport }}.txt ]'
+    - requirements: {{ testing_dir }}/requirements/{{ test_transport }}.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/{{ test_transport }}.txt ]'
 
 install-salt-dev-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f /testing/requirements/dev_{{ python }}.txt ]'
+    - requirements: {{ testing_dir }}/requirements/dev_{{ python }}.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/dev_{{ python }}.txt ]'
 
 install-salt-pytest-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/pytest.txt
-    - onlyif: '[ -f /testing/requirements/pytest.txt ]'
+    - requirements: {{ testing_dir }}/requirements/pytest.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
 {%- endif %}

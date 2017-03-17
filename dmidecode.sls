@@ -1,4 +1,4 @@
-{% if grains['pythonversion'][0]|string not in ('3')  %}
+{% if not pillar.get('py3', False) %}
 
 {% if grains['os'] in ('Windows') %}
   {% set install_method = 'pip.installed' %}

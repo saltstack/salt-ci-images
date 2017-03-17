@@ -20,6 +20,9 @@ import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
 
+# Import 3rd Party libs
+import salt.ext.six as six
+
 log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
@@ -44,6 +47,8 @@ def _get_pip_bin(bin_env):
     pip_bin_name = 'pip2'
     if not bin_env:
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
+        if salt.utils.is_windows() and six.py2:
+            which_result.encode('string-escape')
         if which_result is None:
             raise CommandNotFoundError('Could not find a `pip` binary')
         return which_result
@@ -51,7 +56,11 @@ def _get_pip_bin(bin_env):
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
         if salt.utils.is_windows():
-            pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
+            if six.py2:
+                pip_bin = os.path.join(
+                    bin_env, 'Scripts', 'pip.exe').encode('string-escape')
+            else:
+                pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)
         if os.path.isfile(pip_bin):

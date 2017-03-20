@@ -29,7 +29,10 @@
 {%- endif %}
 
 include:
+  # All VMs get docker-py so they can run unit tests
+  - python.docker
   {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
+  # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
   - locale
@@ -169,6 +172,9 @@ clone-salt-repo:
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
     - target: /testing
     - require:
+      # All VMs get docker-py so they can run unit tests
+      - pip: docker
+      # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
       - service: docker
       - pkg: docker

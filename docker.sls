@@ -1,6 +1,3 @@
-include:
-  - python.pip
-
 /usr/bin/busybox:
   file.managed:
     - source: http://repo.saltstack.com/dev/testing/redhat/7/x86_64/archive/busybox/1.26.2/busybox-x86_64
@@ -14,11 +11,3 @@ docker:
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
-  pip.installed:
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
-    - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
-    - extra_index_url: https://pypi.python.org/simple
-    - require:
-      - cmd: pip-install

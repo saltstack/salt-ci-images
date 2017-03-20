@@ -1,6 +1,6 @@
-{% if not pillar.get('py3', False) %}
+{% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
 
-{% if grains['os'] in ('Windows') %}
+{% if grains['os'] == 'Windows' %}
   {% set install_method = 'pip.installed' %}
 {% else %}
   {% set install_method = 'pkg.installed' %}

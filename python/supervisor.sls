@@ -1,5 +1,5 @@
-{% if not pillar.get('py3', False) %}
-{% if grains['os'] not in ('Windows') %}
+{% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
+{% if grains['os'] != 'Windows' %}
 include:
   - python.pip
 {% endif %}
@@ -11,8 +11,10 @@ supervisor:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-    {% if grains['os'] not in ('Windows') %}
+    {% if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install
     {% endif %}
 {% endif %}
+
+not py3 on windows

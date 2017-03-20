@@ -238,7 +238,7 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
-      {% if not pillar.get('py3', False) %}
+      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
       {% endif %}
       - pip: boto
@@ -292,7 +292,7 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
-      {% if not pillar.get('py3', False) %}
+      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip: dmidecode
       {% endif %}
       {%- else %}

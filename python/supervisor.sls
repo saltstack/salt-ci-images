@@ -16,5 +16,3 @@ supervisor:
       - cmd: pip-install
     {% endif %}
 {% endif %}
-
-not py3 on windows

@@ -10,8 +10,9 @@
   {% set python3 = 'python3' %}
 {% endif %}
 
-
+{% if os_family != 'Windows' %}
 install_python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True
+{% endif %}

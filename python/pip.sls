@@ -38,7 +38,9 @@
 include:
   - curl
 {%- if pillar.get('py3', False) %}
+{%- if os_family != 'Windows' %}
   - python3
+{%- endif %}
 {%- else %}
   {%- if on_redhat_5 %}
   - python26
@@ -65,9 +67,15 @@ pip-install:
     - reload_modules: True
     - onlyif: '[ "$(which {{ pip }} 2>/dev/null)" = "" ]'
     - require:
+    {%- if grains['os_family'] == 'Windows' %}
+      - pip: curl
+    {%- else %}
       - pkg: curl
+    {%- endif %}
     {%- if pillar.get('py3', False) %}
+    {%- if os_family != 'Windows' %}
       - pkg: install_python3
+    {%- endif %}
       - cmd: pip2-install
     {%- else %}
       {%- if on_redhat_5 %}

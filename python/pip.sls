@@ -93,7 +93,7 @@ upgrade-installed-pip:
     - require:
       - cmd: pip-install
 
-{%- if pillar.get('py3', False) %}
+{%- if not pillar.get('py3', False) %}
 pip2-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip

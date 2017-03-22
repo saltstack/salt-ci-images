@@ -159,6 +159,8 @@ include:
   - python.pytest-catchlog
   - python.pytest-helpers-namespace
   - python.pytest-salt
+  - python.junos-eznc
+  - python.jxmlease
   {%- endif %}
 
 /testing:

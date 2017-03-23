@@ -1,4 +1,3 @@
-{% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
 {% if grains['os'] != 'Windows' %}
 include:
   - python.pip
@@ -15,4 +14,3 @@ supervisor:
     - require:
       - cmd: pip-install
     {% endif %}
-{% endif %}

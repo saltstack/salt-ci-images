@@ -292,9 +292,7 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
-      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip: dmidecode
-      {% endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}

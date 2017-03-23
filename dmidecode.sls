@@ -1,5 +1,3 @@
-{% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
-
 {% if grains['os'] == 'Windows' %}
   {% set install_method = 'pip.installed' %}
 {% else %}
@@ -12,5 +10,3 @@ install-dmidecode:
     {% if install_method == 'pkg.installed' %}
     - aggregate: True
     {%- endif %}
-
-{% endif %}

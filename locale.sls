@@ -5,7 +5,6 @@
 # to fail if not set correctly.
 
 # Locale Module not available in Windows
-{% if grains.get('os', '') != 'Windows' %}
 us_locale:
   locale.present:
     - name: en_US.UTF-8
@@ -15,4 +14,3 @@ default_locale:
     - name: en_US.UTF-8
     - require:
       - locale: us_locale
-{% endif %}

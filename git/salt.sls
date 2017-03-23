@@ -41,7 +41,9 @@ include:
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
+  {%- if grains['os'] != 'Windows' ) %}
   - locale
+  {%- endif %}
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}
   {%- if grains.get('os', '') != 'Windows' %}
@@ -87,7 +89,9 @@ include:
   - python.cherrypy
   - python.etcd
   - python.gitpython
+  {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
+  {%- endif %}
   - python.boto
   - python.moto
   - python.psutil
@@ -292,9 +296,7 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
-      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip: dmidecode
-      {% endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}

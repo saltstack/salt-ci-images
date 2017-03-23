@@ -157,7 +157,9 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - extra-swap
   {%- endif %}
+  {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - dmidecode
+  {%- endif %}
   {%- endif %}
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
@@ -296,7 +298,9 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
+      {%- if not pillar.get('py3', False) %}
       - pip: dmidecode
+      {%- endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}

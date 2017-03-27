@@ -20,6 +20,12 @@
   {%- set on_arch = False %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip' %}
+{% else %}
+  {% set install_method = 'pkg' %}
+{% endif %}
+
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
   {%- set pip = 'pip3' %}
@@ -67,11 +73,7 @@ pip-install:
     - reload_modules: True
     - onlyif: '[ "$(which {{ pip }} 2>/dev/null)" = "" ]'
     - require:
-    {%- if grains['os_family'] == 'Windows' %}
-      - pip: curl
-    {%- else %}
-      - pkg: curl
-    {%- endif %}
+      - {{ install_method }}: curl
     {%- if pillar.get('py3', False) %}
     {%- if os_family != 'Windows' %}
       - pkg: install_python3
@@ -101,7 +103,7 @@ pip2-install:
     - reload_modules: True
     - onlyif: '[ "$(which pip2 2>/dev/null)" = "" ]'
     - require:
-      - pkg: curl
+      - {{ install_method }}: curl
     {%- if on_redhat_5 %}
     - pkg: python26
     {%- endif %}

@@ -1,7 +1,5 @@
-{% if grains['os'] not in ('Windows') %}
 include:
   - python.pip
-{% endif %}
 
 {% if grains['os'] in ['Ubuntu', 'Debian'] %}
 pyez dependencies:
@@ -35,7 +33,5 @@ junos-eznc:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-{% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install
-{% endif %}

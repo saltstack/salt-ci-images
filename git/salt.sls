@@ -160,6 +160,10 @@ include:
   - python.pytest-helpers-namespace
   - python.pytest-salt
   {%- endif %}
+  {%- if grains['os'] in ['CentOS', 'Debian', 'Fedora', 'FreeBSD', 'MacOS' , 'Ubuntu'] %}
+  - python.junos-eznc
+  - python.jxmlease
+  {%- endif %}
 
 /testing:
   file.directory

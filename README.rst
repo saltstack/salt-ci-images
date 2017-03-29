@@ -47,7 +47,7 @@ For example, the Jenkins node labeled ``2016_3`` runs tests against the HEAD of 
 same ``2016_3`` node is configured to run the ``salt-jenkins`` state tree using the ``2016.3`` branch of the
 ``salt-jenkins`` repository.
 
-**Note: The ``master`` branch of the ``salt-jenkins`` repository is used to test the ``develop`` branch of Salt.**
+**Note: The "master" branch of the "salt-jenkins" repository is used to test the "develop" branch of Salt.**
 
 Which Salt Jenkins Branch?
 --------------------------

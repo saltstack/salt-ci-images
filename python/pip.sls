@@ -77,8 +77,8 @@ pip-install:
     {%- if pillar.get('py3', False) %}
     {%- if os_family != 'Windows' %}
       - pkg: install_python3
-    {%- endif %}
       - cmd: pip2-install
+    {%- endif %}
     {%- else %}
       {%- if on_redhat_5 %}
       - pkg: python26

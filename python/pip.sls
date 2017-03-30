@@ -20,6 +20,12 @@
   {%- set on_arch = False %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip' %}
+{% else %}
+  {% set install_method = 'pkg' %}
+{% endif %}
+
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
   {%- set pip = 'pip3' %}
@@ -38,7 +44,9 @@
 include:
   - curl
 {%- if pillar.get('py3', False) %}
+{%- if os_family != 'Windows' %}
   - python3
+{%- endif %}
 {%- else %}
   {%- if on_redhat_5 %}
   - python26
@@ -65,11 +73,13 @@ pip-install:
     - reload_modules: True
     - onlyif: '[ "$(which {{ pip }} 2>/dev/null)" = "" ]'
     - require:
-      - pkg: curl
+      - {{ install_method }}: curl
     {%- if pillar.get('py3', False) %}
+    {%- if os_family != 'Windows' %}
       - pkg: install_python3
-      - cmd: pip2-install
+    {%- endif %}
     {%- else %}
+      - cmd: pip2-install
       {%- if on_redhat_5 %}
       - pkg: python26
       {%- endif %}
@@ -85,7 +95,7 @@ upgrade-installed-pip:
     - require:
       - cmd: pip-install
 
-{%- if pillar.get('py3', False) %}
+{%- if pillar.get('py3', False) and grains['os'] != 'Windows' ) %}
 pip2-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
@@ -93,7 +103,7 @@ pip2-install:
     - reload_modules: True
     - onlyif: '[ "$(which pip2 2>/dev/null)" = "" ]'
     - require:
-      - pkg: curl
+      - {{ install_method }}: curl
     {%- if on_redhat_5 %}
     - pkg: python26
     {%- endif %}

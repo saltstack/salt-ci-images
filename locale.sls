@@ -3,6 +3,8 @@
 #
 # This will cause  integration.shell.matcher.MatchTest.test_salt_documentation_arguments_not_assumed
 # to fail if not set correctly.
+
+# Locale Module not available in Windows
 us_locale:
   locale.present:
     - name: en_US.UTF-8

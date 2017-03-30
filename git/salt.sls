@@ -10,6 +10,12 @@
   {%- set on_redhat_5 = False %}
 {%- endif %}
 
+{%- if grains['os'] == 'Windows' %}
+  {%- set testing_dir = 'C:\\testing' %}
+{%- else %}
+  {%- set testing_dir = '/testing' %}
+{%- endif %}
+
 {%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
 {%- else %}
@@ -35,7 +41,9 @@ include:
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
+  {%- if grains['os'] != 'Windows' %}
   - locale
+  {%- endif %}
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}
   {%- if grains.get('os', '') != 'Windows' %}
@@ -81,7 +89,9 @@ include:
   - python.cherrypy
   - python.etcd
   - python.gitpython
+  {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
+  {%- endif %}
   - python.boto
   - python.moto
   - python.psutil
@@ -147,7 +157,9 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - extra-swap
   {%- endif %}
+  {%- if grains['os'] != 'Windows' or (not (pillar.get('py3', False) and grains['os'] == 'Windows' )) %}
   - dmidecode
+  {%- endif %}
   {%- endif %}
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
@@ -165,7 +177,7 @@ include:
   - python.jxmlease
   {%- endif %}
 
-/testing:
+{{ testing_dir }}:
   file.directory
 
 clone-salt-repo:
@@ -174,7 +186,7 @@ clone-salt-repo:
     - force_checkout: True
     - force_reset: True
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
-    - target: /testing
+    - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
@@ -184,7 +196,7 @@ clone-salt-repo:
       - pkg: docker
       - file: /usr/bin/busybox
       {%- endif %}
-      - file: /testing
+      - file: {{ testing_dir }}
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
@@ -236,7 +248,9 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
+      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
+      {% endif %}
       - pip: boto
       - pip: moto
       - pip: psutil
@@ -288,7 +302,9 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
+      {%- if not pillar.get('py3', False) %}
       - pip: dmidecode
+      {%- endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}
@@ -305,16 +321,16 @@ clone-salt-repo:
 add-upstream-repo:
   cmd.run:
     - name: git remote add upstream {{ default_test_git_url }}
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - git: clone-salt-repo
-    - unless: 'cd /testing ; git remote -v | grep {{ default_test_git_url }}'
+    - unless: 'cd {{ testing_dir }} ; git remote -v | grep {{ default_test_git_url }}'
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - cmd: add-upstream-repo
 {%- endif %}
@@ -323,16 +339,16 @@ fetch-upstream-tags:
 {#- Install Salt Dev Dependencies #}
 install-salt-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f /testing/requirements/{{ test_transport }}.txt ]'
+    - requirements: {{ testing_dir }}/requirements/{{ test_transport }}.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/{{ test_transport }}.txt ]'
 
 install-salt-dev-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f /testing/requirements/dev_{{ python }}.txt ]'
+    - requirements: {{ testing_dir }}/requirements/dev_{{ python }}.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/dev_{{ python }}.txt ]'
 
 install-salt-pytest-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/pytest.txt
-    - onlyif: '[ -f /testing/requirements/pytest.txt ]'
+    - requirements: {{ testing_dir }}/requirements/pytest.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
 {%- endif %}

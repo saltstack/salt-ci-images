@@ -177,7 +177,7 @@ include:
   - python.jxmlease
   {%- endif %}
   - python.python-hglib
-  - python.gssapi
+  - python.python-gssapi
   - python.pyVmomi
 
 {{ testing_dir }}:

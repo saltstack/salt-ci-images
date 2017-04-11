@@ -177,6 +177,7 @@ include:
   - python.jxmlease
   {%- endif %}
   - python.python-hglib
+  - python.gssapi
 
 {{ testing_dir }}:
   file.directory

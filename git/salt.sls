@@ -178,6 +178,7 @@ include:
   {%- endif %}
   - python.python-hglib
   - python.gssapi
+  - python.pyVmomi
 
 {{ testing_dir }}:
   file.directory

@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 {% endif %}
@@ -16,7 +16,7 @@ gnupg:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os'] == 'Fedora' %}
       - pkg: python-gnupg

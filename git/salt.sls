@@ -177,8 +177,10 @@ include:
   - python.jxmlease
   {%- endif %}
   - python.python-hglib
+  {%- if grains['os'] != 'Windows' %}
   - python.python-gssapi
   - python.pyVmomi
+  {%- endif %}
 
 {{ testing_dir }}:
   file.directory

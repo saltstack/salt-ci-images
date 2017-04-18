@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 {% endif %}
@@ -10,7 +10,7 @@ pytest-tempdir:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
 {% endif %}

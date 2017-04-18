@@ -1,6 +1,6 @@
 {% set fedora = True if grains['os'] == 'Fedora' else False %}
 {% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 {% endif %}
@@ -12,7 +12,7 @@ setproctitle:
     {%- endif %}
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       {%- if fedora24 %}

@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
   - gcc
@@ -13,7 +13,7 @@ SaltTesting:
     - upgrade: true
     - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
     - extra_index_url: https://pypi.python.org/simple
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       - pkg: gcc

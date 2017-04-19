@@ -11,4 +11,5 @@ install_pygit2:
     {%- else %}
     - name: python-pygit2
     {%- endif %}
+    - aggregate: True
 {% endif %}

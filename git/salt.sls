@@ -176,6 +176,11 @@ include:
   - python.junos-eznc
   - python.jxmlease
   {%- endif %}
+  - python.python-hglib
+  {%- if grains['os'] != 'Windows' %}
+  - python.python-gssapi
+  - python.pyVmomi
+  {%- endif %}
 
 {{ testing_dir }}:
   file.directory
@@ -315,6 +320,7 @@ clone-salt-repo:
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
       {%- endif %}
+      - pip: python-hglib
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}

@@ -89,6 +89,7 @@ include:
   - python.cherrypy
   - python.etcd
   - python.gitpython
+  - python.pygit2
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
   {%- endif %}

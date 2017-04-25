@@ -40,6 +40,7 @@ include:
   {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
+  - python.zookeeper
   {%- endif %}
   {%- if grains['os'] != 'Windows' %}
   - locale

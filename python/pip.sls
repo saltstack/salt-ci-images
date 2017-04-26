@@ -1,6 +1,7 @@
 {%- set distro = salt['grains.get']('oscodename', '')  %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set os = salt['grains.get']('os', '') %}
 
 {%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
   {%- set on_redhat_5 = True %}
@@ -20,15 +21,20 @@
   {%- set on_arch = False %}
 {%- endif %}
 
-{% if grains['os'] in ('Windows') %}
+{% if os in ('Windows') %}
   {% set install_method = 'pip' %}
 {% else %}
   {% set install_method = 'pkg' %}
 {% endif %}
 
+{%- set force_reinstall = '' %}
+
 {%- if pillar.get('py3', False) %}
   {%- set python = 'python3' %}
   {%- set pip = 'pip3' %}
+  {%- if os == 'Fedora' %}
+    {%- set force_reinstall = '--force-reinstall' %}
+  {%- endif %}
 {%- else %}
   {%- set pip = 'pip2' %}
   {%- if on_arch %}
@@ -60,7 +66,7 @@ include:
   - python.headers
   {%- endif %}
 
-{%- set get_pip = '{0} get-pip.py'.format(python) %}
+{%- set get_pip = '{0} get-pip.py {1}'.format(python, force_reinstall) %}
 
 force-sync-all:
   module.run:
@@ -71,7 +77,9 @@ pip-install:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U pip
     - cwd: /
     - reload_modules: True
+    {%- if os != 'Fedora' %}
     - onlyif: '[ "$(which {{ pip }} 2>/dev/null)" = "" ]'
+    {%- endif %}
     - require:
       - {{ install_method }}: curl
     {%- if pillar.get('py3', False) %}
@@ -95,7 +103,7 @@ upgrade-installed-pip:
     - require:
       - cmd: pip-install
 
-{%- if pillar.get('py3', False) and grains['os'] != 'Windows' %}
+{%- if pillar.get('py3', False) and os != 'Windows' %}
 pip2-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip

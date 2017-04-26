@@ -1,4 +1,3 @@
-{% set fedora = True if grains['os'] == 'Fedora' else False %}
 {% if grains['os'] not in ('Windows') %}
 include:
   - python.pip
@@ -14,7 +13,4 @@ setproctitle:
 {% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install
-      {%- if fedora %}
-      - pkg: redhat-rpm-config
-      {% endif %}
 {% endif %}

@@ -134,13 +134,8 @@ include:
   {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' or '23' %}
+  {%- if grains['os'] == 'Fedora' %}
   - versionlock
-  {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '22' %}
-  - dnf-plugins
-  {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
   - redhat-rpm-config
   {%- endif %}
   {%- if grains['os'] != 'MacOS' %}
@@ -289,7 +284,7 @@ clone-salt-repo:
       - pkg: dmidecode
       {%- endif %}
       {%- endif %}
-      {%- if grains['os'] == 'Fedora' and grains['osrelease'] == '23' %}
+      {%- if grains['os'] == 'Fedora' %}
       - pkg: redhat-rpm-config
       {%- endif %}
       {%- if grains['os'] in ('MacOS', 'Debian') %}

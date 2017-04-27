@@ -178,6 +178,9 @@ include:
   - python.junos-eznc
   - python.jxmlease
   {%- endif %}
+  {%- if grains['os_family'] in ('Arch', 'RedHat', 'Debian') %}
+  - nginx
+  {%- endif %}
 
 {{ testing_dir }}:
   file.directory
@@ -316,6 +319,9 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
+      {%- endif %}
+      {%- if grains['os_family'] in ('Arch', 'RedHat', 'Debian') %}
+      - pkg: nginx
       {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}

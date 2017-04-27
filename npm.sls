@@ -1,9 +1,6 @@
 {% set suse = True if grains['os_family'] == 'Suse' else False %}
 {% set freebsd = True if grains['os'] == 'FreeBSD' else False %}
-{% set fedora = True if grains['os'] == 'Fedora' else False %}
 {% set macos = True if grains['os'] == 'MacOS' else False %}
-
-{% set fedora24 = True if fedora and grains['osrelease'] == '24' else False %}
 
 # Suse does not package npm separately
 {% if suse %}

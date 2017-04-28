@@ -109,7 +109,9 @@ pip2-install:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
     - cwd: /
     - reload_modules: True
+    {%- if os != 'Fedora' %}
     - onlyif: '[ "$(which pip2 2>/dev/null)" = "" ]'
+    {%- endif %}
     - require:
       - {{ install_method }}: curl
     {%- if on_redhat_5 %}

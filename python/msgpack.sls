@@ -10,7 +10,7 @@ msgpack-python:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - name: msgpack-python >= 0.4.2
-    - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
+    - index_url: https://nexus.c7.saltstack.net/repository/salt-proxy/simple
     - extra_index_url: https://pypi.python.org/simple
 {% if grains['os'] not in ('Windows',) %}
     - require:

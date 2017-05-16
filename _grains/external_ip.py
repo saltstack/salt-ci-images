@@ -20,11 +20,13 @@
 # Import Python Libs
 import contextlib
 import socket
-import urllib2
 
 # Import salt libs
 from salt.utils.validate.net import ipv4_addr as _ipv4_addr
 
+# Import 3rd party libs
+from salt.ext.six.moves.urllib.request import urlopen as _urlopen
+from salt.ext.six.moves.urllib.error import HTTPError, URLError
 
 def external_ip():
     '''
@@ -36,14 +38,12 @@ def external_ip():
 
     for url in check_ips:
         try:
-            with contextlib.closing(urllib2.urlopen(url, timeout=3)) as req:
+            with contextlib.closing(_urlopen(url, timeout=3)) as req:
                 ip_ = req.read().strip()
                 if not _ipv4_addr(ip_):
                     continue
             return {'external_ip': ip_}
-        except (urllib2.HTTPError,
-                urllib2.URLError,
-                socket.timeout):
+        except (HTTPError, URLError, socket.timeout):
             continue
 
     # Return an empty value as a last resort

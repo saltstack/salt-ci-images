@@ -4,6 +4,13 @@
   {% set curl = 'curl' %}
 {%- endif %}
 
+{% if grains['os'] in ('Windows') %}
+  {% set install_method = 'pip.installed' %}
+  {% set curl = 'pycurl' %}
+{% else %}
+  {% set install_method = 'pkg.installed' %}
+{% endif %}
+
 {%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
 include:
   {%- if grains['os'] == 'openSUSE' %}
@@ -14,9 +21,11 @@ include:
 {%- endif %}
 
 curl:
-  pkg.installed:
+  {{ install_method }}:
     - name: {{ curl }}
+    {%- if install_method == 'pkg.installed' %}
     - aggregate: True
+    {%- endif %}
     {%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
     - require:
       {%- if grains['os'] == 'openSUSE' %}
@@ -25,6 +34,7 @@ curl:
       - pkg: ca-certificates
       {%- endif %}
     {%- endif %}
+
 
 {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'][0] == '5' %}
 openssl:

@@ -47,7 +47,8 @@ include:
   {%- endif %}
   {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {# On Windows, this is already installed #}
-  {%- if grains.get('os', '') not in ('MacOS', 'Windows',) %}
+  {%- if grains['os'] != 'MacOS' %}
+  {%- if grains['os'] != 'Windows' %}
   - git
   {%- endif %}
   - patch

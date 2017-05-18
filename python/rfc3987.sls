@@ -5,6 +5,7 @@ include:
 
 rfc3987:
   pip.installed:
+    - name: rfc3987
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

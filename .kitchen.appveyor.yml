@@ -1,0 +1,60 @@
+---
+driver:
+  name: proxy
+  host: localhost
+  reset_command: "exit 0"
+  username: <%= ENV["winrm_user"] %>
+  password: <%= ENV["winrm_pass"] %>
+  port: <%= ENV["winrm_port"] %>
+
+provisioner:
+  name: salt_solo
+  init_environment: |
+    Clear-Host
+    $AddedLocation ="c:\salt"
+    $Reg = "Registry::HKLM\System\CurrentControlSet\Control\Session Manager\Environment"
+    $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
+    $NewPath= $OldPath + ';' + $AddedLocation
+    Set-ItemProperty -Path "$Reg" -Name PATH -Value $NewPath
+  is_file_root: true
+  salt_copy_filter:
+    - .bundle
+    - .git
+    - .gitignore
+    - .kitchen
+    - .kitchen.appveyor.yml
+    - Gemfile
+    - Gemfile.lock
+    - README.rst
+    - .travis.yml
+  state_top:
+    base:
+      "*":
+        - git.salt
+        - kitchen
+
+platforms:
+  - name: windows-2012R2
+    transport:
+      name: winrm
+      elevated: true
+
+suites:
+  - name: py2
+    provisioner:
+      pillars:
+        top.sls:
+          base:
+            "*":
+              - jenkins
+        jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
+<% if ENV["GITHUB_BRANCH"].nil? %>
+          test_git_commit: <%= ENV['APPVEYOR_REPO_BRANCH'] == 'master' ? 'develop' : ENV['APPVEYOR_REPO_BRANCH'] %>
+<% else %>
+          test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
+<% end %>
+verifier:
+  name: shell
+  remote_exec: true
+  command: '$(kitchen) /testing/tests/runtests.py -v --output-columns=80 --run-destructive<%= ENV["TEST"] ? " -n #{ENV["TEST"]}" : "" %>'

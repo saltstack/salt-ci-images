@@ -6,6 +6,7 @@
 
 {% if grains['os'] in ('Windows') %}
   {% set install_method = 'pip.installed' %}
+  {% set curl = 'pycurl' %}
 {% else %}
   {% set install_method = 'pkg.installed' %}
 {% endif %}

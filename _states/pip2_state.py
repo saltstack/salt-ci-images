@@ -46,7 +46,7 @@ def _get_pip_bin(bin_env):
     '''
     pip_bin_name = 'pip2'
     if not bin_env:
-        which_result = __salt__['cmd.which_bin']([pip_bin_name])
+        which_result = __salt__['cmd.which']([pip_bin_name])
         if salt.utils.is_windows() and six.PY2:
             which_result.encode('string-escape')
         if which_result is None:

@@ -1,6 +1,7 @@
 force-sync-all:
   module.run:
     - name: saltutil.sync_all
+    - order: 1
 
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}

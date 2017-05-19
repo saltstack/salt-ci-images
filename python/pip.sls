@@ -60,10 +60,6 @@ include:
 
 {%- set get_pip = '{0} get-pip.py {1}'.format(python, force_reinstall) %}
 
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-
 pip-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U pip

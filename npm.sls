@@ -7,7 +7,7 @@
 
 # Suse does not package npm separately
 {% if suse %}
-  {%- set npm = 'nodejs' %}
+  {%- set npm = 'nodejs4' %}
 {% elif freebsd %}
   {%- set npm = 'www/npm' %}
 {% elif macos %}

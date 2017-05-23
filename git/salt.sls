@@ -1,3 +1,8 @@
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
+    - order: 1
+
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -45,9 +50,10 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - locale
   {%- endif %}
-  {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
-  {%- if grains.get('os', '') != 'MacOS' %}
-  {%- if grains.get('os', '') != 'Windows' %}
+  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {# On Windows, this is already installed #}
+  {%- if grains['os'] != 'MacOS' %}
+  {%- if grains['os'] != 'Windows' %}
   - git
   {%- endif %}
   - patch

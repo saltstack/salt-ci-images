@@ -2,9 +2,9 @@
 include:
   - python.pycrypto
 
-{% set os_version = salt['grains.get']('osmajorrelease', '') %}
+{% set os_version = salt['grains.get']('osmajorrelease', 0)|int %}
 
-{% if os_version == '5' %}
+{% if os_version == 5 %}
   {% set crypto_pkg_name = 'python26-crypto' %}
 {% else %}
   {% set crypto_pkg_name = 'python-crypto' %}

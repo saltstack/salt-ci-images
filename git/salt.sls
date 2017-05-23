@@ -7,9 +7,9 @@ force-sync-all:
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
-{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
-{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
+{%- if os_family == 'RedHat' and os_major_release == 5 %}
   {%- set on_redhat_5 = True %}
 {%- else %}
   {%- set on_redhat_5 = False %}
@@ -42,7 +42,7 @@ force-sync-all:
 include:
   # All VMs get docker-py so they can run unit tests
   - python.docker
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   - python.zookeeper
@@ -114,7 +114,7 @@ include:
   - python.jsonschema
   - python.rfc3987
   - python.strict_rfc3339
-  {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+  {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - python.jinja2
   {%- endif %}
   - pyopenssl
@@ -146,10 +146,10 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
   - centos_pycrypto
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
@@ -197,7 +197,7 @@ clone-salt-repo:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
-      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
+      {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
       - service: docker
       - pkg: docker
       - file: /usr/bin/busybox
@@ -263,7 +263,7 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
-      {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+      {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
@@ -300,10 +300,10 @@ clone-salt-repo:
       - npm: bower
       {%- endif %}
       {%- endif %}
-      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
+      {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
       - pkg: uninstall_system_pycrypto
       {%- endif %}
-      {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+      {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pkg: gpg
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}

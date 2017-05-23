@@ -73,7 +73,6 @@ pip-install:
     {%- if pillar.get('py3', False) %}
       - pkg: install_python3
       - cmd: pip2-install
-    {%- endif %}
     {%- else %}
       {%- if on_redhat_5 %}
       - pkg: python26

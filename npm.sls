@@ -20,11 +20,11 @@
 
 npm:
   pkg.installed:
-    pgks:
+    - pkgs:
 {% if suse %} 
-    - {{ npm }}
-    - {{ nodejs }}
+      - {{ nodejs }}
+      - {{ npm }}
 {% else %}
-    - {{ npm }}
+      - {{ npm }}
     - aggregate: True
 {% endif %}

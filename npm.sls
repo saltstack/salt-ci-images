@@ -26,5 +26,5 @@ npm:
       - {{ npm }}
 {% else %}
       - {{ npm }}
-      - aggregate: True
+    - aggregate: True
 {% endif %}

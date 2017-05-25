@@ -1,9 +1,9 @@
 {%- set distro = salt['grains.get']('oscodename', '')  %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
-{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {%- set os = salt['grains.get']('os', '') %}
 
-{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
+{%- if os_family == 'RedHat' and os_major_release == 5 %}
   {%- set on_redhat_5 = True %}
 {%- else %}
   {%- set on_redhat_5 = False %}

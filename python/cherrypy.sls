@@ -3,6 +3,8 @@ include:
   - python.pip
 {% endif %}
 
+{% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
+
 cherrypy:
   pip.installed:
     {%- if salt['config.get']('virtualenv_path', None)  %}
@@ -16,4 +18,18 @@ cherrypy:
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
+{% endif %}
+
+# Tempora 1.6.1 is the last version that supports PY 2.6, which we need
+# for CentOS 6 on older release branches. Tempora is a dependency of
+# Portend, which is a dependency of CherryPy.
+{% if on_py26 %}
+tempora:
+  pip.installed:
+    - name: tempora == 1.6.1
+    {%- if salt['config.get']('virtualenv_path', None)  %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
+    - require_in:
+      - pip: cherrypy
 {% endif %}

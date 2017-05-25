@@ -39,6 +39,11 @@ make-swap:
       - cmd: create-swap-file
 
 add-extra-swap:
+  cmd.run:
+    - name: chmod 0600 {{ swapfile }}
+    - unless: grep -q {{ swapfile }} /proc/swaps
+    - require:
+      - cmd: create-swap-file
   mount.swap:
     - name: {{ swapfile }}
     - persist: False

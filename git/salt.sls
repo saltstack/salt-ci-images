@@ -47,7 +47,7 @@ include:
   - docker
   - python.zookeeper
   {%- endif %}
-  {%- if grains['os'] != 'Windows' %}
+  {%- if os_grain not in ('Windows','MacOS') %}
   - locale
   {%- endif %}
   {# On OSX these utils are available from the system rather than the pkg manager (brew) #}

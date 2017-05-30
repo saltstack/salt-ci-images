@@ -13,6 +13,7 @@ tests_pubkey_root:
     - names:
       - {{ pillar.get('test_pubkey') }}
 
+{%- if grains['os'] != 'MacOS' %}
 debug_sshd_logging_replace:
   file.replace:
     - name: /etc/ssh/sshd_config
@@ -25,6 +26,7 @@ debug_sshd_logging_append:
     - name: /etc/ssh/sshd_config
     - text: LogLevel DEBUG3
     - onlyif: grep -Eq '^#LogLevel (.*)$' /etc/ssh/sshd_config
+{%- endif %}
 
 commend_out_permit_root_login_no:
   file.replace:
@@ -44,5 +46,7 @@ append_permit_root_login_yes:
     - watch:
       - file: append_permit_root_login_yes
       - file: commend_out_permit_root_login_no
+      {%- if grains['os'] != 'MacOS' %}
       - file: debug_sshd_logging_append
       - file: debug_sshd_logging_replace
+      {%- endif %}

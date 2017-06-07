@@ -174,6 +174,9 @@ include:
   {%- if grains['os_family'] in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
+  {%- if grains['os'] == 'MacOS' %}
+  - python.pyyaml
+  {%- endif %}
 
 {{ testing_dir }}:
   file.directory

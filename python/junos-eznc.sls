@@ -1,5 +1,5 @@
 {% set include_paramiko = False %}
-{% if grains['os'] == 'Debian' or (grains['os'] == 'Ubuntu' and grains['osmajorrelease'] >= 16) %}
+{% if grains['os'] in ['Debian', 'Ubuntu'] %}
   {% set include_paramiko = True %}
 {% endif %}
 

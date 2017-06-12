@@ -1,5 +1,13 @@
+{% set include_paramiko = False %}
+{% if grains['os'] == 'Debian' or (grains['os'] == 'Ubuntu' and grains['osmajorrelease'] >= 16) %}
+  {% set include_paramiko = True %}
+{% endif %}
+
 include:
   - python.pip
+  {%- if include_paramiko %}
+  - python.paramiko
+  {%- endif %}
 
 {% if grains['os'] in ['Ubuntu', 'Debian'] %}
 pyez dependencies:
@@ -35,3 +43,6 @@ junos-eznc:
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+      {%- if include_paramiko %}
+      - pip: paramiko
+      {%- endif %}

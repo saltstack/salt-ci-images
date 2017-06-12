@@ -1,5 +1,13 @@
+{% set include_paramiko = False %}
+{% if grains['os'] in ['Debian', 'Ubuntu'] %}
+  {% set include_paramiko = True %}
+{% endif %}
+
 include:
   - python.pip
+  {%- if include_paramiko %}
+  - python.paramiko
+  {%- endif %}
 
 {% if grains['os'] in ['Ubuntu', 'Debian'] %}
 pyez dependencies:
@@ -31,7 +39,10 @@ junos-eznc:
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
-    - index_url: https://pypi-jenkins.saltstack.com/jenkins/develop
+    - index_url: https://nexus.c7.saltstack.net/repository/salt-proxy/simple
     - extra_index_url: https://pypi.python.org/simple
     - require:
       - cmd: pip-install
+      {%- if include_paramiko %}
+      - pip: paramiko
+      {%- endif %}

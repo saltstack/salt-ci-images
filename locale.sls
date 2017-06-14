@@ -8,8 +8,8 @@
 mac_locale:
   file.blockreplace:
     - name: /etc/profile
-    - marker_start: #------ start locale zone ------
-    - marker_end: #------ endlocale zone ------
+    - marker_start: '#------ start locale zone ------'
+    - marker_end: '#------ endlocale zone ------'
     - content: |
         export LANG=en_US.UTF-8
 {%- else %}

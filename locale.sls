@@ -12,6 +12,7 @@ mac_locale:
     - marker_end: '#------ endlocale zone ------'
     - content: |
         export LANG=en_US.UTF-8
+    - append_if_not_found: true
 {%- else %}
 
 {% set suse = True if grains['os_family'] == 'Suse' else False %}

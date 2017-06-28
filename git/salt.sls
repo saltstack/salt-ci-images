@@ -373,4 +373,9 @@ downgrade_node:
 downgrade_npm:
   npm.installed:
     - name: npm@3.10.8
+
+pin_npm:
+  cmd.run:
+    - name: 'brew pin node'
+    - runas: jenkins
 {%- endif %}

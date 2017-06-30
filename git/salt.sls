@@ -60,7 +60,7 @@ include:
   - sed
   {%- endif %}
   {#-
-  {%- if grains['os_family'] not in ('FreeBSD',) %}
+  {%- if os_family not in ('FreeBSD',) %}
   - subversion
   {%- endif %}
   #}
@@ -81,7 +81,7 @@ include:
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
   {%- endif %}
-  {%- if grains['os_family'] == 'Suse' %}
+  {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}
   - python.mock
@@ -179,11 +179,14 @@ include:
   - python.junos-eznc
   - python.jxmlease
   {%- endif %}
-  {%- if grains['os_family'] in ('Arch', 'RedHat', 'Debian') %}
+  {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.pyyaml
+  {%- endif %}
+  {%- if os_family == 'Arch' %}
+  - lsb_release
   {%- endif %}
 
 {{ testing_dir }}:
@@ -224,7 +227,7 @@ clone-salt-repo:
       {%- endif %}
       {%- endif %}
       {#-
-      {%- if grains['os_family'] not in ('FreeBSD',) %}
+      {%- if os_family not in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}
       #}
@@ -244,7 +247,7 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
-      {%- if grains['os_family'] == 'Suse' %}
+      {%- if os_family == 'Suse' %}
       - pip: certifi
       {%- endif %}
       - pip: mock
@@ -324,8 +327,11 @@ clone-salt-repo:
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
       {%- endif %}
-      {%- if grains['os_family'] in ('Arch', 'RedHat', 'Debian') %}
+      {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
       - pkg: nginx
+      {%- endif %}
+      {%- if os_family == 'Arch' %}
+      - pkg: lsb_release
       {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}

@@ -11,6 +11,18 @@ suse_local:
     - name: glibc-locale
 {% endif %}
 
+{% set arch = True if grains['os_family'] == 'Arch' else False %}
+{% if arch %}
+accept_LANG_sshd:
+  file.append:
+    - name: /etc/ssh/sshd_config
+    - text: AcceptEnv LANG
+  service.running:
+    - name: sshd
+    - listen:
+      - file: accept_LANG_sshd
+{% endif %}
+
 us_locale:
   locale.present:
     - name: en_US.UTF-8

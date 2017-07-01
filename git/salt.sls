@@ -323,7 +323,7 @@ clone-salt-repo:
       - pkg: nginx
       {%- endif %}
       {%- if os_family == 'Arch' %}
-      - pkg: lsb_release
+      - pkg: lsb-release
       {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}

@@ -238,7 +238,7 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
-      {%- if grains['os'] == 'Windows' %}
+      {%- if grains['os'] == 'Windows' or (grains['os'] == 'Debian' and grains['osrelease'].startswith('8')) %}
       - pip: pyopenssl
       {%- else %}
       - pip: pyinotify

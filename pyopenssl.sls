@@ -12,7 +12,12 @@
   {% set pyopenssl = 'pyOpenSSL' %}
 {% endif %}
 
+{% if grains['os_family'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  {% set pyopenssl = 'pyOpenSSL==0.13' %}
+{% endif %}
+
 {% if grains['os'] in ('MacOS', 'Windows') %}
+{% elif grains['os_family'] == 'Debian' and grains['osrelease'].startswith('8') %}
   {# brew does not have pyopenssl, so install with pip #}
   {% set install_method = 'pip.installed' %}
 {% else %}

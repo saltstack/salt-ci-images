@@ -239,10 +239,12 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
+      {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
       - pip: pyopenssl
       {%- else %}
       - pip: pyinotify
       - pkg: pyopenssl
+      {%- endif %}
       {%- endif %}
       {%- endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}

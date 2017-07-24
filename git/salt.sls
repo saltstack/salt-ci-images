@@ -147,6 +147,9 @@ include:
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {%- endif %}
+  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  - openssl-dev
+  {%- endif %}
   - python.salttesting
   {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
   - python.pytest
@@ -290,6 +293,11 @@ clone-salt-repo:
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
       {%- endif %}
+      {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+      - pkg: openssl-dev-libs
+      {%- endif %}
+
+
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}

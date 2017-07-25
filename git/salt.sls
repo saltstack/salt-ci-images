@@ -297,8 +297,6 @@ clone-salt-repo:
       - pkg: openssl-dev-libs
       {%- endif %}
 
-
-
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:

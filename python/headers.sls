@@ -1,16 +1,17 @@
 {%- if grains['os_family'] == 'RedHat' %}
   {%- if grains['os'] in ('Fedora', 'Amazon') %}
     {%- if pillar.get('py3', False) %}
-      {%- set python_dev = 'python34-devel' %}
+      {%- if grains['osmajorrelease'] >= 26 %}
+        {%- set python_dev = 'python3-devel' %}
+      {%- else %}
+        {%- set python_dev = 'python34-devel' %}
+      {% endif %}
     {%- else %}
-      {%- set python_dev = 'python-devel' %}
-    {%- endif %}
-  {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osmajorrelease'] >= 26 %}
-    {%- if pillar.get('py3', False) %}
-      {%- set python_dev = 'python3-devel' %}
-    {%- else %}
-      {%- set python_dev = 'python2-devel' %}
+      {%- if grains['osmajorrelease'] >= 26 %}
+        {%- set python_dev = 'python2-devel' %}  
+      {%- else %}
+        {%- set python_dev = 'python-devel' %}
+      {%- endif %}
     {%- endif %}
   {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
     {%- if grains['osrelease'].startswith('5') %}

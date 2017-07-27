@@ -6,7 +6,7 @@
       {%- set python_dev = 'python-devel' %}
     {%- endif %}
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' and grains['osrelease'].startswith('26') %}
+  {%- if grains['os'] == 'Fedora' and grains['osmajorrelease'] >= 26 %}
     {%- if pillar.get('py3', False) %}
       {%- set python_dev = 'python3-devel' %}
     {%- else %}

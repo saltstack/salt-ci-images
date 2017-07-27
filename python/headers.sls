@@ -5,6 +5,13 @@
     {%- else %}
       {%- set python_dev = 'python-devel' %}
     {%- endif %}
+  {%- endif %}
+  {%- if grains['os'] == 'Fedora' and grains['osrelease'].startswith('26') %}
+    {%- if pillar.get('py3', False) %}
+      {%- set python_dev = 'python3-devel' %}
+    {%- else %}
+      {%- set python_dev = 'python2-devel' %}
+    {%- endif %}
   {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
     {%- if grains['osrelease'].startswith('5') %}
       {%- set python_dev = 'python26-devel' %}

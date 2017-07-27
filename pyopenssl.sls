@@ -8,9 +8,9 @@
   {% else %}
     {% set pyopenssl = 'python-openssl' %}
   {% endif %}
-{% elif grains['os'] in 'Arch' %}
+{% elif grains['os'] == 'Arch' %}
   {% set pyopenssl = 'python2-pyopenssl' %}
-{% elif grains['os'] in 'Fedora' %}
+{% elif grains['os'] == 'Fedora' %}
   {% set pyopenssl = 'python2-pyOpenSSL' %}
 {% elif grains['os'] == 'FreeBSD' %}
   {% set pyopenssl = 'security/py-openssl' %}

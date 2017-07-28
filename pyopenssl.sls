@@ -1,4 +1,10 @@
-{% if grains['os_family'] in ('RedHat','MacOS', 'Windows') %}
+{% if grains['os'] == 'Fedora' and  grains['osmajorrelease'] >= 26 %}
+    {%- if pillar.get('py3', False) %}
+      {% set pyopenssl = 'python3-pyOpenSSL' %}
+    {%- else %}
+      {% set pyopenssl = 'python2-pyOpenSSL' %}
+    {%- endif %}
+{% elif grains['os_family'] in ('RedHat','MacOS', 'Windows') %}
   {% set pyopenssl = 'pyOpenSSL' %}
 {% elif grains['os_family'] == 'Suse' %}
   {% set pyopenssl = 'python-pyOpenSSL' %}

@@ -1,4 +1,4 @@
-{% if salt['grains.get']('os', '') == 'Fedora' and grains['osmajorrelease'] < 26 %}
+{% if salt['grains.get']('os', '') == 'Fedora' and grains['osmajorrelease']|int < 26 %}
 include:
   - update_dnf
 

@@ -1,4 +1,4 @@
-{% if grains['os'] == 'Fedora' and  grains['osmajorrelease'] >= 26 %}
+{% if grains['os'] == 'Fedora' and salt.grains.get('osmajorrelease')|int >= 26 %}
     {%- if pillar.get('py3', False) %}
       {% set pyopenssl = 'python3-pyOpenSSL' %}
     {%- else %}

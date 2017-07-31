@@ -11,7 +11,7 @@ pyvmomi:
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}
-    - index_url: https://nexus.c7.saltstack.net/repository/salt-proxy/simple
+    - index_url: https://pypi.c7.saltstack.net/simple
     - extra_index_url: https://pypi.python.org/simple
 {% if grains['os'] not in ('Windows') %}
     - require:

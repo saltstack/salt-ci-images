@@ -3,8 +3,8 @@
     {%- if pillar.get('py3', False) %}
       {%- set python_dev = 'python3-devel' %}
     {%- else %}
-      {%- if grains['osmajorrelease'] >= 26 %}
-        {%- set python_dev = 'python2-devel' %}  
+      {%- if salt.grains.get('osmajorrelease')|int >= 26 %}
+        {%- set python_dev = 'python2-devel' %}
       {%- else %}
         {%- set python_dev = 'python-devel' %}
       {%- endif %}

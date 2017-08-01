@@ -167,6 +167,9 @@ include:
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {%- endif %}
+  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  - openssl-dev
+  {%- endif %}
   - python.salttesting
   {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
   - python.pytest
@@ -273,7 +276,7 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
-      {%- if grains['os'] == 'Windows' %}
+      {%- if grains['os'] == 'Windows' or (grains['os'] == 'Debian' and grains['osrelease'].startswith('8')) %}
       - pip: pyopenssl
       {%- else %}
       - pip: pyinotify
@@ -326,6 +329,9 @@ clone-salt-repo:
       {%- endif %}
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
+      {%- endif %}
+      {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+      - pkg: openssl-dev-libs
       {%- endif %}
       {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
       - pkg: nginx

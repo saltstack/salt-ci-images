@@ -4,7 +4,11 @@ include:
 
 versionlock:
   cmd.run:
+    {%- if salt.grains.get('osmajorrelease')|int < 26 %}
     - name: "dnf install -y python-dnf-plugins-extras-versionlock python3-dnf-plugins-extras-versionlock"
+    {%- elif salt.grains.get('osmajorrelease')|int >= 26 %}
+    - name: "dnf install -y python2-dnf-plugins-extras-versionlock python3-dnf-plugins-extras-versionlock"
+    {%- endif %}
     - require:
       - cmd: update_dnf
 {% endif %}

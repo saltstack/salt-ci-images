@@ -22,3 +22,4 @@ psutil:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
+{%- endif %}

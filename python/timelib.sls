@@ -17,8 +17,6 @@ timelib:
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
-    - index_url: https://pypi.c7.saltstack.net/simple
-    - extra_index_url: https://pypi.python.org/simple
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
       {#- These distributions don't ship the develop headers separately #}

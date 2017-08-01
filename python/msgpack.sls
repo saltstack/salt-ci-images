@@ -10,8 +10,6 @@ msgpack-python:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - name: msgpack-python >= 0.4.2
-    - index_url: https://pypi.c7.saltstack.net/simple
-    - extra_index_url: https://pypi.python.org/simple
 {% if grains['os'] not in ('Windows') %}
     - require:
       - cmd: pip-install

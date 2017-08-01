@@ -10,7 +10,7 @@ msgpack-python:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - name: msgpack-python >= 0.4.2
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       - pkg: gcc

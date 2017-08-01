@@ -11,7 +11,7 @@ include:
 psutil:
   pip.installed:
     - upgrade: True
-    - index_url: https://nexus.c7.saltstack.net/repository/salt-proxy/simple
+    - index_url: https://pypi.c7.saltstack.net/simple
     - extra_index_url: https://pypi.python.org/simple
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}

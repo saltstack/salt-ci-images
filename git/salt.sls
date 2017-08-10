@@ -128,9 +128,6 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
-  - centos_pycrypto
-  {%- endif %}
   {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
   - gpg
   {%- endif %}

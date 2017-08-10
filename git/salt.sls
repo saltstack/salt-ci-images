@@ -271,9 +271,6 @@ clone-salt-repo:
       - npm: bower
       {%- endif %}
       {%- endif %}
-      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
-      - pkg: uninstall_system_pycrypto
-      {%- endif %}
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
       - pkg: gpg
       {%- endif %}

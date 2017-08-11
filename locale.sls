@@ -4,7 +4,7 @@
 # This will cause integration.shell.matcher.MatchTest.test_salt_documentation_arguments_not_assumed
 # to fail if not set correctly.
 
-{%- if grains['os'] in ('MacOS') %}
+{%- if grains['os'] in ('MacOS',) %}
 mac_locale:
   file.blockreplace:
     - name: /etc/profile

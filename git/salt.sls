@@ -41,7 +41,7 @@ include:
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
-  {%- if grains['os'] not in ('Windows') %}
+  {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}

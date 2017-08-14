@@ -13,9 +13,7 @@ include:
 psutil:
   pip.installed:
     - upgrade: True
-    - index_url: https://nexus.c7.saltstack.net/repository/salt-proxy/simple
-    - extra_index_url: https://pypi.python.org/simple
-    {%- if grains['os'] != 'Windows' %}
+    {%- if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
       {#- These distributions don't ship the develop headers separately #}

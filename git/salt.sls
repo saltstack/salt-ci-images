@@ -191,6 +191,7 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  - sssd
 
 {{ testing_dir }}:
   file.directory
@@ -339,6 +340,8 @@ clone-salt-repo:
       {%- if os_family == 'Arch' %}
       - pkg: lsb-release
       {%- endif %}
+      # disable sssd if running
+      - service: sssd
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}

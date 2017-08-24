@@ -3,7 +3,7 @@ include:
   - python.pip
 {% endif %}
 
-install_jsonschema:
+jsonschema:
   pip.installed:
     - name: jsonschema
     {%- if salt['config.get']('virtualenv_path', None)  %}

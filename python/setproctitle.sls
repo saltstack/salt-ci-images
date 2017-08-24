@@ -3,7 +3,7 @@ include:
   - python.pip
 {% endif %}
 
-install_setproctitle:
+setproctitle:
   pip.installed:
     - name: setproctitle
     {%- if salt['config.get']('virtualenv_path', None)  %}

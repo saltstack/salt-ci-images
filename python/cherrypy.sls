@@ -5,7 +5,7 @@ include:
 
 {% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
 
-install_cherry_py:
+cherry_py:
   pip.installed:
     - name: cherrypy
     {%- if salt['config.get']('virtualenv_path', None)  %}

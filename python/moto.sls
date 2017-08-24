@@ -3,8 +3,9 @@ include:
   - python.pip
 {%- endif %}
 
-moto:
+install_moto:
   pip.installed:
+    - name: moto
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

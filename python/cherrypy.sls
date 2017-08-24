@@ -7,6 +7,7 @@ include:
 
 cherrypy:
   pip.installed:
+    - name: cherrypy
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

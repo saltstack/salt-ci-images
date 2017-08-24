@@ -5,6 +5,7 @@ include:
 
 supervisor:
   pip2.installed:
+    - name: supervisor
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

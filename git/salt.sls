@@ -102,6 +102,7 @@ include:
   {%- endif %}
   - python.boto
   - python.moto
+  - python.kubernetes
   - python.psutil
   - python.tornado
   - python.pyvmomi
@@ -269,6 +270,7 @@ clone-salt-repo:
       {% endif %}
       - pip: boto
       - pip: moto
+      - pip: kubernetes
       - pip: psutil
       - pip: tornado
       - pip: pyvmomi

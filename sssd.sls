@@ -1,2 +1,3 @@
 sssd:
-  service.dead
+  service.dead:
+    - onlyif: systemctl is-active sssd

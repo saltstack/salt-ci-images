@@ -4,7 +4,7 @@
     {%- else %}
       {% set pyopenssl = 'python2-pyOpenSSL' %}
     {%- endif %}
-{% elif grains['os_family'] in ('RedHat','MacOS', 'Windows') %}
+{% elif grains['os_family'] in ('RedHat', 'MacOS', 'Windows') %}
   {% set pyopenssl = 'pyOpenSSL' %}
 {% elif grains['os_family'] == 'Suse' %}
   {% set pyopenssl = 'python-pyOpenSSL' %}
@@ -31,4 +31,8 @@ pyopenssl:
     - name: {{ pyopenssl }}
     {%- if install_method == 'pkg.installed' %}
     - aggregate: True
+    {%- endif %}
+    {%- if grains['os_family'] in ('MacOS',) %}
+    {# MacOS needs to upgrade to the newest since we install the newest OpenSSL from Brew #}
+    - upgrade: True
     {%- endif %}

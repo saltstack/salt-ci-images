@@ -198,8 +198,10 @@ clone-salt-repo:
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+      {%- if grains.virtual_subtype not in ('Docker',) %}
       - service: docker
       - pkg: docker
+      {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
       - file: {{ testing_dir }}
@@ -207,7 +209,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if grains['os'] != 'Windows' %}
+      {%- if grains['os'] != 'Windows' and grains.virtual_subtype not in ('Docker',) %}
       - mount: add-extra-swap
       {%- endif %}
       {%- endif %}

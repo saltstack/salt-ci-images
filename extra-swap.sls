@@ -44,10 +44,12 @@ add-extra-swap:
     - unless: grep -q {{ swapfile }} /proc/swaps
     - require:
       - cmd: create-swap-file
+  {%- if grains.virtual_subtype not in ('Docker',) %}
   mount.swap:
     - name: {{ swapfile }}
     - persist: False
     - require:
       - cmd: make-swap
     - unless: grep -q {{ swapfile }} /proc/swaps
+  {%- endif %}
 {% endif %}

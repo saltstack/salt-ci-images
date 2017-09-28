@@ -9,6 +9,15 @@
 suse_local:
   pkg.installed:
     - name: glibc-locale
+{% elif grains.os_family == 'Debian' %}
+deb_locale:
+  pkg.installed:
+    - pkgs:
+      - locales
+      - console-data
+      - dbus
+  service.running:
+    - name: dbus.socket
 {% endif %}
 
 us_locale:

@@ -1,0 +1,28 @@
+language: ruby
+services:
+  - docker
+rvm:
+  - ruby
+dist: trusty
+env:
+  matrix:
+    - SUITE=centos-7
+    - SUITE=centos-6
+    - SUITE=ubuntu-16
+    - SUITE=debian-8
+    - SUITE=debian-9
+    - SUITE=opensuse
+    - SUITE=arch
+script:
+  # Setup for tests
+  - bundle exec kitchen create $SUITE -l warn
+  # Provision containers
+  - bundle exec kitchen converge $SUITE
+  # Run test-kitchen with docker driver:
+  - bundle exec kitchen verify $SUITE
+after_script:
+  - bundle exec kitchen list $SUITE
+  - bundle exec kitchen destroy $SUITE
+matrix:
+  allow_failures:
+    - env: SUITE=opensuse

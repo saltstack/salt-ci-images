@@ -4,6 +4,7 @@
     - source_hash: sha256=79b3c42078019db853f499852dac831afda935acf9df4c748c3bab914f1cf298
     - mode: 0755
 
+{%- if grains.virtual_subtype not in ('Docker',) %}
 docker:
   pkg.installed:
     - aggregate: True
@@ -11,3 +12,4 @@ docker:
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
+{%- endif %}

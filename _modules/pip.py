@@ -63,7 +63,7 @@ def get_pip_bin(bin_env):
     # otherwise, stick with the traditional pip2 binary.
     if __pillar__.get('py3', False):
         pip_bin_name = 'pip3'
-    elif __grains__['os_family'] == 'RedHat' and __grains__['osmajorrelease'] == '6':
+    elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
         pip_bin_name = 'pip2.7'
     else:
         pip_bin_name = 'pip2'

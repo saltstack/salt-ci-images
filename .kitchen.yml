@@ -4,9 +4,11 @@ driver:
   privileged: true
   username: root
   volume:
-    - /var/run/docker.sock:/var/run/docker.sock
+    - /var/run/docker.sock:/docker.sock
   cap_add:
     - sys_admin
+  provision_command:
+    - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
 sudo: false
 provisioner:
   name: salt_solo
@@ -48,6 +50,7 @@ platforms:
       run_command: /lib/systemd/systemd
       provision_command:
         - apt-get install -y dbus
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
   - name: debian-9
     driver_config:
       run_command: /lib/systemd/systemd
@@ -58,6 +61,7 @@ platforms:
       provision_command:
         - pacman -Syu --noconfirm systemd
         - systemctl enable sshd
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
       salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] %> >/dev/null
   - name: opensuse
@@ -65,6 +69,7 @@ platforms:
       run_command: /usr/lib/systemd/systemd
       provision_command:
         - systemctl enable sshd.service
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
       salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] %> >/dev/null
 suites:

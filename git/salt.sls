@@ -94,6 +94,7 @@ include:
   {%- endif %}
   - python.boto
   - python.moto
+  - python.kubernetes
   - python.psutil
   - python.tornado
   - python.pyvmomi
@@ -138,9 +139,6 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
-  - centos_pycrypto
-  {%- endif %}
   {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
@@ -158,6 +156,9 @@ include:
   {%- endif %}
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
+  {%- endif %}
+  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  - openssl-dev
   {%- endif %}
   - python.salttesting
   {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
@@ -180,6 +181,7 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  - sssd
 
 {{ testing_dir }}:
   file.directory
@@ -196,8 +198,10 @@ clone-salt-repo:
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+      {%- if grains.virtual_subtype not in ('Docker',) %}
       - service: docker
       - pkg: docker
+      {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
       - file: {{ testing_dir }}
@@ -205,7 +209,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if grains['os'] != 'Windows' %}
+      {%- if grains['os'] != 'Windows' and grains.virtual_subtype not in ('Docker',) %}
       - mount: add-extra-swap
       {%- endif %}
       {%- endif %}
@@ -257,6 +261,7 @@ clone-salt-repo:
       {% endif %}
       - pip: boto
       - pip: moto
+      - pip: kubernetes
       - pip: psutil
       - pip: tornado
       - pip: pyvmomi
@@ -265,7 +270,7 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
-      {%- if grains['os'] == 'Windows' %}
+      {%- if grains['os'] == 'Windows' or (grains['os'] == 'Debian' and grains['osrelease'].startswith('8')) %}
       - pip: pyopenssl
       {%- else %}
       - pip: pyinotify
@@ -298,9 +303,6 @@ clone-salt-repo:
       - npm: bower
       {%- endif %}
       {%- endif %}
-      {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
-      - pkg: uninstall_system_pycrypto
-      {%- endif %}
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pkg: gpg
       {%- endif %}
@@ -319,12 +321,17 @@ clone-salt-repo:
       {%- if grains['os'] in ('MacOS', 'Debian') %}
       - pkg: openssl
       {%- endif %}
+      {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+      - pkg: openssl-dev-libs
+      {%- endif %}
       {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
       - pkg: nginx
       {%- endif %}
       {%- if os_family == 'Arch' %}
       - pkg: lsb-release
       {%- endif %}
+      # disable sssd if running
+      - service: sssd
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}
@@ -361,4 +368,21 @@ install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
+{%- endif %}
+
+{# npm v5 workaround for issue #41770 #}
+{%- if grains['os'] == 'MacOS' %}
+downgrade_node:
+  cmd.run:
+    - name: 'brew switch node 7.0.0'
+    - runas: jenkins
+
+downgrade_npm:
+  npm.installed:
+    - name: npm@3.10.8
+
+pin_npm:
+  cmd.run:
+    - name: 'brew pin node'
+    - runas: jenkins
 {%- endif %}

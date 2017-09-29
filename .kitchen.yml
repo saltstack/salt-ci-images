@@ -18,7 +18,7 @@ provisioner:
   salt_install: bootstrap
   salt_version: latest
   salt_bootstrap_url: https://bootstrap.saltstack.com
-  salt_bootstrap_options: -X stable <%= (ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '') %>
+  salt_bootstrap_options: -X stable <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '' %>
   log_level: info
   is_file_root: true
   require_chef: false
@@ -43,7 +43,7 @@ platforms:
       image: fedora:latest
       run_command: /usr/lib/systemd/systemd
     provisioner:
-      salt_bootstrap_options: -X git <%= (ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '') %> >/dev/null
+      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '' %> >/dev/null
   - name: centos-7
     driver_config:
       run_command: /usr/lib/systemd/systemd
@@ -53,7 +53,7 @@ platforms:
       provision_command:
         - yum install -y upstart
     provisioner:
-      salt_bootstrap_options: -P -y -x python2.7 -X git <%= (ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '') %> >/dev/null
+      salt_bootstrap_options: -P -y -x python2.7 -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '' %> >/dev/null
   - name: ubuntu-rolling
     driver_config:
       image: ubuntu:rolling
@@ -87,7 +87,7 @@ platforms:
         - systemctl enable sshd
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X git <%= (ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '') %> >/dev/null
+      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '' %> >/dev/null
   - name: opensuse
     driver_config:
       run_command: /usr/lib/systemd/systemd
@@ -95,7 +95,7 @@ platforms:
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X git <%= (ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '') %> >/dev/null
+      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : '' %> >/dev/null
 <% if @vagrant != false %>
   - name: windows-2012r2
     driver:
@@ -144,7 +144,7 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/saltstack/salt.git
-          test_git_commit: <%= (ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH']) %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
   - name: py3
     excludes:
       - centos-6
@@ -156,7 +156,7 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/saltstack/salt.git
-          test_git_commit: <%= (ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH']) %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
           py3: true
 verifier:
   name: shell

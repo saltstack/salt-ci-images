@@ -7,7 +7,9 @@
 docker:
   pkg.installed:
     - aggregate: True
+{%- if grains.virtual_subtype not in ('Docker',) %}
   service.running:
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
+{%- endif %}

@@ -1,4 +1,5 @@
 {% set swapfile = '/.salt-runtests.swapfile' %}
+{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 create-swap-file:
   {# because everytime a new subprocess.Popen() is instantiated, a copy of the current python
@@ -44,7 +45,7 @@ add-extra-swap:
     - unless: grep -q {{ swapfile }} /proc/swaps
     - require:
       - cmd: create-swap-file
-  {%- if grains.virtual_subtype not in ('Docker',) %}
+  {%- if on_docker == False %}
   mount.swap:
     - name: {{ swapfile }}
     - persist: False

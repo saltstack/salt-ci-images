@@ -15,6 +15,7 @@ driver:
 sudo: false
 provisioner:
   name: salt_solo
+  salt_minion_config_template: minion.erb
   salt_install: bootstrap
   salt_version: latest
   salt_bootstrap_url: https://bootstrap.saltstack.com

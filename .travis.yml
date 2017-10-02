@@ -1,0 +1,37 @@
+language: ruby
+services:
+  - docker
+rvm:
+  - ruby
+dist: trusty
+env:
+  matrix:
+    - SUITE=centos-7
+    - SUITE=centos-6
+    - SUITE=fedora
+    - SUITE=py2-ubuntu-16
+    - SUITE=py3-ubuntu-16
+    - SUITE=ubuntu-rolling
+    - SUITE=debian-8
+    - SUITE=debian-9
+    - SUITE=opensuse
+    - SUITE=arch
+bundler_args: --without windows
+script:
+  # Setup for tests
+  - bundle exec kitchen create $SUITE -l warn -c 2
+  # Provision containers
+  - bundle exec kitchen converge $SUITE
+after_script:
+  - bundle exec kitchen list $SUITE
+  - bundle exec kitchen destroy $SUITE
+matrix:
+  allow_failures:
+    - env: SUITE=opensuse
+notifications:
+  slack:
+    rooms:
+      - secure: hhws0yblIfHsksh1IZZz0yDod4ADvpT0CbhFUPEHsmfH+iXkkXt1jDeRtyHPU1tJtV/UxIo+aba/NnCBiKHmzkNt1CfWmEa3LCfAF5s5PaPOzEV5Dl/C4qL2As9lUQcIXSdFTWGmV439F2s39YoC5YcaFDm6zTEiebC/GZzMPm9GuDluXdGEaSQ6MdZFeP+cv3JGeCZAVdA2Yxy6HT7RBVnFqmqdaLWsZcNX2GtJE+hjTFL0QQjyKTpHtA5ZAMjrCHgaCSqF5fgsCYyxI6hoDFKMlXSaKzPfWPz3FXGB+bTp3sCTEZmO+UkecbVb0rt+2k4uP4IgItT5ynnsuXqHiEzw/ivegaBG9LFVCqkjV/cb6Y/vFcLrzQ7p1Wey2aYCRvBpOZ54+/dShmuiPt2EvPcQe2NJ/Fl3W01z+WQy6gXBENy487ti8i1Iu4JO48JfOzkch9b8kCsUSTRI7auuIFfqCMi97UqsWnMVWdJq4vOfV3CT7o5+wn838G+iiCgOUL9YHe85hmEyb6GHAEYKko0aIRWBFZYvMjNQzjdKxqrIzgJUb1tE4CPaGajaeTggUOavVvDZ+e21I8zhtQKTECzOSfGb9KfOJvmpEhcgSRG0VEwI/GRwoxoHu9wbpTSKrQyBTeLrhUm1jwNkxcG9zeAZB9rqG+vD0T5fzCueeqo=
+    on_success: changes
+    on_failure: changes
+    on_pull_requests: false

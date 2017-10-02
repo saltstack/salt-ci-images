@@ -1,2 +1,4 @@
 .idea
 *.un~
+Gemfile.lock
+.bundle/

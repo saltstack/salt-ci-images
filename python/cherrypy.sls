@@ -19,16 +19,27 @@ cherrypy:
       - cmd: pip-install
 {% endif %}
 
-# Tempora 1.6.1 is the last version that supports PY 2.6, which we need
-# for CentOS 6 on older release branches. Tempora is a dependency of
-# Portend, which is a dependency of CherryPy.
+
 {% if on_py26 %}
-tempora:
+# Install older versions of CherryPy deps that have dropped Python 2.6 support
+
+# portend 1.8 is the last version which supports Python 2.6
+portend:
   pip.installed:
-    - name: tempora == 1.6.1
+    - name: 'portend == 1.8'
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - require_in:
       - pip: cherrypy
+
+# tempora 1.6.1 is the last version which supports Python 2.6
+tempora:
+  pip.installed:
+    - name: 'tempora == 1.6.1'
+    {%- if salt['config.get']('virtualenv_path', None)  %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
+    - require_in:
+      - pip: portend
 {% endif %}

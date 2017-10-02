@@ -147,9 +147,6 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
-  - centos_pycrypto
-  {%- endif %}
   {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
@@ -209,8 +206,10 @@ clone-salt-repo:
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+      {%- if grains.virtual_subtype not in ('Docker',) %}
       - service: docker
       - pkg: docker
+      {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
       - file: {{ testing_dir }}
@@ -218,7 +217,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if grains['os'] != 'Windows' %}
+      {%- if grains['os'] != 'Windows' and grains.virtual_subtype not in ('Docker',) %}
       - mount: add-extra-swap
       {%- endif %}
       {%- endif %}
@@ -311,9 +310,6 @@ clone-salt-repo:
       - pkg: npm
       - npm: bower
       {%- endif %}
-      {%- endif %}
-      {%- if grains['os'] == 'CentOS' and os_major_release == 6 %}
-      - pkg: uninstall_system_pycrypto
       {%- endif %}
       {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pkg: gpg

@@ -16,11 +16,13 @@ mac_locale:
 {%- else %}
 
 {% set suse = True if grains['os_family'] == 'Suse' else False %}
+{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+
 {% if suse %}
 suse_local:
   pkg.installed:
     - name: glibc-locale
-{% elif grains.os_family == 'Debian' %}
+{% elif grains.os_family == 'Debian' and on_docker %}
 deb_locale:
   pkg.installed:
     - pkgs:

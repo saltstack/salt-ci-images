@@ -1,3 +1,5 @@
+ {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+
 /usr/bin/busybox:
   file.managed:
     - source: http://repo.saltstack.com/dev/testing/redhat/7/x86_64/archive/busybox/1.26.2/busybox-x86_64
@@ -7,7 +9,7 @@
 docker:
   pkg.installed:
     - aggregate: True
-{%- if grains.virtual_subtype not in ('Docker',) %}
+{%- if on_docker == False %}
   service.running:
     - require:
       - file: /usr/bin/busybox

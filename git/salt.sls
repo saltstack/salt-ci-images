@@ -8,6 +8,7 @@ force-sync-all:
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
+{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 {%- if os_family == 'RedHat' and os_major_release == 5 %}
   {%- set on_redhat_5 = True %}
@@ -206,7 +207,7 @@ clone-salt-repo:
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
-      {%- if grains.virtual_subtype not in ('Docker',) %}
+      {%- if on_docker == False %}
       - service: docker
       - pkg: docker
       {%- endif %}
@@ -217,7 +218,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if grains['os'] != 'Windows' and grains.virtual_subtype not in ('Docker',) %}
+      {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
       {%- endif %}
       {%- endif %}

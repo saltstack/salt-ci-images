@@ -127,7 +127,7 @@ platforms:
     provisioner:
       init_environment: |
         Clear-Host
-        $AddedLocation ="c:\salt"
+        $AddedLocation ="c:\salt;c:\salt\bin\Scripts"
         $Reg = "Registry::HKLM\System\CurrentControlSet\Control\Session Manager\Environment"
         $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
         $NewPath= $OldPath + ’;’ + $AddedLocation

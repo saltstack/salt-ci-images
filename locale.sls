@@ -4,6 +4,17 @@
 # This will cause integration.shell.matcher.MatchTest.test_salt_documentation_arguments_not_assumed
 # to fail if not set correctly.
 
+{%- if grains['os'] in ('MacOS',) %}
+mac_locale:
+  file.blockreplace:
+    - name: /etc/profile
+    - marker_start: '#------ start locale zone ------'
+    - marker_end: '#------ endlocale zone ------'
+    - content: |
+        export LANG=en_US.UTF-8
+    - append_if_not_found: true
+{%- else %}
+
 {% set suse = True if grains['os_family'] == 'Suse' else False %}
 {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
@@ -43,3 +54,5 @@ default_locale:
     - name: en_US.UTF-8
     - require:
       - locale: us_locale
+
+{%- endif %}

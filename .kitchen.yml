@@ -1,6 +1,6 @@
 ---
 <% @vagrant = system('which vagrant 2>&1 >/dev/null') %>
-<% @version = '2017.7' %>
+<% @version = '2017.7.1' %>
 driver:
   name: docker
   use_sudo: false
@@ -44,7 +44,7 @@ platforms:
       image: fedora:latest
       run_command: /usr/lib/systemd/systemd
     provisioner:
-      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : @version %> >/dev/null
+      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
   - name: centos-7
     driver_config:
       run_command: /usr/lib/systemd/systemd
@@ -54,7 +54,7 @@ platforms:
       provision_command:
         - yum install -y upstart
     provisioner:
-      salt_bootstrap_options: -P -y -x python2.7 -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : @version %> >/dev/null
+      salt_bootstrap_options: -P -y -x python2.7 -X git v<%= @version %> >/dev/null
   - name: ubuntu-rolling
     driver_config:
       image: ubuntu:rolling
@@ -88,7 +88,7 @@ platforms:
         - systemctl enable sshd
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : @version %> >/dev/null
+      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
   - name: opensuse
     driver_config:
       run_command: /usr/lib/systemd/systemd
@@ -96,7 +96,7 @@ platforms:
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X git <%= ENV['TRAVIS_BRANCH'] != 'master' ? ENV['TRAVIS_BRANCH'] : @version %> >/dev/null
+      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
 <% if @vagrant != false %>
   - name: windows-2012r2
     driver:

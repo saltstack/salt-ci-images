@@ -17,9 +17,11 @@ deb_locale:
     - pkgs:
       - locales
       - console-data
+  {% if grains.get('init') == 'systemd' %}
       - dbus
   service.running:
     - name: dbus.socket
+  {%- endif %}
 {% endif %}
 
 us_locale:

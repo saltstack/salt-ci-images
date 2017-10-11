@@ -267,16 +267,12 @@ clone-salt-repo:
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
+      - pip: pyopenssl
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
-      {%- if grains['os'] == 'Windows' or (grains['os'] == 'Debian' and grains['osrelease'].startswith('8')) %}
-      - pip: pyopenssl
-      {%- else %}
       - pip: pyinotify
-      - pkg: pyopenssl
-      {%- endif %}
       {%- endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}
       - pip: futures

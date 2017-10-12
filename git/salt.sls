@@ -11,6 +11,14 @@
   {%- set on_redhat_5 = False %}
 {%- endif %}
 
+{%- if pillar.get('testing_dir') %}
+  {%- set testing_dir = pillar.get('testing_dir') %}
+{%- elif grains['os'] == 'Windows' %}
+  {%- set testing_dir = 'C:\\testing' %}
+{%- else %}
+  {%- set testing_dir = '/testing' %}
+{%- endif %}
+
 {%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
 {%- else %}
@@ -157,9 +165,10 @@ include:
   - python.pytest-salt
   {%- endif %}
 
-/testing:
+{{testing_dir}}:
   file.directory
 
+{%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:
   git.latest:
     - name: {{ test_git_url }}
@@ -308,21 +317,22 @@ fetch-upstream-tags:
     - require:
       - cmd: add-upstream-repo
 {%- endif %}
+{%- endif %}
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
 install-salt-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f /testing/requirements/{{ test_transport }}.txt ]'
+    - requirements: {{testing_dir}}/requirements/{{ test_transport }}.txt
+    - onlyif: '[ -f {{testing_dir}}/requirements/{{ test_transport }}.txt ]'
 
 install-salt-dev-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f /testing/requirements/dev_{{ python }}.txt ]'
+    - requirements: {{testing_dir}}/requirements/dev_{{ python }}.txt
+    - onlyif: '[ -f {{testing_dir}}/requirements/dev_{{ python }}.txt ]'
 
 install-salt-pytest-pip-deps:
   pip.installed:
-    - requirements: /testing/requirements/pytest.txt
-    - onlyif: '[ -f /testing/requirements/pytest.txt ]'
+    - requirements: {{testing_dir}}/requirements/pytest.txt
+    - onlyif: '[ -f {{testing_dir}}/requirements/pytest.txt ]'
 {%- endif %}

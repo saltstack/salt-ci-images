@@ -28,9 +28,11 @@ deb_locale:
     - pkgs:
       - locales
       - console-data
+  {% if grains.get('init') == 'systemd' %}
       - dbus
   service.running:
     - name: dbus.socket
+  {%- endif %}
 {% endif %}
 
 {% set arch = True if grains['os_family'] == 'Arch' else False %}

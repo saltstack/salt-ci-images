@@ -6,3 +6,4 @@ include:
 pyopenssl:
   pip.installed:
     - name: pyOpenSSL
+    - upgrade: True

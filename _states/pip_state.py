@@ -55,4 +55,47 @@ def installed(name, **kwargs):
         index_url=index_url,
         extra_index_url=extra_index_url,
         user=sudo_user or None)
+    kwargs = salt.utils.clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
+
+def mod_aggregate(low, chunks, running):
+    '''
+    The mod_aggregate function which looks up all packages in the available
+    low chunks and merges them into a single pkgs ref in the present low data
+    '''
+    pkgs = []
+    # What functions should we aggregate?
+    agg_enabled = ['installed',]
+    # The `low` data is just a dict with the state, function (fun) and
+    # arguments passed in from the sls
+    if low.get('fun') not in agg_enabled:
+        return low
+    # Now look into what other things are set to execute
+    for chunk in chunks:
+        # The state runtime uses "tags" to track completed jobs, it may
+        # look familiar with the _|-
+        tag = salt.utils.gen_state_tag(chunk)
+        if tag in running:
+            # Already ran the pkg state, skip aggregation
+            continue
+        if chunk.get('state') == 'pip':
+            if '__agg__' in chunk:
+                continue
+            # Check for the same function
+            if chunk.get('fun') != low.get('fun'):
+                continue
+            # Pull out the pkg names!
+            if 'pkgs' in chunk:
+                pkgs.extend(chunk['pkgs'])
+                chunk['__agg__'] = True
+            elif 'name' in chunk:
+                pkgs.append(chunk['name'])
+                chunk['__agg__'] = True
+    if pkgs:
+        if 'pkgs' in low:
+            low['pkgs'].extend(pkgs)
+        else:
+            low['pkgs'] = pkgs
+    # The low has been modified and needs to be returned to the state
+    # runtime for execution
+    return low

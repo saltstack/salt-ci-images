@@ -5,6 +5,7 @@ include:
 
 strict_rfc3339:
   pip.installed:
+    - name: strict_rfc3339
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

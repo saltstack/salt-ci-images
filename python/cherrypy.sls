@@ -7,10 +7,7 @@ include:
 
 cherrypy:
   pip.installed:
-    {% if on_py26 %}
-    {# CherryPy dropped Python 2.6 support in version 11.0.0 -#}
-    - name: 'cherrypy < 11.0.0'
-    {% endif %}
+    - name: cherrypy
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

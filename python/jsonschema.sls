@@ -5,6 +5,7 @@ include:
 
 jsonschema:
   pip.installed:
+    - name: jsonschema
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

@@ -7,6 +7,7 @@ include:
 pyopenssl:
   pip.installed:
     - name: pyOpenSSL
+    - upgrade: True
     {%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

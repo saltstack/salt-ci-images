@@ -12,6 +12,7 @@ pyopenssl:
     - require:
       - cmd: pip-install
     {%- if pillar.get('py3', False) %}
+    - require_in:
       - pip: cffi
     {%- endif %}
     {%- endif %}

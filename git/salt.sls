@@ -279,7 +279,7 @@ clone-salt-repo:
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
-      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pip: pyinotify
       {%- endif %}
       {%- if grains.get('pythonversion')[:2] < [3, 2] %}

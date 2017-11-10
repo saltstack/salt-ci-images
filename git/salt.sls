@@ -193,6 +193,9 @@ include:
   - lsb_release
   {%- endif %}
   - sssd
+  {%- if grains['kernel'] == 'Linux' %}
+  - ulimits
+  {%- endif %}
 
 {{ testing_dir }}:
   file.directory
@@ -340,6 +343,9 @@ clone-salt-repo:
       {%- endif %}
       # disable sssd if running
       - service: sssd
+      {%- if grains['kernel'] == 'Linux' %}
+      - file: ulimits-nofile
+      {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}

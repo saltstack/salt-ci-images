@@ -1,4 +1,4 @@
-#!/usr/bin/env {{ 'python3' if salt.pillar.get('py3') else 'python2' }}
+#!/usr/bin/env python2
 import salt.client
 import salt.config
 

@@ -8,4 +8,4 @@ caller = salt.client.Caller(mopts=__opts__)
 if caller.cmd('config.get', 'py3', False):
     print('python3')
 else:
-    print('python2')
+    print('python2.7')

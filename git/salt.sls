@@ -16,7 +16,9 @@ force-sync-all:
   {%- set on_redhat_5 = False %}
 {%- endif %}
 
-{%- if grains['os'] == 'Windows' %}
+{%- if pillar.get('testing_dir') %}
+  {%- set testing_dir = pillar.get('testing_dir') %}
+{%- elif grains['os'] == 'Windows' %}
   {%- set testing_dir = 'C:\\testing' %}
 {%- else %}
   {%- set testing_dir = '/testing' %}
@@ -198,6 +200,7 @@ include:
 {{ testing_dir }}:
   file.directory
 
+{%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:
   git.latest:
     - name: {{ test_git_url }}
@@ -361,6 +364,7 @@ fetch-upstream-tags:
     - cwd: {{ testing_dir }}
     - require:
       - cmd: add-upstream-repo
+{%- endif %}
 {%- endif %}
 
 {%- if pillar.get('py3', False) %}

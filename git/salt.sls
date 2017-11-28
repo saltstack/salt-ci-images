@@ -45,9 +45,10 @@ force-sync-all:
 include:
   # All VMs get docker-py so they can run unit tests
   - python.docker
-  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
-  # Docker integration tests only on CentOS 7 (for now)
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   - docker
+  {%- endif %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
@@ -212,7 +213,7 @@ clone-salt-repo:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
-      {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+      {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
       {%- if on_docker == False %}
       - service: docker
       - pkg: docker

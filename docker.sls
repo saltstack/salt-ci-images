@@ -9,6 +9,7 @@
 
 docker:
   pkg.installed:
+    - name: {{ docker_pkg }}
     - aggregate: True
 {%- if on_docker == False %}
   service.running:

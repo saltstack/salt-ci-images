@@ -5,7 +5,7 @@ include:
 
 kubernetes:
   pip.installed:
-    - name: kubernetes
+    - name: kubernetes < 4.0
     {%- if salt['config.get']('virtualenv_path', None) %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

@@ -225,8 +225,10 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
+      {%- if grains['oscodename'] != 'openSUSE Leap 42.2' %}
       {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
+      {%- endif %}
       {%- endif %}
       {%- endif %}
       {%- if grains['os'] == 'Windows' %}

@@ -117,7 +117,7 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - gem
   {%- endif %}
-  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  {%- if not pillar.get('py3', False) %}
   - python.futures
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
@@ -279,7 +279,7 @@ clone-salt-repo:
       {%- if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       {%- endif %}
-      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      {%- if not pillar.get('py3', False) %}
       - pip: futures
       {%- endif %}
       - pip: gitpython

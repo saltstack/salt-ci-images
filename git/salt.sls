@@ -37,6 +37,16 @@
   {%- endif %}
 {%- endif %}
 
+{# handling requirements #}
+{% if test_transport == 'zeromq' %}
+  {% set transport_reqs = ['pycrypto>=2.6.1', 'pyzmq>=2.2.0'] %}
+{% elif test_transport == 'raet' %}
+  {% set transport_reqs = ['libnacl>=1.0.0', 'ioflo>=1.1.7', 'raet>=0.6.0'] %}
+{% endif %}
+
+{% set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
+{% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
+
 include:
   # All VMs get docker-py so they can run unit tests
   - python.docker
@@ -357,15 +367,20 @@ fetch-upstream-tags:
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
-install-salt-pip-deps:
-  pip.installed:
-    - requirements: {{ testing_dir }}/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f {{ testing_dir }}/requirements/{{ test_transport }}.txt ]'
+{% for req in transport_reqs %}
+{{ req }}:
+  pip.installed
+{% endfor %}
 
-install-salt-dev-pip-deps:
-  pip.installed:
-    - requirements: {{ testing_dir }}/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f {{ testing_dir }}/requirements/dev_{{ python }}.txt ]'
+{% for req in dev_reqs %}
+{{ req }}:
+  pip.installed
+{% endfor %}
+
+{% for req in base_reqs %}
+{{ req }}:
+  pip.installed
+{% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:

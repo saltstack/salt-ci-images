@@ -368,18 +368,21 @@ fetch-upstream-tags:
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
 {% for req in transport_reqs %}
-{{ req }}:
-  pip.installed
+install-transport-{{ req }}:
+  pip.installed:
+    - name: {{ req }}
 {% endfor %}
 
 {% for req in dev_reqs %}
-{{ req }}:
-  pip.installed
+install-dev-{{ req }}:
+  pip.installed:
+    - name: {{ req }}
 {% endfor %}
 
 {% for req in base_reqs %}
-{{ req }}:
-  pip.installed
+install-base-{{ req }}:
+  pip.installed:
+    - name: {{ req }}
 {% endfor %}
 
 install-salt-pytest-pip-deps:

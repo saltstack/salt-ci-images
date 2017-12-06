@@ -16,7 +16,7 @@ include:
   - python.requests
   - python.keyring
   - python.tornado
-  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  {%- if not pillar.get('py3', False) %}
   - python.futures
   {%- endif %}
   - cloud-only.azure
@@ -48,7 +48,7 @@ include:
       - pip: keyring
       - pip: azure
       - pip: tornado
-      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      {%- if not pillar.get('py3', False) %}
       - pip: futures
       {%- endif %}
       - pkg: sshpass

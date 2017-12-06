@@ -28,7 +28,7 @@ after_script:
   - bundle exec kitchen destroy $SUITE
 matrix:
   allow_failures:
-    - env: SUITE=opensuse
+    - env: SUITE=ubuntu-rolling
 notifications:
   slack:
     rooms:

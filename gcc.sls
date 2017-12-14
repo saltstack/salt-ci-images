@@ -8,13 +8,9 @@
 gcc-multilib:
   pkg.removed
 
-{% else %}
+{%- else -%}
 gcc:
   pkg.installed:
     - name: {{ gcc }}
     - aggregate: True
-    {%- if grains['os'] == 'Arch' %}
-    - require:
-      - pkg: gcc-multilib
-    {%- endif %}
 {%- endif %}

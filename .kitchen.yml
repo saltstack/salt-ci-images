@@ -149,6 +149,7 @@ suites:
   - name: py3
     excludes:
       - centos-6
+      - ubuntu-1404
     provisioner:
       pillars:
         top.sls:

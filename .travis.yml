@@ -26,9 +26,6 @@ script:
 after_script:
   - bundle exec kitchen list $SUITE
   - bundle exec kitchen destroy $SUITE
-matrix:
-  allow_failures:
-    - env: SUITE=opensuse
 notifications:
   slack:
     rooms:

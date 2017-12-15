@@ -61,6 +61,9 @@ include:
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
   {%- endif %}
+  {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease']|int >= 17 %}
+  - dpkg
+  {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
@@ -382,11 +385,13 @@ fetch-upstream-tags:
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
-{% for req in transport_reqs %}
+{%- if test_transport in ('zeromq', 'raet') -%}
+  {% for req in transport_reqs %}
 install-transport-{{ req }}:
   pip.installed:
     - name: {{ req }}
-{% endfor %}
+  {% endfor %}
+{%- endif -%}
 
 {% for req in dev_reqs %}
 install-dev-{{ req }}:

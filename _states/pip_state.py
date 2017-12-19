@@ -49,12 +49,9 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
-    sudo_user = os.environ.get('SUDO_USER')
-
     kwargs.update(
         index_url=index_url,
-        extra_index_url=extra_index_url,
-        user=sudo_user or None)
+        extra_index_url=extra_index_url)
     kwargs = salt.utils.clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
 

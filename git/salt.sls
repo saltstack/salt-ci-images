@@ -54,7 +54,7 @@ include:
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
-  {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease']|int >= 17 %}
+  {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}

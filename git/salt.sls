@@ -61,7 +61,7 @@ include:
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
   {%- endif %}
-  {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease']|int >= 17 %}
+  {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}

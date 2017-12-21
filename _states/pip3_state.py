@@ -91,13 +91,11 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
-    sudo_user = os.environ.get('SUDO_USER')
     bin_env = _get_pip_bin(kwargs.get('bin_env'))
     log.warning('pip3 binary found: %s', bin_env)
 
     kwargs.update(
         index_url=index_url,
         extra_index_url=extra_index_url,
-        bin_env=bin_env,
-        user=sudo_user or None)
+        bin_env=bin_env)
     return pip_state_installed(name, **kwargs)

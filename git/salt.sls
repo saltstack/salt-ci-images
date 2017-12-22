@@ -125,6 +125,7 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
+  - python.clustershell
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.pyinotify
   {%- endif %}
@@ -298,6 +299,7 @@ clone-salt-repo:
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl
+      - pip: clustershell
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}

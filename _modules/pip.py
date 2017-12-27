@@ -14,8 +14,8 @@ import types
 import logging
 
 # Import salt libs
-import salt.utils
-from salt.utils import namespaced_function
+import salt.utils.functools
+import salt.utils.platform
 from salt.exceptions import CommandNotFoundError
 import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
@@ -26,8 +26,8 @@ from salt.modules.pip import list_ as pip_list
 import salt.ext.six as six
 
 # Let's namespace the pip_install function
-pip_install = namespaced_function(pip_install, globals())  # pylint: disable=invalid-name
-pip_list = namespaced_function(pip_list, globals())  # pylint: disable=invalid-name
+pip_install = salt.utils.functools.namespaced_function(pip_install, globals())  # pylint: disable=invalid-name
+pip_list = salt.utils.functools.namespaced_function(pip_list, globals())  # pylint: disable=invalid-name
 
 # Let's namespace all other functions from the pip module
 for name in dir(salt.modules.pip):
@@ -76,7 +76,7 @@ def get_pip_bin(bin_env):
 
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
-        if salt.utils.is_windows():
+        if salt.utils.platform.is_windows():
             pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)

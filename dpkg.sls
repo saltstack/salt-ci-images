@@ -1,0 +1,3 @@
+libdpkg-perl:
+  pkg:
+    - installed

@@ -42,13 +42,27 @@ force-sync-all:
   {%- endif %}
 {%- endif %}
 
+{# handling requirements #}
+{% if test_transport == 'zeromq' %}
+  {% set transport_reqs = ['pycrypto>=2.6.1', 'pyzmq>=2.2.0'] %}
+{% elif test_transport == 'raet' %}
+  {% set transport_reqs = ['libnacl>=1.0.0', 'ioflo>=1.1.7', 'raet>=0.6.0'] %}
+{% endif %}
+
+{% set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
+{% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
+
 include:
   # All VMs get docker-py so they can run unit tests
   - python.docker
-  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
-  # Docker integration tests only on CentOS 7 (for now)
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   - docker
+  {%- endif %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
+  {%- endif %}
+  {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
+  - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
   - locale
@@ -111,6 +125,7 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
+  - python.clustershell
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.pyinotify
   {%- endif %}
@@ -125,7 +140,7 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - gem
   {%- endif %}
-  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  {%- if not pillar.get('py3', False) %}
   - python.futures
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
@@ -146,6 +161,7 @@ include:
   - python.mysqldb
   {%- endif %}
   - python.dns
+  - python.croniter
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
@@ -212,7 +228,7 @@ clone-salt-repo:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
-      {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+      {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
       {%- if on_docker == False %}
       - service: docker
       - pkg: docker
@@ -224,8 +240,10 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
+      {%- if salt['grains.get']('oscodename', '') != 'openSUSE Leap 42.2' %}
       {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
+      {%- endif %}
       {%- endif %}
       {%- endif %}
       {%- if grains['os'] == 'Windows' %}
@@ -282,13 +300,14 @@ clone-salt-repo:
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl
+      - pip: clustershell
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pip: pyinotify
       {%- endif %}
-      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      {%- if not pillar.get('py3', False) %}
       - pip: futures
       {%- endif %}
       - pip: gitpython
@@ -369,15 +388,25 @@ fetch-upstream-tags:
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
-install-salt-pip-deps:
+{%- if test_transport in ('zeromq', 'raet') -%}
+  {% for req in transport_reqs %}
+install-transport-{{ req }}:
   pip.installed:
-    - requirements: {{ testing_dir }}/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f {{ testing_dir }}/requirements/{{ test_transport }}.txt ]'
+    - name: {{ req }}
+  {% endfor %}
+{%- endif -%}
 
-install-salt-dev-pip-deps:
+{% for req in dev_reqs %}
+install-dev-{{ req }}:
   pip.installed:
-    - requirements: {{ testing_dir }}/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f {{ testing_dir }}/requirements/dev_{{ python }}.txt ]'
+    - name: {{ req }}
+{% endfor %}
+
+{% for req in base_reqs %}
+install-base-{{ req }}:
+  pip.installed:
+    - name: {{ req }}
+{% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:

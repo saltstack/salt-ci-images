@@ -1,5 +1,6 @@
 {% set swapfile = '/.salt-runtests.swapfile' %}
 {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- if salt['grains.get']('os_family') != 'Suse' %}
 
 create-swap-file:
   {# because everytime a new subprocess.Popen() is instantiated, a copy of the current python
@@ -53,4 +54,5 @@ add-extra-swap:
       - cmd: make-swap
     - unless: grep -q {{ swapfile }} /proc/swaps
   {%- endif %}
+{% endif %}
 {% endif %}

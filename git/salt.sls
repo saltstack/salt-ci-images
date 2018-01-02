@@ -2,10 +2,10 @@
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
-{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
-{%- if os_family == 'RedHat' and os_major_release[0] == '5' %}
+{%- if os_family == 'RedHat' and os_major_release == 5 %}
   {%- set on_redhat_5 = True %}
 {%- else %}
   {%- set on_redhat_5 = False %}
@@ -37,14 +37,29 @@
   {%- endif %}
 {%- endif %}
 
+{# handling requirements #}
+{% if test_transport == 'zeromq' %}
+  {% set transport_reqs = ['pycrypto>=2.6.1', 'pyzmq>=2.2.0'] %}
+{% elif test_transport == 'raet' %}
+  {% set transport_reqs = ['libnacl>=1.0.0', 'ioflo>=1.1.7', 'raet>=0.6.0'] %}
+{% endif %}
+
+{% set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
+{% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
+
 include:
   # All VMs get docker-py so they can run unit tests
   - python.docker
-  {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   {%- endif %}
+  {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
+  - dpkg
+  {%- endif %}
+  {%- if grains['os'] not in ('Windows',) %}
   - locale
+  {%- endif %}
   {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains.get('os', '') != 'MacOS' %}
   {%- if grains.get('os', '') != 'Windows' %}
@@ -54,7 +69,7 @@ include:
   - sed
   {%- endif %}
   {#-
-  {%- if grains['os_family'] not in ('FreeBSD',) %}
+  {%- if os_family not in ('FreeBSD',) %}
   - subversion
   {%- endif %}
   #}
@@ -75,7 +90,7 @@ include:
   {%- if grains['os'] == 'Arch' %}
   - python.setuptools
   {%- endif %}
-  {%- if grains['os_family'] == 'Suse' %}
+  {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}
   - python.mock
@@ -90,9 +105,12 @@ include:
   - python.cherrypy
   - python.etcd
   - python.gitpython
+  {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
+  {%- endif %}
   - python.boto
   - python.moto
+  - python.kubernetes
   - python.psutil
   - python.tornado
   - python.pyvmomi
@@ -105,14 +123,14 @@ include:
   - python.jsonschema
   - python.rfc3987
   - python.strict_rfc3339
-  {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+  {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - python.jinja2
   {%- endif %}
   - pyopenssl
   {%- if grains['os'] != 'Windows' %}
   - gem
   {%- endif %}
-  {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+  {%- if not pillar.get('py3', False) %}
   - python.futures
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
@@ -137,7 +155,7 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
@@ -148,7 +166,9 @@ include:
   {%- if grains['os'] != 'Windows' %}
   - extra-swap
   {%- endif %}
+  {%- if grains['os'] != 'Windows' or (not (pillar.get('py3', False) and grains['os'] == 'Windows' )) %}
   - dmidecode
+  {%- endif %}
   {%- endif %}
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
@@ -164,8 +184,22 @@ include:
   - python.pytest-helpers-namespace
   - python.pytest-salt
   {%- endif %}
+  {%- if grains['os'] in ['CentOS', 'Debian', 'Fedora', 'FreeBSD', 'MacOS' , 'Ubuntu'] %}
+  - python.junos-eznc
+  - python.jxmlease
+  {%- endif %}
+  {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+  - nginx
+  {%- endif %}
+  {%- if grains['os'] == 'MacOS' %}
+  - python.pyyaml
+  {%- endif %}
+  {%- if os_family == 'Arch' %}
+  - lsb_release
+  {%- endif %}
+  - sssd
 
-{{testing_dir}}:
+{{ testing_dir }}:
   file.directory
 
 {%- if pillar.get('clone_repo', True) %}
@@ -175,19 +209,19 @@ clone-salt-repo:
     - force_checkout: True
     - force_reset: True
     - rev: {{ pillar.get('test_git_commit', 'develop') }}
-    - target: /testing
+    - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
       - pip: docker
       # Docker integration tests only on CentOS 7 (for now)
-      {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}
+      {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
       {%- if on_docker == False %}
       - service: docker
       - pkg: docker
       {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
-      - file: /testing
+      - file: {{ testing_dir }}
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
@@ -208,7 +242,7 @@ clone-salt-repo:
       {%- endif %}
       {%- endif %}
       {#-
-      {%- if grains['os_family'] not in ('FreeBSD',) %}
+      {%- if os_family not in ('FreeBSD',) %}
       - pkg: subversion
       {%- endif %}
       #}
@@ -228,7 +262,7 @@ clone-salt-repo:
       - pip: unittest2
       - pip: argparse
       {%- endif %}
-      {%- if grains['os_family'] == 'Suse' %}
+      {%- if os_family == 'Suse' %}
       - pip: certifi
       {%- endif %}
       - pip: mock
@@ -241,21 +275,24 @@ clone-salt-repo:
       - pip: gnupg
       - pip: cherrypy
       - pip: python-etcd
+      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
+      {% endif %}
       - pip: boto
       - pip: moto
+      - pip: kubernetes
       - pip: psutil
       - pip: tornado
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl
-      {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+      {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       - pip: pyinotify
       {%- endif %}
-      {%- if grains.get('pythonversion')[:2] < [3, 2] %}
+      {%- if not pillar.get('py3', False) %}
       - pip: futures
       {%- endif %}
       - pip: gitpython
@@ -281,12 +318,14 @@ clone-salt-repo:
       - npm: bower
       {%- endif %}
       {%- endif %}
-      {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and grains['osmajorrelease'] == '5') %}
+      {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pkg: gpg
       {%- endif %}
       {%- if grains['os'] != 'MacOS' %}
       {%- if grains['os'] == 'Windows' %}
+      {%- if not pillar.get('py3', False) %}
       - pip: dmidecode
+      {%- endif %}
       {%- else %}
       - pkg: dmidecode
       {%- endif %}
@@ -300,22 +339,30 @@ clone-salt-repo:
       {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
       - pkg: openssl-dev-libs
       {%- endif %}
+      {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+      - pkg: nginx
+      {%- endif %}
+      {%- if os_family == 'Arch' %}
+      - pkg: lsb-release
+      {%- endif %}
+      # disable sssd if running
+      - service: sssd
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
     - name: git remote add upstream {{ default_test_git_url }}
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - git: clone-salt-repo
-    - unless: 'cd /testing ; git remote -v | grep {{ default_test_git_url }}'
+    - unless: 'cd {{ testing_dir }} ; git remote -v | grep {{ default_test_git_url }}'
 
 {# Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
-    - cwd: /testing
+    - cwd: {{ testing_dir }}
     - require:
       - cmd: add-upstream-repo
 {%- endif %}
@@ -323,18 +370,45 @@ fetch-upstream-tags:
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
-install-salt-pip-deps:
+{%- if test_transport in ('zeromq', 'raet') -%}
+  {% for req in transport_reqs %}
+install-transport-{{ req }}:
   pip.installed:
-    - requirements: {{testing_dir}}/requirements/{{ test_transport }}.txt
-    - onlyif: '[ -f {{testing_dir}}/requirements/{{ test_transport }}.txt ]'
+    - name: {{ req }}
+  {% endfor %}
+{%- endif -%}
 
-install-salt-dev-pip-deps:
+{% for req in dev_reqs %}
+install-dev-{{ req }}:
   pip.installed:
-    - requirements: {{testing_dir}}/requirements/dev_{{ python }}.txt
-    - onlyif: '[ -f {{testing_dir}}/requirements/dev_{{ python }}.txt ]'
+    - name: {{ req }}
+{% endfor %}
+
+{% for req in base_reqs %}
+install-base-{{ req }}:
+  pip.installed:
+    - name: {{ req }}
+{% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
-    - requirements: {{testing_dir}}/requirements/pytest.txt
-    - onlyif: '[ -f {{testing_dir}}/requirements/pytest.txt ]'
+    - requirements: {{ testing_dir }}/requirements/pytest.txt
+    - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
+{%- endif %}
+
+{# npm v5 workaround for issue #41770 #}
+{%- if grains['os'] == 'MacOS' %}
+downgrade_node:
+  cmd.run:
+    - name: 'brew switch node 7.0.0'
+    - runas: jenkins
+
+downgrade_npm:
+  npm.installed:
+    - name: npm@3.10.8
+
+pin_npm:
+  cmd.run:
+    - name: 'brew pin node'
+    - runas: jenkins
 {%- endif %}

@@ -3,11 +3,9 @@ include:
   - python.pip
 {% endif %}
 
-rfc3987:
+cffi:
   pip.installed:
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - name: cffi==1.11.0
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

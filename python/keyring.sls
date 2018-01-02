@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 {% endif %}
@@ -10,7 +10,7 @@ keyring:
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}
     - upgrade: True
-{% if grains['os'] not in ('Windows') %}
+{% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       {%- if grains['os'] == 'OpenSUSE' %}

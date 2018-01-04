@@ -106,7 +106,6 @@ include:
   - python.requests
   - python.keyring
   - python.gnupg
-  - python.cherrypy
   - python.etcd
   - python.gitpython
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
@@ -121,6 +120,7 @@ include:
   - python.pycrypto
   - python.setproctitle
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.cherrypy
   - python.pyinotify
   {%- endif %}
   - python.msgpack
@@ -277,7 +277,6 @@ clone-salt-repo:
       - pip: requests
       - pip: keyring
       - pip: gnupg
-      - pip: cherrypy
       - pip: python-etcd
       {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
@@ -293,7 +292,8 @@ clone-salt-repo:
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
-      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
+      - pip: cherrypy
       - pip: pyinotify
       {%- endif %}
       {%- if not pillar.get('py3', False) %}

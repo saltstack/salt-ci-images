@@ -110,7 +110,6 @@ include:
   - python.requests
   - python.keyring
   - python.gnupg
-  - python.cherrypy
   - python.etcd
   - python.gitpython
   - python.pygit2
@@ -126,6 +125,7 @@ include:
   - python.pycrypto
   - python.setproctitle
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.cherrypy
   - python.pyinotify
   {%- endif %}
   - python.msgpack
@@ -286,7 +286,6 @@ clone-salt-repo:
       - pip: requests
       - pip: keyring
       - pip: gnupg
-      - pip: cherrypy
       - pip: python-etcd
       {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
@@ -303,6 +302,7 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
+      - pip: cherrypy
       - pip: pyinotify
       {%- endif %}
       {%- if not pillar.get('py3', False) %}

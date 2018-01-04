@@ -13,6 +13,8 @@ include:
   - python.coverage
   - python.unittest-xml-reporting
   - python.libcloud
+  - python.shade
+  - python.rackspaceauth
   - python.requests
   - python.keyring
   - python.tornado

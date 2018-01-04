@@ -332,7 +332,7 @@ clone-salt-repo:
       {%- endif %}
       - pip: dnspython
       {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
-      {%- if grains['os'] != 'Windows' %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: npm
       - npm: bower
       {%- endif %}
@@ -419,18 +419,24 @@ install-salt-pytest-pip-deps:
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}
+{# node version 7.0.0 is not avaliable in MAC OSX 13(High Sierra) #}
+{# installing node, npm, and bower manually for the MAC OS. #}
 {%- if grains['os'] == 'MacOS' %}
-downgrade_node:
-  cmd.run:
-    - name: 'brew switch node 7.0.0'
-    - runas: jenkins
+download_node:
+  file.managed:
+    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg 
+    - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
+    - name: /tmp/node-v7.0.0.pkg
+    - user: root
+    - group: wheel
 
-downgrade_npm:
+install_node:
+  macpackage.installed:
+    - name: /tmp/node-v7.0.0.pkg
+    - reload_modules: True
+
+bower:
   npm.installed:
-    - name: npm@3.10.8
-
-pin_npm:
-  cmd.run:
-    - name: 'brew pin node'
-    - runas: jenkins
+    - require:
+      - macpackage: install_node 
 {%- endif %}

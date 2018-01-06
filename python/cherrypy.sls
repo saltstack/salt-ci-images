@@ -9,7 +9,7 @@ cherrypy:
   pip.installed:
     {% if on_py26 %}
     {# CherryPy dropped Python 2.6 support in version 11.0.0 -#}
-    - name: 'cherrypy < 11.0.0'
+    - name: 'cherrypy==10.2.2'
     {% endif %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
@@ -45,4 +45,14 @@ tempora:
     {%- endif %}
     - require_in:
       - pip: portend
+
+# cheroot 5.11.0 is the last version which supports Python 2.6
+cheroot:
+  pip.installed:
+    - name: 'cheroot==5.11.0'
+    {%- if salt['config.get']('virtualenv_path', None)  %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
+    - require_in:
+      - pip: cherrypy 
 {% endif %}

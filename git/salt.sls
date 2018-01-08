@@ -436,7 +436,7 @@ install-salt-pytest-pip-deps:
 {%- if grains['os'] == 'MacOS' %}
 download_node:
   file.managed:
-    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg 
+    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg
     - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
     - name: /tmp/node-v7.0.0.pkg
     - user: root
@@ -450,5 +450,11 @@ install_node:
 bower:
   npm.installed:
     - require:
-      - macpackage: install_node 
+      - macpackage: install_node
+
+# workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
+update-brew:
+  cmd.run:
+    - name: brew update
+    - runas: jenkins
 {%- endif %}

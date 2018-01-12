@@ -3,6 +3,8 @@ include:
   - python.pip
 {%- endif %}
 
+{%- set moto_version = 'moto==1.1.25' %}
+
 moto:
   pip.installed:
     - name: moto

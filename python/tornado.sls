@@ -8,6 +8,7 @@ include:
 tornado:
   pip.installed:
     - name: {{ pinned_pkg }}
+    - upgrade: True
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

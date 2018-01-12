@@ -95,9 +95,7 @@ include:
   - python.hgtools
   - python.setuptools-scm
   {%- endif %}
-  {%- if grains['os'] == 'Arch' %}
   - python.setuptools
-  {%- endif %}
   {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}

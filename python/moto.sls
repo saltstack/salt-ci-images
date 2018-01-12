@@ -6,7 +6,7 @@ include:
 {%- if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
   {%- set moto_version = 'moto==1.0.1' %}
 {%- else %}
-  {%- set moto_version = 'moto' %}
+  {%- set moto_version = 'moto==1.1.25' %}
 {%- endif %}
 
 moto:

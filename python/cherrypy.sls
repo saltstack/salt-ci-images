@@ -42,4 +42,14 @@ tempora:
     {%- endif %}
     - require_in:
       - pip: portend
+
+# cheroot 5.11.0 is the last version which supports Python 2.6
+cheroot:
+  pip.installed:
+    - name: 'cheroot==5.11.0'
+    {%- if salt['config.get']('virtualenv_path', None)  %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
+    - require_in:
+      - pip: cherrypy 
 {% endif %}

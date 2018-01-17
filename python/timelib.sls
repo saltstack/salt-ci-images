@@ -22,7 +22,8 @@ get-timelib-zip:
 
 install-timelib:
   cmd.run:
-    - name: cd {{ timelib_dir }}/timelib-0.2.4/; make install
+    - name: make install
+    - cwd: {{ timelib_dir }}/timelib-0.2.4/
     - require:
         - archive: get-timelib-zip
 {% else %}

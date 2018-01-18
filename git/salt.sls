@@ -280,7 +280,11 @@ clone-salt-repo:
       - pip: certifi
       {%- endif %}
       - pip: mock
+      {%- if grains['os'] != 'MacOS' %}
+      - cmd: timelib
+      {% else %}
       - pip: timelib
+      {% endif %}
       - pip: coverage
       - pip: unittest-xml-reporting
       - pip: apache-libcloud

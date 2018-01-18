@@ -3,12 +3,11 @@ include:
   - python.pip
 {%- endif %}
 
-{%- set pinned_pkg = 'tornado>=4.2.1,<4.5.0' %}
+{%- set pinned_pkg = 'tornado>=4.4.3,<4.5.0' %}
 
 tornado:
   pip.installed:
     - name: {{ pinned_pkg }}
-    - upgrade: True
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

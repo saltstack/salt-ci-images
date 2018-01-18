@@ -34,4 +34,8 @@ libuv:
     - reinstall: True
     - sources:
       - libuv: https://archive.archlinux.org/packages/l/libuv/libuv-1.18.0-1-x86_64.pkg.tar.xz
+  file.replace:
+    - name: /etc/pacman.conf
+    - pattern: '^#IgnorePkg   =$'
+    - repl: 'IgnorePkg = libuv'
 {% endif %}

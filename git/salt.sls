@@ -280,7 +280,7 @@ clone-salt-repo:
       - pip: certifi
       {%- endif %}
       - pip: mock
-      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] == 'MacOS' %}
       - cmd: timelib
       {% else %}
       - pip: timelib

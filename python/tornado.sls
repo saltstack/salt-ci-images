@@ -4,13 +4,15 @@ include:
 {% endif %}
 
 {% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
+{% set debian8 = grains.os == 'Debian' and grains.osmajorrelease|int == 8 %} 
+
 
 tornado:
   pip.installed:
-  {%- if on_py26 %}
+  {%- if on_py26 or debian8 %}
     - name: tornado==4.4.3
   {%- else %}
-    - upgrade: True
+    - name: tornado
   {%- endif %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}

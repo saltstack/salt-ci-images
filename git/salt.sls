@@ -48,6 +48,9 @@
 {% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
 
 include:
+  {%- if grains['os'] == 'MacOS' %}
+  - python.path
+  {% endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}

@@ -38,6 +38,9 @@
 {%- endif %}
 
 include:
+  {%- if grains['os'] == 'MacOS' %}
+  - python.path
+  {% endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
   {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 7 %}

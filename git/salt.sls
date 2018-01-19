@@ -48,7 +48,7 @@
 {% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
 
 include:
-  {%- if grains.get('kernel') == 'Linux %}
+  {%- if grains.get('kernel') == 'Linux' %}
   - man
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}

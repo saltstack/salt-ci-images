@@ -48,6 +48,9 @@
 {% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
 
 include:
+  {%- if grains.get('kernel') == 'Linux %}
+  - man
+  {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.path
   {% endif %}
@@ -348,6 +351,9 @@ clone-salt-repo:
       {%- endif %}
       # disable sssd if running
       - service: sssd
+      {%- if grains.get('kernel') == 'Linux %}
+      - pkg: man-db
+      {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}
 {#- Add Salt Upstream Git Repo #}

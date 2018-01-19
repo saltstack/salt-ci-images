@@ -351,7 +351,7 @@ clone-salt-repo:
       {%- endif %}
       # disable sssd if running
       - service: sssd
-      {%- if grains.get('kernel') == 'Linux %}
+      {%- if grains.get('kernel') == 'Linux' %}
       - pkg: man-db
       {%- endif %}
 

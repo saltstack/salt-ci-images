@@ -11,6 +11,7 @@
 from __future__ import absolute_import
 import os
 import types
+import pkg_resources
 
 # Import salt libs
 from salt.utils import namespaced_function

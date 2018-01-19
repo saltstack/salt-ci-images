@@ -26,16 +26,3 @@ npm:
       - {{ npm }}
     - aggregate: True
 {% endif %}
-
-{# workaround for https://github.com/npm/npm/issues/19634 #}
-{% if arch %}
-libuv:
-  pkg.installed:
-    - reinstall: True
-    - sources:
-      - libuv: https://archive.archlinux.org/packages/l/libuv/libuv-1.18.0-1-x86_64.pkg.tar.xz
-  file.replace:
-    - name: /etc/pacman.conf
-    - pattern: '^#IgnorePkg   =$'
-    - repl: 'IgnorePkg = libuv'
-{% endif %}

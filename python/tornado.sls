@@ -3,6 +3,7 @@ include:
   - python.pip
 {%- endif %}
 
+{% set pinned_pkg = 'tornado>=4.2.1,<4.5.0' %}
 {% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
 {% set debian8 = grains.os == 'Debian' and grains.osmajorrelease|int == 8 %} 
 
@@ -12,7 +13,7 @@ tornado:
   {%- if on_py26 or debian8 %}
     - name: tornado==4.4.3
   {%- else %}
-    - name: tornado
+    - name: {{ pinned_pkg }}
   {%- endif %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}

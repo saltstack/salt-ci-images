@@ -366,7 +366,7 @@ clone-salt-repo:
       - service: sssd
       {%- if grains.get('kernel') == 'Linux' %}
       - file: ulimits-nofile
-      - pkg: man-db
+      - pkg: man
       {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}

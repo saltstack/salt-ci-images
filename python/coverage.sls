@@ -2,8 +2,8 @@
 
 {% if pillar.get('new_coverage', False) %}
   {% set coverage_version = 'coverage' %}
-{% elif pillar.get('py3', False) and grains['os'] in ('Arch', 'Ubuntu') %}
-  {% set coverage_version = 'coverage==4.4.1' %}
+{% elif pillar.get('py3', False) %}
+  {% set coverage_version = 'coverage==4.4.2' %}
 {% endif %}
 
 {% if grains['os'] not in ('Windows',) %}

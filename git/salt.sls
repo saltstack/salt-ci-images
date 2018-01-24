@@ -106,7 +106,6 @@ include:
   - python.requests
   - python.keyring
   - python.gnupg
-  - python.cherrypy
   - python.etcd
   - python.gitpython
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
@@ -121,6 +120,7 @@ include:
   - python.pycrypto
   - python.setproctitle
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.cherrypy
   - python.pyinotify
   {%- endif %}
   - python.msgpack
@@ -277,7 +277,6 @@ clone-salt-repo:
       - pip: requests
       - pip: keyring
       - pip: gnupg
-      - pip: cherrypy
       - pip: python-etcd
       {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
@@ -293,7 +292,8 @@ clone-salt-repo:
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
-      {%- if grains['os'] != 'MacOS' %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
+      - pip: cherrypy
       - pip: pyinotify
       {%- endif %}
       {%- if not pillar.get('py3', False) %}
@@ -382,6 +382,9 @@ fetch-upstream-tags:
 install-transport-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
   {% endfor %}
 {%- endif -%}
 
@@ -389,18 +392,27 @@ install-transport-{{ req }}:
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {% endfor %}
 
 {% for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}

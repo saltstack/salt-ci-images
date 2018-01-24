@@ -11,7 +11,10 @@ include:
 psutil:
   pip.installed:
     - upgrade: True
-{% if grains['os'] not in ('Windows',) %}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
+    {%- if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
       {#- These distributions don't ship the develop headers separately #}

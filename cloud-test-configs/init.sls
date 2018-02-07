@@ -164,6 +164,8 @@ openstack-provider:
         openstack-config:
           driver: openstack
           profile: rackspace
+          ssh_key_name: {{ salt['pillar.get']('rackspace:ssh_key_name', '') }}
+          ssh_key_file: {{ salt['pillar.get']('rackspace:ssh_key_file', '') }}
           auth:
             username: {{ salt['pillar.get']('rackspace:user', '') }}
             api_key: {{ salt['pillar.get']('rackspace:apikey', '') }}

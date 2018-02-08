@@ -4,6 +4,7 @@ include:
   - cloud-test-configs.azure
   - cloud-test-configs.joyent
   - cloud-test-configs.gce
+  - cloud-test-configs.openstack
 
 ssh-directory:
   file.directory:
@@ -18,3 +19,4 @@ ssh-directory:
       - file: azure-key
       - file: joyent-key
       - file: gce-key
+      - file: rackspace-key

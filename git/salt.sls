@@ -129,6 +129,7 @@ include:
   - python.pycrypto
   - python.setproctitle
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.ldap
   - python.cherrypy
   - python.pyinotify
   {%- endif %}
@@ -306,6 +307,7 @@ clone-salt-repo:
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
+      - pip: python-ldap
       - pip: cherrypy
       - pip: pyinotify
       {%- endif %}

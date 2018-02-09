@@ -3,7 +3,7 @@ include:
   - python.pip
 {% endif %}
 
-{%- if grains['os'] == 'Ubuntu' and grains.get('osrelease', '').startswith('14') %}
+{%- if grains['os'] in ('Debian', 'Ubuntu') %}
   {%- set pinned_mock = 'mock' %}
 {%- else %}
   {%- set pinned_mock = 'mock < 1.1.0' %}

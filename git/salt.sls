@@ -53,6 +53,12 @@ force-sync-all:
 {% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado>=4.2.1'] %}
 
 include:
+  {%- if grains.get('kernel') == 'Linux' %}
+  - man
+  {%- endif %}
+  {%- if grains['os'] == 'MacOS' %}
+  - python.path
+  {% endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
@@ -95,9 +101,7 @@ include:
   - python.hgtools
   - python.setuptools-scm
   {%- endif %}
-  {%- if grains['os'] == 'Arch' %}
   - python.setuptools
-  {%- endif %}
   {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}
@@ -110,7 +114,6 @@ include:
   - python.requests
   - python.keyring
   - python.gnupg
-  - python.cherrypy
   - python.etcd
   - python.gitpython
   - python.pygit2
@@ -125,8 +128,12 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
+  {%- if grains['os'] not in ('Windows',) %}
   - python.clustershell
+  {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.ldap
+  - python.cherrypy
   - python.pyinotify
   {%- endif %}
   - python.msgpack
@@ -240,7 +247,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if salt['grains.get']('oscodename', '') != 'openSUSE Leap 42.2' %}
+      {%- if salt.grains.get('os_family') not in ('Suse', ) %}  
       {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
       {%- endif %}
@@ -280,14 +287,17 @@ clone-salt-repo:
       - pip: certifi
       {%- endif %}
       - pip: mock
+      {%- if grains['os'] == 'MacOS' %}
+      - cmd: timelib
+      {% else %}
       - pip: timelib
+      {% endif %}
       - pip: coverage
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
       - pip: requests
       - pip: keyring
       - pip: gnupg
-      - pip: cherrypy
       - pip: python-etcd
       {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
@@ -300,11 +310,15 @@ clone-salt-repo:
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl
+      {%- if grains['os'] not in ('Windows',) %}
       - pip: clustershell
+      {%- endif %}
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
+      - pip: python-ldap
+      - pip: cherrypy
       - pip: pyinotify
       {%- endif %}
       {%- if not pillar.get('py3', False) %}
@@ -328,7 +342,7 @@ clone-salt-repo:
       {%- endif %}
       - pip: dnspython
       {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
-      {%- if grains['os'] != 'Windows' %}
+      {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: npm
       - npm: bower
       {%- endif %}
@@ -362,8 +376,9 @@ clone-salt-repo:
       {%- endif %}
       # disable sssd if running
       - service: sssd
-      {%- if grains['kernel'] == 'Linux' %}
+      {%- if grains.get('kernel') == 'Linux' %}
       - file: ulimits-nofile
+      - pkg: man
       {%- endif %}
 
 {%- if test_git_url != default_test_git_url %}
@@ -393,6 +408,9 @@ fetch-upstream-tags:
 install-transport-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
   {% endfor %}
 {%- endif -%}
 
@@ -400,33 +418,54 @@ install-transport-{{ req }}:
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {% endfor %}
 
 {% for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
+    {%- if salt['config.get']('virtualenv_path', None) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path') }}
+    {%- endif %}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}
+{# node version 7.0.0 is not avaliable in MAC OSX 13(High Sierra) #}
+{# installing node, npm, and bower manually for the MAC OS. #}
 {%- if grains['os'] == 'MacOS' %}
-downgrade_node:
-  cmd.run:
-    - name: 'brew switch node 7.0.0'
-    - runas: jenkins
+download_node:
+  file.managed:
+    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg
+    - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
+    - name: /tmp/node-v7.0.0.pkg
+    - user: root
+    - group: wheel
 
-downgrade_npm:
+install_node:
+  macpackage.installed:
+    - name: /tmp/node-v7.0.0.pkg
+    - reload_modules: True
+
+bower:
   npm.installed:
-    - name: npm@3.10.8
+    - require:
+      - macpackage: install_node
 
-pin_npm:
+# workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
+update-brew:
   cmd.run:
-    - name: 'brew pin node'
+    - name: brew update
     - runas: jenkins
 {%- endif %}

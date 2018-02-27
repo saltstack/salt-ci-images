@@ -1,3 +1,4 @@
+{% set arch = True if grains['os_family'] == 'Arch' else False %}
 {% set suse = True if grains['os_family'] == 'Suse' else False %}
 {% set freebsd = True if grains['os'] == 'FreeBSD' else False %}
 {% set macos = True if grains['os'] == 'MacOS' else False %}
@@ -18,7 +19,7 @@
 npm:
   pkg.installed:
     - pkgs:
-{% if suse %} 
+{% if suse %}
       - {{ nodejs }}
       - {{ npm }}
 {% else %}

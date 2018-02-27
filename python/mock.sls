@@ -5,7 +5,7 @@ include:
 
 mock:
   pip.installed:
-    - name: 'mock < 1.1.0'
+    - name: mock
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

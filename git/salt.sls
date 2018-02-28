@@ -216,7 +216,7 @@ include:
   - lsb_release
   {%- endif %}
   - sssd
-  {%- if grains['kernel'] == 'Linux' %}
+  {%- if grains['kernel'] in ('Linux', 'Darwin') %}
   - ulimits
   {%- endif %}
 

@@ -12,7 +12,7 @@ tornado:
   {%- if on_py26 or debian8 %}
     - name: tornado==4.4.3
   {%- else %}
-    - name: tornado
+    - name: tornado<5.0
   {%- endif %}
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}

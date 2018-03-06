@@ -1,9 +1,7 @@
-{# workaround only needs to be in 2016.11 branch #}
-{%- if grains['os'] in ('MacOS') %}
-  {% set pythonpath = 'export PATH=/opt/salt/bin/:$PATH' %}
-{% endif %}
-python-path:
+fix path for mac:
   file.append:
-    - name: /etc/profile
-    - text: |
-        {{ pythonpath }}
+    - names:
+      - /etc/pam.d/sshd:
+        - text: 'session    optional       pam_env.so'
+      - /etc/environment:
+        - text: 'export PATH=/opt/salt/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin'

@@ -66,12 +66,12 @@ include:
   {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
-  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
-  {# On Windows, this is already installed #}
-  {%- if grains['os'] != 'MacOS' %}
-  {%- if grains['os'] != 'Windows' %}
+  {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
+  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
   - git
   {%- endif %}
+  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {%- if grains['os'] != 'MacOS' %}
   - patch
   - sed
   {%- endif %}

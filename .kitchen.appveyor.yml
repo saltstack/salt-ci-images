@@ -31,7 +31,6 @@ provisioner:
     base:
       "*":
         - git.salt
-        - kitchen
 
 platforms:
   - name: windows-2012R2
@@ -53,7 +52,3 @@ suites:
 <% else %>
           test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
 <% end %>
-verifier:
-  name: shell
-  remote_exec: true
-  command: '$(kitchen) /testing/tests/runtests.py -v --output-columns=80 --run-destructive<%= ENV["TEST"] ? " -n #{ENV["TEST"]}" : "" %>'

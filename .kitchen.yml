@@ -37,7 +37,6 @@ provisioner:
     base:
       "*":
         - git.salt
-        - kitchen
 platforms:
   - name: fedora
     driver_config:
@@ -160,7 +159,3 @@ suites:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
           py3: true
-verifier:
-  name: shell
-  remote_exec: true
-  command: '$(kitchen) /testing/tests/runtests.py -v --output-columns=80 --run-destructive<%= ENV["TEST"] ? " -n #{ENV["TEST"]}" : "" %>'

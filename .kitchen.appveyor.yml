@@ -46,6 +46,8 @@ suites:
           base:
             "*":
               - jenkins
+        windows.sls:
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
         jenkins.sls:
 <% if ENV["GITHUB_BRANCH"].nil? %>
           test_git_commit: <%= ENV['APPVEYOR_REPO_BRANCH'] == 'master' ? 'develop' : ENV['APPVEYOR_REPO_BRANCH'] %>

@@ -10,11 +10,3 @@ group :windows do
   gem 'winrm', '~>2.0'
   gem 'winrm-fs', '~>1.0'
 end
-
-group :appveyor do
-  gem 'test-kitchen'
-  gem "kitchen-salt", :git => 'https://github.com/saltstack/kitchen-salt.git'
-  gem 'kitchen-vagrant'
-  gem 'winrm', '~>2.0'
-  gem 'winrm-fs', '~>1.0'
-end

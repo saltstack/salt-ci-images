@@ -23,8 +23,6 @@ install:
   - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
   - ps: gem install bundler --quiet --no-ri --no-rdoc
   - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\salt-jenkins\certs.pem
-  - ps: Invoke-WebRequest -Uri https://gist.githubusercontent.com/dwoz/b9553ae70f4407d8dcad86ceb34d5fd4/raw/0926ef47e1759b2733dd1415f3f402429c0dd317/install-openssh.ps1 -OutFile c:\install_openssh.ps1
-  - set SSL_CERT_FILE=c:\projects\salt-jenkins\certs.pem
 
 build_script:
   - bundle install --with windows
@@ -32,9 +30,9 @@ build_script:
 test_script:
   - ps: >-
      if ($env:DEBUG_BUILD -eq "yes") {
-         bundle exec kitchen verify windows -l debug | tee kitchen.run.log
+         bundle exec kitchen converge windows -l debug | tee kitchen.run.log
      } else {
-         bundle exec kitchen verify windows | tee kitchen.run.log
+         bundle exec kitchen converge windows | tee kitchen.run.log
      }
 
 on_failure:

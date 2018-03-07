@@ -48,7 +48,6 @@ suites:
             "*":
               - jenkins
         jenkins.sls:
-          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
 <% if ENV["GITHUB_BRANCH"].nil? %>
           test_git_commit: <%= ENV['APPVEYOR_REPO_BRANCH'] == 'master' ? 'develop' : ENV['APPVEYOR_REPO_BRANCH'] %>
 <% else %>

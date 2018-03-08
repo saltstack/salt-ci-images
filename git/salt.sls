@@ -66,11 +66,12 @@ include:
   {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
-  {# on OSX, these utils are available from the system rather than the pkg manager (brew) #}
-  {%- if grains.get('os', '') != 'MacOS' %}
-  {%- if grains.get('os', '') != 'Windows' %}
+  {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
+  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
   - git
   {%- endif %}
+  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {%- if grains['os'] != 'MacOS' %}
   - patch
   - sed
   {%- endif %}
@@ -230,7 +231,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if grains['oscodename'] != 'openSUSE Leap 42.2' %}
+      {%- if grains.get('oscodename', '') != 'openSUSE Leap 42.2' %}
       {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
       {%- endif %}

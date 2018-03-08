@@ -1,0 +1,71 @@
+---
+driver:
+  name: proxy
+  host: localhost
+  reset_command: "exit 0"
+  username: <%= ENV["winrm_user"] %>
+  password: <%= ENV["winrm_pass"] %>
+  port: <%= ENV["winrm_port"] %>
+
+provisioner:
+  name: salt_solo
+  init_environment: |
+    Clear-Host
+    $AddedLocation ="c:\salt"
+    $Reg = "Registry::HKLM\System\CurrentControlSet\Control\Session Manager\Environment"
+    $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
+    $NewPath= $OldPath + ';' + $AddedLocation
+    Set-ItemProperty -Path "$Reg" -Name PATH -Value $NewPath
+  is_file_root: true
+  salt_copy_filter:
+    - .bundle
+    - .git
+    - .gitignore
+    - .kitchen
+    - .kitchen.appveyor.yml
+    - Gemfile
+    - Gemfile.lock
+    - README.rst
+    - .travis.yml
+  state_top:
+    base:
+      "*":
+        - git.salt
+
+platforms:
+  - name: windows-2012R2
+    transport:
+      name: winrm
+      elevated: true
+
+suites:
+  - name: py2
+    provisioner:
+      salt_minion_extra_config:
+          virtualenv_path: 'c:\Python27-x64\Scripts\pip.exe'
+      pillars:
+        top.sls:
+          base:
+            "*":
+              - jenkins
+        jenkins.sls:
+<% if ENV["GITHUB_BRANCH"].nil? %>
+          test_git_commit: <%= ENV['APPVEYOR_REPO_BRANCH'] == 'master' ? 'develop' : ENV['APPVEYOR_REPO_BRANCH'] %>
+<% else %>
+          test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
+<% end %>
+  - name: py3
+    provisioner:
+      salt_minion_extra_config:
+          virtualenv_path: 'c:\Python36-x64\Scripts\pip.exe'
+      pillars:
+        top.sls:
+          base:
+            "*":
+              - jenkins
+        jenkins.sls:
+<% if ENV["GITHUB_BRANCH"].nil? %>
+          test_git_commit: <%= ENV['APPVEYOR_REPO_BRANCH'] == 'master' ? 'develop' : ENV['APPVEYOR_REPO_BRANCH'] %>
+<% else %>
+          test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
+<% end %>

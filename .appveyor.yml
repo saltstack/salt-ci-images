@@ -1,0 +1,45 @@
+version: "{build}"
+
+image: Visual Studio 2015
+platform:
+  - x64
+
+# Environment variables can be overridden in the Appveyor's build
+# settings. A more secure password should be set there.
+environment:
+  winrm_user: kitchen_user
+  winrm_pass: p@ssw0rd
+  winrm_port: 5985
+  KITCHEN_YAML: .kitchen.appveyor.yml
+
+  matrix:
+    - suite_name: "py2-windows"
+      ruby_version: "24"
+    - suite_name: "py3-windows"
+      ruby_version: "24"
+
+clone_depth: 1
+
+install:
+  - ps: net user /add $env:winrm_user $env:winrm_pass
+  - ps: net localgroup administrators $env:winrm_user /add
+  - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
+  - ps: gem install bundler --quiet --no-ri --no-rdoc
+  - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\salt-jenkins\certs.pem
+
+build_script:
+  - bundle install --with windows
+
+test_script:
+  - ps: >-
+     if ($env:DEBUG_BUILD -eq "yes") {
+         bundle exec kitchen converge $env:suite_name -l debug | tee kitchen.run.log
+     } else {
+         bundle exec kitchen converge $env:suite_name | tee kitchen.run.log
+     }
+
+on_failure:
+  - ps: ls ./*
+  - bundle exec kitchen diagnose --all
+  - ps: Get-ChildItem ".\\.kitchen\\logs\\kitchen.log" | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  - ps: Get-ChildItem "kitchen.run.log" | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }

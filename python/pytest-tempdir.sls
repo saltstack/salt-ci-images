@@ -5,6 +5,7 @@ include:
 
 pytest-tempdir:
   pip.installed:
+    - name: pytest-tempdir
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

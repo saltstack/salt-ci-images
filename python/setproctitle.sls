@@ -3,8 +3,9 @@ include:
   - python.pip
 {% endif %}
 
-setproctitle:
+install_setproctitle:
   pip.installed:
+    - name: setproctitle
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

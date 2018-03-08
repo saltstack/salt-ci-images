@@ -5,6 +5,7 @@ include:
 
 pyvmomi:
   pip.installed:
+    - name: pyvmomi
     {%- if salt['config.get']('virtualenv_path', None)  %}
     - bin_env: {{ salt['config.get']('virtualenv_path') }}
     {%- endif %}

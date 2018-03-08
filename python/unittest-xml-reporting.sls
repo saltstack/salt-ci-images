@@ -3,8 +3,9 @@ include:
   - python.pip
 {% endif %}
 
-unittest-xml-reporting:
+install_unittest-xml-reporting:
   pip.installed:
+    - name: unittest-xml-reporting
     {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int <= 6 %}
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- endif %}

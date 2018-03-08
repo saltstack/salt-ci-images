@@ -10,7 +10,7 @@
   {% set python3 = 'python3' %}
 {% endif %}
 
-{% if os_family != 'Windows' %}
+{% if os_family != 'Windows' and not salt.cmd.retcode('which python3')%}
 install_python3:
   pkg.installed:
     - name: {{ python3 }}

@@ -137,6 +137,8 @@ platforms:
 suites:
   - name: py2
     provisioner:
+      salt_minion_extra_config:
+        virtualenv_path: 'c:\Python27\Scripts\pip.exe'
       pillars:
         top.sls:
           base:
@@ -150,6 +152,8 @@ suites:
       - centos-6
       - ubuntu-1404
     provisioner:
+      salt_minion_extra_config:
+        virtualenv_path: 'c:\Python36\Scripts\pip.exe'
       pillars:
         top.sls:
           base:

@@ -10,6 +10,8 @@ include:
 docker_py:
   pip.installed:
     - name: {{docker}}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    {%- if salt.config.get('virtualenv_path') %}
+    - bin_env: {{ salt.config.get('virtualenv_path') }}
+    {%- endif %}
     - require:
       - cmd: pip-install

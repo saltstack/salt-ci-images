@@ -100,7 +100,9 @@ upgrade-installed-pip:
   pip.installed:
     - name: pip
     - upgrade: True
-    - bin_env: {{salt.config.get('virtualenv_path', None)}}
+    {%- if salt.config.get('virtualenv_path') %}
+    - bin_env: {{ salt.config.get('virtualenv_path') }}
+    {%- endif %}
     - require:
       - cmd: pip-install
 

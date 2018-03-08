@@ -15,4 +15,5 @@ install_python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True
+    - unless: which python3
 {% endif %}

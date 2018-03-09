@@ -13,9 +13,9 @@ environment:
   KITCHEN_YAML: .kitchen.appveyor.yml
 
   matrix:
-    - suite_name: "py2-windows"
-      ruby_version: "24"
     - suite_name: "py3-windows"
+      ruby_version: "24"
+    - suite_name: "py2-windows"
       ruby_version: "24"
 
 clone_depth: 1

@@ -3,7 +3,7 @@ include:
   - python.pip
 {% endif %}
 
-install_unittest-xml-reporting:
+unittest-xml-reporting:
   pip.installed:
     - name: unittest-xml-reporting
     {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int <= 6 %}

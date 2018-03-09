@@ -217,7 +217,7 @@ clone-salt-repo:
     - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
-      - pip: docker
+      - pip: docker_py
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
       {%- if on_docker == False %}

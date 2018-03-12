@@ -13,7 +13,7 @@
 {% if os_family == 'MacOS' %}
 install_python3:
    macpackage.installed:
-    - name: https://www.python.org/ftp/python/3.6.3/python-3.6.3rc1-macosx10.6.pkg
+    - name: https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg 
     - store: True
     - dmg: False
 {% else %}

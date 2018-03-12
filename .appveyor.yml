@@ -7,7 +7,7 @@ platform:
 # Environment variables can be overridden in the Appveyor's build
 # settings. A more secure password should be set there.
 environment:
-  winrm_user: kitchen_user
+  winrm_user: appveyor
   winrm_pass: p@ssw0rd
   winrm_port: 5985
   KITCHEN_YAML: .kitchen.appveyor.yml
@@ -18,15 +18,23 @@ environment:
     - suite_name: "py2-windows"
       ruby_version: "24"
 
-clone_depth: 1
+clone_depth: 15
 
 install:
-  - ps: net user /add $env:winrm_user $env:winrm_pass
-  - ps: net localgroup administrators $env:winrm_user /add
+  - set APPVEYOR_RDP_PASSWORD=%winrm_pass%
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: >-
+      if ($env:winrm_user -ne "appveyor") {
+        net user /add $env:winrm_user $env:winrm_pass;
+        net localgroup administrators $env:winrm_user /add
+      }
   - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
   - ps: gem install bundler --quiet --no-ri --no-rdoc
   - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\salt-jenkins\certs.pem
   - set SSL_CERT_FILE=c:\projects\salt-jenkins\certs.pem
+  - ps: Enable-PSRemoting –force
+  - ps: winrm s winrm/config/client '@{TrustedHosts="*"}'
+  - ps: winrm quickconfig
 
 build_script:
   - bundle install --with windows
@@ -42,5 +50,7 @@ test_script:
 on_failure:
   - ps: ls ./*
   - bundle exec kitchen diagnose --all
+  - winrm get winrm/config
+  - winrm enumerate winrm/config/listener
   - ps: Get-ChildItem ".\\.kitchen\\logs\\kitchen.log" | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
   - ps: Get-ChildItem "kitchen.run.log" | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }

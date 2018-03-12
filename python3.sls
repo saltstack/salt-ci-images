@@ -9,10 +9,17 @@
 {% else %}
   {% set python3 = 'python3' %}
 {% endif %}
-
-{% if os_family != 'Windows' and not salt.cmd.retcode('which python3')%}
+{% if os_family != 'Windows' %}
+{% if os_family == 'MacOS' %}
+install_python3:
+   macpackage.installed:
+    - name: https://www.python.org/ftp/python/3.6.3/python-3.6.3rc1-macosx10.6.pkg
+    - store: True
+    - dmg: False
+{% else %}
 install_python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True
+{% endif %}
 {% endif %}

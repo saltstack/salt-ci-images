@@ -71,7 +71,11 @@ pip-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
+    {% if os_family == 'MacOS' %}
+      - macpackage: install_python3
+    {% else %}
       - pkg: install_python3
+    {% endif %}
       - cmd: pip2-install
     {%- else %}
       {%- if on_redhat_5 %}

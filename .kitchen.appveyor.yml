@@ -37,6 +37,9 @@ platforms:
     transport:
       name: winrm
       elevated: true
+      username: <%= ENV["winrm_user"] %>
+      password: <%= ENV["winrm_pass"] %>
+      port: <%= ENV["winrm_port"] %>
 
 suites:
   - name: py2

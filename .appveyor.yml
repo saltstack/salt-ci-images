@@ -26,6 +26,7 @@ install:
   - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
   - ps: gem install bundler --quiet --no-ri --no-rdoc
   - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\salt-jenkins\certs.pem
+  - set SSL_CERT_FILE=c:\projects\salt-jenkins\certs.pem
 
 build_script:
   - bundle install --with windows

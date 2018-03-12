@@ -35,9 +35,10 @@ install:
   - ps: Enable-PSRemoting –force
   - ps: winrm s winrm/config/client '@{TrustedHosts="*"}'
   - ps: winrm quickconfig
+  - type Gemfile.appveyor > Gemfile
 
 build_script:
-  - bundle install --with windows
+  - bundle install
 
 test_script:
   - ps: >-

@@ -6,9 +6,8 @@ include:
 keyring:
   pip.installed:
     - name: keyring==5.7.1
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - upgrade: True
 {% if grains['os'] not in ('Windows',) %}
     - require:

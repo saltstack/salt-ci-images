@@ -11,9 +11,8 @@ cherrypy:
     {# CherryPy dropped Python 2.6 support in version 11.0.0 -#}
     - name: 'cherrypy==10.2.2'
     {% endif %}
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}
@@ -30,9 +29,8 @@ cherrypy:
 portend:
   pip.installed:
     - name: 'portend == 1.8'
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
       - pip: cherrypy
 
@@ -40,9 +38,8 @@ portend:
 tempora:
   pip.installed:
     - name: 'tempora == 1.6.1'
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
       - pip: portend
 
@@ -50,9 +47,8 @@ tempora:
 cheroot:
   pip.installed:
     - name: 'cheroot==5.11.0'
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
       - pip: cherrypy 
 {% endif %}

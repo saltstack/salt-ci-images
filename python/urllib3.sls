@@ -3,12 +3,10 @@ include:
   - python.pip
 {% endif %}
 
-apache-libcloud:
+urllib3:
   pip.installed:
-    - name: 'apache-libcloud==1.0.0'
+    - name: urllib3
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
     - require:
-      - cmd: pip-install
-{% endif %}
+      - upgrade-installed-pip

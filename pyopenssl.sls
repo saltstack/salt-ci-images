@@ -13,14 +13,11 @@ pyopenssl:
   pip.installed:
     - name: pyOpenSSL
     - upgrade: True
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
-    {%- if grains['os'] not in ('Windows',) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip-install
     {%- if pillar.get('py3', False) %}
     - require_in:
       - pip: cffi
-    {%- endif %}
     {%- endif %}

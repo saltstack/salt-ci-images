@@ -6,10 +6,15 @@
   {% set git = 'git' %}
 {% endif %}
 
-{%- if grains['os_family'] == 'RedHat' %}
+
 include:
+{%- if grains['os_family'] == 'Windows' %}
+   - winrepo
+   - python.pip
+{%- elif grains['os_family'] == 'RedHat' %}
    - python.ca-certificates
 {%- endif %}
+
 
 git:
   pkg.installed:
@@ -20,3 +25,10 @@ git:
     - require:
       - pkg: ca-certificates
     {%- endif %}
+    {%- if grains['os_family'] == 'Windows' %}
+    - require:
+      - win-pkg-refresh
+    {%- endif %}
+{%- if grains['os_family'] == 'Windows' %}
+  
+{%- endif %}

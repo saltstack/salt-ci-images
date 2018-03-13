@@ -36,16 +36,19 @@ platforms:
   - name: windows-2012R2
     transport:
       name: winrm
-      elevated: true
+      username: <%= ENV["winrm_user"] %>
+      password: <%= ENV["winrm_pass"] %>
+      port: <%= ENV["winrm_port"] %>
 
 suites:
   - name: py2
     provisioner:
-      salt_minion_extra_config:
-          virtualenv_path: 'c:\Python27-x64\Scripts\pip.exe'
       pillars:
         top.sls:
           base:
+            "os:Windows":
+              - match: grain
+              - windows
             "*":
               - jenkins
         jenkins.sls:
@@ -54,13 +57,16 @@ suites:
 <% else %>
           test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
 <% end %>
+        windows.sls:
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
   - name: py3
     provisioner:
-      salt_minion_extra_config:
-          virtualenv_path: 'c:\Python36-x64\Scripts\pip.exe'
       pillars:
         top.sls:
           base:
+            "os:Windows":
+              - match: grain
+              - windows
             "*":
               - jenkins
         jenkins.sls:
@@ -69,3 +75,6 @@ suites:
 <% else %>
           test_git_commit: <%= ENV['GITHUB_BRANCH'] %>
 <% end %>
+        windows.sls:
+          virtualenv_path: 'c:\Python35\Scripts\pip.exe'
+          py3: true

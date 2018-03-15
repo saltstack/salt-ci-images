@@ -3,6 +3,7 @@
 {% else %}
   {% set python2 = 'python2' %}
 {% endif %}
+
 python2:
   pkg.latest:
     - name: {{ python2 }}

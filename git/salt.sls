@@ -67,7 +67,7 @@ include:
   - locale
   {%- endif %}
   {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
-  {%- if grains['os'] not in ('MacOS',) %}
+  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
   - git
   {%- endif %}
   {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
@@ -211,10 +211,9 @@ testing-dir:
     - win_owner: 'Users'
     - win_inheritance: true
     - win_perms:
-        Users:
-          perms: full_control
+      Users:
+        perms: full_control
   {%- endif %}
-
 
 {%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:

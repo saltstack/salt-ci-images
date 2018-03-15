@@ -150,15 +150,18 @@ suites:
               - match: grain
               - windows
         jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
         windows.sls:
-          salt_pip: 'c:\Salt\bin\Scripts\pip.exe'
-          salt_pip_cwd: 'c:\Salt\bin\Scripts'
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
   - name: py3
     excludes:
       - centos-6
       - ubuntu-1404
     provisioner:
+      salt_minion_extra_config:
+        winrepo_remotes_ng:
+          - https://github.com/dwoz/salt-winrepo-ng.git
       pillars:
         top.sls:
           base:
@@ -168,8 +171,8 @@ suites:
             "*":
               - jenkins
         jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
           py3: true
         windows.sls:
-          virtualenv_path: 'c:\Salt\bin\Scripts\pip.exe'
-          pip_cwd: 'c:\Salt\bin\Scripts'
+          virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'

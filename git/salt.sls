@@ -73,12 +73,12 @@ include:
   {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
-  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
-  {# On Windows, this is already installed #}
-  {%- if grains['os'] != 'MacOS' %}
-  {%- if grains['os'] != 'Windows' %}
+  {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
+  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
   - git
   {%- endif %}
+  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {%- if grains['os'] != 'MacOS' %}
   - patch
   - sed
   {%- endif %}
@@ -230,7 +230,7 @@ clone-salt-repo:
     - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
-      - pip: docker
+      - pip: docker_py
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
       {%- if on_docker == False %}

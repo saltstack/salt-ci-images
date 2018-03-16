@@ -21,6 +21,9 @@ install_python3:
   macpackage.installed:
     - name: /tmp/python-3.6.4-macosx10.6.pkg
     - reload_modules: True
+install_certs:
+  cmd.run:
+    - name: /Applications/Python\ 3.6/Install\ Certificates.command
 {% else %}
 install_python3:
   pkg.installed:

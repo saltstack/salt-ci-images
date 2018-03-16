@@ -211,8 +211,8 @@ testing-dir:
     - win_owner: 'Users'
     - win_inheritance: true
     - win_perms:
-      Users:
-        perms: full_control
+        Users:
+          perms: full_control
   {%- endif %}
 
 {%- if pillar.get('clone_repo', True) %}

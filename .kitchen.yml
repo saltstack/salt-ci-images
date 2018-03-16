@@ -159,9 +159,6 @@ suites:
       - centos-6
       - ubuntu-1404
     provisioner:
-      salt_minion_extra_config:
-        winrepo_remotes_ng:
-          - https://github.com/dwoz/salt-winrepo-ng.git
       pillars:
         top.sls:
           base:

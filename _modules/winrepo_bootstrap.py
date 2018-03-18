@@ -67,4 +67,6 @@ def download_git_repos():
                 local_repo.object_store, local_repo['head'].tree
             )
             ret.update({remote_info: True})
-    return ret
+    if __salt__['winrepo.genrepo']():
+        return ret
+    return False

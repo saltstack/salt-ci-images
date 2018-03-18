@@ -234,7 +234,7 @@ clone-salt-repo:
       {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
-      - testing-dir
+      - file: testing-dir
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap

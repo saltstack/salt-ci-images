@@ -23,6 +23,9 @@ provisioner:
   log_level: info
   is_file_root: true
   require_chef: false
+  retry_on_exit_code:
+    - 139
+  max_retries: 2
   salt_copy_filter:
     - .bundle
     - .git
@@ -35,6 +38,9 @@ provisioner:
     - .travis.yml
   state_top:
     base:
+      "os:Windows":
+        - match: grain
+        - windeps
       "*":
         - git.salt
 platforms:
@@ -141,11 +147,11 @@ suites:
       pillars:
         top.sls:
           base:
+            "*":
+              - jenkins
             "os:Windows":
               - match: grain
               - windows
-            "*":
-              - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
@@ -169,4 +175,4 @@ suites:
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
           py3: true
         windows.sls:
-          virtualenv_path: 'c:\Python36\Scripts\pip.exe'
+          virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'

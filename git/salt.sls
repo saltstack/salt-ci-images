@@ -204,8 +204,16 @@ include:
   {%- endif %}
   - sssd
 
-{{ testing_dir }}:
-  file.directory
+testing-dir:
+  file.directory:
+    - name: {{ testing_dir }}
+  {%- if grains['os'] == 'Windows' %}
+    - win_owner: 'Users'
+    - win_inheritance: true
+    - win_perms:
+        Users:
+          perms: full_control
+  {%- endif %}
 
 {%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:
@@ -226,7 +234,7 @@ clone-salt-repo:
       {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
-      - file: {{ testing_dir }}
+      - file: testing-dir
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
@@ -383,9 +391,8 @@ fetch-upstream-tags:
 install-transport-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
   {% endfor %}
 {%- endif -%}
 
@@ -393,27 +400,24 @@ install-transport-{{ req }}:
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 {% for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}

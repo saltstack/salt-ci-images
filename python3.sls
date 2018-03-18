@@ -6,13 +6,13 @@
   {% set python3 = 'python34' %}
 {% elif os_family == 'Arch' %}
   {% set python3 = 'python' %}
+{% elif grains['os'] == 'Windows' %}
+  {% set python3 = 'python3_x86' %}
 {% else %}
   {% set python3 = 'python3' %}
 {% endif %}
 
-{% if os_family != 'Windows' %}
 install_python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True
-{% endif %}

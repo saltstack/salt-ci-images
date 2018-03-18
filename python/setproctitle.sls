@@ -6,10 +6,9 @@ include:
 install_setproctitle:
   pip.installed:
     - name: setproctitle
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
-{% if grains['os'] not in ('Windows',) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
 {% endif %}

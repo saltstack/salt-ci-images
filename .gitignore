@@ -2,3 +2,4 @@
 *.un~
 Gemfile.lock
 .bundle/
+.kitchen/

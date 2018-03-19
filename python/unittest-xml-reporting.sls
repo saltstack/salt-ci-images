@@ -9,9 +9,8 @@ unittest-xml-reporting:
     {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int <= 6 %}
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- endif %}
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

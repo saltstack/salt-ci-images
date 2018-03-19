@@ -9,7 +9,6 @@ include:
   - python.headers
   {%- endif %}
 {%- endif %}
-{%- endif %}
 
 psutil:
   pip.installed:

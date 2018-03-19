@@ -6,9 +6,8 @@ include:
 
 msgpack-python:
   pip.installed:
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - name: 'msgpack-python >= 0.4.2, != 0.5.5'
 {% if grains['os'] not in ('Windows',) %}
     - require:

@@ -6,9 +6,8 @@ include:
 pyinotify:
   pip.installed:
     - name: pyinotify
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

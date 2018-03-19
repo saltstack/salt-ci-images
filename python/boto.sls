@@ -6,9 +6,8 @@ include:
 boto:
   pip.installed:
     - name: boto >= 2.46.0
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}
@@ -20,9 +19,8 @@ boto:
 boto3:
   pip.installed:
     - name: boto3
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}

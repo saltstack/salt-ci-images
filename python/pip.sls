@@ -62,7 +62,7 @@ include:
 
 pip-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} -U pip
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && {{ get_pip }} 'pip<=9.0.1'
     - cwd: /
     - reload_modules: True
     {%- if os != 'Fedora' %}
@@ -84,15 +84,17 @@ pip-install:
 
 upgrade-installed-pip:
   pip.installed:
-    - name: pip
+    - name: pip <=9.0.1
     - upgrade: True
+    - bin_env: {{ salt.config.get('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip-install
 
 {%- if pillar.get('py3', False) %}
 pip2-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py -U pip
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1'
     - cwd: /
     - reload_modules: True
     {%- if os != 'Fedora' %}
@@ -109,8 +111,10 @@ pip2-install:
 
 upgrade-installed-pip2:
   pip2.installed:
-    - name: pip
+    - name: pip <=9.0.1
     - upgrade: True
+    - bin_env: {{salt.config.get('virtualenv_path', '')}}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip2-install
 {%- endif %}

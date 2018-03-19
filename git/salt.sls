@@ -73,12 +73,12 @@ include:
   {%- if grains['os'] not in ('Windows',) %}
   - locale
   {%- endif %}
-  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
-  {# On Windows, this is already installed #}
-  {%- if grains['os'] != 'MacOS' %}
-  {%- if grains['os'] != 'Windows' %}
+  {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
+  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
   - git
   {%- endif %}
+  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {%- if grains['os'] != 'MacOS' %}
   - patch
   - sed
   {%- endif %}
@@ -217,8 +217,16 @@ include:
   - ulimits
   {%- endif %}
 
-{{ testing_dir }}:
-  file.directory
+testing-dir:
+  file.directory:
+    - name: {{ testing_dir }}
+  {%- if grains['os'] == 'Windows' %}
+    - win_owner: 'Users'
+    - win_inheritance: true
+    - win_perms:
+        Users:
+          perms: full_control
+  {%- endif %}
 
 {%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:
@@ -230,7 +238,7 @@ clone-salt-repo:
     - target: {{ testing_dir }}
     - require:
       # All VMs get docker-py so they can run unit tests
-      - pip: docker
+      - pip: docker_py
       # Docker integration tests only on CentOS 7 (for now)
       {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
       {%- if on_docker == False %}
@@ -239,7 +247,7 @@ clone-salt-repo:
       {%- endif %}
       - file: /usr/bin/busybox
       {%- endif %}
-      - file: {{ testing_dir }}
+      - file: testing-dir
       {%- if grains['os'] not in ('MacOS',) %}
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
@@ -398,9 +406,8 @@ fetch-upstream-tags:
 install-transport-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
   {% endfor %}
 {%- endif -%}
 
@@ -408,27 +415,24 @@ install-transport-{{ req }}:
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 {% for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}

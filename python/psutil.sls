@@ -1,22 +1,22 @@
 {%- if grains['os'] != 'Windows' %}
 include:
-  {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo', 'Windows') %}
+{%- if grains['os_family'] not in ('FreeBSD', 'Gentoo', 'Windows') %}
   - gcc
-  {%- endif %}
+{%- endif %}
   - python.pip
   {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
   {#- These distributions don't ship the develop headers separately #}
   - python.headers
   {%- endif %}
 {%- endif %}
+{%- endif %}
 
 psutil:
   pip.installed:
     - upgrade: True
-    {%- if salt['config.get']('virtualenv_path', None) %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
-    {%- if grains['os'] not in ('Windows',) %}
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
+    {%- if grains['os'] != 'Windows' %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
       {#- These distributions don't ship the develop headers separately #}

@@ -1,6 +1,6 @@
 ---
 <% @vagrant = system('which vagrant 2>&1 >/dev/null') %>
-<% @version = '2017.7.1' %>
+<% @version = '2017.7.4' %>
 driver:
   name: docker
   use_sudo: false
@@ -23,6 +23,9 @@ provisioner:
   log_level: info
   is_file_root: true
   require_chef: false
+  retry_on_exit_code:
+    - 139
+  max_retries: 2
   salt_copy_filter:
     - .bundle
     - .git
@@ -35,9 +38,11 @@ provisioner:
     - .travis.yml
   state_top:
     base:
+      "os:Windows":
+        - match: grain
+        - windeps
       "*":
         - git.salt
-        - kitchen
 platforms:
   - name: fedora
     driver_config:
@@ -55,6 +60,7 @@ platforms:
         - yum install -y upstart
     provisioner:
       salt_bootstrap_options: -P -y -x python2.7 -X git v<%= @version %> >/dev/null
+      salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
   - name: ubuntu-rolling
     driver_config:
       image: ubuntu:rolling
@@ -143,9 +149,14 @@ suites:
           base:
             "*":
               - jenkins
+            "os:Windows":
+              - match: grain
+              - windows
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
+        windows.sls:
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
   - name: py3
     excludes:
       - centos-6
@@ -154,13 +165,14 @@ suites:
       pillars:
         top.sls:
           base:
+            "os:Windows":
+              - match: grain
+              - windows
             "*":
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
           py3: true
-verifier:
-  name: shell
-  remote_exec: true
-  command: '$(kitchen) /testing/tests/runtests.py -v --output-columns=80 --run-destructive<%= ENV["TEST"] ? " -n #{ENV["TEST"]}" : "" %>'
+        windows.sls:
+          virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'

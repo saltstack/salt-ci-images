@@ -110,12 +110,12 @@ platforms:
       communicator: winrm
       name: vagrant
       gui: true
-      username: administrator
-      password: Pass@word1
+      username: Vagrant
+      password: vagrant
     provisioner:
       init_environment: |
         Clear-Host
-        $AddedLocation ="c:\salt"
+        $AddedLocation ="c:\salt;c:\salt\bin\Scripts"
         $Reg = "Registry::HKLM\System\CurrentControlSet\Control\Session Manager\Environment"
         $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
         $NewPath= $OldPath + ’;’ + $AddedLocation
@@ -147,11 +147,11 @@ suites:
       pillars:
         top.sls:
           base:
-            "*":
-              - jenkins
             "os:Windows":
               - match: grain
               - windows
+            "*":
+              - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
           test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>

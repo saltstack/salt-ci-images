@@ -8,7 +8,8 @@ nodejs-legacy:
 {# for MacOS we want to install node, npm, and bower at the end for issue #41770, so skipping install here. #}
 {% if grains['os'] != 'MacOS' %}
 
-{% set ubuntu14 = grains.os == 'Ubuntu' and grains.osmajorrelease|int == 14 %}
+{# osrelease is used here for legacy reasions.  Old jenkins used 2016.3.1 for ub14, which did not have osmajorrelease for ubuntu systems #}
+{% set ubuntu14 = grains.os == 'Ubuntu' and grains.osrelease|int == 14 %}
 {% set centos6 = grains.os == 'CentOS' and grains.osmajorrelease|int == 6 %}
 
 bower:

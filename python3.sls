@@ -7,7 +7,7 @@
 {% elif os_family == 'Arch' %}
   {% set python3 = 'python' %}
 {% elif grains['os'] == 'Windows' %}
-  {% set python3 = 'python3_x86' %}
+  {% set python3 = 'python3_x64' %}
 {% else %}
   {% set python3 = 'python3' %}
 {% endif %}

@@ -67,7 +67,7 @@ include:
   - locale
   {%- endif %}
   {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
-  {%- if grains['os'] not in ('Windows', 'MacOS',) %}
+  {%- if grains['os'] not in ('MacOS',) %}
   - git
   {%- endif %}
   {# On OSX these utils are available from the system rather than the pkg manager (brew) #}

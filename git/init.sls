@@ -30,7 +30,7 @@ git:
               installer: https://github.com/git-for-windows/git/releases/download/v2.16.2.windows.1/Git-2.16.2-32-bit.exe
             {% endif %}
               install_flags: /VERYSILENT /NORESTART /SP- /NOCANCEL
-              uninstaller: {{ PROGRAM_FILES }}\Git\unins000.exe
+              uninstaller: '{{ PROGRAM_FILES }}\Git\unins000.exe'
               uninstall_flags: /VERYSILENT /NORESTART
               msiexec: False
               locale: en_US

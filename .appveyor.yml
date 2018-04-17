@@ -30,8 +30,8 @@ install:
       }
   - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
   - ps: gem install bundler --quiet --no-ri --no-rdoc
-  - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\salt-jenkins\certs.pem
-  - set SSL_CERT_FILE=c:\projects\salt-jenkins\certs.pem
+  - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\certs.pem
+  - set SSL_CERT_FILE=c:\certs.pem
   - ps: Enable-PSRemoting –force
   - ps: winrm s winrm/config/client '@{TrustedHosts="*"}'
   - ps: winrm quickconfig

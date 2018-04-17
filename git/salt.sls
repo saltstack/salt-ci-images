@@ -13,10 +13,17 @@
 
 {%- if pillar.get('testing_dir') %}
   {%- set testing_dir = pillar.get('testing_dir') %}
-{%- elif grains['os'] == 'Windows' %}
+{%- elif os_family == 'Windows' %}
   {%- set testing_dir = 'C:\\testing' %}
 {%- else %}
   {%- set testing_dir = '/testing' %}
+{%- endif %}
+
+{%- if os_family == 'Windows' %}
+stop-minion:
+  service.dead:
+    - name: salt-minion
+    - enable: False
 {%- endif %}
 
 {%- if os_family == 'Arch' %}

@@ -3,10 +3,10 @@
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {%- set os = salt['grains.get']('os', '') %}
 
-{%- if os_family == 'RedHat' and os_major_release == 5 %}
-  {%- set on_redhat_5 = True %}
+{%- if os_family == 'RedHat' and os_major_release == 6 %}
+  {%- set on_redhat_6 = True %}
 {%- else %}
-  {%- set on_redhat_5 = False %}
+  {%- set on_redhat_6 = False %}
 {%- endif %}
 
 {%- if os_family == 'Debian' and distro == 'wheezy' %}
@@ -39,10 +39,10 @@
   {%- set pip = 'pip2' %}
   {%- if on_arch %}
     {%- set python = 'python2' %}
-  {%- elif on_redhat_5 %}
-    {%- set python = 'python26' %}
+  {%- elif on_redhat_6 %}
+    {%- set python = 'python2.7' %}
   {%- else %}
-    {%- set python = 'python' %}
+    {%- set python = 'python2' %}
   {%- endif %}
 {%- endif %}
 
@@ -54,9 +54,6 @@ include:
   - python3
 {%- endif %}
 {%- else %}
-  {%- if on_redhat_5 %}
-  - python26
-  {%- endif %}
   {%- if on_arch %}
   - python27
   {%- endif %}
@@ -88,9 +85,6 @@ pip-install:
       - cmd: pip2-install
     {%- endif %}
     {%- else %}
-      {%- if on_redhat_5 %}
-      - pkg: python26
-      {%- endif %}
       {%- if on_debian_7 %}
       - pkg: python-dev
       {%- endif %}
@@ -116,9 +110,6 @@ pip2-install:
     {%- endif %}
     - require:
       - {{ install_method }}: curl
-    {%- if on_redhat_5 %}
-    - pkg: python26
-    {%- endif %}
     {%- if on_debian_7 %}
     - pkg: python-dev
     {%- endif %}

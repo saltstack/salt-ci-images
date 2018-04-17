@@ -19,6 +19,13 @@
   {%- set testing_dir = '/testing' %}
 {%- endif %}
 
+{%- if grains['os'] == 'Windows' %}
+stop-minion:
+  service.dead:
+    - name: salt-minion
+    - enable: False
+{%- endif %}
+
 {%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
 {%- else %}

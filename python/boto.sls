@@ -3,6 +3,19 @@ include:
   - python.pip
 {% endif %}
 
+{#- boto is sometimes installed on amazon images, we want to make sure we install the latest version so remove the installed ones here if they are already installed #}
+uninstall boto modules:
+  pip.removed:
+    - names:
+      - boto
+      - botocore
+      - boto3
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+{% if grains['os'] not in ('Windows',) %}
+    - require:
+      - cmd: pip-install
+{% endif %}
+
 boto:
   pip.installed:
     - name: boto >= 2.46.0

@@ -294,7 +294,7 @@ clone-salt-repo:
       - pip: moto
       - pip: kubernetes
       - pip: psutil
-      - pip: tornado
+      - module: install-tornado
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl

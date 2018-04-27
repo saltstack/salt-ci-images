@@ -10,8 +10,7 @@ env:
     - SUITE=centos-6
     - SUITE=fedora
     - SUITE=ubuntu-14
-    - SUITE=py2-ubuntu-16
-    - SUITE=py3-ubuntu-16
+    - SUITE=ubuntu-16
     - SUITE=ubuntu-rolling
     - SUITE=debian-8
     - SUITE=debian-9

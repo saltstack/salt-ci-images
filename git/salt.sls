@@ -301,7 +301,11 @@ clone-salt-repo:
       - pip: moto
       - pip: kubernetes
       - pip: psutil
-      - pip: tornado
+      {%- if grains['os'] == 'Windows' %}
+      - pip: install-tornado
+      {%- else %}
+      - module: install-tornado
+      {%- endif %}
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl

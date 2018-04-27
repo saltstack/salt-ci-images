@@ -6,14 +6,21 @@ include:
 {% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
 {% set debian8 = grains.os == 'Debian' and grains.osmajorrelease|int == 8 %} 
 
-
-tornado:
-  pip.installed:
+{%- if grains['os'] not in ('Windows') %}
+install-tornado:
+  module.run:
+    - name: pip.install
+    - pkgs:
   {%- if on_py26 or debian8 %}
-    - name: tornado==4.4.3
+      - tornado==4.4.3
   {%- else %}
-    - name: "tornado{{ salt.pillar.get('tornado:version', '<5.0') }}"
+      - tornado{{ salt.pillar.get('tornado:version', '<5.0.0') }}"
   {%- endif %}
+{%- else %}
+install-tornado:
+  pip.installed:
+    - name: tornado{{ salt.pillar.get('tornado:version', '<5.0.0') }}"
+{%- endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}

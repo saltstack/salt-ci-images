@@ -176,23 +176,3 @@ suites:
           py3: true
         windows.sls:
           virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'
-  - name: py2-tornado
-    includes:
-      - centos-7
-      - ubuntu-16
-    provisioner:
-      pillars:
-        top.sls:
-          base:
-            "os:Windows":
-              - match: grain
-              - windows
-            "*":
-              - jenkins
-        jenkins.sls:
-          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
-          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
-          tornado:
-            version: '==5.0.2'
-        windows.sls:
-          virtualenv_path: 'c:\Python27\Scripts\pip.exe'

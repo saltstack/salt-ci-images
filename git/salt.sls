@@ -295,7 +295,7 @@ clone-salt-repo:
       - pip: kubernetes
       - pip: psutil
       {%- if grains['os'] == 'Windows' %}
-      - pip: tornado
+      - pip: install-tornado
       {%- else %}
       - module: install-tornado
       {%- endif %}

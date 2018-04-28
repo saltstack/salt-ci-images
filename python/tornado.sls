@@ -15,7 +15,7 @@ include:
 tornado:
 {%- if pillar.tornado is defined %}
   pip.tornado:
-    - name: {{version}}
+    - name: "{{version}}"
 {%- else %}
   pip.installed:
     - name: "tornado{{version}}"

@@ -27,6 +27,7 @@ include:
 /testing:
   file.directory
 
+{%- if pillar.get('clone_repo', True) %}
 {{ test_git_url }}:
   git.latest:
     - name: {{ test_git_url }}
@@ -70,3 +71,4 @@ fetch-upstream-tags:
     - require:
       - cmd: add-upstream-repo
 {% endif %}
+{%- endif %}

@@ -1,8 +1,8 @@
 include:
   - cloud-test-configs.ssh_directory
 
-{% set config_path = '/testing/tests/integration/files/conf/cloud.providers.d/' %}
-{% set profile_config_path = '/testing/tests/integration/files/conf/cloud.profiles.d/' %}
+{% set config_path = '%s/tests/integration/files/conf/cloud.providers.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
+{% set profile_config_path = '%s/tests/integration/files/conf/cloud.profiles.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
 
 azure-provider:
   file.managed:

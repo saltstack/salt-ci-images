@@ -97,3 +97,21 @@ def mod_aggregate(low, chunks, running):
     # The low has been modified and needs to be returned to the state
     # runtime for execution
     return low
+
+
+def tornado(name, cwd, bin_env):
+    ret = {
+        'name': 'pip install tornado{version}'.format(version=name),
+        'result': True,
+        'changes': {},
+    }
+
+    pip_bin = __salt__['pip.get_pip_bin'](bin_env)
+    ret['comment'] = __salt__['cmd.run'](
+        cmd='{pip} install -U --upgrade-strategy only-if-needed tornado{version}'.format(
+            pip=pip_bin,
+            version=name
+        ),
+        cwd=cwd or None,
+    )
+    return ret

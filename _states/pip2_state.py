@@ -93,6 +93,8 @@ def installed(name, **kwargs):
         extra_index_url = 'https://pypi.python.org/simple'
 
     bin_env = _get_pip_bin(kwargs.get('bin_env'))
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
     log.warning('pip2 binary found: %s', bin_env)
 
     kwargs.update(

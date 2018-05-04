@@ -112,7 +112,7 @@ _get_pip_bin = get_pip_bin
 
 def install(*args, **kwargs):  # pylint: disable=function-redefined
     pip_binary = _get_pip_bin(kwargs.get('bin_env'))
-    kwargs['bin_env'] = pip_binary
+    kwargs['bin_env'] = pip_binary[0]
     env_vars = kwargs.pop('env_vars', None)
     if not env_vars:
         env_vars = {}

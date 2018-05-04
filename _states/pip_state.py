@@ -107,6 +107,8 @@ def tornado(name, cwd, bin_env):
     }
 
     pip_bin = __salt__['pip.get_pip_bin'](bin_env)
+    if isinstance(pip_bin, list):
+        pip_bin = pip_bin[0]
     ret['comment'] = __salt__['cmd.run'](
         cmd='{pip} install -U --upgrade-strategy only-if-needed tornado{version}'.format(
             pip=pip_bin,

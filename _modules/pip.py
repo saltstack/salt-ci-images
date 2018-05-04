@@ -17,6 +17,7 @@ import pkg_resources
 # Import salt libs
 import salt.utils
 from salt.utils import namespaced_function
+from salt.utils.versions import LooseVersion
 from salt.exceptions import CommandNotFoundError
 import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
@@ -53,6 +54,18 @@ def __virtual__():
     return True
 
 
+def _list_or_not(ret):
+    '''
+    Return a list instead of a string when newer than 2017.7.5 and not 2018.3, or from a git checkout
+
+    Caused by this PR #47196
+    '''
+    version = __grains__['saltversion']
+    if (LooseVersion(version) >= LooseVersion('2017.7.6') and version != '2018.3.0') or 'n/a' in version:
+        return [ret]
+    return ret
+
+
 def get_pip_bin(bin_env):
     '''
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
@@ -73,7 +86,7 @@ def get_pip_bin(bin_env):
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
             raise CommandNotFoundError('Could not find a `pip` binary')
-        return which_result
+        return _list_or_not(which_result)
 
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
@@ -82,13 +95,13 @@ def get_pip_bin(bin_env):
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)
         if os.path.isfile(pip_bin):
-            return pip_bin
+            return _list_or_not(pip_bin)
         msg = 'Could not find a `pip` binary in virtualenv {0}'.format(bin_env)
         raise CommandNotFoundError(msg)
     # bin_env is the pip binary
     elif os.access(bin_env, os.X_OK):
         if os.path.isfile(bin_env) or os.path.islink(bin_env):
-            return bin_env
+            return _list_or_not(bin_env)
     else:
         raise CommandNotFoundError('Could not find a `pip` binary')
 

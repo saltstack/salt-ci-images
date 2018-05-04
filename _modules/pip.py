@@ -82,7 +82,8 @@ def get_pip_bin(bin_env):
     else:
         pip_bin_name = 'pip2'
 
-    if not bin_env or bin_env == '/':
+    if not bin_env or bin_env not in ['/', 'c']:
+        # not in / or c ignores the "root" directories as virtualenvs
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
             raise CommandNotFoundError('Could not find a `pip` binary')

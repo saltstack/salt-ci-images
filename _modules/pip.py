@@ -66,23 +66,24 @@ def _list_or_not(ret):
     return ret
 
 
-def get_pip_bin(bin_env):
+def get_pip_bin(bin_env, pip_bin_name=None):
     '''
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
     executable itself, or from searching conventional filesystem locations
     '''
-    # Always use pip3 if running with pillar="{py3: true}"
-    # If running tests on CentOS 6, the Nitrogen and Develop branches run on Python2.7
-    # so we need to set pip to 2.7 as well here (see PR #41039 in Salt repo)
-    # otherwise, stick with the traditional pip2 binary.
-    if __pillar__.get('py3', False):
-        pip_bin_name = 'pip3'
-    elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
-        pip_bin_name = 'pip2.7'
-    else:
-        pip_bin_name = 'pip2'
+    if pip_bin_name is None:
+        # Always use pip3 if running with pillar="{py3: true}"
+        # If running tests on CentOS 6, the Nitrogen and Develop branches run on Python2.7
+        # so we need to set pip to 2.7 as well here (see PR #41039 in Salt repo)
+        # otherwise, stick with the traditional pip2 binary.
+        if __pillar__.get('py3', False):
+            pip_bin_name = 'pip3'
+        elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
+            pip_bin_name = 'pip2.7'
+        else:
+            pip_bin_name = 'pip2'
 
-    if not bin_env or bin_env not in ['/', 'c']:
+    if not bin_env:
         # not in / or c ignores the "root" directories as virtualenvs
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
@@ -113,7 +114,9 @@ _get_pip_bin = get_pip_bin
 
 def install(*args, **kwargs):  # pylint: disable=function-redefined
     pip_binary = _get_pip_bin(kwargs.get('bin_env'))
-    kwargs['bin_env'] = pip_binary[0]
+    if isinstance(pip_binary, list):
+        pip_binary = pip_binary[0]
+    kwargs['bin_env'] = pip_binary
     env_vars = kwargs.pop('env_vars', None)
     if not env_vars:
         env_vars = {}

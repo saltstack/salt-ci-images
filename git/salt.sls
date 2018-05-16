@@ -192,7 +192,6 @@ include:
   {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
   - python.pytest
   - python.pytest-tempdir
-  - python.pytest-catchlog
   - python.pytest-helpers-namespace
   - python.pytest-salt
   {%- endif %}

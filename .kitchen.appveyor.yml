@@ -39,6 +39,8 @@ platforms:
       username: <%= ENV["winrm_user"] %>
       password: <%= ENV["winrm_pass"] %>
       port: <%= ENV["winrm_port"] %>
+      salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.ps1
+      salt_bootstrap_options: '-version 2017.7.0'
 
 suites:
   - name: py2

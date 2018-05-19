@@ -70,6 +70,9 @@ include:
   - python.docker
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   - docker
+  # Windows cloud tests
+  - python.impacket
+  - python.winrm
   {%- endif %}
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
@@ -205,7 +208,6 @@ include:
   {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
   - python.pytest
   - python.pytest-tempdir
-  - python.pytest-catchlog
   - python.pytest-helpers-namespace
   - python.pytest-salt
   {%- endif %}

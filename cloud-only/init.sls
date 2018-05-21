@@ -23,6 +23,9 @@ include:
   - cloud-only.netaddr
   - cloud-only.profitbricks
   - cloud-only.sshpass
+  - cloud-only.winexe
+  - python.impacket
+  - python.winrm
 
 /testing:
   file.directory

@@ -66,9 +66,6 @@ include:
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
-  # Windows cloud tests
-  - python.impacket
-  - python.winrm
   {%- endif %}
   {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
   - dpkg

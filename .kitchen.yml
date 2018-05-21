@@ -61,12 +61,9 @@ platforms:
     provisioner:
       salt_bootstrap_options: -P -y -x python2.7 -X git v<%= @version %> >/dev/null
       salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
-  - name: ubuntu-rolling
+  - name: ubuntu-18.04
     driver_config:
-      image: ubuntu:rolling
       run_command: /lib/systemd/systemd
-    provisioner:
-      salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
   - name: ubuntu-16.04
     driver_config:
       run_command: /lib/systemd/systemd

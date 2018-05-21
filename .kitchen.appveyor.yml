@@ -9,6 +9,7 @@ driver:
 
 provisioner:
   name: salt_solo
+  salt_version: 2017.7.4
   init_environment: |
     Clear-Host
     $AddedLocation ="c:\salt"
@@ -16,6 +17,7 @@ provisioner:
     $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
     $NewPath= $OldPath + ';' + $AddedLocation
     Set-ItemProperty -Path "$Reg" -Name PATH -Value $NewPath
+    cmd.exe /c "c:\python27\python.exe -m pip install pip==9.0.3 2>&1"
   is_file_root: true
   salt_copy_filter:
     - .bundle

@@ -70,9 +70,6 @@ include:
   - python.docker
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   - docker
-  # Windows cloud tests
-  - python.impacket
-  - python.winrm
   {%- endif %}
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper

@@ -24,11 +24,7 @@ vim:
               locale: en_US
               reboot: False
 
-vim_env:
-  cmd.run:
-    - name: |
-        $theCurrentPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path;
-        $theUpdatedPath=$theCurrentPath+';{{ PROGRAM_FILES }}\vim\vim80';
-        Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $theUpdatedPath;
-    - shell: powershell
+'{{ PROGRAM_FILES }}\vim\vim80':
+    win_path.exists
+
 {% endif %}

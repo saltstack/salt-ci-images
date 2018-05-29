@@ -12,6 +12,13 @@ nodejs-legacy:
 {% set ubuntu14 = grains.os == 'Ubuntu' and grains.osrelease|int == 14 %}
 {% set centos6 = grains.os == 'CentOS' and grains.osmajorrelease|int == 6 %}
 
+{%- if ubuntu14 or centos6 %}
+{# workaround for https://github.com/npm/npm/issues/20191 #}
+npm_ssl_config:
+  cmd.run:
+    - name: npm config set strict-ssl false
+{% endif %}
+
 bower:
   npm.installed:
     {%- if ubuntu14 or centos6 %}

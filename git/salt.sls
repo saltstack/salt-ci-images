@@ -176,6 +176,7 @@ include:
   {%- endif %}
   - python.dns
   - python.croniter
+  - cron
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower

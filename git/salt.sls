@@ -62,6 +62,7 @@ stop-minion:
 include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
+  - python.ansible
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.path

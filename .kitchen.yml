@@ -1,6 +1,6 @@
 ---
 <% @vagrant = system('which vagrant 2>&1 >/dev/null') %>
-<% @version = '2017.7.4' %>
+<% @version = '2017.7.6' %>
 driver:
   name: docker
   use_sudo: false

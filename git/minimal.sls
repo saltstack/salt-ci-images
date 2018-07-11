@@ -1,6 +1,8 @@
-{%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
-{%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
-{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
+    - order: 1
+
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
@@ -20,25 +22,10 @@ stop-minion:
     - enable: False
 {%- endif %}
 
-{%- if os_family == 'Arch' %}
-  {%- set on_arch = True %}
-{%- else %}
-  {%- set on_arch = False %}
-{%- endif %}
-
-{%- if pillar.get('py3', False) %}
-  {%- set python = 'python3' %}
-{%- else %}
-  {%- if on_arch %}
-    {%- set python = 'python2' %}
-  {%- else %}
-    {%- set python = 'python' %}
-  {%- endif %}
-{%- endif %}
-
 include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
+  - ulimits
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.path
@@ -105,6 +92,7 @@ include:
   {%- endif %}
   - sssd
   - python.tox
+  - cron
 
 testing-dir:
   file.directory:

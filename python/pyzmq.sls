@@ -8,6 +8,7 @@ include:
 {#- These distributions don't ship the develop headers separately #}
   - python.headers
 {%- endif %}
+{%- endif %}
 
 pyzmq:
   {%- if grains['os_family'] not in ('Arch', 'Windows') %}

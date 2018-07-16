@@ -49,13 +49,6 @@ stop-minion:
   {%- endif %}
 {%- endif %}
 
-{# handling requirements #}
-{% if test_transport == 'zeromq' %}
-  {% set transport_reqs = ['pycrypto>=2.6.1', 'pyzmq>=2.2.0'] %}
-{% elif test_transport == 'raet' %}
-  {% set transport_reqs = ['libnacl>=1.0.0', 'ioflo>=1.1.7', 'raet>=0.6.0'] %}
-{% endif %}
-
 {% set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
 {% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado%s'|format(salt.pillar.get('tornado:version', '<5.0.0'))] %}
 
@@ -126,6 +119,10 @@ include:
   - python.pygit2
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
+  {%- if test_transport in ('zeromq') %}
+  - python.pyzmq
+  - python.pycrypto
+  {%- endif %}
   {%- endif %}
   - python.boto
   - python.moto
@@ -408,15 +405,6 @@ fetch-upstream-tags:
 
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
-{%- if test_transport in ('zeromq', 'raet') -%}
-  {% for req in transport_reqs %}
-install-transport-{{ req }}:
-  pip.installed:
-    - name: {{ req }}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
-  {% endfor %}
-{%- endif -%}
 
 {% for req in dev_reqs %}
 install-dev-{{ req }}:

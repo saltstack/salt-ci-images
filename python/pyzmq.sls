@@ -11,7 +11,7 @@ include:
 {%- endif %}
 
 pyzmq:
-  {%- if grains['os'] != 'Windows' %}
+  {%- if grains['os_family'] not in ('Arch', 'Windows') %}
   pkg.installed:
     - name: {{ 'g++' if grains.os_family == 'Debian' else 'gcc-c++' }}
   {%- endif %}

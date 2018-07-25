@@ -14,7 +14,7 @@ include:
 {%- endif %}
 
 git:
-{% if grains['os_family'] == 'Windows' %}
+{% if grains['os'] == 'Windows' %}
   module.run:
     - name: winrepo_pkg.install
     - args:

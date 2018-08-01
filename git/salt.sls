@@ -461,6 +461,7 @@ install_node:
 
 bower:
   npm.installed:
+    - force_reinstall: True
     - require:
       - macpackage: install_node
 

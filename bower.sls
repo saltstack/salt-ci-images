@@ -23,7 +23,6 @@ bower:
   npm.installed:
     {%- if ubuntu14 or centos6 %}
     - registry: http://registry.npmjs.org/
-    - force_reinstall: True
     {%- endif %}
     - require:
       - pkg: npm

@@ -181,7 +181,7 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
+  {%- if grains['os'] in ('Fedora', 'MacOS') or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}

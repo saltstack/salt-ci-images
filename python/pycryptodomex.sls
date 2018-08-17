@@ -4,15 +4,15 @@ include:
   - python.pip
 {% endif %}
 
-{% for cpkg in ['m2crypto', 'pycrpyto'] %}
+{% for cpkg in ['m2crypto', 'pycrypto'] %}
 remove-{{cpkg}}:
   pip.removed:
     - name: {{cpkg}}
 {% endfor %}
 
-pycryptodome:
+pycryptodomex:
   pip.installed:
-    - name: pycryptodome >= 3.6.5
+    - name: pycryptodomex >= 3.6.5
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}

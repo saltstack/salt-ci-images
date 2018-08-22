@@ -1,5 +1,5 @@
 remove packages:
-  pkg.absent:
+  pkg.removed:
     - names:
       - docker
       - nginx

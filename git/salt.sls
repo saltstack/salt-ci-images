@@ -164,6 +164,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'openSUSE' %}
   - python-zypp
+  - susepkgs
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.mysqldb

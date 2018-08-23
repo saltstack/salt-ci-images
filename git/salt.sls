@@ -168,7 +168,7 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
-  {%- if grains['os'] == 'openSUSE' %}
+  {%- if grains['os'].endswith('SUSE') %}
   - python-zypp
   - susepkgs
   {%- endif %}

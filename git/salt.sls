@@ -57,7 +57,9 @@ include:
   - man
   {%- if os_major_release != 14 and os_family not in ('Ubuntu') %}
   - python.ansible
-  {%- endif %} {%- endif %}
+  {%- endif %}
+  {%- endif %}
+  - python.setuptools
   {%- if grains['os'] == 'MacOS' %}
   - python.path
   {% endif %}
@@ -105,7 +107,6 @@ include:
   - python.hgtools
   - python.setuptools-scm
   {%- endif %}
-  - python.setuptools
   {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}

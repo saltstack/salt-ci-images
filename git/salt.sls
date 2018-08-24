@@ -99,7 +99,7 @@ include:
   - python.unittest2
   - python.argparse
   {%- endif %}
-  {%- if grains['os'] == 'openSUSE' %}
+  {%- if grains['os'].endswith('SUSE') %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   - python.hgtools
@@ -284,7 +284,7 @@ clone-salt-repo:
       - pkg: subversion
       {%- endif %}
       #}
-      {%- if grains['os'] == 'openSUSE' %}
+      {%- if grains['os'].endswith('SUSE') %}
       {#- Yes! openSuse ships xml as separate package #}
       - pkg: python-xml
       - pip: hgtools
@@ -354,11 +354,11 @@ clone-salt-repo:
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
       - pkg: lxc
       {%- endif %}
-      {%- if grains['os'] == 'openSUSE' %}
+      {%- if grains['os'].endswith('SUSE') %}
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: npm
       - npm: bower

@@ -55,15 +55,16 @@ stop-minion:
 include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
+  {%- if os_major_release != 14 and os_family not in ('Ubuntu') %}
   - python.ansible
-  {%- endif %}
+  {%- endif %} {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.path
   {% endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
   - python.pylxd
-  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release >= 16 %}
   - docker
   - vault
   {%- endif %}

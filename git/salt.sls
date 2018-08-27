@@ -74,6 +74,7 @@ include:
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
+  - no_show_proc
   - locale
   {%- endif %}
   {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}

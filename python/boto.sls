@@ -31,7 +31,11 @@ boto:
 
 boto3:
   pip.installed:
+{% if grains['os'] in ('Windows',) %}
+    - name: boto3 < 1.8.0
+{% else %}
     - name: boto3
+{% endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}

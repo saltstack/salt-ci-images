@@ -38,7 +38,7 @@ azure-profile:
           ssh_username: {{ salt['pillar.get']('azure:ssh_username', '') }}
           ssh_password: {{ salt['pillar.get']('azure:ssh_password', '') }}
           media_link: {{ salt['pillar.get']('azure:media_link', '') }}
-          script_args: '-P -Z'
+          script_args: '-P'
     - show_changes: False
     - require:
       - file: ssh-directory

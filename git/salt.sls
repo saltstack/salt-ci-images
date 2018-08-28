@@ -56,6 +56,7 @@ include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
   {%- endif %}
+  - python.setuptools
   {%- if grains['os'] == 'MacOS' %}
   - python.path
   {% endif %}
@@ -102,7 +103,6 @@ include:
   - python.hgtools
   - python.setuptools-scm
   {%- endif %}
-  - python.setuptools
   {%- if os_family == 'Suse' %}
   - python.certifi
   {%- endif %}

@@ -20,7 +20,7 @@ include:
   {%- endif %}
 {%- endif %}
 
-{%- if grains['os_family'] == 'Darwin' %}
+{%- if grains['os_family'] == 'MacOS' %}
 mac-ruby-upgrade:
   rvm.installed:
     - name: ruby-2.4.4

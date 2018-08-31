@@ -20,6 +20,15 @@ include:
   {%- endif %}
 {%- endif %}
 
+{%- if grains['os_family'] == 'Darwin' %}
+mac-ruby-upgrade:
+  rvm.installed:
+    - name: ruby-2.4.4
+    - default: true
+    - require_in:
+      - pkg: curl
+{%- endif %}
+
 curl:
   {{ install_method }}:
     - name: {{ curl }}

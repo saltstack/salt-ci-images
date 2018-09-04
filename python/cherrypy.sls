@@ -7,10 +7,7 @@ include:
 
 cherrypy:
   pip.installed:
-    {% if on_py26 %}
-    {# CherryPy dropped Python 2.6 support in version 11.0.0 -#}
-    - name: 'cherrypy==10.2.2'
-    {% endif %}
+    - name: 'cherrypy==17.3.0'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}

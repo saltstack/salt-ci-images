@@ -7,7 +7,7 @@ include:
 
 cherrypy:
   pip.installed:
-    - name: cherrypy
+    - name: 'cherrypy==17.3.0'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     {%- if salt['config.get']('pip_target', None)  %}

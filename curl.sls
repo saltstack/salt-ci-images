@@ -20,25 +20,6 @@ include:
   {%- endif %}
 {%- endif %}
 
-# We only have to do this for Sierra, so let's only do it for OSX 10.12
-{%- if grains['os_family'] == 'MacOS' and grains['osrelease_info'][1] == 12 %}
-mac-ruby-upgrade:
-  rvm.installed:
-    - name: ruby-2.4
-    - user: jenkins
-    - default: true
-
-mac-ruby-upgrade-root:
-  rvm.installed:
-    - name: ruby-2.4
-    - user: root
-    - default: true
-    - require:
-      - rvm: mac-ruby-upgrade
-    - require_in:
-      - pkg: curl
-{%- endif %}
-
 curl:
   {{ install_method }}:
     - name: {{ curl }}

@@ -320,7 +320,7 @@ clone-salt-repo:
       - pip: python-etcd
       {% if not ( pillar.get('py3', False) and grains['os'] in ('Windows', 'MacOS')) %} 
       - pip2: supervisor
-      {% elif not ( pillar.get('py3', False) and grains['os'] == 'MacOS') %}
+      {% elif grains['os'] == 'MacOS') %}
       - pkg: supervisor
       {% endif %}
       - pip: boto

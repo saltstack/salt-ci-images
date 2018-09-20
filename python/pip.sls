@@ -89,7 +89,7 @@ upgrade-installed-pip:
     - require:
       - cmd: pip-install
 
-{%- if pillar.get('py3', False) %}
+{%- if pillar.get('py3', False) and grains['os'] != 'MacOS' %}
 pip2-install:
   cmd.run:
     - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1'
@@ -108,6 +108,24 @@ upgrade-installed-pip2:
   pip2.installed:
     - name: pip <=9.0.1
     - upgrade: True
+    - bin_env: {{salt.config.get('virtualenv_path', '')}}
+    - cwd: {{ salt['config.get']('pip_cwd', '') }}
+    - require:
+      - cmd: pip2-install
+
+{% elif ( pillar.get('py3', False) and grains['os'] == 'MacOS') %}
+pip2-install:
+  cmd.run:
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1'
+    - cwd: /
+    - reload_modules: True
+    - require:
+      - pkg: curl
+
+upgrade-installed-pip2:
+  cmd.run:
+    - name: pip install --upgrade pip==9.0.1
+    - reload_modules: True
     - bin_env: {{salt.config.get('virtualenv_path', '')}}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:

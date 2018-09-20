@@ -318,10 +318,10 @@ clone-salt-repo:
       - pip: keyring
       - pip: gnupg
       - pip: python-etcd
-      {% if not ( pillar.get('py3', False) and grains['os'] in ('Windows', 'MacOS')) %} 
-      - pip2: supervisor
-      {% elif not ( pillar.get('py3', False) and grains['os'] == 'MacOS') %}
+      {% if grains['os'] == 'MacOS' %}
       - pkg: supervisor
+      {% elif not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %} 
+      - pip2: supervisor
       {% endif %}
       - pip: boto
       - pip: moto

@@ -116,7 +116,7 @@ upgrade-installed-pip2:
 {% elif ( pillar.get('py3', False) and grains['os'] == 'MacOS') %}
 pip2-install:
   cmd.run:
-    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1'
+    - name: curl -L 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py && python2.7 get-pip.py 'pip<=9.0.1'
     - cwd: /
     - reload_modules: True
     - require:

@@ -43,9 +43,6 @@ append_permit_root_login_yes:
 
 {{ ssh_service }}:
   service.running:
-      {%- if '10.13' in grains['osrelease'] and  grains['os'] == 'MacOS' %}
-    - init_delay: 20
-      {% endif %}
     - watch:
       - file: append_permit_root_login_yes
       - file: commend_out_permit_root_login_no

@@ -69,7 +69,7 @@ ec2-provider:
           id: {{ salt['pillar.get']('ec2:id', '') }}
           key: {{ salt['pillar.get']('ec2:key', '') }}
           keyname: {{ salt['pillar.get']('ec2:keyname', '') }}
-          securitygroup: {{ salt['pillar.get']('ec2:securitygroup', '') }}
+          securitygroupname: [{{ salt['pillar.get']('ec2:securitygroup', '') }}] 
           private_key: {{ salt['pillar.get']('ec2:private_key', '') }}
           location: {{ salt['pillar.get']('ec2:location', '') }}
           minion:

@@ -47,7 +47,7 @@ The ``salt-jenkins`` project is welcome and open to contributions.
 The ``salt-jenkins`` repository has a few openly maintained branches. These correspond to the actively maintained
 release branches in the `Salt project`_. This helps stabilize the testing
 environments that the ``salt-jenkins`` states configure on the test VMs running at
-`jenkins.saltstack.com`_.
+`jenkinsci.saltstack.com`_.
 
 There is a node located in Salt's Jenkins installation configured to run the tests for each supported Salt
 release branch. In turn, each node is configured to run the ``salt-jenkins`` state tree based on the Salt release
@@ -96,6 +96,6 @@ each branch is merged into the directly newer branch::
     2016.3    *---*---*---*---*---*---*
 
 
-.. _jenkins.saltstack.com: https://jenkins.saltstack.com/
+.. _jenkinsci.saltstack.com: https://jenkinsci.saltstack.com/
 .. _Salt project: https://github.com/saltstack/salt
-.. _Salt's Jenkins system: https://jenkins.saltstack.com/
+.. _Salt's Jenkins system: https://jenkinsci.saltstack.com/

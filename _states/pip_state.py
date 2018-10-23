@@ -45,7 +45,7 @@ def __virtual__():
 def installed(name, **kwargs):
     index_url = kwargs.pop('index_url', None)
     if index_url is None:
-        index_url = 'https://pypi.c7.saltstack.net/simple'
+        index_url = 'https://oss-nexus.aws.saltstack.net/repository/salt-proxy/simple'
     extra_index_url = kwargs.pop('extra_index_url', None)
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'

@@ -15,13 +15,18 @@ mac_locale:
     - append_if_not_found: true
 {%- else %}
 
-{% set suse = True if grains['os_family'] == 'Suse' else False %}
+{% set suse = True if grains['os_family'] in ('Suse', 'SUSE') else False %}
 
 
 {% if suse %}
 suse_local:
   pkg.installed:
-    - name: glibc-locale
+    - pkgs:
+      - glibc-locale
+      - dbus-1
+  service.running:
+    - name: dbus.socket
+    - onlyif: systemctl daemon-reload
 {% elif grains.os_family == 'Debian' %}
 deb_locale:
   pkg.installed:

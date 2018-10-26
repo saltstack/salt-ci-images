@@ -17,9 +17,6 @@ env:
     - SUITE=debian-9
     - SUITE=opensuse
     - SUITE=arch
-matrix:
-  allow_failures:
-    - env: SUITE=arch
 bundler_args: --without windows
 script:
   # Setup for tests

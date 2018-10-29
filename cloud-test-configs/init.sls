@@ -82,7 +82,6 @@ ec2-provider:
     - require:
       - file: ssh-directory
 
-
 gogrid-provider:
   file.managed:
     - name: {{ config_path }}gogrid.conf

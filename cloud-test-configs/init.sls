@@ -79,6 +79,8 @@ ec2-provider:
             master_type: str
           known_hosts_file: /dev/null
     - show_changes: False
+    - require:
+      - file: ssh-directory
 
 
 gogrid-provider:

@@ -70,6 +70,7 @@ ec2-provider:
           key: {{ salt['pillar.get']('ec2:key', '') }}
           keyname: {{ salt['pillar.get']('ec2:keyname', '') }}
           securitygroupname: [{{ salt['pillar.get']('ec2:securitygroup', '') }}] 
+          subnet_id: {{ salt['pillar.get']('ec2:subnet_id', '') }}
           private_key: {{ salt['pillar.get']('ec2:private_key', '') }}
           location: {{ salt['pillar.get']('ec2:location', '') }}
           minion:

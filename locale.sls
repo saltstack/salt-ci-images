@@ -29,6 +29,8 @@ suse_local:
     - onlyif: systemctl daemon-reload
 {% elif grains.os_family == 'Debian' %}
 deb_locale:
+  file.touch:
+    - name: /etc/default/keyboard  # ubuntu is stupid and this file has to exist for systemd-localed to be able to run
   pkg.installed:
     - pkgs:
       - locales
@@ -36,9 +38,12 @@ deb_locale:
   {% if grains.get('init') == 'systemd' %}
       - dbus
   service.running:
-    - name: dbus.socket
+    - names:
+      - dbus.socket
+      - systemd-localed.service
   {%- endif %}
 {% endif %}
+
 
 {% set arch = True if grains['os_family'] == 'Arch' else False %}
 {% if arch %}

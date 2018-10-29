@@ -70,15 +70,16 @@ ec2-provider:
           key: {{ salt['pillar.get']('ec2:key', '') }}
           keyname: {{ salt['pillar.get']('ec2:keyname', '') }}
           securitygroupname: [{{ salt['pillar.get']('ec2:securitygroup', '') }}] 
-          subnet_id: {{ salt['pillar.get']('ec2:subnet_id', '') }}
+          subnetid: {{ salt['pillar.get']('ec2:subnetid', '') }}
+          ssh_interface: {{ salt['pillar.get']('ec2:ssh_interface', '') }}
           private_key: {{ salt['pillar.get']('ec2:private_key', '') }}
           location: {{ salt['pillar.get']('ec2:location', '') }}
+          del_root_vol_on_destroy: {{ salt['pillar.get']('ec2:del_root_vol_on_destroy', '') }}
           minion:
             master_type: str
           known_hosts_file: /dev/null
     - show_changes: False
-    - require:
-      - file: ssh-directory
+
 
 gogrid-provider:
   file.managed:

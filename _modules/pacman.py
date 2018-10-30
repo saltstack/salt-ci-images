@@ -16,8 +16,9 @@ import os.path
 import types
 
 # Import salt libs
-import salt.utils
 import salt.utils.pkg
+import salt.utils.data
+import salt.utils.functools
 import salt.utils.itertools
 import salt.utils.systemd
 from salt.exceptions import CommandExecutionError, MinionError
@@ -42,7 +43,7 @@ for name in dir(salt.modules.pacman):
             continue
         if attr in globals():
             continue
-        globals()[name] = salt.utils.namespaced_function(attr, globals())
+        globals()[name] = salt.utils.functools.namespaced_function(attr, globals())
 
 
 def install(name=None,
@@ -191,7 +192,7 @@ def install(name=None,
             _available = list_repo_pkgs(*[x[0] for x in wildcards], refresh=refresh)
             for pkgname, verstr in wildcards:
                 candidates = _available.get(pkgname, [])
-                match = salt.utils.fnmatch_multiple(candidates, verstr)
+                match = salt.utils.itertools.fnmatch_multiple(candidates, verstr)
                 if match is not None:
                     targets.append('='.join((pkgname, match)))
                 else:
@@ -230,7 +231,7 @@ def install(name=None,
 
         __context__.pop('pkg.list_pkgs', None)
         new = list_pkgs()
-        ret = salt.utils.compare_dicts(old, new)
+        ret = salt.utils.data.compare_dicts(old, new)
 
     if errors:
         try:

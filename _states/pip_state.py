@@ -14,7 +14,8 @@ import types
 import pkg_resources
 
 # Import salt libs
-from salt.utils import namespaced_function
+from salt.utils.functools import namespaced_function
+import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
@@ -53,7 +54,7 @@ def installed(name, **kwargs):
     kwargs.update(
         index_url=index_url,
         extra_index_url=extra_index_url)
-    kwargs = salt.utils.clean_kwargs(**kwargs)
+    kwargs = salt.utils.args.clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
 
 def mod_aggregate(low, chunks, running):

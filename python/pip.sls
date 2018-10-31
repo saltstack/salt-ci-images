@@ -81,6 +81,14 @@ pip-install:
       {%- endif %}
     {%- endif %}
 
+{% if os_family == 'MacOS' %}
+pip_update_path:
+   environ.setenv:
+     - name: PATH
+     - value: '/opt/salt/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
+     - update_minion: True
+{% endif %}
+
 upgrade-installed-pip:
   pip.installed:
     - name: pip <=9.0.1
@@ -123,6 +131,14 @@ pip2-install:
     - reload_modules: True
     - require:
       - pkg: curl
+
+{% if os_family == 'MacOS' %}
+pip2_update_path:
+   environ.setenv:
+     - name: PATH
+     - value: '/opt/salt/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
+     - update_minion: True
+{% endif %}
 
 upgrade-installed-pip2:
   cmd.run:

@@ -477,4 +477,14 @@ update-brew:
   cmd.run:
     - name: brew update
     - runas: jenkins
+
+node_binary:
+  file.symlink:
+    - name: /usr/bin/node
+    - target: /usr/local/bin/node
+
+npm_binary:
+  file.symlink:
+    - name: /usr/bin/npm
+    - target: /usr/local/bin/npm
 {%- endif %}

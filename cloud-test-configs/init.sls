@@ -69,7 +69,7 @@ ec2-provider:
           id: {{ salt['pillar.get']('ec2:id', '') }}
           key: {{ salt['pillar.get']('ec2:key', '') }}
           keyname: {{ salt['pillar.get']('ec2:keyname', '') }}
-          securitygroupname: [{{ salt['pillar.get']('ec2:securitygroup', '') }}] 
+          securitygroupname: {{ salt['pillar.get']('ec2:securitygroup', '') }}
           subnetid: {{ salt['pillar.get']('ec2:subnetid', '') }}
           ssh_interface: {{ salt['pillar.get']('ec2:ssh_interface', '') }}
           private_key: {{ salt['pillar.get']('ec2:private_key', '') }}
@@ -78,6 +78,46 @@ ec2-provider:
           minion:
             master_type: str
           known_hosts_file: /dev/null
+    - show_changes: False
+    - require:
+      - file: ssh-directory
+
+ec2-profile:
+  file.managed:
+    - name: {{ profile_config_path }}ec2.conf
+    - contents: |
+        ec2-test:
+          provider: ec2-config
+          image: {{ salt['pillar.get']('ec2:ami-centos7', '') }}
+          size: {{ salt['pillar.get']('ec2:size', '') }}
+          sh_username: {{ salt['pillar.get']('ec2:user-centos7', '') }}
+          script_args: '-P'
+        ec2-win2012r2-test:
+          provider: ec2-config
+          size: {{ salt['pillar.get']('ec2:size', '') }}
+          image: {{ salt['pillar.get']('ec2:ami-win2012r2', '') }}
+          smb_port: 445
+          win_installer: ''
+          win_username: {{ salt['pillar.get']('ec2:user-windows', '') }}
+          win_password: auto
+          userdata_file: ''
+          userdata_template: False
+          use_winrm: True
+          winrm_verify_ssl: False
+          deploy: True
+        ec2-win2016-test:
+          provider: ec2-config
+          size: {{ salt['pillar.get']('ec2:size', '') }}
+          image: {{ salt['pillar.get']('ec2:ami-win2016', '') }}
+          smb_port: 445
+          win_installer: ''
+          win_username: {{ salt['pillar.get']('ec2:user-windows', '') }}
+          win_password: auto
+          userdata_file: ''
+          userdata_template: False
+          use_winrm: True
+          winrm_verify_ssl: False
+          deploy: True
     - show_changes: False
     - require:
       - file: ssh-directory

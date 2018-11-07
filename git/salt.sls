@@ -478,6 +478,8 @@ update-brew:
     - name: brew update
     - runas: jenkins
 
+{# set npm and node symlinks on sierra #}
+{% if '10.12' in grains['osrelease'] %}
 node_binary:
   file.symlink:
     - name: /usr/bin/node
@@ -487,4 +489,5 @@ npm_binary:
   file.symlink:
     - name: /usr/bin/npm
     - target: /usr/local/bin/npm
+{%- endif %}
 {%- endif %}

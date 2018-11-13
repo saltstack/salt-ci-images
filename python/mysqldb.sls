@@ -6,18 +6,18 @@
   {% else %}
     {% set mysqldb = 'MySQL-python' %}
   {% endif %}
+{% elif grains['os_family'] == 'Suse' %}
+  {% if- pillar.get('py3', False) %}
+    {% set mysqldb = 'python3-PyMySQL' %}
+  {% else %}
+    {% set mysqldb = 'python2-PyMySQL' %}
+  {% endif %}
 {% elif grains['os_family'] == 'FreeBSD' %}
   {% set mysqldb = 'py27-MySQLdb' %}
 {% else %}
   {% set mysqldb = 'python-mysqldb' %}
 {% endif %}
 
-{% if- pillar.get('py3', False) and grains['os_family'] == 'Suse' %}
-  {% set mysqldb = 'python3-PyMySQL' %}
-{% else %}
-  {% set mysqldb = 'python2-PyMySQL' %}
-{% endif %}
-  
 {% if grains['os'] in ('Windows') %}
   {% set install_method = 'pip.installed' %}
   {% set mysqldb = 'pymysqldb' %}

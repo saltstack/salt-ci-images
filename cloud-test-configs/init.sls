@@ -52,7 +52,7 @@ digital-ocean-provider:
           personal_access_token: {{ salt['pillar.get']('digital_ocean:personal_access_token', '') }}
           ssh_key_file: {{ salt['pillar.get']('digital_ocean:ssh_key_file', '') }}
           ssh_key_name: {{ salt['pillar.get']('digital_ocean:ssh_key_name', '') }}
-          location: San Francisco 1
+          location: San Francisco 2
           minion:
             master_type: str
           known_hosts_file: /dev/null

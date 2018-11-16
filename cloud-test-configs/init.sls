@@ -69,7 +69,7 @@ ec2-provider:
           id: {{ salt['pillar.get']('ec2:id', '') }}
           key: {{ salt['pillar.get']('ec2:key', '') }}
           keyname: {{ salt['pillar.get']('ec2:keyname', '') }}
-          securitygroupname: {{ salt['pillar.get']('ec2:securitygroup', '') }}
+          securitygroupname: {{ salt['pillar.get']('ec2:securitygroup', '') | json }}
           subnetid: {{ salt['pillar.get']('ec2:subnetid', '') }}
           ssh_interface: {{ salt['pillar.get']('ec2:ssh_interface', '') }}
           private_key: {{ salt['pillar.get']('ec2:private_key', '') }}

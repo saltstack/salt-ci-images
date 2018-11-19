@@ -55,6 +55,9 @@ stop-minion:
 include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
+  {%- if os_major_release != 14 and os_family not in ('Ubuntu') %}
+  - python.ansible
+  {%- endif %}
   {%- endif %}
   - python.setuptools
   {%- if grains['os'] == 'MacOS' %}
@@ -62,8 +65,10 @@ include:
   {% endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
-  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
+  - python.pylxd
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release >= 16 %}
   - docker
+  - vault
   {%- endif %}
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
   - python.zookeeper
@@ -72,7 +77,7 @@ include:
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
-  - no_show_proc
+  # - no_show_proc
   - locale
   {%- endif %}
   {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
@@ -133,6 +138,9 @@ include:
   - python.pyvmomi
   - python.pycrypto
   - python.setproctitle
+  {%- if grains['os'] not in ('Windows',) %}
+  - python.clustershell
+  {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.ldap
   - python.cherrypy
@@ -177,7 +185,7 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
+  {%- if grains['os'] in ('Fedora', 'MacOS') or (grains['os'] == 'CentOS' and os_major_release == 5) %}
   - gpg
   {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
@@ -219,7 +227,7 @@ include:
   - lsb_release
   {%- endif %}
   - sssd
-  {%- if grains['kernel'] == 'Linux' %}
+  {%- if grains['kernel'] in ('Linux', 'Darwin') %}
   - ulimits
   {%- endif %}
 
@@ -298,7 +306,11 @@ clone-salt-repo:
       - pip: certifi
       {%- endif %}
       - pip: mock
+      {%- if grains['os'] == 'MacOS' %}
+      - cmd: timelib
+      {% else %}
       - pip: timelib
+      {% endif %}
       - pip: coverage
       - pip: unittest-xml-reporting
       - pip: apache-libcloud
@@ -306,7 +318,9 @@ clone-salt-repo:
       - pip: keyring
       - pip: gnupg
       - pip: python-etcd
-      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
+      {% if grains['os'] == 'MacOS' %}
+      - pkg: supervisor
+      {% elif not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %} 
       - pip2: supervisor
       {% endif %}
       - pip: boto
@@ -317,6 +331,9 @@ clone-salt-repo:
       - pip: pyvmomi
       - pip: pycrypto
       - pip: pyopenssl
+      {%- if grains['os'] not in ('Windows',) %}
+      - pip: clustershell
+      {%- endif %}
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2
       {%- endif %}
@@ -438,7 +455,7 @@ install-salt-pytest-pip-deps:
 {%- if grains['os'] == 'MacOS' %}
 download_node:
   file.managed:
-    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg 
+    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg
     - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
     - name: /tmp/node-v7.0.0.pkg
     - user: root
@@ -451,6 +468,26 @@ install_node:
 
 bower:
   npm.installed:
+    - force_reinstall: True
     - require:
-      - macpackage: install_node 
+      - macpackage: install_node
+
+# workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
+update-brew:
+  cmd.run:
+    - name: brew update
+    - runas: jenkins
+
+{# set npm and node symlinks on sierra #}
+{% if '10.12' in grains['osrelease'] %}
+node_binary:
+  file.symlink:
+    - name: /usr/bin/node
+    - target: /usr/local/bin/node
+
+npm_binary:
+  file.symlink:
+    - name: /usr/bin/npm
+    - target: /usr/local/bin/npm
+{%- endif %}
 {%- endif %}

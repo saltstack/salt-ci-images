@@ -23,6 +23,10 @@ import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.modules.pip import install as pip_install
 from salt.modules.pip import list_ as pip_list
+try:
+    from salt.utils.versions import LooseVersion
+except ImportError:
+    from distutils.version import LooseVersion
 
 # Import 3rd Party libs
 import salt.ext.six as six

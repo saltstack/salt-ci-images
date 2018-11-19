@@ -31,15 +31,16 @@ include:
   - python.path
   {% endif %}
   # All VMs get docker-py so they can run unit tests
-  {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
+  {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
+  - vault
   {%- endif %}
   {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
-  - no_show_proc
+  # - no_show_proc
   - locale
   - gem
   - python.pip

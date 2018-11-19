@@ -3,12 +3,12 @@ include:
   - python.pip
 {% endif %}
 
-apache-libcloud:
-  pip.installed:
-    - name: 'apache-libcloud'
+install_ansible:
+  pip2.installed:
+    - name: ansible
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

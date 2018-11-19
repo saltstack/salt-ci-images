@@ -45,10 +45,10 @@ azure-profile:
 
 digital-ocean-provider:
   file.managed:
-    - name: {{ config_path }}digital_ocean.conf
+    - name: {{ config_path }}digitalocean.conf
     - contents: |
         digitalocean-config:
-          driver: digital_ocean
+          driver: digitalocean
           personal_access_token: {{ salt['pillar.get']('digital_ocean:personal_access_token', '') }}
           ssh_key_file: {{ salt['pillar.get']('digital_ocean:ssh_key_file', '') }}
           ssh_key_name: {{ salt['pillar.get']('digital_ocean:ssh_key_name', '') }}

@@ -1,0 +1,19 @@
+# Configuration for probot-auto-merge - https://github.com/bobvanderlinden/probot-auto-merge
+
+# The minimum number of reviews from each association that approve the pull request before
+# doing an automatic merge. For more information about associations see:
+# https://developer.github.com/v4/reference/enum/commentauthorassociation/
+minApprovals:
+  MEMBER: 1
+
+# The maximum number of reviews from each association that request changes to the pull request.
+# Setting this number higher than 0 will allow automatic merging while changes are still requested.
+# Requested changes from associations not defined in this list are ignored for automatic merging.
+maxRequestedChanges:
+  COLLABORATOR: 0
+
+# Blocking labels are the labels that can be attached to a pull request to make sure the pull request
+# is not being automatically merged.
+blockingLabels:
+  - Blocked
+

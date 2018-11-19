@@ -9,7 +9,7 @@ gitpython:
     # available in Python 2.6
     - name: 'GitPython < 2.0.9'
     {%- else %}
-    - name: GitPython
+    - name: GitPython>=2.1.8
     {%- endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}

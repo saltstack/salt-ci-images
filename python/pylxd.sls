@@ -3,9 +3,9 @@ include:
   - python.pip
 {% endif %}
 
-apache-libcloud:
+pylxd:
   pip.installed:
-    - name: 'apache-libcloud'
+    - name: 'pylxd>=2.2.5'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}

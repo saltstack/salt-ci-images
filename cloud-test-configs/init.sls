@@ -92,6 +92,7 @@ ec2-profile:
           size: {{ salt['pillar.get']('ec2:size', '') }}
           sh_username: {{ salt['pillar.get']('ec2:user-centos7', '') }}
           script_args: '-P'
+          tag: {'created-by': 'cloud-tests'}
         ec2-win2012r2-test:
           provider: ec2-config
           size: {{ salt['pillar.get']('ec2:size', '') }}
@@ -105,6 +106,7 @@ ec2-profile:
           use_winrm: True
           winrm_verify_ssl: False
           deploy: True
+          tag: {'created-by': 'cloud-tests'}
         ec2-win2016-test:
           provider: ec2-config
           size: {{ salt['pillar.get']('ec2:size', '') }}
@@ -118,6 +120,7 @@ ec2-profile:
           use_winrm: True
           winrm_verify_ssl: False
           deploy: True
+          tag: {'created-by': 'cloud-tests'}
     - show_changes: False
     - require:
       - file: ssh-directory

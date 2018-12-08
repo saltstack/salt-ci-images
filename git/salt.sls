@@ -447,6 +447,11 @@ install-salt-pytest-pip-deps:
 {# node version 7.0.0 is not avaliable in MAC OSX 13(High Sierra) #}
 {# installing node, npm, and bower manually for the MAC OS. #}
 {%- if grains['os'] == 'MacOS' %}
+uninstall_brewed_node:
+  cmd.run:
+    - name: brew uninstall --force node
+    - runas: jenkins
+
 download_node:
   file.managed:
     - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg

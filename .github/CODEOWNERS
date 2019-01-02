@@ -7,5 +7,4 @@
 # Each line is a file pattern followed by one or more owners.
 
 # Default owners for everything in this repo
-*                       @Ch3LL @gtmanfred @rallytime
-
+*                       @Ch3LL

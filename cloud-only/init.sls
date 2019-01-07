@@ -28,6 +28,7 @@ include:
   - cloud-only.winexe
   - python.impacket
   - python.winrm
+  - python.pypsexec
 
 /testing:
   file.directory

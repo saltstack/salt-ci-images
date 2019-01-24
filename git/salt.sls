@@ -216,6 +216,7 @@ include:
   {%- if grains['os'] in ['CentOS', 'Debian', 'Fedora', 'FreeBSD', 'MacOS' , 'Ubuntu'] %}
   - python.junos-eznc
   - python.jxmlease
+  - python.yamlordereddictloader
   {%- endif %}
   {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx

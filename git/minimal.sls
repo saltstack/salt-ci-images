@@ -54,7 +54,9 @@ include:
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
+  {%- if pillar.get('extra-swap', True) %}
   - extra-swap
+  {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}

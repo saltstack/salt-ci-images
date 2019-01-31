@@ -220,7 +220,9 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  {%- if not on_docker %}
   - sssd
+  {%- endif %}
   {%- if grains['kernel'] == 'Linux' %}
   - ulimits
   {%- endif %}
@@ -260,7 +262,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'FreeBSD' %}
       - cmd: add-extra-swap
       {%- else %}
-      {%- if salt.grains.get('os_family') not in ('Suse', ) %}  
+      {%- if salt.grains.get('os_family') not in ('Suse', ) %}
       {%- if grains['os'] != 'Windows' and on_docker == False %}
       - mount: add-extra-swap
       {%- endif %}
@@ -440,7 +442,7 @@ install-salt-pytest-pip-deps:
 {%- if grains['os'] == 'MacOS' %}
 download_node:
   file.managed:
-    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg 
+    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg
     - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
     - name: /tmp/node-v7.0.0.pkg
     - user: root
@@ -454,5 +456,5 @@ install_node:
 bower:
   npm.installed:
     - require:
-      - macpackage: install_node 
+      - macpackage: install_node
 {%- endif %}

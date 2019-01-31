@@ -95,7 +95,9 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  {%- if not on_docker %}
   - sssd
+  {%- endif %}
   - python.tox
   - cron
 

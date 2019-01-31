@@ -194,7 +194,9 @@ include:
   {%- endif %}
   {%- if grains['os'] != 'MacOS' %}
   {%- if grains['os'] != 'Windows' %}
+  {%- if pillar.get('extra-swap', True) %}
   - extra-swap
+  {%- endif %}
   {%- endif %}
   {%- if grains['os'] != 'Windows' or (not (pillar.get('py3', False) and grains['os'] == 'Windows' )) %}
   - dmidecode

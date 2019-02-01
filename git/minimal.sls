@@ -75,6 +75,7 @@ include:
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   - python.hgtools
+  - python.setuptools
   - python.setuptools-scm
   - python-zypp
   - python.certifi

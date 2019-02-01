@@ -54,6 +54,7 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
   - dnsutils
   {%- if pillar.get('extra-swap', True) %}
   - extra-swap

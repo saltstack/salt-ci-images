@@ -366,8 +366,9 @@ clone-salt-repo:
       {%- if os_family == 'Arch' %}
       - pkg: lsb-release
       {%- endif %}
-      # disable sssd if running
-      - service: sssd
+      {%- if not on_docker %}
+      - service: sssd  {#- disable sssd if running #}
+      {%- endif %}
       {%- if grains.get('kernel') == 'Linux' %}
       - pkg: man
       {%- endif %}

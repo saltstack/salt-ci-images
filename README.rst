@@ -57,17 +57,18 @@ For example, the Jenkins node labeled ``2016_3`` runs tests against the HEAD of 
 same ``2016_3`` node is configured to run the ``salt-jenkins`` state tree using the ``2016.3`` branch of the
 ``salt-jenkins`` repository.
 
-**Note: The "master" branch of the "salt-jenkins" repository is used to test the "develop" branch of Salt.**
+**Note: The "master" branch of the "salt-jenkins" repository was renamed to develop. "salt-jenkins" branches are now
+a 1 to 1 map with Salt branches.**
 
 Which Salt Jenkins Branch?
 --------------------------
 
-GitHub will open pull requests against Salt Jenkins's main branch, ``master``, by default. Contributions to the
+GitHub will open pull requests against Salt Jenkins's main branch, ``develop``, by default. Contributions to the
 Salt Jenkins state tree should be added to the oldest supported branch that requires the change.
 
 For example, imagine a new execution module was added to the ``develop`` branch in Salt, along with tests for
 the new module. The new module requires a dependency that is not currently installed by the Salt Jenkins
-states. The new state(s) would need to be added to the ``master`` branch of Salt Jenkins.
+states. The new state(s) would need to be added to the ``develop`` branch of Salt Jenkins.
 
 If new tests are written against an older release branch in Salt, such as the ``2016.11`` branch, then the
 change for the Salt Jenkins states needs to also be submitted against the ``2016.11`` branch in the
@@ -85,9 +86,9 @@ tests make their way forward in the Salt repository.
 Here's a simple example of changes merging forward from older branches to newer branches, where the ``HEAD`` of
 each branch is merged into the directly newer branch::
 
-    master    *---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*------------>
+    develop   *---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*------------>
                                                                  /
-                                                                / (Merge Forward from 2016.11 to master)
+                                                                / (Merge Forward from 2016.11 to develop)
                                                                /
     2016.11   *---*---*---*---*---*---*---*---*---*---*---*---*
                                          /

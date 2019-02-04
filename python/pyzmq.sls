@@ -17,7 +17,11 @@ pyzmq:
   {%- endif %}
 
   pip.installed:
+    {%- if pillar.get('py3', False) and grains.get('os_family') == 'Suse' and grains.get('osrelease') == '42.3' %}
+    - name: pyzmq==17.1.1
+    {% else %}
     - name: pyzmq{{salt.pillar.get('pyzmq:version', '')}}
+    {% endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - global_options:

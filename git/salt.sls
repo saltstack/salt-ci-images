@@ -475,7 +475,7 @@ bower:
     - require:
       - macpackage: install_node
 
-# workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
+{#- workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
 update-brew:
   cmd.run:
     - name: brew update

@@ -33,3 +33,7 @@ notifications:
     on_success: changes
     on_failure: changes
     on_pull_requests: false
+
+matrix:
+  allow_failures:
+  - env: SUITE=arch

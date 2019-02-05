@@ -65,10 +65,6 @@ include:
 
 {%- set get_pip = '{0} get-pip.py {1}'.format(python, force_reinstall) %}
 
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-
 pip-install:
   cmd.run:
     - name: curl -L 'https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py' -o get-pip.py && {{ get_pip }} 'pip<=9.0.1' 

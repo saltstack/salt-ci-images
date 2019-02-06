@@ -1,3 +1,7 @@
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
+
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -174,7 +178,9 @@ include:
   {%- endif %}
   {%- if grains['os'] != 'MacOS' %}
   {%- if grains['os'] != 'Windows' %}
+  {%- if pillar.get('extra-swap', True) %}
   - extra-swap
+  {%- endif %}
   {%- endif %}
   {%- if grains['os'] != 'Windows' or (not (pillar.get('py3', False) and grains['os'] == 'Windows' )) %}
   - dmidecode
@@ -206,7 +212,9 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  {%- if not on_docker %}
   - sssd
+  {%- endif %}
 
 testing-dir:
   file.directory:
@@ -362,8 +370,9 @@ clone-salt-repo:
       {%- if os_family == 'Arch' %}
       - pkg: lsb-release
       {%- endif %}
-      # disable sssd if running
-      - service: sssd
+      {%- if not on_docker %}
+      - service: sssd  {#- disable sssd if running #}
+      {%- endif %}
       {%- if grains.get('kernel') == 'Linux' %}
       - pkg: man
       {%- endif %}

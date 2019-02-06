@@ -1,3 +1,8 @@
+force-sync-all:
+  module.run:
+    - name: saltutil.sync_all
+    - order: 1
+
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -67,7 +72,9 @@ include:
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
+  {%- if pillar.get('extra-swap', True) %}
   - extra-swap
+  {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
@@ -104,7 +111,9 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
+  {%- if not on_docker %}
   - sssd
+  {%- endif %}
   - python.tox
 
 testing-dir:

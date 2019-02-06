@@ -53,7 +53,9 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
+  {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install python-ldap on CentOS 6 #}
   - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
+  {%- endif %}
   - dnsutils
   {%- if pillar.get('extra-swap', True) %}
   - extra-swap

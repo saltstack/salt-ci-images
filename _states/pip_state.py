@@ -15,62 +15,28 @@ import logging
 import pkg_resources
 
 # Import salt libs
-import salt.utils.functools
 import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
 from salt.states.pip_state import removed as pip_state_removed
+from salt.states.pip_state import _from_line  # pylint: disable=wildcard-import,unused-wildcard-import
+from salt.states.pip_state import _pep440_version_cmp  # pylint: disable=wildcard-import,unused-wildcard-import
+from salt.utils.functools import namespaced_function
 
-try:
-    import pip
-    HAS_PIP = True
-except ImportError:
-    HAS_PIP = False
-
-if HAS_PIP is True:
-    try:
-        from pip.req import InstallRequirement
-        _from_line = InstallRequirement.from_line
-    except ImportError:
-        # pip 10.0.0 move req module under pip._internal
-        try:
-            try:
-                from pip._internal.req import InstallRequirement
-                _from_line = InstallRequirement.from_line
-            except AttributeError:
-                from pip._internal.req.constructors import install_req_from_line as _from_line
-        except ImportError:
-            HAS_PIP = False
-
-    try:
-        from pip.exceptions import InstallationError
-    except ImportError:
-        InstallationError = ValueError
+__virtualname__ = 'pip'
 
 log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
-pip_state_installed = salt.utils.functools.namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
-pip_state_removed = salt.utils.functools.namespaced_function(pip_state_removed, globals())  # pylint: disable=invalid-name
-# Let's namespace all other functions from the pip_state module
-for name in dir(salt.states.pip_state):
-    attr = getattr(salt.states.pip_state, name)
-    if isinstance(attr, types.FunctionType):
-        if attr in ('installed',):
-            continue
-        if attr in globals():
-            continue
-        globals()[name] = salt.utils.functools.namespaced_function(attr, globals())
-
-salt.states.pip_state.HAS_PIP = HAS_PIP
-try:
-    salt.states.pip_state._from_line = _from_line
-except NameError:
-    pass
-
-
-__virtualname__ = 'pip'
+pip_state_installed = namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
+pip_state_removed = namespaced_function(pip_state_removed, globals())  # pylint: disable=invalid-name
+uptodate = namespaced_function(salt.states.pip_state.uptodate, globals())  # pylint: disable=invalid-name
+removed = namespaced_function(salt.states.pip_state.removed, globals())  # pylint: disable=invalid-name
+_check_if_installed = namespaced_function(salt.states.pip_state._check_if_installed, globals())  # pylint: disable=invalid-name
+_check_pkg_version_format = namespaced_function(salt.states.pip_state._check_pkg_version_format, globals())  # pylint: disable=invalid-name
+_fulfills_version_spec = namespaced_function(salt.states.pip_state._fulfills_version_spec, globals())  # pylint: disable=invalid-name
+_find_key = namespaced_function(salt.states.pip_state._find_key, globals())  # pylint: disable=invalid-name
 
 
 def __virtual__():

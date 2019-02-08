@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import os
 import types
 import pkg_resources
+import logging
 
 # Import salt libs
 from salt.utils.functools import namespaced_function
@@ -19,22 +20,21 @@ import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
+from salt.states.pip_state import _from_line  # pylint: disable=wildcard-import,unused-wildcard-import
+from salt.states.pip_state import _pep440_version_cmp  # pylint: disable=wildcard-import,unused-wildcard-import
+
+__virtualname__ = 'pip'
+
+log = logging.getLogger()
 
 # Let's namespace the pip_state_installed function
 pip_state_installed = namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
-
-# Let's namespace all other functions from the pip_state module
-for name in dir(salt.states.pip_state):
-    attr = getattr(salt.states.pip_state, name)
-    if isinstance(attr, types.FunctionType):
-        if attr in ('installed',):
-            continue
-        if attr in globals():
-            continue
-        globals()[name] = namespaced_function(attr, globals())
-
-
-__virtualname__ = 'pip'
+uptodate = namespaced_function(salt.states.pip_state.uptodate, globals())  # pylint: disable=invalid-name
+removed = namespaced_function(salt.states.pip_state.removed, globals())  # pylint: disable=invalid-name
+_check_if_installed = namespaced_function(salt.states.pip_state._check_if_installed, globals())  # pylint: disable=invalid-name
+_check_pkg_version_format = namespaced_function(salt.states.pip_state._check_pkg_version_format, globals())  # pylint: disable=invalid-name
+_fulfills_version_spec = namespaced_function(salt.states.pip_state._fulfills_version_spec, globals())  # pylint: disable=invalid-name
+_find_key = namespaced_function(salt.states.pip_state._find_key, globals())  # pylint: disable=invalid-name
 
 
 def __virtual__():

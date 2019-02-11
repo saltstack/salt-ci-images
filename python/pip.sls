@@ -59,7 +59,7 @@ include:
 
 pip-install:
   cmd.run:
-    - name: curl -L 'https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py' -o get-pip.py && {{ get_pip }} 'pip<=9.0.1' 
+    - name: curl -L 'https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py' -o get-pip.py && {{ get_pip }} 'pip<=9.0.1'
     - cwd: /
     - reload_modules: True
     {%- if os != 'Fedora' %}
@@ -68,7 +68,7 @@ pip-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
-      - pkg: install_python3
+      - pkg: python3
       - cmd: pip2-install
     {%- else %}
       {%- if on_debian_7 %}
@@ -88,7 +88,7 @@ upgrade-installed-pip:
 {%- if pillar.get('py3', False) %}
 pip2-install:
   cmd.run:
-    - name: curl -L 'https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1' 
+    - name: curl -L 'https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py' -o get-pip.py && python2 get-pip.py 'pip<=9.0.1'
     - cwd: /
     - reload_modules: True
     {%- if os != 'Fedora' %}

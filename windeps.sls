@@ -30,7 +30,7 @@ extend:
       - require:
         - urllib3
 {% if salt['config.get']('py3', False) %}
-  install_python3:
+  python3:
     pkg.installed:
       - aggregate: False
       - require:
@@ -83,7 +83,7 @@ windeps-sync-all:
       - git
       - vcpp-compiler
     {% if salt['config.get']('py3', False) %}
-      - install_python3
+      - python3
     {% else %}
       - python2
     {% endif %}

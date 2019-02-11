@@ -70,9 +70,9 @@ pip-install:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
     {% if os_family == 'MacOS' %}
-      - macpackage: install_python3
+      - macpackage: python3
     {% else %}
-      - pkg: install_python3
+      - pkg: python3
     {% endif %}
       - cmd: pip2-install
     {%- else %}

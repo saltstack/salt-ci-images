@@ -13,7 +13,7 @@
 {% endif %}
 {% if os_family != 'Windows' %}
 {% if os_family == 'MacOS' %}
-install_python3:
+python3:
   file.managed:
     - source: https://www.python.org/ftp/python/3.6.4/python-3.6.4-macosx10.6.pkg
     - name: /tmp/python-3.6.4-macosx10.6.pkg
@@ -28,7 +28,7 @@ install_certs:
     - name: /Applications/Python\ 3.6/Install\ Certificates.command
 {% else %}
 
-install_python3:
+python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True

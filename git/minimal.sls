@@ -61,9 +61,9 @@ include:
   - no_show_proc
   - locale
   - gem
+  - python
   - python.pip
   - gcc
-  - python.headers
   {%- endif %}
   {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}

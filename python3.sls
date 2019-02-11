@@ -12,7 +12,7 @@
   {% set python3 = 'python3' %}
 {% endif %}
 
-install_python3:
+python3:
   pkg.installed:
     - name: {{ python3 }}
     - aggregate: True

@@ -60,6 +60,7 @@ include:
   {%- endif %}
   {%- endif %}
   - python.setuptools
+  - python.more-itertools
   {%- if grains['os'] == 'MacOS' %}
   - python.path
   {% endif %}

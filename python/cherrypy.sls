@@ -1,6 +1,7 @@
 {% if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
+  - python.more-itertools
 {% endif %}
 
 {% set on_py26 = True if grains.get('pythonexecutable', '').endswith('2.6') else False %}
@@ -16,6 +17,7 @@ cherrypy:
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
+      - pip: more-itertools
 {% endif %}
 
 

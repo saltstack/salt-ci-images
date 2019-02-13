@@ -24,8 +24,31 @@ import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
 
-# Import 3rd Party libs
-import salt.ext.six as six
+try:
+    import pip
+    HAS_PIP = True
+except ImportError:
+    HAS_PIP = False
+
+if HAS_PIP is True:
+    try:
+        from pip.req import InstallRequirement
+        _from_line = InstallRequirement.from_line
+    except ImportError:
+        # pip 10.0.0 move req module under pip._internal
+        try:
+            try:
+                from pip._internal.req import InstallRequirement
+                _from_line = InstallRequirement.from_line
+            except AttributeError:
+                from pip._internal.req.constructors import install_req_from_line as _from_line
+        except ImportError:
+            HAS_PIP = False
+
+    try:
+        from pip.exceptions import InstallationError
+    except ImportError:
+        InstallationError = ValueError
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +64,12 @@ for name in dir(salt.states.pip_state):
         if attr in globals():
             continue
         globals()[name] = namespaced_function(attr, globals())
+
+salt.states.pip_state.HAS_PIP = HAS_PIP
+try:
+    salt.states.pip_state._from_line = _from_line
+except NameError:
+    pass
 
 
 __virtualname__ = 'pip2'

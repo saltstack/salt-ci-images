@@ -29,7 +29,7 @@ install:
         net localgroup administrators $env:winrm_user /add
       }
   - ps: $env:PATH="C:\Ruby$env:ruby_version\bin;$env:PATH"
-  - ps: gem install bundler --quiet --no-ri --no-rdoc
+  - ps: gem install bundler --quiet
   - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\certs.pem
   - set SSL_CERT_FILE=c:\certs.pem
   - ps: Enable-PSRemoting –force

@@ -15,28 +15,28 @@ mac_locale:
     - append_if_not_found: true
 {%- else %}
 
-{% set suse = True if grains['os_family'] == 'Suse' else False %}
+{%- set suse = True if grains['os_family'] == 'Suse' else False %}
 
 
-{% if suse %}
+{%- if suse %}
 suse_local:
   pkg.installed:
     - name: glibc-locale
-{% elif grains.os_family == 'Debian' %}
+{%- elif grains.os_family == 'Debian' %}
 deb_locale:
   pkg.installed:
     - pkgs:
       - locales
       - console-data
-  {% if grains.get('init') == 'systemd' %}
+  {%- if grains.get('init') == 'systemd' %}
       - dbus
   service.running:
     - name: dbus.socket
   {%- endif %}
-{% endif %}
+{%- endif %}
 
-{% set arch = True if grains['os_family'] == 'Arch' else False %}
-{% if arch %}
+{%- set arch = True if grains['os_family'] == 'Arch' else False %}
+{%- if arch %}
 accept_LANG_sshd:
   file.append:
     - name: /etc/ssh/sshd_config
@@ -45,7 +45,7 @@ accept_LANG_sshd:
     - name: sshd
     - listen:
       - file: accept_LANG_sshd
-{% endif %}
+{%- endif %}
 
 us_locale:
   locale.present:

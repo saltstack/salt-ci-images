@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -7,15 +7,15 @@ include:
   {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
   {#- These distributions don't ship the develop headers separately #}
   - python.headers
-  {% endif %}
-{% endif %}
+  {%- endif %}
+{%- endif %}
 
 timelib:
   pip.installed:
     - name: timelib
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
       {#- These distributions don't ship the develop headers separately #}
@@ -26,4 +26,4 @@ timelib:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
-{% endif %}
+{%- endif %}

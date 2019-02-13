@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 {#- boto is sometimes installed on amazon images, we want to make sure we install the latest version so remove the installed ones here if they are already installed #}
 uninstall boto modules:
@@ -11,10 +11,10 @@ uninstall boto modules:
       - botocore
       - boto3
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}
 
 boto:
   pip.installed:
@@ -24,10 +24,10 @@ boto:
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}
 
 boto3:
   pip.installed:
@@ -37,8 +37,8 @@ boto3:
     {%- if salt['config.get']('pip_target', None)  %}
     - target: {{ salt['config.get']('pip_target') }}
     {%- endif %}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}
 

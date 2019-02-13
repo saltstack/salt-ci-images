@@ -1,8 +1,8 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
   - python.cffi
-{% endif %}
+{%- endif %}
 
 {%- if grains['os'] == 'CentOS' and grains['osmajorrelease']|int == 6 %}
 libffi-devel:

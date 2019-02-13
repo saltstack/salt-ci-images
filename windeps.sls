@@ -1,6 +1,6 @@
-{% set salt_dir = salt['config.get']('salt_dir', 'c:\\salt').rstrip('\\') %}
-{% set bin_env = salt_dir + '\\bin\\Scripts\\pip.exe' %}
-{% set cwd_dir = salt_dir + '\\bin\\Scripts' %}
+{%- set salt_dir = salt['config.get']('salt_dir', 'c:\\salt').rstrip('\\') %}
+{%- set bin_env = salt_dir + '\\bin\\Scripts\\pip.exe' %}
+{%- set cwd_dir = salt_dir + '\\bin\\Scripts' %}
 
 stop-minion:
   service.dead:
@@ -10,11 +10,11 @@ stop-minion:
 include:
     - python.urllib3
     - python.dulwich
-  {% if salt['config.get']('py3', False) %}
+  {%- if salt['config.get']('py3', False) %}
     - python3
-  {% else %}
+  {%- else %}
     - python27
-  {% endif %}
+  {%- endif %}
 
 extend:
   urllib3:
@@ -29,18 +29,18 @@ extend:
       - global_options: '--pure'
       - require:
         - urllib3
-{% if salt['config.get']('py3', False) %}
+{%- if salt['config.get']('py3', False) %}
   install_python3:
     pkg.installed:
       - aggregate: False
       - require:
         - win-pkg-refresh
-{% else %}
+{%- else %}
   python2:
     pkg.latest:
       - require:
         - win-pkg-refresh
-{% endif %}
+{%- endif %}
 
 download-git-repos:
    module.run:
@@ -56,11 +56,11 @@ win-pkg-refresh:
 
 vcpp-compiler:
   pkg.installed:
-  {% if salt['config.get']('py3', False) %}
+  {%- if salt['config.get']('py3', False) %}
     - name: ms-vcpp-2015-build-tools
-  {% else %}
+  {%- else %}
     - name: vcforpython27
-  {% endif %}
+  {%- endif %}
     - require:
       - win-pkg-refresh
 
@@ -82,8 +82,8 @@ windeps-sync-all:
       - win-pkg-refresh
       - git
       - vcpp-compiler
-    {% if salt['config.get']('py3', False) %}
+    {%- if salt['config.get']('py3', False) %}
       - install_python3
-    {% else %}
+    {%- else %}
       - python2
-    {% endif %}
+    {%- endif %}

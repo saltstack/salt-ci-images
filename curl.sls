@@ -1,15 +1,15 @@
 {%- if grains['os'] == 'Gentoo' %}
-  {% set curl = 'net-misc/curl' %}
-{% else %}
-  {% set curl = 'curl' %}
+  {%- set curl = 'net-misc/curl' %}
+{%- else %}
+  {%- set curl = 'curl' %}
 {%- endif %}
 
-{% if grains['os'] in ('Windows') %}
-  {% set install_method = 'pip.installed' %}
-  {% set curl = 'pycurl' %}
-{% else %}
-  {% set install_method = 'pkg.installed' %}
-{% endif %}
+{%- if grains['os'] in ('Windows') %}
+  {%- set install_method = 'pip.installed' %}
+  {%- set curl = 'pycurl' %}
+{%- else %}
+  {%- set install_method = 'pkg.installed' %}
+{%- endif %}
 
 {%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
 include:
@@ -38,7 +38,7 @@ curl:
     {%- endif %}
 
 
-{% if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int == 5 %}
+{%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int == 5 %}
 openssl:
   pkg.latest:
     - aggregate: True
@@ -47,10 +47,10 @@ update-openssl:
   cmd:
     - run
     - name: yum update -y --enablerepo=epel openssl
-{% endif %}
+{%- endif %}
 
-{% if grains['os'] == 'Arch' %}
+{%- if grains['os'] == 'Arch' %}
 openssl:
   pkg.latest:
     - aggregate: True
-{% endif %}
+{%- endif %}

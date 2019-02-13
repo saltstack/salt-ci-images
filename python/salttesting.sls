@@ -1,8 +1,8 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
   - gcc
-{% endif %}
+{%- endif %}
 
 SaltTesting:
   pip.installed:
@@ -10,8 +10,8 @@ SaltTesting:
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - upgrade: true
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       - pkg: gcc
-{% endif %}
+{%- endif %}

@@ -1,7 +1,7 @@
-{% set include_paramiko = False %}
-{% if grains['os'] in ['Debian', 'Ubuntu'] %}
-  {% set include_paramiko = True %}
-{% endif %}
+{%- set include_paramiko = False %}
+{%- if grains['os'] in ['Debian', 'Ubuntu'] %}
+  {%- set include_paramiko = True %}
+{%- endif %}
 
 include:
   - python.pip
@@ -9,14 +9,14 @@ include:
   - python.paramiko
   {%- endif %}
 
-{% if grains['os'] in ['Ubuntu', 'Debian'] %}
+{%- if grains['os'] in ['Ubuntu', 'Debian'] %}
 pyez dependencies:
   pkg.installed:
     - pkgs:
       - libxslt1-dev
       - libssl-dev
       - libffi-dev
-{% elif grains['os'] in ['Fedora', 'CentOS'] %}
+{%- elif grains['os'] in ['Fedora', 'CentOS'] %}
 pyez dependencies:
   pkg.installed:
     - pkgs:
@@ -26,13 +26,13 @@ pyez dependencies:
       - openssl-devel
       - libffi-devel
       - redhat-rpm-config
-{% elif grains['os'] == 'FreeBSD' %}
+{%- elif grains['os'] == 'FreeBSD' %}
 pyez dependencies:
   pkg.installed:
     - pkgs:
       - libxml2
       - libxslt
-{% endif %}
+{%- endif %}
 
 junos-eznc:
   pip.installed:

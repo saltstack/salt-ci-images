@@ -21,11 +21,11 @@
   {%- set on_arch = False %}
 {%- endif %}
 
-{% if os in ('Windows') %}
-  {% set install_method = 'pip' %}
-{% else %}
-  {% set install_method = 'pkg' %}
-{% endif %}
+{%- if os in ('Windows') %}
+  {%- set install_method = 'pip' %}
+{%- else %}
+  {%- set install_method = 'pkg' %}
+{%- endif %}
 
 {%- set force_reinstall = '' %}
 

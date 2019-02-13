@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 
@@ -15,4 +15,4 @@ gitpython:
     - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

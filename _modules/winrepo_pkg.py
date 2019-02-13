@@ -6,12 +6,15 @@ import os
 import logging
 import types
 import functools
-import salt.utils
 
 try:
     from salt.utils.functools import namespaced_function
 except (ImportError, AttributeError):
     from salt.utils import namespaced_function
+try:
+    from salt.utils.platform import is_windows
+except (ImportError, AttributeError):
+    from salt.utils import is_windows
 import salt.modules.win_pkg
 from salt.modules.win_pkg import *
 from salt.ext.six.moves.urllib.parse import urlparse as _urlparse
@@ -34,7 +37,7 @@ for name in dir(salt.modules.win_pkg):
 
 
 def __virtual__():
-    if salt.utils.is_windows():
+    if is_windows():
         return True
     return (False, 'This module only works on Windows.')
 

@@ -94,6 +94,10 @@ def installed(name, **kwargs):
         bin_env = bin_env[0]
     log.warning('pip3 binary found: %s', bin_env)
 
+    # Complementary set of cwd and target
+    kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
+    kwargs.setdefault('target', __salt__['config.get']('pip_target', None))
+
     kwargs.update(
         index_url=index_url,
         extra_index_url=extra_index_url,

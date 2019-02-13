@@ -8,7 +8,10 @@ import types
 import functools
 import salt.utils
 
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
 import salt.modules.win_pkg
 from salt.modules.win_pkg import *
 from salt.ext.six.moves.urllib.parse import urlparse as _urlparse
@@ -27,7 +30,7 @@ for name in dir(salt.modules.win_pkg):
     attr = getattr(salt.modules.win_pkg, name)
     if isinstance(attr, types.FunctionType):
         if name in NAMESPACE_FUNCS:
-            globals()[name] = salt.utils.namespaced_function(attr, globals())
+            globals()[name] = namespaced_function(attr, globals())
 
 
 def __virtual__():

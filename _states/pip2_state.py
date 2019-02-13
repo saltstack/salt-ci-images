@@ -15,7 +15,10 @@ import logging
 import pkg_resources
 
 # Import salt libs
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
 from salt.exceptions import CommandNotFoundError
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import

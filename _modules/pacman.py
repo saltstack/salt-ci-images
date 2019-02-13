@@ -20,6 +20,10 @@ import salt.utils
 import salt.utils.pkg
 import salt.utils.itertools
 import salt.utils.systemd
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
 from salt.exceptions import CommandExecutionError, MinionError
 from salt.utils.versions import LooseVersion as _LooseVersion
 import salt.modules.pacman
@@ -42,7 +46,7 @@ for name in dir(salt.modules.pacman):
             continue
         if attr in globals():
             continue
-        globals()[name] = salt.utils.namespaced_function(attr, globals())
+        globals()[name] = namespaced_function(attr, globals())
 
 
 def install(name=None,

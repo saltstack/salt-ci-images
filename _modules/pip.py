@@ -16,7 +16,10 @@ import pkg_resources
 
 # Import salt libs
 import salt.utils
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
 from salt.utils.versions import LooseVersion
 from salt.exceptions import CommandNotFoundError
 import salt.modules.pip

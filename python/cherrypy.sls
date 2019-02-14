@@ -10,10 +10,6 @@ cherrypy:
   pip.installed:
     - name: 'cherrypy==17.3.0'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
-    {%- if salt['config.get']('pip_target', None)  %}
-    - target: {{ salt['config.get']('pip_target') }}
-    {%- endif %}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
@@ -29,7 +25,6 @@ portend:
   pip.installed:
     - name: 'portend == 1.8'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
       - pip: cherrypy
 
@@ -38,7 +33,6 @@ tempora:
   pip.installed:
     - name: 'tempora == 1.6.1'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
       - pip: portend
 
@@ -47,7 +41,6 @@ cheroot:
   pip.installed:
     - name: 'cheroot==5.11.0'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require_in:
-      - pip: cherrypy 
+      - pip: cherrypy
 {% endif %}

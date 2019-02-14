@@ -407,7 +407,6 @@ install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 {% for req in base_reqs %}
@@ -415,7 +414,6 @@ install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
@@ -423,7 +421,6 @@ install-salt-pytest-pip-deps:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}

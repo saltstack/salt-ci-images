@@ -85,7 +85,10 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
-    bin_env = __salt__['pip.get_pip_bin'](kwargs.get('bin_env'), 'pip3')
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+        'pip3'
+    )
     if isinstance(bin_env, list):
         bin_env = bin_env[0]
     log.warning('pip3 binary found: %s', bin_env)

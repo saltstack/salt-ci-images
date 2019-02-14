@@ -86,7 +86,6 @@ upgrade-installed-pip:
     - name: pip <=9.0.1
     - upgrade: True
     - bin_env: {{ salt.config.get('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip-install
 
@@ -111,7 +110,6 @@ upgrade-installed-pip2:
     - name: pip <=9.0.1
     - upgrade: True
     - bin_env: {{salt.config.get('virtualenv_path', '')}}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip2-install
 {%- endif %}

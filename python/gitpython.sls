@@ -12,7 +12,6 @@ gitpython:
     - name: GitPython>=2.1.8
     {%- endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
     - require:
       - cmd: pip-install
 {% endif %}

@@ -93,7 +93,10 @@ def installed(name, **kwargs):
         pip_bin_name = 'pip2.7'
     else:
         pip_bin_name = 'pip2'
-    bin_env = __salt__['pip.get_pip_bin'](kwargs.get('bin_env'), pip_bin_name)
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+        pip_bin_name
+    )
     if isinstance(bin_env, list):
         bin_env = bin_env[0]
     log.warning('pip2 binary found: %s', bin_env)

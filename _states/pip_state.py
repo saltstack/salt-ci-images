@@ -88,13 +88,21 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
+    log.warning('pip binary found: %s', bin_env)
+
     # Complementary set of cwd and target
     kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
     kwargs.setdefault('target', __salt__['config.get']('pip_target', None))
 
     kwargs.update(
         index_url=index_url,
-        extra_index_url=extra_index_url)
+        extra_index_url=extra_index_url,
+        bin_env=bin_env)
     kwargs = salt.utils.clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
 

@@ -10,7 +10,6 @@ unittest-xml-reporting:
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

@@ -13,7 +13,6 @@ include:
 psutil:
   pip.installed:
     - upgrade: True
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     {%- if grains['os'] != 'Windows' %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}

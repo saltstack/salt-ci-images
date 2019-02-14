@@ -13,7 +13,6 @@ include:
 docker_py:
   pip.installed:
     - name: {{docker}}
-    - bin_env: {{ salt.config.get('virtualenv_path', '') }}
     {%- if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install

@@ -10,7 +10,6 @@ uninstall boto modules:
       - boto
       - botocore
       - boto3
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
@@ -19,7 +18,6 @@ uninstall boto modules:
 boto:
   pip.installed:
     - name: boto >= 2.46.0
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
@@ -28,7 +26,6 @@ boto:
 boto3:
   pip.installed:
     - name: boto3
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

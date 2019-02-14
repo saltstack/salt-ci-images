@@ -16,11 +16,11 @@ tornado:
 {%- if pillar.tornado is defined %}
   pip.tornado:
     - name: "{{version}}"
+    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {%- else %}
   pip.installed:
     - name: "tornado{{version}}"
 {%- endif %}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

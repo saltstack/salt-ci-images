@@ -5,7 +5,7 @@ include:
 
 tox:
   pip.installed:
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
+    - name: tox
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

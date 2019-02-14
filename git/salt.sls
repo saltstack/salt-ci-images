@@ -418,21 +418,18 @@ fetch-upstream-tags:
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% endfor %}
 
 {% for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
     - requirements: {{ testing_dir }}/requirements/pytest.txt
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {%- endif %}
 
 {# npm v5 workaround for issue #41770 #}

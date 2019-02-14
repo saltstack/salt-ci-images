@@ -6,7 +6,6 @@ include:
 unittest2:
   pip.installed:
     - name: unittest2
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     {%- if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install

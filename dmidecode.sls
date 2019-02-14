@@ -7,7 +7,6 @@
 install-dmidecode:
   {{ install_method }}:
     - name: dmidecode
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     {% if install_method == 'pkg.installed' %}
     - aggregate: True
     {%- endif %}

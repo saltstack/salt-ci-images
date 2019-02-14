@@ -5,7 +5,6 @@ include:
 
 m2crypto:
   pip.installed:
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - require:
       - cmd: pip-install
       - pkg: gcc

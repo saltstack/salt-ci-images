@@ -6,7 +6,6 @@ include:
 supervisor:
   pip2.installed:
     - name: supervisor
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     {%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

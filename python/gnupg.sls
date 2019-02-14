@@ -11,7 +11,6 @@ python-gnupg:
 gnupg:
   pip.installed:
     - name: python-gnupg
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os'] == 'Fedora' %}

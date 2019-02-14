@@ -6,7 +6,6 @@ include:
 apache-libcloud:
   pip.installed:
     - name: 'apache-libcloud==1.0.0'
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

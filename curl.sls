@@ -26,7 +26,6 @@ curl:
     {%- if install_method == 'pkg.installed' %}
     - aggregate: True
     {%- endif %}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     {%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
     - require:
       {%- if grains['os'] == 'openSUSE' %}

@@ -14,7 +14,6 @@ include:
 coverage:
   pip.installed:
     - name: {{ coverage_version }}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

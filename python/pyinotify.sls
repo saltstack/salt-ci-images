@@ -5,7 +5,6 @@ include:
 
 pyinotify:
   pip.installed:
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
 {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

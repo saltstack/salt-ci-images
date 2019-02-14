@@ -18,7 +18,6 @@ pyzmq:
 
   pip.installed:
     - name: pyzmq{{salt.pillar.get('pyzmq:version', '')}}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - global_options:
       - fetch_libzmq
     - install_options:

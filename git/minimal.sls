@@ -116,6 +116,7 @@ include:
   - sssd
   {%- endif %}
   - python.tox
+  - python.nox
 
 testing-dir:
   file.directory:

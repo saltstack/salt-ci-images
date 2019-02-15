@@ -102,6 +102,7 @@ include:
   - sssd
   {%- endif %}
   - python.tox
+  - python.nox
   - cron
 
 testing-dir:

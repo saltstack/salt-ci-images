@@ -16,5 +16,3 @@ patch:
     {%- if install_method == 'pkg.installed' %}
     - aggregate: True
     {%- endif %}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}

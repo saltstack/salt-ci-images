@@ -1,6 +1,9 @@
 import os
 import logging
-import salt.utils
+try:
+    from salt.utils.platform import is_windows
+except (ImportError, AttributeError):
+    from salt.utils import is_windows
 from salt.exceptions import CommandExecutionError
 
 log = logging.getLogger(__name__)
@@ -13,7 +16,7 @@ def __virtual__():
     '''
     Set the winrepo module if the OS is Windows
     '''
-    if salt.utils.is_windows():
+    if is_windows():
         return True
     return (False, 'This module only works on Windows.')
 

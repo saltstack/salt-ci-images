@@ -15,14 +15,40 @@ import logging
 import pkg_resources
 
 # Import salt libs
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
 from salt.exceptions import CommandNotFoundError
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
 
-# Import 3rd Party libs
-import salt.ext.six as six
+try:
+    import pip
+    HAS_PIP = True
+except ImportError:
+    HAS_PIP = False
+
+if HAS_PIP is True:
+    try:
+        from pip.req import InstallRequirement
+        _from_line = InstallRequirement.from_line
+    except ImportError:
+        # pip 10.0.0 move req module under pip._internal
+        try:
+            try:
+                from pip._internal.req import InstallRequirement
+                _from_line = InstallRequirement.from_line
+            except AttributeError:
+                from pip._internal.req.constructors import install_req_from_line as _from_line
+        except ImportError:
+            HAS_PIP = False
+
+    try:
+        from pip.exceptions import InstallationError
+    except ImportError:
+        InstallationError = ValueError
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +64,12 @@ for name in dir(salt.states.pip_state):
         if attr in globals():
             continue
         globals()[name] = namespaced_function(attr, globals())
+
+salt.states.pip_state.HAS_PIP = HAS_PIP
+try:
+    salt.states.pip_state._from_line = _from_line
+except NameError:
+    pass
 
 
 __virtualname__ = 'pip2'
@@ -61,10 +93,17 @@ def installed(name, **kwargs):
         pip_bin_name = 'pip2.7'
     else:
         pip_bin_name = 'pip2'
-    bin_env = __salt__['pip.get_pip_bin'](kwargs.get('bin_env'), pip_bin_name)
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+        pip_bin_name
+    )
     if isinstance(bin_env, list):
         bin_env = bin_env[0]
     log.warning('pip2 binary found: %s', bin_env)
+
+    # Complementary set of cwd and target
+    kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
+    kwargs.setdefault('target', __salt__['config.get']('pip_target', None))
 
     kwargs.update(
         index_url=index_url,

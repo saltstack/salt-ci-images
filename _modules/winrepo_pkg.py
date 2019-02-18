@@ -6,9 +6,15 @@ import os
 import logging
 import types
 import functools
-import salt.utils
 
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
+try:
+    from salt.utils.platform import is_windows
+except (ImportError, AttributeError):
+    from salt.utils import is_windows
 import salt.modules.win_pkg
 from salt.modules.win_pkg import *
 from salt.ext.six.moves.urllib.parse import urlparse as _urlparse
@@ -16,10 +22,10 @@ from salt.ext.six.moves.urllib.parse import urlparse as _urlparse
 
 PKG_DATA = {}
 NAMESPACE_FUNCS = [
-	'_get_repo_details',
-	'_get_msiexec',
-	'_get_latest_pkg_version',
-	'get_repo_data',
+    '_get_repo_details',
+    '_get_msiexec',
+    '_get_latest_pkg_version',
+    'get_repo_data',
 ]
 
 
@@ -27,11 +33,11 @@ for name in dir(salt.modules.win_pkg):
     attr = getattr(salt.modules.win_pkg, name)
     if isinstance(attr, types.FunctionType):
         if name in NAMESPACE_FUNCS:
-            globals()[name] = salt.utils.namespaced_function(attr, globals())
+            globals()[name] = namespaced_function(attr, globals())
 
 
 def __virtual__():
-    if salt.utils.is_windows():
+    if is_windows():
         return True
     return (False, 'This module only works on Windows.')
 

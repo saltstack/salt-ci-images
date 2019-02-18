@@ -16,7 +16,14 @@ import pkg_resources
 
 # Import salt libs
 import salt.utils
-from salt.utils import namespaced_function
+try:
+    from salt.utils.functools import namespaced_function
+except (ImportError, AttributeError):
+    from salt.utils import namespaced_function
+try:
+    from salt.utils.platform import is_windows
+except (ImportError, AttributeError):
+    from salt.utils import is_windows
 from salt.utils.versions import LooseVersion
 from salt.exceptions import CommandNotFoundError
 import salt.modules.pip
@@ -92,7 +99,7 @@ def get_pip_bin(bin_env, pip_bin_name=None):
 
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
-        if salt.utils.is_windows():
+        if is_windows():
             pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)

@@ -27,9 +27,6 @@ Arch:
 python-ldap:
   pip.installed:
     - name: python-ldap
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
     {%- if pillar.get('py3', False) %}
     - pre_releases: True
     {%- endif %}

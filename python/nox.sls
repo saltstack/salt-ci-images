@@ -1,6 +1,6 @@
 {%- if grains['os'] == 'Windows' %}
   {%- set binary_name = 'nox.exe' %}
-  {%- set binary_path = 'C:\\Program Files\\nox.exe' %}
+  {%- set binary_path = 'C:\\Windows\\nox.exe' %}
   {%- set source_hash = 'f594344d4d06ad0477d43b87a490976b1d26f537' %}
 {%- else %}
   {%- set binary_name = 'nox' %}

@@ -6,7 +6,7 @@ include:
 mock:
   pip.installed:
     - name: mock
-{% if grains['os'] not in ('Windows',) %}
+    {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+    {% endif %}

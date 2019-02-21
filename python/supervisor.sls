@@ -11,7 +11,7 @@ include:
 supervisor:
   {{ install_type }}:
     - name: supervisor
-    {%- if grains['os'] not in ('Windows',) %}
+    {% if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install
     {%- endif %}

@@ -6,7 +6,7 @@ include:
 apache-libcloud:
   pip.installed:
     - name: 'apache-libcloud==2.0.0'
-{% if grains['os'] not in ('Windows',) %}
+    {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+    {% endif %}

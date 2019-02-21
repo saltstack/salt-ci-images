@@ -6,7 +6,6 @@ import os
 import logging
 import types
 import functools
-import salt.utils
 
 from salt.utils.functools import namespaced_function
 import salt.utils.platform

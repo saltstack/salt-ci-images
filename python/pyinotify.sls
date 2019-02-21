@@ -6,7 +6,7 @@ include:
 pyinotify:
   pip.installed:
     - name: pyinotify
-{% if grains['os'] not in ('Windows',) %}
+    {% if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+    {% endif %}

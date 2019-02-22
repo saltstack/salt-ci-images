@@ -401,7 +401,7 @@ add-upstream-repo:
       - git: clone-salt-repo
     - unless: 'cd {{ testing_dir }} ; git remote -v | grep {{ default_test_git_url }}'
 
-{#- Fetch Upstream Tags -#}
+{#- Fetch Upstream Tags #}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags

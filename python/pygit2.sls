@@ -10,14 +10,14 @@
         {%- set pygit2_pkg = 'python3-pygit2' %}
     {%- else %}
         {%- set pygit2_pkg = 'python2-pygit2' %}
-    {% endif %}
+    {%- endif %}
 {%- else %}
     {%- set pygit2_pkg = 'python-pygit2' %}
-{% endif %}
+{%- endif %}
 
 {%- if os_family in ('Arch', 'RedHat') or os == 'Ubuntu' and osmajorrelease >= 16 %}
 install_pygit2:
   pkg.installed:
     - name: {{ pygit2_pkg  }}
     - aggregate: True
-{% endif %}
+{%- endif %}

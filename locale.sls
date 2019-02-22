@@ -15,10 +15,10 @@ mac_locale:
     - append_if_not_found: true
 {%- else %}
 
-{% set suse = True if grains['os_family'] in ('Suse', 'SUSE') else False %}
+{%- set suse = True if grains['os_family'] in ('Suse', 'SUSE') else False %}
 
 
-{% if suse %}
+{%- if suse %}
 suse_local:
   pkg.installed:
     - pkgs:
@@ -27,7 +27,7 @@ suse_local:
   service.running:
     - name: dbus.socket
     - onlyif: systemctl daemon-reload
-{% elif grains.os_family == 'Debian' %}
+{%- elif grains.os_family == 'Debian' %}
 deb_locale:
   file.touch:
     - name: /etc/default/keyboard  # ubuntu is stupid and this file has to exist for systemd-localed to be able to run
@@ -35,18 +35,18 @@ deb_locale:
     - pkgs:
       - locales
       - console-data
-  {% if grains.get('init') == 'systemd' %}
+  {%- if grains.get('init') == 'systemd' %}
       - dbus
   service.running:
     - names:
       - dbus.socket
       - systemd-localed.service
   {%- endif %}
-{% endif %}
+{%- endif %}
 
 
-{% set arch = True if grains['os_family'] == 'Arch' else False %}
-{% if arch %}
+{%- set arch = True if grains['os_family'] == 'Arch' else False %}
+{%- if arch %}
 accept_LANG_sshd:
   file.append:
     - name: /etc/ssh/sshd_config
@@ -55,7 +55,7 @@ accept_LANG_sshd:
     - name: sshd
     - listen:
       - file: accept_LANG_sshd
-{% endif %}
+{%- endif %}
 
 us_locale:
   locale.present:

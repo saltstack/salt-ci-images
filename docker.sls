@@ -1,5 +1,5 @@
-{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
-{% set docker_pkg = 'docker.io' if salt['grains.get']('os', '') == 'Ubuntu' else 'docker' %}
+{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set docker_pkg = 'docker.io' if salt['grains.get']('os', '') == 'Ubuntu' else 'docker' %}
 
 /usr/bin/busybox:
   file.managed:

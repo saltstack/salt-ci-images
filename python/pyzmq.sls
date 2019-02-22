@@ -19,9 +19,9 @@ pyzmq:
   pip.installed:
     {%- if pillar.get('py3', False) and grains.get('os_family') == 'Suse' and grains.get('osrelease') == '42.3' %}
     - name: pyzmq==17.1.1
-    {% else %}
+    {%- else %}
     - name: pyzmq{{salt.pillar.get('pyzmq:version', '')}}
-    {% endif %}
+    {%- endif %}
     - global_options:
       - fetch_libzmq
     - install_options:

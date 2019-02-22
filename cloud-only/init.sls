@@ -1,6 +1,6 @@
-{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
-{% set os_family = grains.get('os_family', '')  %}
-{% set on_redhat = True if os_family == 'RedHat' else False %}
+{%- set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
+{%- set os_family = grains.get('os_family', '')  %}
+{%- set on_redhat = True if os_family == 'RedHat' else False %}
 
 include:
   - git
@@ -60,7 +60,7 @@ include:
       {%- endif %}
       - pkg: sshpass
 
-{% if test_git_url != "https://github.com/saltstack/salt.git" %}
+{%- if test_git_url != "https://github.com/saltstack/salt.git" %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
@@ -69,12 +69,12 @@ add-upstream-repo:
     - require:
       - git: {{ test_git_url }}
 
-{# Fetch Upstream Tags -#}
+{#- Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
     - cwd: /testing
     - require:
       - cmd: add-upstream-repo
-{% endif %}
+{%- endif %}
 {%- endif %}

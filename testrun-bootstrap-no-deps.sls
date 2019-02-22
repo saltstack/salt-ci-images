@@ -1,4 +1,4 @@
-{% from '_python.sls' import python with context %}
+{%- from '_python.sls' import python with context %}
 
 test_cmd:
 {%- if 'runtests.run' in salt %}

@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
 
@@ -13,4 +13,4 @@ gitpython:
     {%- endif %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

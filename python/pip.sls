@@ -33,17 +33,17 @@
   {%- set on_macos = False %}
 {%- endif %}
 
-{% if os in ('Windows',) %}
-  {% set install_method = 'pip' %}
-{% else %}
-  {% set install_method = 'pkg' %}
-{% endif %}
+{%- if os in ('Windows',) %}
+  {%- set install_method = 'pip' %}
+{%- else %}
+  {%- set install_method = 'pkg' %}
+{%- endif %}
 
 {%- if os == 'Fedora' %}
   {%- set force_reinstall = '--force-reinstall' %}
 {%- else %}
   {%- set force_reinstall = '' %}
-{% endif %}
+{%- endif %}
 
 {%- set pip2 = 'pip2' %}
 {%- set pip3 = 'pip3' %}
@@ -72,13 +72,13 @@ include:
 {%- set get_pip2 = '{0} get-pip.py {1}'.format(python2, force_reinstall) %}
 {%- set get_pip3 = '{0} get-pip.py {1}'.format(python3, force_reinstall) %}
 
-{% if on_macos %}
+{%- if on_macos %}
 pip-update-path:
    environ.setenv:
      - name: PATH
      - value: '/opt/salt/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
      - update_minion: True
-{% endif %}
+{%- endif %}
 
 pip-install:
   cmd.run:
@@ -104,7 +104,7 @@ pip3-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
-      {% if os_family == 'MacOS' %}
+      {%- if os_family == 'MacOS' %}
       - macpackage: python3
       {%- elif os_family != 'Windows' %}
       - pkg: python3

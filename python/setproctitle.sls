@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 install_setproctitle:
   pip.installed:
@@ -9,4 +9,4 @@ install_setproctitle:
 {%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

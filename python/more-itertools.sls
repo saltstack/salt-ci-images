@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 {%- if pillar.get('py3', False) %}
 {%- set itertools = 'more-itertools==6.0.0' %}
 {%- else %}
@@ -12,7 +12,7 @@ include:
 more-itertools:
   pip.installed:
     - name: '{{ itertools }}'
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

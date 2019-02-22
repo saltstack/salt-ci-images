@@ -1,13 +1,13 @@
-{% if grains['os'] == 'Arch' %}
-  {% set python = 'python2' %}
-{% elif grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int == 5 %}
-  {% set python = 'python26' %}
-{% else %}
-  {% set python = 'python' %}
-{% endif %}
-{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
-{% set test_transport = pillar.get('test_transport', 'zeromq') %}
-{% set test_transport = pillar.get('test_transport', 'zeromq') %}
+{%- if grains['os'] == 'Arch' %}
+  {%- set python = 'python2' %}
+{%- elif grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int == 5 %}
+  {%- set python = 'python26' %}
+{%- else %}
+  {%- set python = 'python' %}
+{%- endif %}
+{%- set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt.git') %}
+{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
+{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
   - git.salt

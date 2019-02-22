@@ -8,7 +8,7 @@ force-sync-all:
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
-{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 {%- if pillar.get('testing_dir') %}
   {%- set testing_dir = pillar.get('testing_dir') %}
@@ -47,7 +47,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
   - python.path
-  {% endif %}
+  {%- endif %}
   - python.more-itertools
   # All VMs get docker-py so they can run unit tests
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
@@ -65,7 +65,7 @@ include:
   - python.pip
   - gcc
   {%- endif %}
-  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}
   - git
   - patch
@@ -129,7 +129,7 @@ testing-dir:
           perms: full_control
   {%- endif %}
 
-{# npm v5 workaround for issue #41770 #}
+{#- npm v5 workaround for issue #41770 #}
 {%- if grains['os'] == 'MacOS' %}
 downgrade_node:
   cmd.run:

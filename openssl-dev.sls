@@ -1,7 +1,7 @@
 {%- if grains['os_family'] == 'RedHat' %}
-  {% set openssl_dev = 'openssl-devel' %}
+  {%- set openssl_dev = 'openssl-devel' %}
 {%- else %}
-  {% set openssl_dev = 'libssl-dev' %}
+  {%- set openssl_dev = 'libssl-dev' %}
 {%- endif %}
 
 openssl-dev-libs:

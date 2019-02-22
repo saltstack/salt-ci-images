@@ -7,7 +7,7 @@ force-sync-all:
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
-{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 {%- if os_family == 'RedHat' and os_major_release == 5 %}
   {%- set on_redhat_5 = True %}
@@ -48,8 +48,8 @@ stop-minion:
   {%- endif %}
 {%- endif %}
 
-{% set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
-{% set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado%s'|format(salt.pillar.get('tornado:version', '<5.0.0'))] %}
+{%- set dev_reqs = ['mock', 'apache-libcloud>=0.14.0', 'boto>=2.32.1', 'boto3>=1.2.1', 'moto>=0.3.6', 'SaltTesting>=2016.10.26', 'SaltPyLint'] %}
+{%- set base_reqs = ['Jinja2', 'msgpack-python>0.3', 'PyYAML', 'MarkupSafe', 'requests>=1.0.0', 'tornado%s'|format(salt.pillar.get('tornado:version', '<5.0.0'))] %}
 
 include:
   {%- if grains.get('kernel') == 'Linux' %}
@@ -59,7 +59,7 @@ include:
   - python.more-itertools
   {%- if grains['os'] == 'MacOS' %}
   - python.path
-  {% endif %}
+  {%- endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 %}
@@ -73,11 +73,11 @@ include:
   - no_show_proc
   - locale
   {%- endif %}
-  {# On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
+  {#- On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
   {%- if grains['os'] not in ('MacOS',) %}
   - git
   {%- endif %}
-  {# On OSX these utils are available from the system rather than the pkg manager (brew) #}
+  {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] != 'MacOS' %}
   - patch
   - sed
@@ -87,9 +87,9 @@ include:
   - subversion
   {%- endif %}
   #}
-  {# if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) #}
+  {#- if (grains['os'] in ('RedHat', 'CentOS') and grains['osrelease'].startswith('7')) or (grains['os'] in ('Ubuntu') and grains['osrelease'] in ('16.04', '14.04')) #}
   #- openstack
-  {# endif #}
+  {#- endif #}
   - python.virtualenv
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
   - python.unittest2
@@ -301,9 +301,9 @@ clone-salt-repo:
       - pip: keyring
       - pip: gnupg
       - pip: python-etcd
-      {% if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
+      {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
       - pip2: supervisor
-      {% endif %}
+      {%- endif %}
       - pip: boto
       - pip: moto
       - pip: kubernetes
@@ -389,7 +389,7 @@ add-upstream-repo:
       - git: clone-salt-repo
     - unless: 'cd {{ testing_dir }} ; git remote -v | grep {{ default_test_git_url }}'
 
-{# Fetch Upstream Tags -#}
+{#- Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
@@ -402,17 +402,17 @@ fetch-upstream-tags:
 {%- if pillar.get('py3', False) %}
 {#- Install Salt Dev Dependencies #}
 
-{% for req in dev_reqs %}
+{%- for req in dev_reqs %}
 install-dev-{{ req }}:
   pip.installed:
     - name: {{ req }}
-{% endfor %}
+{%- endfor %}
 
-{% for req in base_reqs %}
+{%- for req in base_reqs %}
 install-base-{{ req }}:
   pip.installed:
     - name: {{ req }}
-{% endfor %}
+{%- endfor %}
 
 install-salt-pytest-pip-deps:
   pip.installed:
@@ -420,7 +420,7 @@ install-salt-pytest-pip-deps:
     - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
 {%- endif %}
 
-{# npm v5 workaround for issue #41770 #}
+{#- npm v5 workaround for issue #41770 #}
 {%- if grains['os'] == 'MacOS' %}
 downgrade_node:
   cmd.run:

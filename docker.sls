@@ -1,4 +1,4 @@
- {% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+ {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 /usr/bin/busybox:
   file.managed:

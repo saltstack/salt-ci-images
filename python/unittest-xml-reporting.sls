@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 unittest-xml-reporting:
   pip.installed:
@@ -9,7 +9,7 @@ unittest-xml-reporting:
     {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int <= 6 %}
     - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
     {%- endif %}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

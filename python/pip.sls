@@ -27,17 +27,17 @@
   {%- set on_ubuntu_14 = False %}
 {%- endif %}
 
-{% if os in ('Windows',) %}
-  {% set install_method = 'pip' %}
-{% else %}
-  {% set install_method = 'pkg' %}
-{% endif %}
+{%- if os in ('Windows',) %}
+  {%- set install_method = 'pip' %}
+{%- else %}
+  {%- set install_method = 'pkg' %}
+{%- endif %}
 
 {%- if os == 'Fedora' %}
   {%- set force_reinstall = '--force-reinstall' %}
 {%- else %}
   {%- set force_reinstall = '' %}
-{% endif %}
+{%- endif %}
 
 {%- set pip2 = 'pip2' %}
 {%- set pip3 = 'pip3' %}
@@ -90,7 +90,7 @@ pip3-install:
     - require:
       - pkg: curl
     {%- if pillar.get('py3', False) %}
-      {% if os_family == 'MacOS' %}
+      {%- if os_family == 'MacOS' %}
       - macpackage: python3
       {%- elif os_family != 'Windows' %}
       - pkg: python3

@@ -1,4 +1,4 @@
-{% set on_redhat_7 = True if grains.get('osmajorrelease', 0)|int == 7 else False %}
+{%- set on_redhat_7 = True if grains.get('osmajorrelease', 0)|int == 7 else False %}
 {%- load_yaml as rawmap %}
 Ubuntu:
   package: glance
@@ -17,8 +17,8 @@ glance packages:
     - force_yes: True
     - pkgs:
       - {{ glance.package }}
-      {% if on_redhat_7 %}
+      {%- if on_redhat_7 %}
       - python2-glanceclient
-      {% else %}
+      {%- else %}
       - python-glanceclient
-      {% endif %}
+      {%- endif %}

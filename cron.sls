@@ -1,4 +1,4 @@
-{% if salt['grains.get']('os_family') == 'RedHat' %}
+{%- if salt['grains.get']('os_family') == 'RedHat' %}
 cronie:
   pkg.installed
-{% endif %}
+{%- endif %}

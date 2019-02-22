@@ -1,4 +1,4 @@
-{# dockerd is required for the zookeeper test #}
+{#- dockerd is required for the zookeeper test #}
 include:
   - docker
   - python.pip

@@ -1,4 +1,4 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   {%- if grains['os_family'] not in ('FreeBSD', 'Gentoo') %}
   - gcc
@@ -7,8 +7,8 @@ include:
   {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
   {#- These distributions don't ship the develop headers separately #}
   - python.headers
-  {% endif %}
-{% endif %}
+  {%- endif %}
+{%- endif %}
 
 {%- if grains['os_family'] in ('MacOS', ) -%}
 {#due to issue https://github.com/pediapress/timelib/issues/6 we need to use custom pkg for mac#}
@@ -26,11 +26,11 @@ timelib:
     - cwd: {{ timelib_dir }}/timelib-0.2.4/
     - require:
         - archive: get-timelib-zip
-{% else %}
+{%- else %}
 timelib:
   pip.installed:
     - name: timelib
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
       {#- These distributions don't ship the develop headers separately #}
@@ -41,5 +41,5 @@ timelib:
       - pkg: gcc
       {%- endif %}
       - cmd: pip-install
-{% endif %}
-{% endif %}
+{%- endif %}
+{%- endif %}

@@ -1,8 +1,8 @@
 include:
   - cloud-test-configs.ssh_directory
 
-{% set config_path = '%s/tests/integration/files/conf/cloud.providers.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
-{% set profile_config_path = '%s/tests/integration/files/conf/cloud.profiles.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
+{%- set config_path = '%s/tests/integration/files/conf/cloud.providers.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
+{%- set profile_config_path = '%s/tests/integration/files/conf/cloud.profiles.d/'|format(salt.pillar.get('testing_dir', '/testing')) %}
 
 azure-provider:
   file.managed:
@@ -183,7 +183,7 @@ linode-provider:
           known_hosts_file: /dev/null
     - show_changes: False
 
-{# "<=2017.7" #}
+{#- "<=2017.7" #}
 rackspace-provider:
   file.managed:
     - name: {{ config_path}}rackspace.conf
@@ -202,7 +202,7 @@ rackspace-provider:
           known_hosts_file: /dev/null
     - show_changes: False
 
-{# ">=oxygen" #}
+{#- ">=oxygen" #}
 openstack-provider:
   file.managed:
     - name: {{ config_path}}openstack.conf

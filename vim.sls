@@ -1,11 +1,11 @@
-{% if grains['os'] == 'Windows' %}
+{%- if grains['os'] == 'Windows' %}
 # just 32-bit x86 installer available
 # https://raw.githubusercontent.com/gpwen/vim-installer-mui2/wiki-files/gen/vim73_install_manual.txt
-{% if grains['cpuarch'] == 'AMD64' %}
-    {% set PROGRAM_FILES = "%ProgramFiles(x86)%" %}
-{% else %}
-    {% set PROGRAM_FILES = "%ProgramFiles%" %}
-{% endif %}
+{%- if grains['cpuarch'] == 'AMD64' %}
+    {%- set PROGRAM_FILES = "%ProgramFiles(x86)%" %}
+{%- else %}
+    {%- set PROGRAM_FILES = "%ProgramFiles%" %}
+{%- endif %}
 vim:
   module.run:
     - name: winrepo_pkg.install
@@ -27,4 +27,4 @@ vim:
 '{{ PROGRAM_FILES }}\vim\vim80':
     win_path.exists
 
-{% endif %}
+{%- endif %}

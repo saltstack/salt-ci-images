@@ -1,7 +1,7 @@
 {%- if grains['os_family'] == 'RedHat' %}
-  {% set apache = 'httpd' %}
+  {%- set apache = 'httpd' %}
 {%- else %}
-  {% set apache = 'apache2' %}
+  {%- set apache = 'apache2' %}
 {%- endif %}
 
 {{ apache }}:

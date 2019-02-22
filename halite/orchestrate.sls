@@ -1,4 +1,4 @@
-{% from "halite/settings.jinja" import settings with context %}
+{%- from "halite/settings.jinja" import settings with context %}
 
 deploy-master:
   salt.state:

@@ -1,7 +1,7 @@
-{% from '_python.sls' import python with context %}
-{% import 'git/salt.sls' as gitsalt with context %}
-{% set test_transport = pillar.get('test_transport', 'zeromq') %}
-{% set with_coverage = pillar.get('with_coverage', True) %}
+{%- from '_python.sls' import python with context %}
+{%- import 'git/salt.sls' as gitsalt with context %}
+{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
+{%- set with_coverage = pillar.get('with_coverage', True) %}
 
 include:
   - git.salt
@@ -12,7 +12,7 @@ test_cmd:
 {%- else %}
   cmd.run:
 {%- endif %}
-    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors --ssh --xml=/tmp/xml-unittests-output{% if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
+    - name: '{{ python }} /testing/tests/runtests.py -v --run-destructive --sysinfo --no-colors --ssh --xml=/tmp/xml-unittests-output{%- if with_coverage %} --coverage-xml=/tmp/coverage.xml{% endif %} --transport={{ test_transport }}; code=$?; echo "Test Suite Exit Code: ${code}";'
     - order: last
     - require:
       - git: clone-salt-repo

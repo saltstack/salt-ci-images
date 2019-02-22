@@ -44,7 +44,6 @@ deb_locale:
   {%- endif %}
 {%- endif %}
 
-
 {%- set arch = True if grains['os_family'] == 'Arch' else False %}
 {%- if arch %}
 accept_LANG_sshd:

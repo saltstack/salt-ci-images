@@ -11,7 +11,7 @@ include:
 {%- endif %}
 
 {%- if grains['os_family'] in ('MacOS', ) -%}
-{#due to issue https://github.com/pediapress/timelib/issues/6 we need to use custom pkg for mac#}
+{#- Due to issue https://github.com/pediapress/timelib/issues/6 we need to use custom pkg for mac #}
 {%- set timelib_dir = '/tmp/timelib/' -%}
 get-timelib-zip:
   archive.extracted:

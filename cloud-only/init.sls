@@ -66,7 +66,7 @@ add-upstream-repo:
     - require:
       - git: {{ test_git_url }}
 
-{#- Fetch Upstream Tags -#}
+{#- Fetch Upstream Tags #}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags

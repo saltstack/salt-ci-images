@@ -1,7 +1,7 @@
 {%- if grains['os'] == 'Gentoo' %}
-  {% set supervisor = 'app-admin/supervisor' %}
-{% else %}
-  {% set supervisor = 'supervisor' %}
+  {%- set supervisor = 'app-admin/supervisor' %}
+{%- else %}
+  {%- set supervisor = 'supervisor' %}
 {%- endif %}
 
 supervisor:

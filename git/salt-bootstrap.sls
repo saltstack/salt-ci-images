@@ -1,5 +1,5 @@
-{% set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
-{% set test_transport = pillar.get('test_transport', 'zeromq') %}
+{%- set test_git_url =  pillar.get('test_git_url', 'https://github.com/saltstack/salt-bootstrap.git') %}
+{%- set test_transport = pillar.get('test_transport', 'zeromq') %}
 
 include:
   - git
@@ -38,7 +38,7 @@ include:
       - pip: mock
       - pip: unittest-xml-reporting
 
-{% if test_git_url != "https://github.com/saltstack/salt-boostrap.git" %}
+{%- if test_git_url != "https://github.com/saltstack/salt-boostrap.git" %}
 {#- Add Salt Upstream Git Repo #}
 add-upstream-repo:
   cmd.run:
@@ -47,11 +47,11 @@ add-upstream-repo:
     - require:
       - git: {{ test_git_url }}
 
-{# Fetch Upstream Tags -#}
+{#- Fetch Upstream Tags -#}
 fetch-upstream-tags:
   cmd.run:
     - name: git fetch upstream --tags
     - cwd: /testing
     - require:
       - cmd: add-upstream-repo
-{% endif %}
+{%- endif %}

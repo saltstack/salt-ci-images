@@ -1,4 +1,4 @@
-{% from 'libsodium.sls' import libsodium with context %}
+{%- from 'libsodium.sls' import libsodium with context %}
 
 include:
   - python.pip

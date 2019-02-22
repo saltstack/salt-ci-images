@@ -1,7 +1,7 @@
-{% if grains['os'] != 'Windows' %}
+{%- if grains['os'] != 'Windows' %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 webtest:
   pip.installed:
@@ -9,4 +9,4 @@ webtest:
 {%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

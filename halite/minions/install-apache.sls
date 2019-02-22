@@ -1,4 +1,4 @@
-{% from "apache/init.sls" import apache with context %}
+{%- from "apache/init.sls" import apache with context %}
 
 include:
   - apache

@@ -1,9 +1,9 @@
-{% set swapfile = '/.salt-runtests.swapfile' %}
-{% set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set swapfile = '/.salt-runtests.swapfile' %}
+{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- if salt['grains.get']('os_family') != 'Suse' %}
 
 create-swap-file:
-  {# because everytime a new subprocess.Popen() is instantiated, a copy of the current python
+  {#- because everytime a new subprocess.Popen() is instantiated, a copy of the current python
      interpreter memory is cloned. Yes, it's copy-on-write, however, due to python's refcount
      for garbage collection, copy-on-write's happen to often and we endup with getting out of
      memory errors in the tests suite.
@@ -13,7 +13,7 @@ create-swap-file:
     - name: dd if=/dev/zero of={{ swapfile }} bs=2048 count=1M
     - unless: grep -q {{ swapfile }} /proc/swaps
 
-{% if grains['os'] == 'FreeBSD' %}
+{%- if grains['os'] == 'FreeBSD' %}
 chmod-swap:
   cmd.run:
     - name: chmod 0600 {{ swapfile }}
@@ -32,7 +32,7 @@ add-extra-swap:
     - name: swapon /dev/md0
     - require:
       - cmd: mdconfig
-{% else %}
+{%- else %}
 make-swap:
   cmd.run:
     - name: mkswap {{ swapfile }}
@@ -54,5 +54,5 @@ add-extra-swap:
       - cmd: make-swap
     - unless: grep -q {{ swapfile }} /proc/swaps
   {%- endif %}
-{% endif %}
-{% endif %}
+{%- endif %}
+{%- endif %}

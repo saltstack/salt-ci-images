@@ -55,7 +55,7 @@ include:
   - python3
 {%- endif %}
 {%- else %}
-  {%- if on_arch %}
+  {%- if on_arch or on_windows %}
   - python27
   {%- endif %}
 {%- endif %}

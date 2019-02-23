@@ -1,8 +1,3 @@
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-    - order: 1
-
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -16,13 +11,6 @@ force-sync-all:
   {%- set testing_dir = 'C:\\testing' %}
 {%- else %}
   {%- set testing_dir = '/testing' %}
-{%- endif %}
-
-{%- if os_family == 'Windows' %}
-stop-minion:
-  service.dead:
-    - name: salt-minion
-    - enable: False
 {%- endif %}
 
 {%- if os_family == 'Arch' %}
@@ -42,6 +30,9 @@ stop-minion:
 {%- endif %}
 
 include:
+  {%- if grains['os'] == 'Windows' %}
+  - windows
+  {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
   {%- endif %}
@@ -73,9 +64,9 @@ include:
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
-  {%- if pillar.get('extra-swap', True) %}
+    {%- if pillar.get('extra-swap', True) %}
   - extra-swap
-  {%- endif %}
+    {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
@@ -115,6 +106,11 @@ include:
   {%- if not on_docker %}
   - sssd
   {%- endif %}
+  {%- if grains['os'] == 'Windows' %}
+  - python.pywin32
+  - python.wmi
+  - python.pycrypto  {#- Install PyCrypto using salt states because we need to patch it #}
+  {%- endif %}
   - python.tox
   - python.nox
 
@@ -148,3 +144,7 @@ pin_npm:
     - name: 'brew pin node'
     - runas: jenkins
 {%- endif %}
+
+{#- Make sure there's at least one state entry in the state file #}
+noop-{{ sls }}:
+  test.succeed_without_changes

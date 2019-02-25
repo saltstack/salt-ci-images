@@ -10,6 +10,7 @@
 # Import python libs
 from __future__ import absolute_import
 import os
+import re
 import types
 import logging
 import pkg_resources
@@ -29,6 +30,7 @@ from salt.exceptions import CommandNotFoundError
 import salt.modules.pip
 from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.modules.pip import install as pip_install
+from salt.modules.pip import freeze as pip_freeze
 from salt.modules.pip import list_ as pip_list
 
 # Import 3rd Party libs
@@ -36,21 +38,21 @@ import salt.ext.six as six
 
 # Let's namespace the pip_install function
 pip_install = namespaced_function(pip_install, globals())  # pylint: disable=invalid-name
+pip_freeze = namespaced_function(pip_freeze, globals())  # pylint: disable=invalid-name
 pip_list = namespaced_function(pip_list, globals())  # pylint: disable=invalid-name
 
 # Let's namespace all other functions from the pip module
 for name in dir(salt.modules.pip):
     attr = getattr(salt.modules.pip, name)
     if isinstance(attr, types.FunctionType):
-        if attr == 'install':
+        if attr in ('install', 'freeze', 'list', 'list_'):
             continue
-        if attr in globals():
-            continue
+        #if attr in globals():
+        #    continue
         globals()[name] = namespaced_function(attr, globals())
 
 
 log = logging.getLogger(__name__)
-
 
 __func_alias__ = {
     'list_': 'list'
@@ -67,8 +69,8 @@ def _list_or_not(ret):
 
     Caused by this PR #47196
     '''
-    version = __grains__['saltversion']
-    if (LooseVersion(version) >= LooseVersion('2017.7.6') and version != '2018.3.0') or 'n/a' in version:
+    _version = __grains__['saltversion']
+    if (LooseVersion(_version) >= LooseVersion('2017.7.6') and _version != '2018.3.0') or 'n/a' in _version:
         return [ret]
     return ret
 
@@ -83,12 +85,15 @@ def get_pip_bin(bin_env, pip_bin_name=None):
         # If running tests on CentOS 6, the Nitrogen and Develop branches run on Python2.7
         # so we need to set pip to 2.7 as well here (see PR #41039 in Salt repo)
         # otherwise, stick with the traditional pip2 binary.
-        if __pillar__.get('py3', False):
-            pip_bin_name = 'pip3'
-        elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
-            pip_bin_name = 'pip2.7'
+        if is_windows():
+            pip_bin_name = 'pip.exe'
         else:
-            pip_bin_name = 'pip2'
+            if __pillar__.get('py3', False):
+                pip_bin_name = 'pip3'
+            elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
+                pip_bin_name = 'pip2.7'
+            else:
+                pip_bin_name = 'pip2'
 
     if not bin_env:
         # not in / or c ignores the "root" directories as virtualenvs
@@ -120,7 +125,7 @@ _get_pip_bin = get_pip_bin
 
 
 def install(*args, **kwargs):  # pylint: disable=function-redefined
-    pip_binary = _get_pip_bin(kwargs.get('bin_env'))
+    pip_binary = get_pip_bin(kwargs.get('bin_env'))
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
     kwargs['bin_env'] = pip_binary
@@ -138,8 +143,69 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
         log.debug('Explicitly setting environment variable "LC_ALL=en_US.UTF-8"')
         env_vars['LC_ALL'] = 'en_US.UTF-8'
     kwargs['env_vars'] = env_vars
+    if kwargs.get('cwd') is None:
+        if is_windows():
+            # On windows, the cwd must the same directory as the pip executable
+            kwargs['cwd'] = os.path.dirname(pip_binary)
+        else:
+            kwargs['cwd'] = '/'
+    cache_pip_version(pip_binary, kwargs.get('cwd'))
     return pip_install(*args, **kwargs)
 
 
 def list_(*args, **kwargs):
+    pip_binary = get_pip_bin(kwargs.get('bin_env'))
+    if isinstance(pip_binary, list):
+        pip_binary = pip_binary[0]
+    kwargs['bin_env'] = pip_binary
+    if kwargs.get('cwd') is None:
+        if is_windows():
+            # On windows, the cwd must the same directory as the pip executable
+            kwargs['cwd'] = os.path.dirname(pip_binary)
+        else:
+            kwargs['cwd'] = '/'
+    cache_pip_version(pip_binary, kwargs.get('cwd'))
     return pip_list(*args, **kwargs)
+
+
+def freeze(*args, **kwargs):
+    pip_binary = get_pip_bin(kwargs.get('bin_env'))
+    if isinstance(pip_binary, list):
+        pip_binary = pip_binary[0]
+    kwargs['bin_env'] = pip_binary
+    if kwargs.get('cwd') is None:
+        if is_windows():
+            # On windows, the cwd must the same directory as the pip executable
+            kwargs['cwd'] = os.path.dirname(pip_binary)
+        else:
+            kwargs['cwd'] = '/'
+    cache_pip_version(pip_binary, kwargs.get('cwd'))
+    return pip_freeze(*args, **kwargs)
+
+
+def cache_pip_version(pip_binary, cwd=None):
+    contextkey = 'pip.version'
+    if pip_binary is not None:
+        contextkey = '{}.{}'.format(contextkey, pip_binary)
+
+    if contextkey in __context__:
+        return __context__[contextkey]
+
+    cmd = [pip_binary, '--version']
+    if cwd is None:
+        if is_windows():
+            cwd = os.path.dirname(pip_binary)
+        else:
+            cwd = '/'
+
+    ret = __salt__['cmd.run_all'](cmd, cwd=cwd, python_shell=False)
+    if ret['retcode']:
+        raise CommandNotFoundError('Could not find a `pip` binary')
+
+    try:
+        pip_version = re.match(r'^pip (\S+)', ret['stdout']).group(1)
+    except AttributeError:
+        pip_version = None
+
+    __context__[contextkey] = pip_version
+    return pip_version

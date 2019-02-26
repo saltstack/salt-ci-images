@@ -118,6 +118,8 @@ include:
   - python.tox
   - python.nox
 
+
+{%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:
     - name: {{ testing_dir }}
@@ -128,6 +130,7 @@ testing-dir:
         Users:
           perms: full_control
   {%- endif %}
+{%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}
 {%- if grains['os'] == 'MacOS' %}

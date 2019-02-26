@@ -218,6 +218,7 @@ include:
   - sssd
   {%- endif %}
 
+{%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:
     - name: {{ testing_dir }}
@@ -228,6 +229,7 @@ testing-dir:
         Users:
           perms: full_control
   {%- endif %}
+{%- endif %}
 
 {%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:

@@ -113,6 +113,7 @@ def get_pip_bin(bin_env, pip_bin_name=None):
         log.debug('resolved pip_bin: %s', pip_bin)
         if os.path.isfile(pip_bin):
             log.debug('Returning pip_bin executable: %s', pip_bin)
+            cache_pip_version(pip_bin)
             return _list_or_not(pip_bin)
         msg = 'Could not find a `pip` binary in virtualenv {0}'.format(bin_env)
         raise CommandNotFoundError(msg)
@@ -121,6 +122,7 @@ def get_pip_bin(bin_env, pip_bin_name=None):
         log.debug('bin_env(%s) is not a direactory', bin_env)
         if os.path.isfile(bin_env) or os.path.islink(bin_env):
             log.debug('bin_env(%s) exists, returning it', bin_env)
+            cache_pip_version(bin_env)
             return _list_or_not(bin_env)
     else:
         log.debug('Could not find a pip binary with bin_env(%s) and pip_bin_name(%s)!!!!', bin_env, pip_bin_name)

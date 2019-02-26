@@ -26,8 +26,13 @@ except (ImportError, AttributeError):
     from salt.utils import namespaced_function
 from salt.exceptions import CommandExecutionError, MinionError
 from salt.utils.versions import LooseVersion as _LooseVersion
-import salt.modules.pacman
-from salt.modules.pacman import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+try:
+    import salt.modules.pacman
+    from salt.modules.pacman import *  # pylint: disable=wildcard-import,unused-wildcard-import
+    HAS_PACMAN = True
+except ImportError:
+    HAS_PACMAN = False
 
 # Import 3rd-party libs
 import salt.ext.six as six
@@ -37,16 +42,25 @@ log = logging.getLogger(__name__)
 # Define the module's virtual name
 __virtualname__ = 'pkg'
 
-# Let's namespace the pip_install function
-# Let's namespace all other functions from the pip module
-for name in dir(salt.modules.pacman):
-    attr = getattr(salt.modules.pacman, name)
-    if isinstance(attr, types.FunctionType):
-        if attr == 'install':
-            continue
-        if attr in globals():
-            continue
-        globals()[name] = namespaced_function(attr, globals())
+if HAS_PACMAN:
+    # Let's namespace the install function
+    # Let's namespace all other functions from the pacman module
+    for name in dir(salt.modules.pacman):
+        attr = getattr(salt.modules.pacman, name)
+        if isinstance(attr, types.FunctionType):
+            if attr == 'install':
+                continue
+            if attr in globals():
+                continue
+            globals()[name] = namespaced_function(attr, globals())
+
+
+def __virtual__():
+    if __grains__['os_family'] != 'Arch':
+        return (False, 'The pacman module could not be loaded: unsupported OS family.')
+    if HAS_PACMAN is False:
+        return (False, 'salt.module.pacman not available')
+    return True
 
 
 def install(name=None,

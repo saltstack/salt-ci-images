@@ -23,6 +23,7 @@ extend:
       - global_options: '--pure'
       - require:
         - urllib3
+      - reload_modules: True
 {%- endif %}
 
 download-git-repos:

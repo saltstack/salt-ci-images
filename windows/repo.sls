@@ -39,6 +39,8 @@ download-git-repos:
 win-pkg-refresh:
   module.run:
     - name: pkg.refresh_db
+    - verbose: true
+    - failhard: true
     - require:
       - download-git-repos
     - order: 2

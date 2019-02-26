@@ -168,36 +168,56 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
     return pip_install(*args, **kwargs)
 
 
-def list_(*args, **kwargs):
-    log.debug('custom pip module // pip.list called // args: %s // kwargs: %s', args, kwargs)
-    pip_binary = get_pip_bin(kwargs.get('bin_env'))
+def list_(prefix=None,
+          bin_env=None,
+          user=None,
+          cwd=None,
+          env_vars=None,
+          **kwargs):
+    log.debug('custom pip module // pip.list called // kwargs: %s', kwargs)
+    pip_binary = get_pip_bin(bin_env)
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
-    kwargs['bin_env'] = pip_binary
-    if kwargs.get('cwd') is None:
+    bin_env = pip_binary
+    if cwd is None:
         if is_windows():
             # On windows, the cwd must the same directory as the pip executable
-            kwargs['cwd'] = os.path.dirname(pip_binary)
+            cwd = os.path.dirname(pip_binary)
         else:
-            kwargs['cwd'] = '/'
-    cache_pip_version(pip_binary, kwargs.get('cwd'))
-    return pip_list(*args, **kwargs)
+            cwd = '/'
+    cache_pip_version(pip_binary, cwd)
+    return pip_list(prefix=prefix,
+                    bin_env=bin_env,
+                    user=user,
+                    cwd=cwd,
+                    env_vars=env_vars,
+                    **kwargs)
 
 
-def freeze(*args, **kwargs):
+def freeze(bin_env=None,
+           user=None,
+           cwd=None,
+           use_vt=False,
+           env_vars=None,
+           **kwargs):
     log.debug('custom pip module // pip.freeze called')
-    pip_binary = get_pip_bin(kwargs.get('bin_env'))
+    pip_binary = get_pip_bin(bin_env)
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
-    kwargs['bin_env'] = pip_binary
-    if kwargs.get('cwd') is None:
+    bin_env = pip_binary
+    if cwd is None:
         if is_windows():
             # On windows, the cwd must the same directory as the pip executable
-            kwargs['cwd'] = os.path.dirname(pip_binary)
+            cwd = os.path.dirname(pip_binary)
         else:
-            kwargs['cwd'] = '/'
-    cache_pip_version(pip_binary, kwargs.get('cwd'))
-    return pip_freeze(*args, **kwargs)
+            cwd = '/'
+    cache_pip_version(pip_binary, cwd)
+    return pip_freeze(bin_env=bin_env,
+                      user=user,
+                      cwd=cwd,
+                      use_vt=use_vt,
+                      env_vars=env_vars,
+                      **kwargs)
 
 
 def cache_pip_version(pip_binary, cwd=None):

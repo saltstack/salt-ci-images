@@ -75,7 +75,7 @@ def _list_or_not(ret):
     return ret
 
 
-def get_pip_bin(bin_env, pip_bin_name=None):
+def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
     '''
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
     executable itself, or from searching conventional filesystem locations
@@ -126,7 +126,8 @@ def get_pip_bin(bin_env, pip_bin_name=None):
             return _list_or_not(bin_env)
     else:
         log.debug('Could not find a pip binary with bin_env(%s) and pip_bin_name(%s)!!!!', bin_env, pip_bin_name)
-        raise CommandNotFoundError('Could not find a `pip` binary')
+        if raise_error:
+            raise CommandNotFoundError('Could not find a `pip` binary')
 
 
 # An alias to the old private function

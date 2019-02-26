@@ -80,43 +80,50 @@ def get_pip_bin(bin_env, pip_bin_name=None):
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
     executable itself, or from searching conventional filesystem locations
     '''
+    log.debug('Calling get_pip_bin on custom pip moule. bin_env: %s, pip_bin_name: %s', bin_env, pip_bin_name)
     if pip_bin_name is None:
         # Always use pip3 if running with pillar="{py3: true}"
         # If running tests on CentOS 6, the Nitrogen and Develop branches run on Python2.7
         # so we need to set pip to 2.7 as well here (see PR #41039 in Salt repo)
         # otherwise, stick with the traditional pip2 binary.
-        if is_windows():
-            pip_bin_name = 'pip.exe'
+        if __pillar__.get('py3', False):
+            pip_bin_name = 'pip3'
+        elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
+            pip_bin_name = 'pip2.7'
         else:
-            if __pillar__.get('py3', False):
-                pip_bin_name = 'pip3'
-            elif __grains__['os_family'] == 'RedHat' and int(__grains__['osmajorrelease']) == 6:
-                pip_bin_name = 'pip2.7'
-            else:
-                pip_bin_name = 'pip2'
+            pip_bin_name = 'pip2'
+        log.debug('pip_bin_name resolved to: %s', pip_bin_name)
+
 
     if not bin_env:
         # not in / or c ignores the "root" directories as virtualenvs
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
             raise CommandNotFoundError('Could not find a `pip` binary')
+        log.debug('bin_env was None, lookup for pip_bin_name(%s) is: %s', pip_bin_name, which_result)
         return _list_or_not(which_result)
 
     # try to get pip bin from virtualenv, bin_env
     if os.path.isdir(bin_env):
+        log.debug('bin_env is a directory')
         if is_windows():
             pip_bin = os.path.join(bin_env, 'Scripts', 'pip.exe')
         else:
             pip_bin = os.path.join(bin_env, 'bin', pip_bin_name)
+        log.debug('resolved pip_bin: %s', pip_bin)
         if os.path.isfile(pip_bin):
+            log.debug('Returning pip_bin executable: %s', pip_bin)
             return _list_or_not(pip_bin)
         msg = 'Could not find a `pip` binary in virtualenv {0}'.format(bin_env)
         raise CommandNotFoundError(msg)
     # bin_env is the pip binary
     elif os.access(bin_env, os.X_OK):
+        log.debug('bin_env(%s) is not a direactory', bin_env)
         if os.path.isfile(bin_env) or os.path.islink(bin_env):
+            log.debug('bin_env(%s) exists, returning it', bin_env)
             return _list_or_not(bin_env)
     else:
+        log.debug('Could not find a pip binary with bin_env(%s) and pip_bin_name(%s)!!!!', bin_env, pip_bin_name)
         raise CommandNotFoundError('Could not find a `pip` binary')
 
 
@@ -125,6 +132,7 @@ _get_pip_bin = get_pip_bin
 
 
 def install(*args, **kwargs):  # pylint: disable=function-redefined
+    log.debug('custom pip module // pip.install called')
     pip_binary = get_pip_bin(kwargs.get('bin_env'))
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
@@ -154,6 +162,7 @@ def install(*args, **kwargs):  # pylint: disable=function-redefined
 
 
 def list_(*args, **kwargs):
+    log.debug('custom pip module // pip.list called // args: %s // kwargs: %s', args, kwargs)
     pip_binary = get_pip_bin(kwargs.get('bin_env'))
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
@@ -169,6 +178,7 @@ def list_(*args, **kwargs):
 
 
 def freeze(*args, **kwargs):
+    log.debug('custom pip module // pip.freeze called')
     pip_binary = get_pip_bin(kwargs.get('bin_env'))
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
@@ -184,6 +194,7 @@ def freeze(*args, **kwargs):
 
 
 def cache_pip_version(pip_binary, cwd=None):
+    log.debug('custom pip module // pip.cache_pip_version called')
     contextkey = 'pip.version'
     if pip_binary is not None:
         contextkey = '{}.{}'.format(contextkey, pip_binary)

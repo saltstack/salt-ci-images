@@ -88,6 +88,12 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
+    virtualenv_path = __salt__['config.get']('virtualenv_path', None)
+    log.debug(
+        'Searching for pip binary using bin_env(%s) or virtualenv_path(%s)',
+        kwargs.get('bin_env'),
+        virtualenv_path
+    )
     bin_env = __salt__['pip.get_pip_bin'](
         kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
     )

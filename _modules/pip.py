@@ -32,6 +32,7 @@ from salt.modules.pip import *  # pylint: disable=wildcard-import,unused-wildcar
 from salt.modules.pip import install as pip_install
 from salt.modules.pip import freeze as pip_freeze
 from salt.modules.pip import list_ as pip_list
+from salt.modules.pip import _get_pip_bin as __get_pip_bin
 
 # Import 3rd Party libs
 import salt.ext.six as six
@@ -40,12 +41,13 @@ import salt.ext.six as six
 pip_install = namespaced_function(pip_install, globals())  # pylint: disable=invalid-name
 pip_freeze = namespaced_function(pip_freeze, globals())  # pylint: disable=invalid-name
 pip_list = namespaced_function(pip_list, globals())  # pylint: disable=invalid-name
+__get_pip_bin = namespaced_function(__get_pip_bin, globals())
 
 # Let's namespace all other functions from the pip module
 for name in dir(salt.modules.pip):
     attr = getattr(salt.modules.pip, name)
     if isinstance(attr, types.FunctionType):
-        if attr in ('install', 'freeze', 'list', 'list_'):
+        if attr in ('install', 'freeze', 'list', 'list_', __get_pip_bin):
             continue
         #if attr in globals():
         #    continue
@@ -99,7 +101,8 @@ def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
         # not in / or c ignores the "root" directories as virtualenvs
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
-            raise CommandNotFoundError('Could not find a `pip` binary')
+            return _list_or_not(__get_pip_bin(bin_env))
+            #raise CommandNotFoundError('Could not find a `pip` binary')
         log.debug('bin_env was None, lookup for pip_bin_name(%s) is: %s', pip_bin_name, which_result)
         return _list_or_not(which_result)
 
@@ -126,8 +129,9 @@ def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
             return _list_or_not(bin_env)
     else:
         log.debug('Could not find a pip binary with bin_env(%s) and pip_bin_name(%s)!!!!', bin_env, pip_bin_name)
-        if raise_error:
-            raise CommandNotFoundError('Could not find a `pip` binary')
+        return _list_or_not(__get_pip_bin(bin_env))
+        #if raise_error:
+        #    raise CommandNotFoundError('Could not find a `pip` binary')
 
 
 # An alias to the old private function
@@ -205,7 +209,11 @@ def cache_pip_version(pip_binary, cwd=None):
     if contextkey in __context__:
         return __context__[contextkey]
 
-    cmd = [pip_binary, '--version']
+    if isinstance(pip_binary, list):
+        cmd = pip_binary
+    else:
+        cmd = [pip_binary]
+    cmd.append('--version')
     if cwd is None:
         if is_windows():
             cwd = os.path.dirname(pip_binary)

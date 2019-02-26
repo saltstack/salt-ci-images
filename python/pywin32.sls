@@ -2,9 +2,14 @@
 {%- set scripts_dir = salt_dir | path_join('bin', 'Scripts') %}
 {%- set site_packages = salt_dir | path_join('Lib', 'site-packages') %}
 
+include:
+  - python.pip
+
 pywin32:
   pip.installed:
     - name: pywin32==223
+    - require:
+      - pip-install
 
 {%- for fname in salt.file.find(site_packages | path_join('pywin32_system32'), name='*.dll') %}
 move-{{ fname.split('\\')[-1] }}:

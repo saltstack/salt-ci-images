@@ -1,16 +1,23 @@
-{%- if grains['os'] not in ('Windows',) %}
 include:
+  {%- if grains['os'] not in ('Windows',) %}
   - gcc
+  {%- else %}
+  - windows.compiler
+  {%- endif %}
   - python.pip
-{%- endif %}
 
 pycrypto:
   pip.installed:
     - name: pycrypto >= 2.6.1
-    {%- if grains['os'] not in ('Windows',) %}
+    {%- if grains['os'] == 'Windows' %}
+    - global_options: '--no-use-wheel'
+    {%- endif %}
     - require:
       - cmd: pip-install
+    {%- if grains['os'] != 'Windows' %}
       - pkg: gcc
+    {%- else %}
+      - vcpp-compiler
     {%- endif %}
 
 {%- if grains['os'] == 'Windows' %}
@@ -24,4 +31,6 @@ fix-pycrypto:
     - repl: 'from Crypto.Random.OSRNG import winrandom'
     - require:
       - pycrypto
+    - onchanges:
+      - pip: pycrypto
 {%- endif %}

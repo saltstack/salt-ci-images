@@ -109,7 +109,7 @@ include:
   {%- if grains['os'] == 'Windows' %}
   - python.pywin32
   - python.wmi
-  - python.pycrypto  {#- Install PyCrypto using salt states because we need to patch it #}
+  # - python.pycrypto  {#- Install PyCrypto using salt states because we need to patch it #}
   {%- endif %}
   - python.tox
   - python.nox

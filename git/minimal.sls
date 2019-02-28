@@ -113,6 +113,7 @@ include:
   {%- endif %}
   - python.tox
   - python.nox
+  - rsync
 
 
 {%- if pillar.get('create_testing_dir', True) %}

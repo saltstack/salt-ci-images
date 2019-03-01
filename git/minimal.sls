@@ -74,7 +74,9 @@ include:
   - python.xml
   - python.hgtools
   - python.setuptools-scm
+  {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
+  {%- endif %}
   - python.certifi
   {%- endif %}
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}

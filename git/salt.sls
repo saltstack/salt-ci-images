@@ -333,7 +333,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
       - pkg: lxc
       {%- endif %}
-      {%- if grains['os'].endswith('SUSE') %}
+      {%- if grains['os'].endswith('SUSE') and not grains['osrelease'].startswith('15') %}
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython

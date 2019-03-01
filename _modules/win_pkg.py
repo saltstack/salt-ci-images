@@ -56,10 +56,10 @@ def __virtual__():
 
 def install(name=None, refresh=False, pkgs=None, **kwargs):
     if pkgs and len(pkgs) == 1:
-        log.warning('PKGS: %s', pkgs)
         for pkg, version in six.iteritems(pkgs[0]):
-            log.debug('PKG: %s  //  Details: %s', pkg, version)
             name = pkg
+            if version is None:
+                continue
             kwargs_version = kwargs.get('version')
             if not kwargs_version or kwargs_version != version:
                 kwargs['version'] = version

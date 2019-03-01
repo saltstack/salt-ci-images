@@ -64,6 +64,7 @@ include:
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
+  - rsync
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap
     {%- endif %}
@@ -113,7 +114,6 @@ include:
   {%- endif %}
   - python.tox
   - python.nox
-  - rsync
 
 
 {%- if pillar.get('create_testing_dir', True) %}

@@ -31,7 +31,7 @@ python2:
     {%- else %}
     - aggregate: False
     - version: '2.7.1150'
-    - extra_install_flags: "TargetDir=C:\\Python27"
+    - extra_install_flags: "ADDLOCAL=DefaultFeature,SharedCRT,Extensions,pip_feature,PrependPath TargetDir=C:\\Python27"
     - require:
       - win-pkg-refresh
     {%- endif %}

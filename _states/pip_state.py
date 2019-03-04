@@ -19,6 +19,12 @@ try:
     from salt.utils.functools import namespaced_function
 except (ImportError, AttributeError):
     from salt.utils import namespaced_function
+try:
+    import salt.utils.kwargs.args
+    clean_kwargs = salt.utils.args.clean_kwargs
+except (ImportError, AttributeError):
+    import salt.utils
+    clean_kwargs = salt.utils.clean_kwargs
 
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
@@ -109,7 +115,7 @@ def installed(name, **kwargs):
         index_url=index_url,
         extra_index_url=extra_index_url,
         bin_env=bin_env)
-    kwargs = salt.utils.clean_kwargs(**kwargs)
+    kwargs = clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
 
 def mod_aggregate(low, chunks, running):

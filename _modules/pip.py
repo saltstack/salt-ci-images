@@ -49,8 +49,6 @@ for name in dir(salt.modules.pip):
     if isinstance(attr, types.FunctionType):
         if attr in ('install', 'freeze', 'list', 'list_', __get_pip_bin):
             continue
-        #if attr in globals():
-        #    continue
         globals()[name] = namespaced_function(attr, globals())
 
 
@@ -77,7 +75,7 @@ def _list_or_not(ret):
     return ret
 
 
-def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
+def get_pip_bin(bin_env, pip_bin_name=None):
     '''
     Locate the pip binary, either from `bin_env` as a virtualenv, as the
     executable itself, or from searching conventional filesystem locations
@@ -102,7 +100,6 @@ def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
         which_result = __salt__['cmd.which_bin']([pip_bin_name])
         if which_result is None:
             return _list_or_not(__get_pip_bin(bin_env))
-            #raise CommandNotFoundError('Could not find a `pip` binary')
         log.debug('bin_env was None, lookup for pip_bin_name(%s) is: %s', pip_bin_name, which_result)
         return _list_or_not(which_result)
 
@@ -130,8 +127,6 @@ def get_pip_bin(bin_env, pip_bin_name=None, raise_error=True):
     else:
         log.debug('Could not find a pip binary with bin_env(%s) and pip_bin_name(%s)!!!!', bin_env, pip_bin_name)
         return _list_or_not(__get_pip_bin(bin_env))
-        #if raise_error:
-        #    raise CommandNotFoundError('Could not find a `pip` binary')
 
 
 # An alias to the old private function

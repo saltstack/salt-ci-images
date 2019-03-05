@@ -1,8 +1,3 @@
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-    - order: 1
-
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -236,6 +231,7 @@ include:
   - ulimits
   {%- endif %}
 
+{%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:
     - name: {{ testing_dir }}
@@ -246,6 +242,7 @@ testing-dir:
         Users:
           perms: full_control
   {%- endif %}
+{%- endif %}
 
 {%- if pillar.get('clone_repo', True) %}
 clone-salt-repo:
@@ -361,7 +358,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
       - pkg: lxc
       {%- endif %}
-      {%- if grains['os'].endswith('SUSE') %}
+      {%- if grains['os'].endswith('SUSE') and not grains['osrelease'].startswith('15') %}
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython

@@ -11,7 +11,7 @@
 {%- else %}
   {%- set python3 = 'python3' %}
 {%- endif %}
-{%- if os_family != 'Windows' %}
+
 {%- if os_family == 'MacOS' %}
 python3:
   file.managed:
@@ -28,9 +28,21 @@ install_certs:
     - name: /Applications/Python\ 3.6/Install\ Certificates.command
 {%- else %}
 
+  {%- if grains['os'] == 'Windows' %}
+include:
+  - windows.repo
+  {%- endif %}
+
 python3:
   pkg.installed:
     - name: {{ python3 }}
+    {%- if grains['os'] != 'Windows' %}
     - aggregate: True
-{%- endif %}
+    {%- else %}
+    - aggregate: False
+    - version: '3.5.2150.0'
+    - extra_install_flags: "TargetDir=C:\\Python35 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
+    - require:
+      - win-pkg-refresh
+    {%- endif %}
 {%- endif %}

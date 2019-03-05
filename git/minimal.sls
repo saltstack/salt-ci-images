@@ -112,11 +112,6 @@ include:
   {%- if not on_docker %}
   - sssd
   {%- endif %}
-  {%- if grains['os'] == 'Windows' %}
-  - python.pywin32
-  - python.wmi
-  # - python.pycrypto  {#- Install PyCrypto using salt states because we need to patch it #}
-  {%- endif %}
   - python.tox
   - python.nox
   - cron

@@ -1,8 +1,8 @@
 include:
   - python.pip
 
-tox:
+wmi:
   pip.installed:
-    - name: tox
+    - name: WMI==1.4.9
     - require:
-      - cmd: pip-install
+      - pip-install

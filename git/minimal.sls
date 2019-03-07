@@ -1,8 +1,3 @@
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-    - order: 1
-
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
@@ -15,14 +10,26 @@ force-sync-all:
   {%- set testing_dir = '/testing' %}
 {%- endif %}
 
-{%- if os_family == 'Windows' %}
-stop-minion:
-  service.dead:
-    - name: salt-minion
-    - enable: False
+{%- if os_family == 'Arch' %}
+  {%- set on_arch = True %}
+{%- else %}
+  {%- set on_arch = False %}
+{%- endif %}
+
+{%- if pillar.get('py3', False) %}
+  {%- set python = 'python3' %}
+{%- else %}
+  {%- if on_arch %}
+    {%- set python = 'python2' %}
+  {%- else %}
+    {%- set python = 'python' %}
+  {%- endif %}
 {%- endif %}
 
 include:
+  {%- if grains['os'] == 'Windows' %}
+  - windows
+  {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
   - ulimits
@@ -58,16 +65,19 @@ include:
   - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
   {%- endif %}
   - dnsutils
-  {%- if pillar.get('extra-swap', True) %}
+  - rsync
+    {%- if pillar.get('extra-swap', True) %}
   - extra-swap
-  {%- endif %}
+    {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   - python.hgtools
   - python.setuptools-scm
+  {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
+  {%- endif %}
   - python.certifi
   - susepkgs
   {%- endif %}
@@ -105,6 +115,8 @@ include:
   - python.nox
   - cron
 
+
+{%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:
     - name: {{ testing_dir }}
@@ -115,6 +127,7 @@ testing-dir:
         Users:
           perms: full_control
   {%- endif %}
+{%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}
 {%- if grains['os'] == 'MacOS' %}
@@ -132,3 +145,7 @@ pin_npm:
     - name: 'brew pin node'
     - runas: jenkins
 {%- endif %}
+
+{#- Make sure there's at least one state entry in the state file #}
+noop-{{ sls }}:
+  test.succeed_without_changes

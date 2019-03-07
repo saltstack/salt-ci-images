@@ -15,7 +15,7 @@ import logging
 import pkg_resources
 
 # Import salt libs
-from salt.utils.functools import namespaced_function
+import salt.utils.functools
 import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
@@ -50,7 +50,7 @@ if HAS_PIP is True:
 log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
-pip_state_installed = namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
+pip_state_installed = salt.utils.functools.namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
 # Let's namespace all other functions from the pip_state module
 for name in dir(salt.states.pip_state):
     attr = getattr(salt.states.pip_state, name)
@@ -59,7 +59,7 @@ for name in dir(salt.states.pip_state):
             continue
         if attr in globals():
             continue
-        globals()[name] = namespaced_function(attr, globals())
+        globals()[name] = salt.utils.functools.namespaced_function(attr, globals())
 
 salt.states.pip_state.HAS_PIP = HAS_PIP
 try:
@@ -85,6 +85,12 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
+    virtualenv_path = __salt__['config.get']('virtualenv_path', None)
+    log.debug(
+        'Searching for pip binary using bin_env(%s) or virtualenv_path(%s)',
+        kwargs.get('bin_env'),
+        virtualenv_path
+    )
     bin_env = __salt__['pip.get_pip_bin'](
         kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
     )

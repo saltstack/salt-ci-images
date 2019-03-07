@@ -1,8 +1,3 @@
-force-sync-all:
-  module.run:
-    - name: saltutil.sync_all
-    - order: 1
-
 {%- set default_test_git_url = 'https://github.com/saltstack/salt.git' %}
 {%- set test_git_url = pillar.get('test_git_url', default_test_git_url) %}
 {%- set test_transport = pillar.get('test_transport', 'zeromq') %}
@@ -16,13 +11,6 @@ force-sync-all:
   {%- set testing_dir = 'C:\\testing' %}
 {%- else %}
   {%- set testing_dir = '/testing' %}
-{%- endif %}
-
-{%- if os_family == 'Windows' %}
-stop-minion:
-  service.dead:
-    - name: salt-minion
-    - enable: False
 {%- endif %}
 
 {%- if os_family == 'Arch' %}
@@ -42,6 +30,9 @@ stop-minion:
 {%- endif %}
 
 include:
+  {%- if grains['os'] == 'Windows' %}
+  - windows
+  {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
   {%- endif %}
@@ -73,16 +64,19 @@ include:
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
-  {%- if pillar.get('extra-swap', True) %}
+  - rsync
+    {%- if pillar.get('extra-swap', True) %}
   - extra-swap
-  {%- endif %}
+    {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
   - python.hgtools
   - python.setuptools-scm
+  {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
+  {%- endif %}
   - python.certifi
   {%- endif %}
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
@@ -118,6 +112,8 @@ include:
   - python.tox
   - python.nox
 
+
+{%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:
     - name: {{ testing_dir }}
@@ -128,6 +124,7 @@ testing-dir:
         Users:
           perms: full_control
   {%- endif %}
+{%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}
 {%- if grains['os'] == 'MacOS' %}
@@ -145,3 +142,7 @@ pin_npm:
     - name: 'brew pin node'
     - runas: jenkins
 {%- endif %}
+
+{#- Make sure there's at least one state entry in the state file #}
+noop-{{ sls }}:
+  test.succeed_without_changes

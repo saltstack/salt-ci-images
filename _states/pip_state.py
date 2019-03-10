@@ -152,16 +152,20 @@ def mod_aggregate(low, chunks, running):
     return low
 
 
-def tornado(name, cwd, bin_env):
+def tornado(name, cwd=None, bin_env=None):
     ret = {
         'name': 'pip install tornado{version}'.format(version=name),
         'result': True,
         'changes': {},
     }
+    if cwd is None:
+         cwd = __salt__['config.get']('pip_cwd', None)
+    pip_bin = __salt__['pip.get_pip_bin'](
+        bin_env or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
 
-    pip_bin = __salt__['pip.get_pip_bin'](bin_env)
-    if isinstance(pip_bin, list):
-        pip_bin = pip_bin[0]
     ret['comment'] = __salt__['cmd.run'](
         cmd='{pip} install -U --upgrade-strategy only-if-needed tornado{version}'.format(
             pip=pip_bin,

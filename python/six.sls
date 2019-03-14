@@ -1,6 +1,3 @@
-{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
-{%- set os = salt['grains.get']('os', '') %}
-
 {%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip

@@ -9,10 +9,9 @@ include:
   {%- endif %}
 
 update-env-vars:
-  environ.setenv:
-    - name: PATH
-    - value: '{{ scripts_dir }};$Path'
-    - permanent: true
+  win_path.exists:
+    - name: '{{ scripts_dir }}'
+    - index: 0
     - order: 2
     - require:
     {%- if salt['config.get']('py3', False) %}

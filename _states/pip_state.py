@@ -95,7 +95,7 @@ def removed(name, **kwargs):
     kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
     kwargs.update(
         bin_env=bin_env)
-    kwargs = clean_kwargs(**kwargs)
+    kwargs = salt.utils.args. clean_kwargs(**kwargs)
     return pip_state_removed(name, **kwargs)
 
 def installed(name, **kwargs):

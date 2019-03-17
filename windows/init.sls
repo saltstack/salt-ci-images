@@ -7,7 +7,6 @@ include:
   {%- endif %}
   - windows.nsis
   - windows.dlls
-  - windows.envvars
   - windows.compiler
 
 stop-minion:

@@ -114,6 +114,11 @@ include:
   - python.nox
 
 
+minion-service-stopped:
+  service.dead:
+    - name: salt-minion
+    - enable: False
+
 {%- if pillar.get('create_testing_dir', True) %}
 testing-dir:
   file.directory:

@@ -12,7 +12,7 @@ openssl:
             'openssl':
               full_name: 'Openssl'
               installer: 'https://slproweb.com/download/Win64OpenSSL-1_0_2r.exe'
-              install_flags: '/silent /DIR=c:\\python27'
+              install_flags: '/silent'
               uninstaller: 'https://slproweb.com/download/Win64OpenSSL-1_0_2r.exe'
               uninstall_flags: ''
               msiexec: False

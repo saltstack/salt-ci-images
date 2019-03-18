@@ -107,10 +107,9 @@ include:
   - python.gitpython
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
-  {%- if test_transport in ('zeromq') %}
-  - python.pyzmq
-  - python.pycrypto
   {%- endif %}
+  {%- if test_transport in ('zeromq',) %}
+  - python.pyzmq
   {%- endif %}
   - python.boto
   - python.moto
@@ -118,7 +117,7 @@ include:
   - python.psutil
   - python.tornado
   - python.pyvmomi
-  - python.pycrypto
+  - crypto.pycryptodomex
   - python.setproctitle
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - python.cherrypy
@@ -301,7 +300,7 @@ clone-salt-repo:
       - pip: psutil
       - pip: tornado
       - pip: pyvmomi
-      - pip: pycrypto
+      - pip: pycryptodomex
       - pip: pyopenssl
       {%- if (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('12.')) or (grains['os'] == 'CentOS' and os_major_release == 5) %}
       - pip: jinja2

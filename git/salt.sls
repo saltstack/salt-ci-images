@@ -197,9 +197,7 @@ include:
   {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
-  {%- if grains['os'] == 'MacOS' %}
   - python.pyyaml
-  {%- endif %}
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}

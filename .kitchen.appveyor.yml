@@ -9,10 +9,14 @@ driver:
 
 provisioner:
   name: salt_solo
-  salt_version: 2017.7.4
+  salt_install: bootstrap
+  salt_version: latest
+  salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.ps1
+  sudo: true
+  require_chef: false
   init_environment: |
     Clear-Host
-    $AddedLocation ="c:\salt"
+    $AddedLocation ="c:\salt;c:\salt\bin\Scripts"
     $Reg = "Registry::HKLM\System\CurrentControlSet\Control\Session Manager\Environment"
     $OldPath = (Get-ItemProperty -Path "$Reg" -Name PATH).Path
     $NewPath= $OldPath + ';' + $AddedLocation
@@ -31,6 +35,10 @@ provisioner:
     - .travis.yml
   state_top:
     base:
+      "os:Windows":
+        - match: grain
+        - windows
+        - python.pip
       "*":
         - git.salt
 

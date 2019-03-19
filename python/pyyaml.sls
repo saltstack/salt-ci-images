@@ -13,7 +13,7 @@ PyYAML:
     - require:
       - cmd: pip-install
     {%- if on_windows %}
-      - pkg: vccp-compiler
+      - pkg: vcpp-compiler
     {%- else %}
       - pkg: gcc
     {%- endif %}

@@ -19,13 +19,6 @@
   {%- set testing_dir = '/testing' %}
 {%- endif %}
 
-{%- if os_family == 'Windows' %}
-stop-minion:
-  service.dead:
-    - name: salt-minion
-    - enable: False
-{%- endif %}
-
 {%- if os_family == 'Arch' %}
   {%- set on_arch = True %}
 {%- else %}
@@ -121,10 +114,9 @@ include:
   - python.pygit2
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
-  {%- if test_transport in ('zeromq') %}
-  - python.pyzmq
-  - python.pycrypto
   {%- endif %}
+  {%- if test_transport in ('zeromq',) %}
+  - python.pyzmq
   {%- endif %}
   - python.boto
   - python.moto
@@ -132,7 +124,7 @@ include:
   - python.psutil
   - python.tornado
   - python.pyvmomi
-  - python.pycrypto
+  - crypto.pycryptodomex
   - python.setproctitle
   {%- if grains['os'] not in ('Windows',) %}
   - python.clustershell
@@ -219,9 +211,7 @@ include:
   {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
-  {%- if grains['os'] == 'MacOS' %}
   - python.pyyaml
-  {%- endif %}
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
@@ -332,7 +322,7 @@ clone-salt-repo:
       - pip: psutil
       - pip: tornado
       - pip: pyvmomi
-      - pip: pycrypto
+      - pip: pycryptodomex
       - pip: pyopenssl
       {%- if grains['os'] not in ('Windows',) %}
       - pip: clustershell

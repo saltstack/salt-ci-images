@@ -20,9 +20,9 @@ env:
 bundler_args: --without windows
 script:
   # Setup for tests
-  - bundle exec kitchen create $SUITE -l warn -c 2
+  - travis_wait bundle exec kitchen create $SUITE -l warn -c 2
   # Provision containers
-  - bundle exec kitchen converge $SUITE
+  - travis_wait bundle exec kitchen converge $SUITE
 after_script:
   - bundle exec kitchen list $SUITE
   - bundle exec kitchen destroy $SUITE

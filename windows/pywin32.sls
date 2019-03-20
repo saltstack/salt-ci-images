@@ -3,6 +3,6 @@ include:
 
 pywin32:
   pip.installed:
-    - name: 'pywin32==223'
+    - name: 'pywin32==224'
     - require:
       - pip-install

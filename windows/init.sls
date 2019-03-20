@@ -1,3 +1,5 @@
+{%- set win_bootstrap = True %}
+
 include:
   - windows.repo
   {%- if salt['config.get']('py3', False) %}
@@ -5,9 +7,13 @@ include:
   {%- else %}
   - python27
   {%- endif %}
+  - windows.git
   - windows.nsis
-  - windows.dlls
   - windows.compiler
+  - windows.vcredist
+  - windows.openssl
+  - windows.pywin32
+  - windows.wmi
 
 stop-minion:
   service.dead:

@@ -46,8 +46,8 @@
 
 {%- if on_windows %}
   {#- TODO: Maybe run this by powershell `py.exe -3 -c "import sys; print(sys.executable)"` #}
-  {%- set python2 = 'c:\\Python27\\python.exe' %}
-  {%- set python3 = 'c:\\Python35\\python.exe' %}
+  {%- set python2 = 'c:\\\\Python27\\\\python.exe' %}
+  {%- set python3 = 'c:\\\\Python35\\\\python.exe' %}
 {%- else %}
   {%- if on_redhat_6 %}
     {%- set python2 = 'python2.7' %}
@@ -55,6 +55,19 @@
     {%- set python2 = 'python2' %}
   {%- endif %}
   {%- set python3 = 'python3' %}
+{%- endif %}
+
+
+{%- if (not on_redhat_6 and not on_ubuntu_14 and not on_windows) or (on_windows and pillar.get('py3', False)) %}
+  {%- set install_pip3 = True %}
+{%- else %}
+  {%- set install_pip3 = False %}
+{%- endif %}
+
+{%- if not on_windows or (on_windows and pillar.get('py3', False) == False) %}
+  {%- set install_pip2 = True %}
+{%- else %}
+  {%- set install_pip2 = False %}
 {%- endif %}
 
 include:
@@ -79,8 +92,10 @@ pip-install:
   cmd.run:
     - name: 'echo "Place holder for pip2 and pip3 installs"'
     - require:
+      {%- if install_pip2 %}
       - cmd: pip2-install
-      {%- if not on_redhat_6 and not on_ubuntu_14 %}
+      {%- endif %}
+      {%- if install_pip3 %}
       - cmd: pip3-install
       {%- endif %}
 
@@ -90,18 +105,19 @@ download-get-pip:
     - source: https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py
     - skip_verify: true
 
-{%- if (not on_redhat_6 and not on_ubuntu_14) or (on_windows and pillar.get('py3', False)) %}
+{%- if install_pip3 %}
 pip3-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
+    {%- if on_windows %}
+    - name: '{{ get_pip3 }} "pip<=9.0.1"'
+    {%- else %}
     - name: {{ get_pip3 }} 'pip<=9.0.1'
+    {%- endif %}
     - cwd: /
     - reload_modules: True
     - onlyif:
-      {%- if on_windows %}
-      - 'if (py.exe -3 -c "import sys; print(sys.executable)") { exit 0 } else { exit 1 }'
-      - 'if (get-command pip3) { exit 1 } else { exit 0 }'
-      {%- else %}
+      {%- if not on_windows %}
       - '[ "$(which {{ python3 }} 2>/dev/null)" != "" ]'
         {%- if os != 'Fedora' %}
       - '[ "$(which {{ pip3 }} 2>/dev/null)" = "" ]'
@@ -133,17 +149,19 @@ upgrade-installed-pip3:
       - cmd: pip3-install
 {%- endif %}
 
+{%- if install_pip2 %}
 pip2-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
+    {%- if on_windows %}
+    - name: '{{ get_pip2 }} "pip<=9.0.1"'
+    {%- else %}
     - name: {{ get_pip2 }} 'pip<=9.0.1'
+    {%- endif %}
     - cwd: /
     - reload_modules: True
     - onlyif:
-      {%- if on_windows %}
-      - 'if (py.exe -2 -c "import sys; print(sys.executable)") { exit 0 } else { exit 1 }'
-      - 'if (get-command pip2) { exit 1 } else { exit 0 }'
-      {%- else %}
+      {%- if not on_windows %}
       - '[ "$(which {{ python2 }} 2>/dev/null)" != "" ]'
         {%- if os != 'Fedora' %}
       - '[ "$(which {{ pip2 }} 2>/dev/null)" = "" ]'
@@ -171,3 +189,4 @@ upgrade-installed-pip2:
     {%- endif %}
     - require:
       - cmd: pip2-install
+{%- endif %}

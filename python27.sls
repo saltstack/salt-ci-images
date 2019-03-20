@@ -1,5 +1,9 @@
 {%- if grains['os'] == 'Windows' %}
-  {%- set python2 = 'python2_x86' %}
+  {%- if grains['cpuarch'].lower() == 'x86' %}
+    {%- set python2 = 'python2_x86' %}
+  {%- else %}
+    {%- set python2 = 'python2_x64' %}
+  {%- endif %}
 {%- elif grains['os'] == 'openSUSE' %}
   {%- set python2 = 'python' %}
 {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}

@@ -53,6 +53,7 @@ include:
   - python
   - python.pip
   - gcc
+  - libsodium
   {%- endif %}
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}
@@ -115,6 +116,11 @@ include:
   - python.nox
   - cron
 
+
+minion-service-stopped:
+  service.dead:
+    - name: salt-minion
+    - enable: False
 
 {%- if pillar.get('create_testing_dir', True) %}
 testing-dir:

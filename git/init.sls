@@ -15,29 +15,6 @@ force-sync-all:
     - order: 1
     - reload_modules: True
 
-{%- if grains['os_family'] == 'Windows' %}
-  {%- if not git_binary %}
-include:
-  - windows.repo
-
-git-exists-in-path:
-  win_path.exists:
-    - name: 'C:\Program Files\Git\cmd'
-
-git:
-  pkg.installed:
-    - name: git
-    - refresh_modules: True
-    - require:
-      - git-exists-in-path
-      - win-pkg-refresh
-  {%- else %}
-git:
-  test.show_notification:
-    - text: "Git is already installed"
-  {%- endif %}
-{%- endif %}
-
 {%- if grains['os_family'] != 'Windows' %}
   {%- if grains['os_family'] == 'RedHat' %}
 include:

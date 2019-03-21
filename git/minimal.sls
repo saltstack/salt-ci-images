@@ -55,8 +55,8 @@ include:
   - python
   - python.pip
   - gcc
-  - libsodium
   {%- endif %}
+  - libsodium
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}
   - git

@@ -47,7 +47,7 @@
   {%- set force_reinstall = '' %}
 {%- endif %}
 
-{%- if os_family == 'Fedora' and os_major_release == 28 %}
+{%- if os == 'Fedora' and os_major_release == 28 %}
   {%- set on_fedora_28 = True %}
 {%- else %}
   {%- set on_fedora_28 = False %}

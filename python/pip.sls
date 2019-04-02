@@ -115,10 +115,10 @@ pip-update-path:
      - update_minion: True
 {%- endif %}
 
-{%- if install_pip %}
 pip-install:
   cmd.run:
     - name: 'echo "Place holder for pip2 and pip3 installs"'
+{%- if install_pip %}
     - require:
       {%- if install_pip2 %}
       - cmd: pip2-install
@@ -126,7 +126,9 @@ pip-install:
       {%- if install_pip3 %}
       - cmd: pip3-install
       {%- endif %}
+{%- endif %}
 
+{%- if install_pip %}
 download-get-pip:
   file.managed:
     - name: {{ get_pip_path }}

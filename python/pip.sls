@@ -55,6 +55,7 @@
 
 {%- set pip2 = 'pip2' %}
 {%- set pip3 = 'pip3' %}
+{%- set install_pip = True %}
 
 {%- if on_windows %}
   {#- TODO: Maybe run this by powershell `py.exe -3 -c "import sys; print(sys.executable)"` #}
@@ -85,6 +86,7 @@
 {%- if on_fedora_28 %}
   {%- set install_pip2 = False %}
   {%- set install_pip3 = False %}
+  {%- set install_pip = False %}
 {%- endif %}
 
 include:
@@ -113,6 +115,7 @@ pip-update-path:
      - update_minion: True
 {%- endif %}
 
+{%- if install_pip %}
 pip-install:
   cmd.run:
     - name: 'echo "Place holder for pip2 and pip3 installs"'
@@ -129,6 +132,7 @@ download-get-pip:
     - name: {{ get_pip_path }}
     - source: https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py
     - skip_verify: true
+{%- endif %}
 
 {%- if install_pip3 %}
 pip3-install:

@@ -47,6 +47,12 @@
   {%- set force_reinstall = '' %}
 {%- endif %}
 
+{%- if os_family == 'Fedora' and os_major_release == 28 %}
+  {%- set on_fedora_28 = True %}
+{%- else %}
+  {%- set on_fedora_28 = False %}
+{%- endif %}
+
 {%- set pip2 = 'pip2' %}
 {%- set pip3 = 'pip3' %}
 
@@ -74,6 +80,11 @@
   {%- set install_pip2 = True %}
 {%- else %}
   {%- set install_pip2 = False %}
+{%- endif %}
+
+{%- if on_fedora_28 %}
+  {%- set install_pip2 = False %}
+  {%- set install_pip3 = False %}
 {%- endif %}
 
 include:

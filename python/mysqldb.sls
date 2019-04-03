@@ -7,10 +7,12 @@
     {%- set mysqldb = 'MySQL-python' %}
   {%- endif %}
 {%- elif grains['os_family'] == 'Suse' %}
-  {%- set mysqldb = 'python2-PyMySQL' %}
-  {%- if pillar.get('py3', False) %}
-      {%- set mysqldb = 'python3-PyMySQL' %}
-  {%- endif %}
+  {%- if grains['osmajorrelease'] == '15' %}
+      {%- set mysqldb = 'python2-PyMySQL' %}
+      {%- if pillar.get('py3', False) %}
+          {%- set mysqldb = 'python3-PyMySQL' %}
+      {%- endif %}
+  {% endif %}
 {%- elif grains['os_family'] == 'FreeBSD' %}
   {%- set mysqldb = 'py27-MySQLdb' %}
 {%- else %}

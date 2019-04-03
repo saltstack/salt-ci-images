@@ -13,7 +13,7 @@
       {%- if pillar.get('py3', False) %}
           {%- set mysqldb = 'python3-PyMySQL' %}
       {%- endif %}
-  {% endif %}
+  {%- endif %}
 {%- elif grains['os_family'] == 'FreeBSD' %}
   {%- set mysqldb = 'py27-MySQLdb' %}
 {%- else %}

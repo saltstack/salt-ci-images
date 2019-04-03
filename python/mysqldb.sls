@@ -7,6 +7,7 @@
     {%- set mysqldb = 'MySQL-python' %}
   {%- endif %}
 {%- elif grains['os_family'] == 'Suse' %}
+  {%- set mysqldb = 'python-MySQL-python' %}
   {%- if grains['osmajorrelease'] == '15' %}
       {%- set mysqldb = 'python2-PyMySQL' %}
       {%- if pillar.get('py3', False) %}

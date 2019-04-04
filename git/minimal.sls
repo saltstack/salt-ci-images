@@ -66,6 +66,7 @@ include:
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
   - rsync
+  - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap
     {%- endif %}

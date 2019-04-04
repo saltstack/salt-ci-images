@@ -11,6 +11,12 @@
   {%- set on_redhat_6 = False %}
 {%- endif %}
 
+{%- if os_family == 'RedHat' and os_major_release == 7 %}
+  {%- set on_redhat_7 = True %}
+{%- else %}
+  {%- set on_redhat_7 = False %}
+{%- endif %}
+
 {%- if os_family == 'Debian' and distro == 'wheezy' %}
   {%- set on_debian_7 = True %}
 {%- else %}
@@ -67,7 +73,11 @@
   {%- else %}
     {%- set python2 = 'python2' %}
   {%- endif %}
-  {%- set python3 = 'python3' %}
+  {%- if on_redhat_7 %}
+    {%- set python3 = 'python3.4' %}
+  {%- else %}
+    {%- set python3 = 'python3' %}
+  {%- endif %}
 {%- endif %}
 
 

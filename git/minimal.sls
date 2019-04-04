@@ -99,8 +99,11 @@ include:
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {%- endif %}
-  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  {%- if grains['os'] != 'Windows' %}
+    {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
+    {#- These distributions don't ship the develop headers separately #}
   - openssl-dev
+    {%- endif %}
   {%- endif %}
   {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx

@@ -36,13 +36,6 @@ provisioner:
     - Gemfile.lock
     - README.rst
     - .travis.yml
-  state_top:
-    base:
-      "os:Windows":
-        - match: grain
-        - windeps
-      "*":
-        - git.salt
 platforms:
   - name: fedora
     driver_config:
@@ -139,8 +132,15 @@ platforms:
       salt_bootstrap_options: ''
 <% end %>
 suites:
-  - name: py2
+  - name: py2-minimal
     provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.minimal
       pillars:
         top.sls:
           base:
@@ -151,14 +151,43 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
-          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
         windows.sls:
           virtualenv_path: 'c:\Python27\Scripts\pip.exe'
-  - name: py3
+  - name: py2-full
+    provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.salt
+      pillars:
+        top.sls:
+          base:
+            "os:Windows":
+              - match: grain
+              - windows
+            "*":
+              - jenkins
+        jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
+        windows.sls:
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
+  - name: py3-minimal
     excludes:
       - centos-6
       - ubuntu-1404
     provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.minimal
       pillars:
         top.sls:
           base:
@@ -169,7 +198,33 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
-          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
+          py3: true
+        windows.sls:
+          virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'
+  - name: py3-full
+    excludes:
+      - centos-6
+      - ubuntu-1404
+    provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.salt
+      pillars:
+        top.sls:
+          base:
+            "os:Windows":
+              - match: grain
+              - windows
+            "*":
+              - jenkins
+        jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
           py3: true
         windows.sls:
           virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'

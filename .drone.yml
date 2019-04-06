@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: build-centos-7
+name: py2-minimal-centos-6
 
 platform:
   os: linux
@@ -10,14 +10,356 @@ steps:
 - name: build
   image: saltstack/drone-plugin-kitchen
   settings:
-    target: centos-7
+    target: py2-minimal-centos-6
   privileged: true
-  when:
-    event:
-    - pull_request
+
+---
+kind: pipeline
+name: py2-full-centos-6
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-centos-6
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-centos-7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-centos-7
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-centos-7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-centos-7
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-debian-8
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-debian-8
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-debian-8
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-debian-8
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-debian-9
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-debian-9
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-debian-9
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-debian-9
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-ubuntu-14
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-14
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-ubuntu-14
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-14
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-ubuntu-16
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-16
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-ubuntu-16
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-16
+  privileged: true
+
+---
+kind: pipeline
+name: py2-minimal-ubuntu-18
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-18
+  privileged: true
+
+---
+kind: pipeline
+name: py2-full-ubuntu-18
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-18
+  privileged: true
+
+---
+kind: pipeline
+name: py3-minimal-centos-7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-centos-7
+  privileged: true
+
+---
+kind: pipeline
+name: py3-full-centos-7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-centos-7
+  privileged: true
+
+---
+kind: pipeline
+name: py3-minimal-debian-8
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-debian-8
+  privileged: true
+
+---
+kind: pipeline
+name: py3-full-debian-8
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-debian-8
+  privileged: true
+
+---
+kind: pipeline
+name: py3-minimal-debian-9
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-debian-9
+  privileged: true
+
+---
+kind: pipeline
+name: py3-full-debian-9
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-debian-9
+  privileged: true
+
+---
+kind: pipeline
+name: py3-minimal-ubuntu-16
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-ubuntu-16
+  privileged: true
+
+---
+kind: pipeline
+name: py3-full-ubuntu-16
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-ubuntu-16
+  privileged: true
+
+---
+kind: pipeline
+name: py3-minimal-ubuntu-18
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-ubuntu-18
+  privileged: true
+
+---
+kind: pipeline
+name: py3-full-ubuntu-18
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-ubuntu-18
+  privileged: true
 
 ---
 kind: signature
-hmac: 2065d89588e9f4d0c612f88921f09b8260884dda35af76faced19a3197266a88
+hmac: 3956037934dc21f318b2261e447d3615b828676d3f14a9d6eeaafb15803d0102
 
 ...

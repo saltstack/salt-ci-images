@@ -1,365 +1,525 @@
 ---
 kind: pipeline
-name: py2-minimal-centos-6
+name: arch
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-arch
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-arch
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-arch
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-arch
+  privileged: true
+  depends_on:
+  - throttle-build
+
+---
+kind: pipeline
+name: centos-6
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py2-minimal-centos-6
   privileged: true
+  depends_on:
+  - throttle-build
 
----
-kind: pipeline
-name: py2-full-centos-6
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
+- name: py2-full
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py2-full-centos-6
   privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py2-minimal-centos-7
+name: centos-7
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py2-minimal-centos-7
   privileged: true
+  depends_on:
+  - throttle-build
 
----
-kind: pipeline
-name: py2-full-centos-7
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-centos-7
-  privileged: true
-
----
-kind: pipeline
-name: py2-minimal-debian-8
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-minimal-debian-8
-  privileged: true
-
----
-kind: pipeline
-name: py2-full-debian-8
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-debian-8
-  privileged: true
-
----
-kind: pipeline
-name: py2-minimal-debian-9
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-minimal-debian-9
-  privileged: true
-
----
-kind: pipeline
-name: py2-full-debian-9
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-debian-9
-  privileged: true
-
----
-kind: pipeline
-name: py2-minimal-ubuntu-14
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-minimal-ubuntu-14
-  privileged: true
-
----
-kind: pipeline
-name: py2-full-ubuntu-14
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-ubuntu-14
-  privileged: true
-
----
-kind: pipeline
-name: py2-minimal-ubuntu-16
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-minimal-ubuntu-16
-  privileged: true
-
----
-kind: pipeline
-name: py2-full-ubuntu-16
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-ubuntu-16
-  privileged: true
-
----
-kind: pipeline
-name: py2-minimal-ubuntu-18
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-minimal-ubuntu-18
-  privileged: true
-
----
-kind: pipeline
-name: py2-full-ubuntu-18
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: py2-full-ubuntu-18
-  privileged: true
-
----
-kind: pipeline
-name: py3-minimal-centos-7
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
+- name: py3-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-minimal-centos-7
   privileged: true
+  depends_on:
+  - throttle-build
 
----
-kind: pipeline
-name: py3-full-centos-7
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-centos-7
+  privileged: true
+  depends_on:
+  - throttle-build
 
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
+- name: py3-full
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-full-centos-7
   privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-minimal-debian-8
+name: debian-8
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-debian-8
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-minimal-debian-8
   privileged: true
+  depends_on:
+  - throttle-build
 
----
-kind: pipeline
-name: py3-full-debian-8
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-debian-8
+  privileged: true
+  depends_on:
+  - throttle-build
 
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
+- name: py3-full
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-full-debian-8
   privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-minimal-debian-9
+name: debian-9
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-debian-9
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-minimal-debian-9
   privileged: true
+  depends_on:
+  - throttle-build
 
----
-kind: pipeline
-name: py3-full-debian-9
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-debian-9
+  privileged: true
+  depends_on:
+  - throttle-build
 
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: build
+- name: py3-full
   image: saltstack/drone-plugin-kitchen
   settings:
     target: py3-full-debian-9
   privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-minimal-ubuntu-16
+name: fedora-28
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
-    target: py3-minimal-ubuntu-16
+    target: py2-minimal-fedora-28
   privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-fedora-28
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-fedora-28
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-fedora-28
+  privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-full-ubuntu-16
+name: fedora-29
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
-    target: py3-full-ubuntu-16
+    target: py2-minimal-fedora-29
   privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-fedora-29
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-fedora-29
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-fedora-29
+  privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-minimal-ubuntu-18
+name: opensuse-15
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
-    target: py3-minimal-ubuntu-18
+    target: py2-minimal-opensuse-15
   privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-opensuse-15
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-opensuse-15
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-opensuse-15
+  privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: pipeline
-name: py3-full-ubuntu-18
+name: opensuse-42
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
   image: saltstack/drone-plugin-kitchen
   settings:
-    target: py3-full-ubuntu-18
+    target: py2-minimal-opensuse-42
   privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-opensuse-42
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-opensuse-42
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-opensuse-42
+  privileged: true
+  depends_on:
+  - throttle-build
+
+---
+kind: pipeline
+name: ubuntu-1404
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-1404
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-1404
+  privileged: true
+  depends_on:
+  - throttle-build
+
+---
+kind: pipeline
+name: ubuntu-1604
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-1604
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-ubuntu-1604
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-1604
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-ubuntu-1604
+  privileged: true
+  depends_on:
+  - throttle-build
+
+---
+kind: pipeline
+name: ubuntu-1804
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+
+- name: py2-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-minimal-ubuntu-1804
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-minimal
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-minimal-ubuntu-1804
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py2-full-ubuntu-1804
+  privileged: true
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: py3-full-ubuntu-1804
+  privileged: true
+  depends_on:
+  - throttle-build
 
 ---
 kind: signature
-hmac: 8c5c58d54280562186ef8bc4c31cfc861e512c80f96486d234211e12ad7ed747
+hmac: 0f88d46b7abc3de7b5808c3214e69dbe5eb03ff2e6ce5f0b113afe989c4bbed4
 
 ...

@@ -37,9 +37,15 @@ provisioner:
     - README.rst
     - .travis.yml
 platforms:
-  - name: fedora
+  - name: fedora-28
     driver_config:
-      image: fedora:latest
+      image: fedora:28
+      run_command: /usr/lib/systemd/systemd
+    provisioner:
+      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
+  - name: fedora-29
+    driver_config:
+      image: fedora:29
       run_command: /usr/lib/systemd/systemd
     provisioner:
       salt_bootstrap_options: -X git v<%= @version %> >/dev/null
@@ -85,7 +91,15 @@ platforms:
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
       salt_bootstrap_options: -X git v<%= @version %> >/dev/null
-  - name: opensuse
+  - name: opensuse-15
+    driver_config:
+      run_command: /usr/lib/systemd/systemd
+      provision_command:
+        - systemctl enable sshd.service
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
+    provisioner:
+      salt_bootstrap_options: -X -y -x python2 git v<%= @version %> >/dev/null
+  - name: opensuse-42.3
     driver_config:
       run_command: /usr/lib/systemd/systemd
       provision_command:

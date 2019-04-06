@@ -18,7 +18,7 @@ provisioner:
   name: salt_solo
   salt_install: bootstrap
   salt_version: latest
-  salt_bootstrap_url: https://bootstrap.saltstack.com
+  salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
   salt_bootstrap_options: -X stable <%= @version %>
   log_level: info
   is_file_root: true

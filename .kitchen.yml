@@ -93,6 +93,7 @@ platforms:
       salt_bootstrap_options: -X git v<%= @version %> >/dev/null
   - name: opensuse-15
     driver_config:
+      image: opensuse/leap:15.0
       run_command: /usr/lib/systemd/systemd
       provision_command:
         - systemctl enable sshd.service
@@ -101,6 +102,7 @@ platforms:
       salt_bootstrap_options: -X -y -x python2 git v<%= @version %> >/dev/null
   - name: opensuse-42.3
     driver_config:
+      image: opensuse/leap:42.3
       run_command: /usr/lib/systemd/systemd
       provision_command:
         - systemctl enable sshd.service

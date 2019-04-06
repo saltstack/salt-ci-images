@@ -19,7 +19,7 @@ provisioner:
   salt_install: bootstrap
   salt_version: latest
   salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
-  salt_bootstrap_options: -X stable <%= @version %>
+  salt_bootstrap_options: -qXU stable <%= @version %>
   log_level: info
   is_file_root: true
   require_chef: false
@@ -37,41 +37,24 @@ provisioner:
     - README.rst
     - .travis.yml
 platforms:
-  - name: fedora-28
+  - name: arch
     driver_config:
-      image: fedora:28
+      image: archlinux/base
       run_command: /usr/lib/systemd/systemd
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
-  - name: fedora-29
-    driver_config:
-      image: fedora:29
-      run_command: /usr/lib/systemd/systemd
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
-  - name: centos-7
-    driver_config:
-      run_command: /usr/lib/systemd/systemd
+      provision_command:
+        - pacman -Syu --noconfirm --needed systemd grep awk procps which
+        - systemctl enable sshd
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
   - name: centos-6
     driver_config:
       run_command: /sbin/init
       provision_command:
         - yum install -y upstart
     provisioner:
-      salt_bootstrap_options: -P -y -x python2.7 -X git v<%= @version %> >/dev/null
-      salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
-  - name: ubuntu-18.04
+      salt_bootstrap_options: -qXU -P -y -x python2.7 stable <%= @version %>
+  - name: centos-7
     driver_config:
-      run_command: /lib/systemd/systemd
-  - name: ubuntu-16.04
-    driver_config:
-      run_command: /lib/systemd/systemd
-  - name: ubuntu-14.04
-    driver_config:
-      run_command: /sbin/init
-      provision_command:
-        - rm -f /sbin/initctl
-        - dpkg-divert --local --rename --remove /sbin/initctl
+      run_command: /usr/lib/systemd/systemd
   - name: debian-8
     driver_config:
       run_command: /lib/systemd/systemd
@@ -81,16 +64,14 @@ platforms:
   - name: debian-9
     driver_config:
       run_command: /lib/systemd/systemd
-  - name: arch
+  - name: fedora-28
     driver_config:
-      image: archlinux/base
+      image: fedora:28
       run_command: /usr/lib/systemd/systemd
-      provision_command:
-        - pacman -Syu --noconfirm --needed systemd grep awk procps which
-        - systemctl enable sshd
-        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
+  - name: fedora-29
+    driver_config:
+      image: fedora:29
+      run_command: /usr/lib/systemd/systemd
   - name: opensuse-15
     driver_config:
       image: opensuse/leap:15.0
@@ -99,7 +80,7 @@ platforms:
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X -y -x python2 git v<%= @version %> >/dev/null
+      salt_bootstrap_options: -qXU -x python2 stable v<%= @version %>
   - name: opensuse-42.3
     driver_config:
       image: opensuse/leap:42.3
@@ -107,8 +88,18 @@ platforms:
       provision_command:
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
+  - name: ubuntu-14.04
+    driver_config:
+      run_command: /sbin/init
+      provision_command:
+        - rm -f /sbin/initctl
+        - dpkg-divert --local --rename --remove /sbin/initctl
+  - name: ubuntu-16.04
+    driver_config:
+      run_command: /lib/systemd/systemd
+  - name: ubuntu-18.04
+    driver_config:
+      run_command: /lib/systemd/systemd
 <% if @vagrant != false %>
   - name: windows-2012r2
     driver:

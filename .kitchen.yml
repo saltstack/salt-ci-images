@@ -19,7 +19,7 @@ provisioner:
   salt_install: bootstrap
   salt_version: latest
   salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
-  salt_bootstrap_options: -qXU stable <%= @version %>
+  salt_bootstrap_options: -qXU git v<%= @version %>
   log_level: info
   is_file_root: true
   require_chef: false
@@ -51,7 +51,7 @@ platforms:
       provision_command:
         - yum install -y upstart
     provisioner:
-      salt_bootstrap_options: -qXU -P -y -x python2.7 stable <%= @version %>
+      salt_bootstrap_options: -qXU -P -y -x python2.7 git v<%= @version %>
   - name: centos-7
     driver_config:
       run_command: /usr/lib/systemd/systemd
@@ -80,7 +80,7 @@ platforms:
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -qXU -x python2 stable v<%= @version %>
+      salt_bootstrap_options: -qXU -x python2 git v<%= @version %>
   - name: opensuse-42.3
     driver_config:
       image: opensuse/leap:42.3

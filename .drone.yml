@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: arch
+name: Arch
 
 platform:
   os: linux
@@ -10,7 +10,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 0 seconds; sleep 0'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -46,7 +46,7 @@ steps:
 
 ---
 kind: pipeline
-name: centos-6
+name: CentOS 6
 
 platform:
   os: linux
@@ -56,7 +56,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -76,7 +76,7 @@ steps:
 
 ---
 kind: pipeline
-name: centos-7
+name: CentOS 7
 
 platform:
   os: linux
@@ -86,7 +86,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -122,7 +122,7 @@ steps:
 
 ---
 kind: pipeline
-name: debian-8
+name: Debian 8
 
 platform:
   os: linux
@@ -132,7 +132,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 50 seconds; sleep 50'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -168,7 +168,7 @@ steps:
 
 ---
 kind: pipeline
-name: debian-9
+name: Debian 9
 
 platform:
   os: linux
@@ -178,7 +178,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -214,7 +214,7 @@ steps:
 
 ---
 kind: pipeline
-name: fedora-28
+name: Fedora 28
 
 platform:
   os: linux
@@ -224,7 +224,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 70 seconds; sleep 70'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -260,7 +260,7 @@ steps:
 
 ---
 kind: pipeline
-name: fedora-29
+name: Fedora 29
 
 platform:
   os: linux
@@ -270,7 +270,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 80 seconds; sleep 80'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -306,7 +306,7 @@ steps:
 
 ---
 kind: pipeline
-name: opensuse-15
+name: Opensuse 15.0
 
 platform:
   os: linux
@@ -316,7 +316,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 90 seconds; sleep 90'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -352,7 +352,7 @@ steps:
 
 ---
 kind: pipeline
-name: opensuse-42
+name: Opensuse 42.3
 
 platform:
   os: linux
@@ -362,7 +362,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 100 seconds; sleep 100'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -398,7 +398,7 @@ steps:
 
 ---
 kind: pipeline
-name: ubuntu-1404
+name: Ubuntu 14.04
 
 platform:
   os: linux
@@ -408,7 +408,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 55 seconds; sleep 55'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -428,7 +428,7 @@ steps:
 
 ---
 kind: pipeline
-name: ubuntu-1604
+name: Ubuntu 16.04
 
 platform:
   os: linux
@@ -438,7 +438,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 120 seconds; sleep 120'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -474,7 +474,7 @@ steps:
 
 ---
 kind: pipeline
-name: ubuntu-1804
+name: Ubuntu 18.04
 
 platform:
   os: linux
@@ -484,7 +484,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 't=$(shuf -i 10-60 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 130 seconds; sleep 130'"
 
 - name: py2-minimal
   image: saltstack/drone-plugin-kitchen
@@ -520,6 +520,6 @@ steps:
 
 ---
 kind: signature
-hmac: f8c2d638b3dc671891cc09705e080f3e6357b3267a5ffb62d5fd5c90a7e141c8
+hmac: 6c76791f5581bb3636698ee2943517e5e3f0b649cace086687c4fc517ba98617
 
 ...

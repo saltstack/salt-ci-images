@@ -55,8 +55,8 @@ include:
   - python
   - python.pip
   - gcc
-  - libsodium
   {%- endif %}
+  - libsodium
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}
   - git
@@ -66,6 +66,7 @@ include:
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
   - rsync
+  - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap
     {%- endif %}
@@ -98,8 +99,11 @@ include:
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {%- endif %}
-  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  {%- if grains['os'] != 'Windows' %}
+    {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
+    {#- These distributions don't ship the develop headers separately #}
   - openssl-dev
+    {%- endif %}
   {%- endif %}
   {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx

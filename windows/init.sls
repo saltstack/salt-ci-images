@@ -12,8 +12,10 @@ include:
   - windows.compiler
   - windows.vcredist
   - windows.openssl
+  {%- if not pillar.get('packer_golden_images_build', False) %}
   - windows.pywin32
   - windows.wmi
+  {%- endif %}
 
 stop-minion:
   service.dead:

@@ -1,7 +1,7 @@
 local distros = [
   { name: 'Arch', slug: 'arch', multiplier: 0 },
-  //{ name: 'Amazon 1', slug: 'amazon-1', multiplier: 1 },
-  //{ name: 'Amazon 2', slug: 'amazon-2', multiplier: 2 },
+  { name: 'Amazon 1', slug: 'amazon-1', multiplier: 1 },
+  { name: 'Amazon 2', slug: 'amazon-2', multiplier: 2 },
   { name: 'CentOS 6', slug: 'centos-6', multiplier: 3 },
   { name: 'CentOS 7', slug: 'centos-7', multiplier: 4 },
   { name: 'Debian 8', slug: 'debian-8', multiplier: 5 },
@@ -39,7 +39,7 @@ local Build(distro) = {
       commands: [
         std.format(
           "sh -c 'echo Sleeping %(offset)s seconds; sleep %(offset)s'",
-          { offset: 5 * std.length(py_vers) * distro.multiplier }
+          { offset: 10 * std.length(py_vers) * std.length(types) * distro.multiplier }
         ),
       ],
     },

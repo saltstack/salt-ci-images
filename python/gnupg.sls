@@ -1,7 +1,7 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 {%- if grains['os'] == 'Fedora' %}
 python-gnupg:
@@ -11,12 +11,10 @@ python-gnupg:
 gnupg:
   pip.installed:
     - name: python-gnupg
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       {%- if grains['os'] == 'Fedora' %}
       - pkg: python-gnupg
       {%- endif %}
       - cmd: pip-install
-{% endif %}
+{%- endif %}

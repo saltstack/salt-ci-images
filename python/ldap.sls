@@ -1,9 +1,9 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
   - python.headers
   - gcc
-{% endif %}
+{%- endif %}
 
 {%- load_yaml as map %}
 Debian:
@@ -27,13 +27,10 @@ Arch:
 python-ldap:
   pip.installed:
     - name: python-ldap
-    {%- if salt['config.get']('virtualenv_path', None)  %}
-    - bin_env: {{ salt['config.get']('virtualenv_path') }}
-    {%- endif %}
     {%- if pillar.get('py3', False) %}
     - pre_releases: True
     {%- endif %}
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
       - pkg: gcc
@@ -43,4 +40,4 @@ python-ldap:
       {%- endif %}
   pkg.installed:
     - pkgs: {{openldap.pkgs}}
-{% endif %}
+{%- endif %}

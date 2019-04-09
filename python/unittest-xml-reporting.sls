@@ -1,17 +1,12 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 unittest-xml-reporting:
   pip.installed:
-    - name: unittest-xml-reporting
-    {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease']|int <= 6 %}
-    - name: git+https://github.com/s0undt3ch/unittest-xml-reporting.git#egg=unittest-xml-reporting
-    {%- endif %}
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
+    - name: 'unittest-xml-reporting==2.2.1'
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

@@ -1,14 +1,12 @@
-{% if grains['os'] not in ('Windows',) %}
+{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{% endif %}
+{%- endif %}
 
 install_jsonschema:
   pip.installed:
-    - name: jsonschema
-    - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
-    - cwd: {{ salt['config.get']('pip_cwd', '') }}
-{% if grains['os'] not in ('Windows',) %}
+    - name: jsonschema==2.6.0
+{%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install
-{% endif %}
+{%- endif %}

@@ -11,18 +11,48 @@
 from __future__ import absolute_import
 import os
 import types
+import logging
 import pkg_resources
 
 # Import salt libs
-from salt.utils.functools import namespaced_function
+import salt.utils.functools
 import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
+from salt.states.pip_state import removed as pip_state_removed
+
+try:
+    import pip
+    HAS_PIP = True
+except ImportError:
+    HAS_PIP = False
+
+if HAS_PIP is True:
+    try:
+        from pip.req import InstallRequirement
+        _from_line = InstallRequirement.from_line
+    except ImportError:
+        # pip 10.0.0 move req module under pip._internal
+        try:
+            try:
+                from pip._internal.req import InstallRequirement
+                _from_line = InstallRequirement.from_line
+            except AttributeError:
+                from pip._internal.req.constructors import install_req_from_line as _from_line
+        except ImportError:
+            HAS_PIP = False
+
+    try:
+        from pip.exceptions import InstallationError
+    except ImportError:
+        InstallationError = ValueError
+
+log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
-pip_state_installed = namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
-
+pip_state_installed = salt.utils.functools.namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
+pip_state_removed = salt.utils.functools.namespaced_function(pip_state_removed, globals())  # pylint: disable=invalid-name
 # Let's namespace all other functions from the pip_state module
 for name in dir(salt.states.pip_state):
     attr = getattr(salt.states.pip_state, name)
@@ -31,7 +61,13 @@ for name in dir(salt.states.pip_state):
             continue
         if attr in globals():
             continue
-        globals()[name] = namespaced_function(attr, globals())
+        globals()[name] = salt.utils.functools.namespaced_function(attr, globals())
+
+salt.states.pip_state.HAS_PIP = HAS_PIP
+try:
+    salt.states.pip_state._from_line = _from_line
+except NameError:
+    pass
 
 
 __virtualname__ = 'pip'
@@ -43,6 +79,25 @@ def __virtual__():
     return False
 
 
+def removed(name, **kwargs):
+    virtualenv_path = __salt__['config.get']('virtualenv_path', None)
+    log.debug(
+        'Searching for pip binary using bin_env(%s) or virtualenv_path(%s)',
+        kwargs.get('bin_env'),
+        virtualenv_path
+    )
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
+    log.warning('pip binary found: %s', bin_env)
+    kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
+    kwargs.update(
+        bin_env=bin_env)
+    kwargs = salt.utils.args. clean_kwargs(**kwargs)
+    return pip_state_removed(name, **kwargs)
+
 def installed(name, **kwargs):
     index_url = kwargs.pop('index_url', None)
     if index_url is None:
@@ -51,9 +106,27 @@ def installed(name, **kwargs):
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'
 
+    virtualenv_path = __salt__['config.get']('virtualenv_path', None)
+    log.debug(
+        'Searching for pip binary using bin_env(%s) or virtualenv_path(%s)',
+        kwargs.get('bin_env'),
+        virtualenv_path
+    )
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
+    log.warning('pip binary found: %s', bin_env)
+
+    # Complementary set of cwd and target
+    kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
+    kwargs.setdefault('target', __salt__['config.get']('pip_target', None))
+
     kwargs.update(
         index_url=index_url,
-        extra_index_url=extra_index_url)
+        extra_index_url=extra_index_url,
+        bin_env=bin_env)
     kwargs = salt.utils.args.clean_kwargs(**kwargs)
     return pip_state_installed(name, **kwargs)
 
@@ -100,16 +173,20 @@ def mod_aggregate(low, chunks, running):
     return low
 
 
-def tornado(name, cwd, bin_env):
+def tornado(name, cwd=None, bin_env=None):
     ret = {
         'name': 'pip install tornado{version}'.format(version=name),
         'result': True,
         'changes': {},
     }
+    if cwd is None:
+         cwd = __salt__['config.get']('pip_cwd', None)
+    pip_bin = __salt__['pip.get_pip_bin'](
+        bin_env or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
 
-    pip_bin = __salt__['pip.get_pip_bin'](bin_env)
-    if isinstance(pip_bin, list):
-        pip_bin = pip_bin[0]
     ret['comment'] = __salt__['cmd.run'](
         cmd='{pip} install -U --upgrade-strategy only-if-needed tornado{version}'.format(
             pip=pip_bin,

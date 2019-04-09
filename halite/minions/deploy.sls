@@ -13,4 +13,4 @@ test-halite-minion-{{ settings.build_id }}-{{ num }}:
         master: {{ halite_master_ip }}
         grains: {{ settings | yaml }}
     - failhard: True
-{% endfor %}
+{%- endfor %}

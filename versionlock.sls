@@ -1,4 +1,4 @@
-{% if salt['grains.get']('os', '') == 'Fedora' %}
+{%- if salt['grains.get']('os', '') == 'Fedora' %}
 include:
   - update_dnf
 
@@ -11,4 +11,4 @@ versionlock:
     {%- endif %}
     - require:
       - cmd: update_dnf
-{% endif %}
+{%- endif %}

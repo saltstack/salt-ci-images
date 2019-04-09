@@ -12,6 +12,8 @@
   {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
     {%- if grains['osrelease'].startswith('5') %}
       {%- set python_dev = 'python26-devel' %}
+    {%- elif grains['osrelease'].startswith('6') %}
+      {%- set python_dev = 'python27-devel' %}
     {%- else %}
       {%- if pillar.get('py3', False) %}
         {%- set python_dev = 'python34-devel' %}
@@ -51,7 +53,7 @@ python-dev:
   pkg.installed:
     - name: {{ python_dev }}
     - aggregate: True
-    {%- if grains['os'] == 'CentOS' and grains['osrelease'].startswith('5') %}
+    {%- if grains['os'] == 'CentOS' and grains['osrelease'].startswith(('5', '6')) %}
     - fromrepo: saltstack
     {%- endif %}
 {%- endif %}

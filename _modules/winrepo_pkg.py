@@ -6,7 +6,6 @@ import os
 import logging
 import types
 import functools
-import salt.utils
 
 from salt.utils.functools import namespaced_function
 import salt.utils.platform
@@ -17,10 +16,10 @@ from salt.ext.six.moves.urllib.parse import urlparse as _urlparse
 
 PKG_DATA = {}
 NAMESPACE_FUNCS = [
-	'_get_repo_details',
-	'_get_msiexec',
-	'_get_latest_pkg_version',
-	'get_repo_data',
+    '_get_repo_details',
+    '_get_msiexec',
+    '_get_latest_pkg_version',
+    'get_repo_data',
 ]
 
 

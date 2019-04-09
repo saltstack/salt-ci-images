@@ -1,8 +1,11 @@
 {%- set distro = salt['grains.get']('oscodename', '')  %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
+{%- set symlink_set = False %}
 
 {%- if os_family == 'RedHat' and os_major_release == 7 %}
+  {%- set python3_path = '/bin/python3.4' %}
+  {%- set symlink_set = True %}
   {%- set python3 = 'python34' %}
 {%- elif os_family == 'Arch' %}
   {%- set python3 = 'python' %}
@@ -29,3 +32,10 @@ python3:
     - require:
       - win-pkg-refresh
     {%- endif %}
+
+{%- if symlink_set %}
+set_python3_symlink:
+  file.symlink:
+    - name: /bin/python3
+    - target: {{ python3_path }}
+{%- endif %}

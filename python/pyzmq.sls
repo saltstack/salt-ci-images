@@ -22,8 +22,10 @@ pyzmq:
     {%- else %}
     - name: pyzmq{{salt.pillar.get('pyzmq:version', '')}}
     {%- endif %}
+  {%- if grains['os_family'] not in ('Suse') %}
     - global_options:
       - fetch_libzmq
+  {% endif %}
     - install_options:
       - --zmq=bundled
     {%- if grains['os'] != 'Windows' %}

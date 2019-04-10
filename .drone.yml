@@ -65,6 +65,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -83,6 +84,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -140,6 +142,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 services:
 - name: docker
@@ -215,6 +218,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -233,6 +237,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -308,6 +313,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -326,6 +332,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -401,6 +408,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -419,6 +427,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -494,6 +503,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -512,6 +522,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -587,6 +598,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -605,6 +617,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -680,6 +693,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -698,6 +712,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -773,6 +788,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -791,6 +807,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -848,6 +865,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 services:
 - name: docker
@@ -923,6 +941,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -941,6 +960,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -1016,6 +1036,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py2-minimal
 
 - name: py3-full
   image: docker:edge-dind
@@ -1034,6 +1055,7 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
+  - py3-minimal
 
 services:
 - name: docker
@@ -1044,6 +1066,6 @@ services:
 
 ---
 kind: signature
-hmac: c2086cb8f1777bf7c7442222cf89033aa9c87ac24a10da9c9c8577f76f5ddf49
+hmac: 25f2078a8895208f112382f098f9d247c32c111f58ea4efa41e909c738e21419
 
 ...

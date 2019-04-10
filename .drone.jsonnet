@@ -25,9 +25,13 @@ local Build(distro) = {
   local py_vers = if std.count(py3_blacklist, distro.slug) > 0 then [{ k: 1, v: 'py2' }] else [{ k: 1, v: 'py2' }, { k: 2, v: 'py3' }],
   local types = [{ k: 3, v: 'minimal' }, { k: 4, v: 'full' }],
   local suites = [
-    { k: std.parseInt(std.format('%s', [pyver.k * type.k])), v: std.format('%s-%s', [pyver.v, type.v]) }
-    for type in types
+    {
+      k: std.parseInt(std.format('%s', [pyver.k * type.k])),
+      v: std.format('%s-%s', [pyver.v, type.v]),
+      d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else ['throttle-build'],
+    }
     for pyver in py_vers
+    for type in types
   ],
 
   steps: [
@@ -48,9 +52,7 @@ local Build(distro) = {
       environment: {
         DOCKER_HOST: 'tcp://docker:2375',
       },
-      depends_on: [
-        'throttle-build',
-      ],
+      depends_on: suite.d,
       commands: [
         'apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev',
         'gem install bundler',
@@ -59,7 +61,6 @@ local Build(distro) = {
         'sleep 15',  // sleep 5 # give docker enough time to start
         'docker ps -a',
         "echo 'Throttle build in order not to slam the host'",
-        "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'",
         std.format(
           "sh -c 'echo Sleeping %(offset)s seconds; sleep %(offset)s'",
           { offset: 5 * suite.k }

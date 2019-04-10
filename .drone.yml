@@ -1,0 +1,23 @@
+---
+kind: pipeline
+name: build-centos-7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: saltstack/drone-plugin-kitchen
+  settings:
+    target: centos-7
+  privileged: true
+  when:
+    event:
+    - pull_request
+
+---
+kind: signature
+hmac: 2065d89588e9f4d0c612f88921f09b8260884dda35af76faced19a3197266a88
+
+...

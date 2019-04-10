@@ -21,6 +21,9 @@ local py3_blacklist = [
 local Build(distro) = {
   kind: 'pipeline',
   name: distro.name,
+  node: {
+    project: 'open',
+  },
 
   local py_vers = if std.count(py3_blacklist, distro.slug) > 0 then [{ k: 1, v: 'py2' }] else [{ k: 1, v: 'py2' }, { k: 2, v: 'py3' }],
   local types = [{ k: 3, v: 'minimal' }, { k: 4, v: 'full' }],

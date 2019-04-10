@@ -30,6 +30,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 15.0
+  - Opensuse 42.3
 
 - name: py3-minimal
   image: docker:edge-dind
@@ -49,6 +51,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 15.0
+  - Opensuse 42.3
 
 - name: py2-full
   image: docker:edge-dind
@@ -68,6 +72,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 15.0
+  - Opensuse 42.3
 
 - name: py3-full
   image: docker:edge-dind
@@ -87,6 +93,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 15.0
+  - Opensuse 42.3
 
 services:
 - name: docker
@@ -127,6 +135,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - CentOS 7
 
 - name: py2-full
   image: docker:edge-dind
@@ -146,6 +155,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - CentOS 7
 
 services:
 - name: docker
@@ -283,6 +293,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Debian 9
 
 - name: py3-minimal
   image: docker:edge-dind
@@ -302,6 +313,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Debian 9
 
 - name: py2-full
   image: docker:edge-dind
@@ -321,6 +333,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Debian 9
 
 - name: py3-full
   image: docker:edge-dind
@@ -340,6 +353,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Debian 9
 
 services:
 - name: docker
@@ -477,6 +491,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Fedora 29
 
 - name: py3-minimal
   image: docker:edge-dind
@@ -496,6 +511,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Fedora 29
 
 - name: py2-full
   image: docker:edge-dind
@@ -515,6 +531,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Fedora 29
 
 - name: py3-full
   image: docker:edge-dind
@@ -534,6 +551,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Fedora 29
 
 services:
 - name: docker
@@ -671,6 +689,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 42.3
 
 - name: py3-minimal
   image: docker:edge-dind
@@ -690,6 +709,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 42.3
 
 - name: py2-full
   image: docker:edge-dind
@@ -709,6 +729,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 42.3
 
 - name: py3-full
   image: docker:edge-dind
@@ -728,6 +749,7 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Opensuse 42.3
 
 services:
 - name: docker
@@ -865,6 +887,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Ubuntu 16.04
+  - Ubuntu 18.04
 
 - name: py2-full
   image: docker:edge-dind
@@ -884,6 +908,8 @@ steps:
   privileged: true
   depends_on:
   - throttle-build
+  - Ubuntu 16.04
+  - Ubuntu 18.04
 
 services:
 - name: docker

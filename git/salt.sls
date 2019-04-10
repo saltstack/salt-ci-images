@@ -155,7 +155,6 @@ include:
   - python.mysqldb
   {%- endif %}
   - python.dns
-  - python.apt
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower

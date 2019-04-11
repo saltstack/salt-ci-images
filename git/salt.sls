@@ -159,7 +159,7 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
-  {%- if grains['os'].endswith('SUSE') %}
+  {%- if grains['os'].endswith('SUSE') and not grains['osrelease'].startswith('15') %}
   - python-zypp
   - susepkgs
   {%- endif %}
@@ -168,6 +168,7 @@ include:
   {%- endif %}
   - python.dns
   - python.croniter
+  - python.apt
   - cron
   {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm

@@ -2,6 +2,8 @@
 Salt Jenkins State Tree
 =======================
 
+|build|
+
 Salt states used to run Jenkins tests.
 
 The salt-jenkins state tree is used to configure and prepare the testing VMs used to run Salt's test suite on
@@ -99,4 +101,7 @@ each branch is merged into the directly newer branch::
 
 .. _jenkinsci.saltstack.com: https://jenkinsci.saltstack.com/
 .. _Salt project: https://github.com/saltstack/salt
-.. _Salt's Jenkins system: https://jenkinsci.saltstack.com/
+.. _Salt's Jenkins system: https://jenkins.saltstack.com/\
+.. |build|  image:: https://drone.saltstack.com/api/badges/saltstack/salt-jenkins/status.svg?ref=/refs/heads/2017.7
+    :target: https://drone.saltstack.com/saltstack/salt-bootstrap
+    :alt: Build status on Linux

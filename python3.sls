@@ -18,6 +18,12 @@
 {%- if grains['os'] == 'Windows' %}
 include:
   - windows.repo
+{%- elif os_family == 'Debian' %}
+include:
+  - python.apt
+  {%- if pillar.get('py3', False) and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
+  - python.distutils
+  {%- endif %}
 {%- endif %}
 
 python3:

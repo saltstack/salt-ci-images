@@ -2,6 +2,7 @@
 include:
   {%- if pillar.get('py3', False) %}
   - python3
+  - python.apt
   {%- else %}
   - python27
   {%- endif %}

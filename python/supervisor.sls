@@ -5,8 +5,8 @@ include:
 
 supervisor:
   pip2.installed:
-    - name: supervisor
-    {%- if grains['os'] != 'Windows' %}
+    - name: 'supervisor==3.3.5'
+  {%- if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install
-    {%- endif %}
+  {%- endif %}

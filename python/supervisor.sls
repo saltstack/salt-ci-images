@@ -3,15 +3,15 @@ include:
   - python.pip
 {%- endif %}
 
-{%- if grains['os'] == 'MacOS' %}
-  {%- set install_type = 'pkg.installed' %}
-{%- else %}
-  {%- set install_type = 'pip2.installed' %}
-{%- endif %}
 supervisor:
-  {{ install_type }}:
+  {%- if grains['os'] == 'MacOS' %}
+  pkg.installed:
     - name: supervisor
+  {%- else %}
+  pip2.installed:
+    - name: 'supervisor==3.3.5'
     {%- if grains['os'] != 'Windows' %}
     - require:
       - cmd: pip-install
     {%- endif %}
+  {%- endif %}

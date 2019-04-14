@@ -1,25 +1,24 @@
 ---
 <% @vagrant = system('which vagrant 2>&1 >/dev/null') %>
-<% @version = '2018.3.3' %>
+<% @version = '2018.3.4' %>
 driver:
   name: docker
   use_sudo: false
+  hostname: salt
   privileged: true
   username: root
-  volume:
-    - /var/run/docker.sock:/docker.sock
   cap_add:
     - sys_admin
   disable_upstart: false
-  provision_command:
-    - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
-sudo: false
+  use_internal_docker_network: false
+
 provisioner:
   name: salt_solo
+  sudo: false
   salt_install: bootstrap
   salt_version: latest
-  salt_bootstrap_url: https://bootstrap.saltstack.com
-  salt_bootstrap_options: -X stable <%= @version %>
+  salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
+  salt_bootstrap_options: -qXU git v<%= @version %>
   log_level: info
   is_file_root: true
   require_chef: false
@@ -36,43 +35,28 @@ provisioner:
     - Gemfile.lock
     - README.rst
     - .travis.yml
-  state_top:
-    base:
-      "os:Windows":
-        - match: grain
-        - windeps
-      "*":
-        - git.salt
+  init_environment: |
+    sh -c 't=$(shuf -i 1-15 -n 1); echo Sleeping $t seconds; sleep $t'
+
 platforms:
-  - name: fedora
+  - name: arch
     driver_config:
-      image: fedora:latest
+      image: archlinux/base
       run_command: /usr/lib/systemd/systemd
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
-  - name: centos-7
-    driver_config:
-      run_command: /usr/lib/systemd/systemd
+      provision_command:
+        - pacman -Syu --noconfirm --needed systemd grep awk procps which
+        - systemctl enable sshd
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
   - name: centos-6
     driver_config:
       run_command: /sbin/init
       provision_command:
         - yum install -y upstart
     provisioner:
-      salt_bootstrap_options: -P -y -x python2.7 -X git v<%= @version %> >/dev/null
-      salt_bootstrap_url: https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.sh
-  - name: ubuntu-18.04
+      salt_bootstrap_options: -qXU -P -y -x python2.7 git v<%= @version %>
+  - name: centos-7
     driver_config:
-      run_command: /lib/systemd/systemd
-  - name: ubuntu-16.04
-    driver_config:
-      run_command: /lib/systemd/systemd
-  - name: ubuntu-14.04
-    driver_config:
-      run_command: /sbin/init
-      provision_command:
-        - rm -f /sbin/initctl
-        - dpkg-divert --local --rename --remove /sbin/initctl
+      run_command: /usr/lib/systemd/systemd
   - name: debian-8
     driver_config:
       run_command: /lib/systemd/systemd
@@ -82,24 +66,44 @@ platforms:
   - name: debian-9
     driver_config:
       run_command: /lib/systemd/systemd
-  - name: arch
+  - name: fedora-28
     driver_config:
-      image: archlinux/base
+      image: fedora:28
+      run_command: /usr/lib/systemd/systemd
+  - name: fedora-29
+    driver_config:
+      image: fedora:29
+      run_command: /usr/lib/systemd/systemd
+  - name: opensuse-15
+    driver_config:
+      image: opensuse/leap:15.0
       run_command: /usr/lib/systemd/systemd
       provision_command:
-        - pacman -Syu --noconfirm --needed systemd grep awk procps which
-        - systemctl enable sshd
-        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
-    provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
-  - name: opensuse
-    driver_config:
-      run_command: /usr/lib/systemd/systemd
-      provision_command:
+        - zypper --non-interactive install --auto-agree-with-licenses dbus-1
         - systemctl enable sshd.service
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
     provisioner:
-      salt_bootstrap_options: -X git v<%= @version %> >/dev/null
+      salt_bootstrap_options: -qXU -x python2 git v<%= @version %>
+  - name: opensuse-42.3
+    driver_config:
+      image: opensuse/leap:42.3
+      run_command: /usr/lib/systemd/systemd
+      provision_command:
+        - zypper --non-interactive install --auto-agree-with-licenses dbus-1
+        - systemctl enable sshd.service
+        - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
+  - name: ubuntu-14.04
+    driver_config:
+      run_command: /sbin/init
+      provision_command:
+        - rm -f /sbin/initctl
+        - dpkg-divert --local --rename --remove /sbin/initctl
+  - name: ubuntu-16.04
+    driver_config:
+      run_command: /lib/systemd/systemd
+  - name: ubuntu-18.04
+    driver_config:
+      run_command: /lib/systemd/systemd
 <% if @vagrant != false %>
   - name: windows-2012r2
     driver:
@@ -139,8 +143,15 @@ platforms:
       salt_bootstrap_options: ''
 <% end %>
 suites:
-  - name: py2
+  - name: py2-minimal
     provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.minimal
       pillars:
         top.sls:
           base:
@@ -151,14 +162,43 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
-          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
         windows.sls:
           virtualenv_path: 'c:\Python27\Scripts\pip.exe'
-  - name: py3
+  - name: py2-full
+    provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.salt
+      pillars:
+        top.sls:
+          base:
+            "os:Windows":
+              - match: grain
+              - windows
+            "*":
+              - jenkins
+        jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
+        windows.sls:
+          virtualenv_path: 'c:\Python27\Scripts\pip.exe'
+  - name: py3-minimal
     excludes:
       - centos-6
       - ubuntu-1404
     provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.minimal
       pillars:
         top.sls:
           base:
@@ -169,7 +209,33 @@ suites:
               - jenkins
         jenkins.sls:
           test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
-          test_git_commit: <%= ENV['TRAVIS_BRANCH'] == 'master' ? 'develop' : ENV['TRAVIS_BRANCH'] %>
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
+          py3: true
+        windows.sls:
+          virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'
+  - name: py3-full
+    excludes:
+      - centos-6
+      - ubuntu-1404
+    provisioner:
+      state_top:
+        base:
+          "os:Windows":
+            - match: grain
+            - windows
+          "*":
+            - git.salt
+      pillars:
+        top.sls:
+          base:
+            "os:Windows":
+              - match: grain
+              - windows
+            "*":
+              - jenkins
+        jenkins.sls:
+          test_git_url: git://github.com/<%= ENV["GITHUB_USER"] || "saltstack" %>/salt.git
+          test_git_commit: <%= ENV['TRAVIS_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] %>
           py3: true
         windows.sls:
           virtualenv_path: 'c:\Program Files (x86)\Python35-32\Scripts\pip.exe'

@@ -11,6 +11,7 @@ docker:
     - aggregate: True
 {%- if on_docker == False %}
   service.running:
+    - enable: True
     - require:
       - file: /usr/bin/busybox
       - pkg: docker

@@ -112,6 +112,9 @@ include:
 {%- if on_debian_7 %}
   - python.headers
 {%- endif %}
+  {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
+  - python.distutils
+  {%- endif %}
   - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
 {%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
@@ -166,6 +169,9 @@ pip3-install:
       {%- endif %}
     - require:
       - download-get-pip
+    {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
+      - python3-distutils
+    {%- endif %}
     {%- if pillar.get('py3', False) %}
       - python3
     {%- else %}

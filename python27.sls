@@ -25,6 +25,9 @@
 {%- if grains['os'] == 'Windows' %}
 include:
   - windows.repo
+{%- elif grains['os_family'] == 'Debian' %}
+include:
+  - python.apt
 {%- endif %}
 
 python2:

@@ -1,23 +1,1085 @@
 ---
 kind: pipeline
-name: build-centos-7
+name: Arch
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
-  image: saltstack/drone-plugin-kitchen
-  settings:
-    target: centos-7
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 0 seconds; sleep 0'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-arch
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-arch
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-arch
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-arch
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
   privileged: true
-  when:
-    event:
-    - pull_request
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: CentOS 6
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 6 seconds; sleep 6'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-centos-6
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-centos-6
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: CentOS 7
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-centos-7
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-centos-7
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-centos-7
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-centos-7
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Debian 8
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 36 seconds; sleep 36'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-debian-8
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-debian-8
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-debian-8
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-debian-8
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Debian 9
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 48 seconds; sleep 48'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-debian-9
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-debian-9
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-debian-9
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-debian-9
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Fedora 28
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-fedora-28
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-fedora-28
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-fedora-28
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-fedora-28
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Fedora 29
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 72 seconds; sleep 72'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-fedora-29
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-fedora-29
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-fedora-29
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-fedora-29
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Opensuse 15.0
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-opensuse-15
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-opensuse-15
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-opensuse-15
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-opensuse-15
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Opensuse 42.3
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 48 seconds; sleep 48'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-opensuse-42
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-opensuse-42
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-opensuse-42
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-opensuse-42
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Ubuntu 14.04
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 18 seconds; sleep 18'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-ubuntu-1404
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-ubuntu-1404
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Ubuntu 16.04
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-ubuntu-1604
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-ubuntu-1604
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-ubuntu-1604
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-ubuntu-1604
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+---
+kind: pipeline
+name: Ubuntu 18.04
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 12 seconds; sleep 12'"
+
+- name: py2-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen test py2-minimal-ubuntu-1804
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-full-ubuntu-1804
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py2-minimal
+
+- name: py3-minimal
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
+  - bundle exec kitchen test py3-minimal-ubuntu-1804
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py3-full
+  image: docker:edge-dind
+  commands:
+  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
+  - gem install bundler
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 15
+  - docker ps -a
+  - "echo 'Throttle build in order not to slam the host'"
+  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
+  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
+  - bundle exec kitchen test py3-full-ubuntu-1804
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - py3-minimal
+
+services:
+- name: docker
+  image: docker:edge-dind
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
 
 ---
 kind: signature
-hmac: 2065d89588e9f4d0c612f88921f09b8260884dda35af76faced19a3197266a88
+hmac: 71478a83a30d167e82f4768390fca26d660185f553d94795498043dda0db0bb4
 
 ...

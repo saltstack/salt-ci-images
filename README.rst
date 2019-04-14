@@ -102,6 +102,6 @@ each branch is merged into the directly newer branch::
 .. _jenkinsci.saltstack.com: https://jenkinsci.saltstack.com/
 .. _Salt project: https://github.com/saltstack/salt
 .. _Salt's Jenkins system: https://jenkins.saltstack.com/\
-.. |build|  image:: https://drone.saltstack.com/api/badges/saltstack/salt-jenkins/status.svg?ref=/refs/heads/2019.2
+.. |build|  image:: https://drone.saltstack.com/api/badges/saltstack/salt-jenkins/status.svg?ref=/refs/heads/develop
     :target: https://drone.saltstack.com/saltstack/salt-jenkins
     :alt: Build status on Linux

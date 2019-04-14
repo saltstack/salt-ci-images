@@ -22,7 +22,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-arch
   environment:
@@ -40,7 +39,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-arch
   environment:
@@ -58,7 +56,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-arch
   environment:
@@ -76,7 +73,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-arch
   environment:
@@ -118,7 +114,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-centos-6
   environment:
@@ -136,7 +131,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-centos-6
   environment:
@@ -178,7 +172,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-centos-7
   environment:
@@ -196,7 +189,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-centos-7
   environment:
@@ -214,7 +206,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-centos-7
   environment:
@@ -232,7 +223,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-centos-7
   environment:
@@ -274,7 +264,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-debian-8
   environment:
@@ -292,7 +281,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-debian-8
   environment:
@@ -310,7 +298,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-debian-8
   environment:
@@ -328,7 +315,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-debian-8
   environment:
@@ -370,7 +356,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-debian-9
   environment:
@@ -388,7 +373,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-debian-9
   environment:
@@ -406,7 +390,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-debian-9
   environment:
@@ -424,7 +407,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-debian-9
   environment:
@@ -466,7 +448,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-fedora-28
   environment:
@@ -484,7 +465,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-fedora-28
   environment:
@@ -502,7 +482,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-fedora-28
   environment:
@@ -520,7 +499,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-fedora-28
   environment:
@@ -562,7 +540,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-fedora-29
   environment:
@@ -580,7 +557,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-fedora-29
   environment:
@@ -598,7 +574,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-fedora-29
   environment:
@@ -616,7 +591,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-fedora-29
   environment:
@@ -658,7 +632,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-opensuse-15
   environment:
@@ -676,7 +649,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-opensuse-15
   environment:
@@ -694,7 +666,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-opensuse-15
   environment:
@@ -712,7 +683,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-opensuse-15
   environment:
@@ -754,7 +724,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-opensuse-42
   environment:
@@ -772,7 +741,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-opensuse-42
   environment:
@@ -790,7 +758,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-opensuse-42
   environment:
@@ -808,7 +775,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-opensuse-42
   environment:
@@ -850,7 +816,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-ubuntu-1404
   environment:
@@ -868,7 +833,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-ubuntu-1404
   environment:
@@ -910,7 +874,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-ubuntu-1604
   environment:
@@ -928,7 +891,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-ubuntu-1604
   environment:
@@ -946,7 +908,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-ubuntu-1604
   environment:
@@ -964,7 +925,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-ubuntu-1604
   environment:
@@ -1006,7 +966,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
   - bundle exec kitchen test py2-minimal-ubuntu-1804
   environment:
@@ -1024,7 +983,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-ubuntu-1804
   environment:
@@ -1042,7 +1000,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-ubuntu-1804
   environment:
@@ -1060,7 +1017,6 @@ steps:
   - sleep 15
   - docker ps -a
   - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
   - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-ubuntu-1804
   environment:
@@ -1080,6 +1036,6 @@ node:
 
 ---
 kind: signature
-hmac: 71478a83a30d167e82f4768390fca26d660185f553d94795498043dda0db0bb4
+hmac: 3b2560bf9733a18f805f63d28acdfa6ce872868b0b217649b8f5d613eb232e53
 
 ...

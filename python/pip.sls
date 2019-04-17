@@ -124,7 +124,7 @@ include:
 pip-update-path:
    environ.setenv:
      - name: PATH
-     - value: '/opt/salt/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
+     - value: '/opt/salt/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
      - update_minion: True
 {%- endif %}
 

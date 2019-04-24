@@ -10,7 +10,7 @@
 {%- set git_binary = 'git' | which %}
 
 {%- set patch_site = False %}
-{%- if grains['os'].endswith('SUSE') and grains['osrelease'].startswith('15') %}
+{%- if grains['os'].endswith('SUSE') and grains['osrelease'].startswith('15') and pillar.get('py3', False) %}
   {%- set patch_site = True %}
 {%- endif %}
 

@@ -84,6 +84,11 @@ local Build(distro) = {
       ],
     },
   ],
+  trigger: {
+    event: [
+        'pull_request',
+    ],
+  },
 };
 
 [

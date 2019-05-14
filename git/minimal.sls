@@ -32,6 +32,7 @@
 include:
   {%- if grains['os'] == 'Windows' %}
   - windows
+  - vim
   {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man

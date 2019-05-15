@@ -44,7 +44,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -65,7 +64,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -123,7 +121,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 services:
 - name: docker
@@ -181,7 +178,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -202,7 +198,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -260,7 +255,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -281,7 +275,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -339,7 +332,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -360,7 +352,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -418,7 +409,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -439,7 +429,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -497,7 +486,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -518,7 +506,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -576,7 +563,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -597,7 +583,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -655,7 +640,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -676,7 +660,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -734,7 +717,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 services:
 - name: docker
@@ -792,7 +774,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -813,7 +794,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -871,7 +851,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py2-minimal
 
 - name: py3-minimal
   image: saltstack/drone-salt-jenkins-testing
@@ -892,7 +871,6 @@ steps:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - create
-  - py3-minimal
 
 services:
 - name: docker
@@ -906,6 +884,6 @@ node:
 
 ---
 kind: signature
-hmac: dc15f1d95e23098703dd684e0ed1307582b56f6fbcfe35054a201d1aaf1129bb
+hmac: bcad52f5ed140726376c022834a948ebf2915b5b621f52640083a8055c8b7793
 
 ...

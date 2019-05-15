@@ -31,8 +31,9 @@ local Build(distro) = {
     {
       k: std.parseInt(std.format('%s', [pyver.k * type.k])),
       v: std.format('%s-%s', [pyver.v, type.v]),
-      d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else [],
+      //d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else [],
       //d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else ['throttle-build'],
+      d: [],
     }
     for pyver in py_vers
     for type in types

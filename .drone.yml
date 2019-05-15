@@ -12,81 +12,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 0 seconds; sleep 0'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create arch
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-arch
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-arch
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-arch
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-arch
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -108,45 +89,42 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 6 seconds; sleep 6'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
-  - bundle exec kitchen test py2-minimal-centos-6
+  - bundle exec kitchen create centos-6
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
 
-- name: py2-full
-  image: docker:edge-dind
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-minimal-centos-6
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py2-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-full-centos-6
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -168,81 +146,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create centos-7
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-centos-7
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-centos-7
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-centos-7
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-centos-7
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -264,81 +223,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 36 seconds; sleep 36'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create debian-8
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-debian-8
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-debian-8
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-debian-8
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-debian-8
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -360,81 +300,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 48 seconds; sleep 48'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create debian-9
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-debian-9
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-debian-9
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-debian-9
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-debian-9
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -456,81 +377,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create fedora-28
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-fedora-28
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-fedora-28
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-fedora-28
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-fedora-28
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -552,81 +454,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 72 seconds; sleep 72'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create fedora-29
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-fedora-29
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-fedora-29
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-fedora-29
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-fedora-29
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -648,81 +531,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create opensuse-15
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-opensuse-15
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-opensuse-15
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-opensuse-15
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-opensuse-15
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -744,81 +608,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 48 seconds; sleep 48'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create opensuse-42
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-opensuse-42
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-opensuse-42
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-opensuse-42
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-opensuse-42
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -840,45 +685,42 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 18 seconds; sleep 18'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
-  - bundle exec kitchen test py2-minimal-ubuntu-1404
+  - bundle exec kitchen create ubuntu-1404
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
   - throttle-build
 
-- name: py2-full
-  image: docker:edge-dind
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
+  - bundle exec kitchen test py2-minimal-ubuntu-1404
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py2-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-full-ubuntu-1404
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -900,81 +742,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create ubuntu-1604
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-ubuntu-1604
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-ubuntu-1604
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-ubuntu-1604
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-ubuntu-1604
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -996,81 +819,62 @@ steps:
   commands:
   - "sh -c 'echo Sleeping 12 seconds; sleep 12'"
 
-- name: py2-minimal
-  image: docker:edge-dind
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - "echo 'Waiting for docker to start'"
-  - sleep 15
+  - sleep 10
   - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 15 seconds; sleep 15'"
+  - bundle exec kitchen create ubuntu-1804
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py2-minimal-ubuntu-1804
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py2-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 20 seconds; sleep 20'"
   - bundle exec kitchen test py2-full-ubuntu-1804
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py2-minimal
+  - create
 
 - name: py3-minimal
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 30 seconds; sleep 30'"
   - bundle exec kitchen test py3-minimal-ubuntu-1804
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - throttle-build
+  - create
 
 - name: py3-full
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   commands:
-  - apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev
-  - gem install bundler
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 15
-  - docker ps -a
-  - "echo 'Throttle build in order not to slam the host'"
-  - "sh -c 't=$(shuf -i 1-25 -n 1); echo Sleeping $t seconds; sleep $t'"
-  - "sh -c 'echo Sleeping 40 seconds; sleep 40'"
   - bundle exec kitchen test py3-full-ubuntu-1804
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
-  - py3-minimal
+  - create
 
 services:
 - name: docker
-  image: docker:edge-dind
+  image: saltstack/drone-salt-jenkins-testing
   command:
   - --storage-driver=overlay2
   privileged: true
@@ -1080,6 +884,6 @@ node:
 
 ---
 kind: signature
-hmac: 71478a83a30d167e82f4768390fca26d660185f553d94795498043dda0db0bb4
+hmac: bcad52f5ed140726376c022834a948ebf2915b5b621f52640083a8055c8b7793
 
 ...

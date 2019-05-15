@@ -29,6 +29,7 @@
 include:
   {%- if grains['os'] == 'Windows' %}
   - windows
+  - vim
   {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
@@ -62,8 +63,10 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
-  {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install python-ldap on CentOS 6 #}
-  - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
+  {%- if grains['os_family'] in ('Arch', 'Debian', 'Suse', 'RedHat') %}
+    {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install openldap on CentOS 6 #}
+  - openldap
+    {%- endif %}
   {%- endif %}
   - dnsutils
   - rsync

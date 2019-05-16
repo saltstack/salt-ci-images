@@ -155,7 +155,7 @@ include:
   - python.mysqldb
   {%- endif %}
   - python.dns
-  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Amazon', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}
@@ -193,7 +193,7 @@ include:
   - python.junos-eznc
   - python.jxmlease
   {%- endif %}
-  {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+  {%- if grains['os'] not in ('Amazon',) and os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
   - python.pyyaml
@@ -327,7 +327,7 @@ clone-salt-repo:
       - cmd: python-zypp
       {%- endif %}
       - pip: dnspython
-      {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+      {%- if (grains['os'] not in ['Amazon', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
       {%- if grains['os'] != 'Windows' %}
       - pkg: npm
       - npm: bower
@@ -354,7 +354,7 @@ clone-salt-repo:
       {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
       - pkg: openssl-dev-libs
       {%- endif %}
-      {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+      {%- if grains['os'] not in ('Amazon',) and os_family in ('Arch', 'RedHat', 'Debian') %}
       - pkg: nginx
       {%- endif %}
       {%- if os_family == 'Arch' %}

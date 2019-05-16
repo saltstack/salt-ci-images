@@ -3,6 +3,8 @@
 {%- elif grains['os_family'] == 'RedHat' %}
   {%- if grains['os'] == 'Fedora' %}
     {%- set mysqldb = 'python2-mysql' %}
+  {%- elif grains['os'] == 'Amazon' and grains['osmajorrelease'] == 2018 %}
+    {%- set mysqldb = 'MySQL-python27' %}
   {%- else %}
     {%- set mysqldb = 'MySQL-python' %}
   {%- endif %}

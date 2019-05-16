@@ -673,63 +673,6 @@ node:
 
 ---
 kind: pipeline
-name: Ubuntu 14.04
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: throttle-build
-  image: alpine
-  commands:
-  - "sh -c 'echo Sleeping 18 seconds; sleep 18'"
-
-- name: create
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 10
-  - docker ps -a
-  - bundle exec kitchen create ubuntu-1404
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - throttle-build
-
-- name: py2-minimal
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-minimal-ubuntu-1404
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-- name: py2-full
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-full-ubuntu-1404
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-services:
-- name: docker
-  image: saltstack/drone-salt-jenkins-testing
-  command:
-  - --storage-driver=overlay2
-  privileged: true
-
-node:
-  project: open
-
----
-kind: pipeline
 name: Ubuntu 16.04
 
 platform:
@@ -884,6 +827,6 @@ node:
 
 ---
 kind: signature
-hmac: bcad52f5ed140726376c022834a948ebf2915b5b621f52640083a8055c8b7793
+hmac: 93a2ca88e0e04f62b57d2747a6e26df7eb1aca86beda34a6615601eddca81abc
 
 ...

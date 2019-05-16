@@ -8,14 +8,12 @@ local distros = [
   { name: 'Fedora 29', slug: 'fedora-29', multiplier: 6 },
   { name: 'Opensuse 15.0', slug: 'opensuse-15', multiplier: 5 },
   { name: 'Opensuse 42.3', slug: 'opensuse-42', multiplier: 4 },
-  { name: 'Ubuntu 14.04', slug: 'ubuntu-1404', multiplier: 3 },
   { name: 'Ubuntu 16.04', slug: 'ubuntu-1604', multiplier: 2 },
   { name: 'Ubuntu 18.04', slug: 'ubuntu-1804', multiplier: 1 },
 ];
 
 local py3_blacklist = [
   'centos-6',
-  'ubuntu-1404',
 ];
 
 local Build(distro) = {
@@ -77,10 +75,6 @@ local Build(distro) = {
       depends_on: ['create'] + suite.d,
       commands: [
         'bundle install --with docker --without opennebula ec2 windows vagrant',
-        /* std.format(
-          "sh -c 'echo Sleeping %(offset)s seconds; sleep %(offset)s'",
-          { offset: 5 * suite.k }
-        ), */
         std.format('bundle exec kitchen test %s-%s', [suite.v, distro.slug]),
       ],
     }

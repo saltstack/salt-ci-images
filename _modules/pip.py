@@ -172,7 +172,13 @@ def list_(prefix=None,
           env_vars=None,
           **kwargs):
     log.debug('custom pip module // pip.list called // kwargs: %s', kwargs)
-    pip_binary = get_pip_bin(bin_env)
+    try:
+        pip_binary = get_pip_bin(bin_env)
+    except CommandNotFoundError:
+        # When upgrading pip on Amazon Linux 2, the used pip to install /usr/bin/pip get's
+        # upgraded to /usr/local/bin/pip which then triggers this CommandNotFoundError.
+        # Let's try and get the binary again, from scratch.
+        pip_binary = get_pip_bin(None)
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
     bin_env = pip_binary

@@ -4,8 +4,9 @@
   {%- set docker = 'docker' %}
 {%- endif %}
 
-{%- if grains['os'] != 'Windows' %}
 include:
+  - python.requests
+{%- if grains['os'] != 'Windows' %}
   - python.pip
 {%- endif %}
 
@@ -13,7 +14,8 @@ include:
 docker_py:
   pip.installed:
     - name: {{docker}}
-{%- if grains['os'] != 'Windows' %}
     - require:
+      - requests
+{%- if grains['os'] != 'Windows' %}
       - cmd: pip-install
 {%- endif %}

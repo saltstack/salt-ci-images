@@ -11,6 +11,8 @@ driver:
     - sys_admin
   disable_upstart: false
   use_internal_docker_network: false
+  init_environment: |
+    sh -c 't=$(shuf -i 1-15 -n 1); echo Sleeping $t seconds; sleep $t'
 
 provisioner:
   name: salt_solo
@@ -35,8 +37,6 @@ provisioner:
     - Gemfile.lock
     - README.rst
     - .travis.yml
-  init_environment: |
-    sh -c 't=$(shuf -i 1-15 -n 1); echo Sleeping $t seconds; sleep $t'
 
 platforms:
   - name: arch
@@ -47,6 +47,20 @@ platforms:
         - pacman -Syu --noconfirm --needed systemd grep awk procps which
         - systemctl enable sshd
         - echo 'L /run/docker.sock - - - - /docker.sock' > /etc/tmpfiles.d/docker.conf
+  - name: amazonlinux-1
+    driver_config:
+      image: amazonlinux:1
+      platform: rhel
+      username: kitchen
+      run_command: /sbin/init
+    provisioner:
+      sudo: true
+      salt_bootstrap_options: -qXU -P -y -x python2.7 git v<%= @version %>
+  - name: amazonlinux-2
+    driver_config:
+      image: amazonlinux:2
+      platform: rhel
+      run_command: /usr/lib/systemd/systemd
   - name: centos-6
     driver_config:
       run_command: /sbin/init

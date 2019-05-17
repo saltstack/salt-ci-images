@@ -29,6 +29,7 @@
 include:
   {%- if grains['os'] == 'Windows' %}
   - windows
+  - vim
   {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
@@ -63,8 +64,10 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
-  {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install python-ldap on CentOS 6 #}
-  - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
+  {%- if grains['os_family'] in ('Arch', 'Debian', 'Suse', 'RedHat') %}
+    {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install openldap on CentOS 6 #}
+  - openldap
+    {%- endif %}
   {%- endif %}
   - dnsutils
   - rsync
@@ -87,7 +90,7 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
-  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Amazon', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}
@@ -108,7 +111,7 @@ include:
   - openssl-dev
     {%- endif %}
   {%- endif %}
-  {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+  {%- if grains['os'] not in ('Amazon',) and os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
   {%- if os_family == 'Arch' %}

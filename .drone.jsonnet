@@ -1,21 +1,22 @@
 local distros = [
   { name: 'Arch', slug: 'arch', multiplier: 0 },
-  { name: 'CentOS 6', slug: 'centos-6', multiplier: 1 },
-  { name: 'CentOS 7', slug: 'centos-7', multiplier: 2 },
-  { name: 'Debian 8', slug: 'debian-8', multiplier: 3 },
-  { name: 'Debian 9', slug: 'debian-9', multiplier: 4 },
+  { name: 'Amazon Linux 1', slug: 'amazonlinux-1', multiplier: 1 },
+  { name: 'Amazon Linux 2', slug: 'amazonlinux-2', multiplier: 2 },
+  { name: 'CentOS 6', slug: 'centos-6', multiplier: 3 },
+  { name: 'CentOS 7', slug: 'centos-7', multiplier: 4 },
+  { name: 'Debian 8', slug: 'debian-8', multiplier: 5 },
+  { name: 'Debian 9', slug: 'debian-9', multiplier: 6 },
   { name: 'Fedora 28', slug: 'fedora-28', multiplier: 5 },
-  { name: 'Fedora 29', slug: 'fedora-29', multiplier: 6 },
-  { name: 'Opensuse 15.0', slug: 'opensuse-15', multiplier: 5 },
-  { name: 'Opensuse 42.3', slug: 'opensuse-42', multiplier: 4 },
-  { name: 'Ubuntu 14.04', slug: 'ubuntu-1404', multiplier: 3 },
-  { name: 'Ubuntu 16.04', slug: 'ubuntu-1604', multiplier: 2 },
-  { name: 'Ubuntu 18.04', slug: 'ubuntu-1804', multiplier: 1 },
+  { name: 'Fedora 29', slug: 'fedora-29', multiplier: 4 },
+  { name: 'Opensuse 15.0', slug: 'opensuse-15', multiplier: 3 },
+  { name: 'Opensuse 42.3', slug: 'opensuse-42', multiplier: 2 },
+  { name: 'Ubuntu 16.04', slug: 'ubuntu-1604', multiplier: 1 },
+  { name: 'Ubuntu 18.04', slug: 'ubuntu-1804', multiplier: 0 },
 ];
 
 local py3_blacklist = [
   'centos-6',
-  'ubuntu-1404',
+  'amazonlinux-1',
 ];
 
 local Build(distro) = {
@@ -31,7 +32,9 @@ local Build(distro) = {
     {
       k: std.parseInt(std.format('%s', [pyver.k * type.k])),
       v: std.format('%s-%s', [pyver.v, type.v]),
-      d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else ['throttle-build'],
+      //d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else [],
+      //d: if type.v == 'full' then [std.format('%s-minimal', [pyver.v])] else ['throttle-build'],
+      d: [],
     }
     for pyver in py_vers
     for type in types
@@ -48,35 +51,49 @@ local Build(distro) = {
         ),
       ],
     },
-  ] + [
     {
-      name: suite.v,
-      image: 'docker:edge-dind',
+      name: 'create',
+      image: 'saltstack/drone-salt-jenkins-testing',
       environment: {
         DOCKER_HOST: 'tcp://docker:2375',
       },
-      depends_on: suite.d,
+      depends_on: [
+        'throttle-build',
+      ],
       commands: [
-        'apk --update add wget python python-dev py-pip git ruby-bundler ruby-rdoc ruby-dev gcc ruby-dev make libc-dev openssl-dev libffi-dev',
-        'gem install bundler',
         'bundle install --with docker --without opennebula ec2 windows vagrant',
         "echo 'Waiting for docker to start'",
-        'sleep 15',  // sleep 5 # give docker enough time to start
+        'sleep 10',  // give docker enough time to start
         'docker ps -a',
-        "echo 'Throttle build in order not to slam the host'",
-        std.format(
-          "sh -c 'echo Sleeping %(offset)s seconds; sleep %(offset)s'",
-          { offset: 5 * suite.k }
-        ),
+        std.format('bundle exec kitchen create %s', [distro.slug]),
+      ],
+    },
+  ] + [
+    {
+      name: suite.v,
+      image: 'saltstack/drone-salt-jenkins-testing',
+      environment: {
+        DOCKER_HOST: 'tcp://docker:2375',
+      },
+      depends_on: ['create'] + suite.d,
+      commands: [
+        'bundle install --with docker --without opennebula ec2 windows vagrant',
         std.format('bundle exec kitchen test %s-%s', [suite.v, distro.slug]),
       ],
     }
     for suite in suites
   ],
+
+  trigger: {
+    event: [
+      'pull_request',
+    ],
+  },
+
   services: [
     {
       name: 'docker',
-      image: 'docker:edge-dind',
+      image: 'saltstack/drone-salt-jenkins-testing',
       privileged: true,
       environment: {},
       command: [

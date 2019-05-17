@@ -27,6 +27,8 @@ patch-site:
     - name: /usr/lib64/python3.6/site.py
     - source: salt://36-site.patch
     - hash: b2f15653ae898c005e39c45581d942e95c07d39451b1ef5ed57556ff0a038f34
+    - require:
+      - pkg: patch
 {%- endif %}
 
 force-sync-all:

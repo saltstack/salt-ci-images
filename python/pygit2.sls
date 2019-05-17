@@ -15,7 +15,7 @@
     {%- set pygit2_pkg = 'python-pygit2' %}
 {%- endif %}
 
-{%- if os_family in ('Arch', 'RedHat') or os == 'Ubuntu' and osmajorrelease >= 16 %}
+{%- if os != 'Amazon' and (os_family in ('Arch', 'RedHat') or os == 'Ubuntu' and osmajorrelease >= 16) %}
 install_pygit2:
   pkg.installed:
     - name: {{ pygit2_pkg  }}

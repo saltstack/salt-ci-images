@@ -3,7 +3,10 @@
     {%- if pillar.get('py3', False) %}
       {%- set python_dev = 'python3-devel' %}
     {%- else %}
-      {%- if salt.grains.get('osmajorrelease')|int >= 26 %}
+      {%- if grains['osrelease'].startswith('2018') %}
+        {#- Amazon Linux 1 #}
+        {%- set python_dev = 'python27-devel' %}
+      {%- elif salt.grains.get('osmajorrelease')|int >= 26 %}
         {%- set python_dev = 'python2-devel' %}
       {%- else %}
         {%- set python_dev = 'python-devel' %}

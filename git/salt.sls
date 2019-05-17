@@ -114,6 +114,8 @@ include:
   - python.pygit2
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
+  {%- endif %}
+  {%- if test_transport in ('zeromq',) %}
   - python.pyzmq
   {%- endif %}
   - python.boto

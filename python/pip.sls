@@ -11,6 +11,12 @@
   {%- set on_redhat_6 = False %}
 {%- endif %}
 
+{%- if os_family == 'RedHat' and os_major_release == 2018 %}
+  {%- set on_amazonlinux_1 = True %}
+{%- else %}
+  {%- set on_amazonlinux_1 = False %}
+{%- endif %}
+
 {%- if os_family == 'RedHat' and os_major_release == 7 %}
   {%- set on_redhat_7 = True %}
 {%- else %}
@@ -55,7 +61,7 @@
   {%- set python2 = 'c:\\\\Python27\\\\python.exe' %}
   {%- set python3 = 'c:\\\\Python35\\\\python.exe' %}
 {%- else %}
-  {%- if on_redhat_6 %}
+  {%- if on_redhat_6 or on_amazonlinux_1 %}
     {%- set python2 = 'python2.7' %}
   {%- else %}
     {%- set python2 = 'python2' %}

@@ -19,6 +19,9 @@
 
 {# patch for https://bugs.python.org/issue30167 #}
 {%- if patch_site %}
+include:
+  - patch
+
 patch-site:
   file.patch:
     - name: /usr/lib64/python3.6/site.py

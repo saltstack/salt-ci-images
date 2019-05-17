@@ -114,8 +114,6 @@ include:
   - python.pygit2
   {%- if not ( pillar.get('py3', False) and grains['os'] == 'Windows' ) %}
   - python.supervisor
-  {%- endif %}
-  {%- if test_transport in ('zeromq',) %}
   - python.pyzmq
   {%- endif %}
   - python.boto
@@ -126,6 +124,7 @@ include:
   - python.pyvmomi
   - crypto.pycryptodomex
   - python.setproctitle
+  - python.watchdog
   {%- if grains['os'] not in ('Windows',) %}
   - python.clustershell
   {%- endif %}
@@ -321,6 +320,7 @@ clone-salt-repo:
       - pip: pyvmomi
       - pip: pycryptodomex
       - pip: pyopenssl
+      - pip: watchdog
       {%- if grains['os'] not in ('Windows',) %}
       - pip: clustershell
       {%- endif %}

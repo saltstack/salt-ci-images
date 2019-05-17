@@ -75,6 +75,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: Amazon Linux 1
@@ -131,6 +135,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -209,6 +217,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: CentOS 6
@@ -265,6 +277,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -343,6 +359,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: Debian 8
@@ -419,6 +439,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -497,6 +521,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: Fedora 28
@@ -573,6 +601,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -651,6 +683,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: Opensuse 15.0
@@ -727,6 +763,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -805,6 +845,10 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: pipeline
 name: Ubuntu 16.04
@@ -881,6 +925,10 @@ services:
 
 node:
   project: open
+
+trigger:
+  event:
+  - pull_request
 
 ---
 kind: pipeline
@@ -959,8 +1007,12 @@ services:
 node:
   project: open
 
+trigger:
+  event:
+  - pull_request
+
 ---
 kind: signature
-hmac: 57cb4099bca72d453560eb71fd3b784fc718d74e381bd273ff1262140d4c151e
+hmac: b6c2dcb33b80fded0791c2100036051829ad4eae45a8dd6f0f4a689ecd2e33f6
 
 ...

@@ -83,6 +83,13 @@ local Build(distro) = {
     }
     for suite in suites
   ],
+
+  trigger: {
+    event: [
+      'pull_request',
+    ],
+  },
+
   services: [
     {
       name: 'docker',

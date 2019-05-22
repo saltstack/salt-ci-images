@@ -3,7 +3,7 @@
 {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 %}
   {%- set docker = 'docker<4.0.0' %}
 {%- else %}
-  {%- set docker = 'docker' %}
+  {%- set docker = 'docker==3.7.2' %}
 {%- endif %}
 
 include:

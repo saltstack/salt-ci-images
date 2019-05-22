@@ -1,7 +1,7 @@
 {%- if grains['os'] == 'Windows' %}
   {%- set docker = 'docker==2.7.0' %}
 {%- else %}
-  {%- set docker = 'docker' %}
+  {%- set docker = 'docker==3.7.2' %}
 {%- endif %}
 
 include:

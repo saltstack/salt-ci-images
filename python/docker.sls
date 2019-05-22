@@ -1,5 +1,7 @@
 {%- if grains['os'] == 'Windows' %}
   {%- set docker = 'docker==2.7.0' %}
+{%- elif grains['os'] == 'CentOS' and salt['grains.get']('osmajorrelease', 0) == 7 %}
+  {%- set docker = 'docker<4.0.0' %}
 {%- else %}
   {%- set docker = 'docker' %}
 {%- endif %}

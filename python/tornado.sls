@@ -9,7 +9,7 @@ include:
 {%- if on_py26 or debian8 %}
   {%- set version = '==4.4.3' %}
 {%- else %}
-  {%- set version = salt.pillar.get('tornado:version', '<5.0.0') %}
+  {%- set version = salt.pillar.get('tornado:version', '==5.1.1') %}
 {%- endif %}
 
 tornado:

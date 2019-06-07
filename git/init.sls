@@ -9,11 +9,37 @@
 {%- endif %}
 {%- set git_binary = 'git' | which %}
 
+{%- set patch_site = False %}
+{%- if grains['os'].endswith('SUSE') and grains['osrelease'].startswith('15') and pillar.get('py3', False) %}
+  {%- set site_path = '/usr/lib64/python3.6/site.py' %}
+  {%- if salt['file.file_exists'](site_path) %}
+      {%- set patch_site = True %}
+  {%- endif %}
+{%- endif %}
+
+{# patch for https://bugs.python.org/issue30167 #}
+{%- if patch_site %}
+include:
+  - patch
+
+patch-site:
+  file.patch:
+    - name: /usr/lib64/python3.6/site.py
+    - source: salt://36-site.patch
+    - hash: b2f15653ae898c005e39c45581d942e95c07d39451b1ef5ed57556ff0a038f34
+    - require:
+      - pkg: patch
+{%- endif %}
+
 force-sync-all:
   module.run:
     - name: saltutil.sync_all
     - order: 1
     - reload_modules: True
+{%- if patch_site %}
+    - require:
+      - file: patch-site
+{%- endif %}
 
 {%- if grains['os_family'] != 'Windows' %}
   {%- if grains['os_family'] == 'RedHat' %}

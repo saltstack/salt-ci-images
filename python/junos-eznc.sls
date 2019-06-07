@@ -8,6 +8,7 @@ include:
   {%- if include_paramiko %}
   - python.paramiko
   {%- endif %}
+  - python.ncclient
 
 {%- if grains['os'] in ['Ubuntu', 'Debian'] %}
 pyez dependencies:
@@ -41,3 +42,4 @@ junos-eznc:
       {%- if include_paramiko %}
       - pip: paramiko
       {%- endif %}
+      - pip: ncclient

@@ -29,6 +29,7 @@
 include:
   {%- if grains['os'] == 'Windows' %}
   - windows
+  - vim
   {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
@@ -55,6 +56,7 @@ include:
   - python.pip
   - gcc
   {%- endif %}
+  - libsodium
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
   {%- if grains['os'] not in ('MacOS',) %}
   - git
@@ -62,11 +64,14 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
-  {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install python-ldap on CentOS 6 #}
-  - python.ldap  {#- Installing python-ldap using pip since it needs system deps, let's do it all here for now #}
+  {%- if grains['os_family'] in ('Arch', 'Debian', 'Suse', 'RedHat') %}
+    {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install openldap on CentOS 6 #}
+  - openldap
+    {%- endif %}
   {%- endif %}
   - dnsutils
   - rsync
+  - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap
     {%- endif %}
@@ -85,7 +90,7 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
-  {%- if (grains['os'] not in ['Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Amazon', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}
@@ -100,10 +105,13 @@ include:
   {%- if grains['os'] in ('MacOS', 'Debian') %}
   - openssl
   {%- endif %}
-  {%- if grains['os'] == 'Debian' and grains['osrelease'].startswith('8') %}
+  {%- if grains['os'] != 'Windows' %}
+    {%- if grains['os_family'] not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS') %}
+    {#- These distributions don't ship the develop headers separately #}
   - openssl-dev
+    {%- endif %}
   {%- endif %}
-  {%- if os_family in ('Arch', 'RedHat', 'Debian') %}
+  {%- if grains['os'] not in ('Amazon',) and os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
   {%- if os_family == 'Arch' %}
@@ -116,6 +124,11 @@ include:
   - python.nox
   - cron
 
+
+minion-service-stopped:
+  service.dead:
+    - name: salt-minion
+    - enable: False
 
 {%- if pillar.get('create_testing_dir', True) %}
 testing-dir:

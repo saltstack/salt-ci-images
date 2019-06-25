@@ -3,11 +3,19 @@
 {%- elif grains['os_family'] == 'RedHat' %}
   {%- if grains['os'] == 'Fedora' %}
     {%- set mysqldb = 'python2-mysql' %}
+  {%- elif grains['os'] == 'Amazon' and grains['osmajorrelease'] == 2018 %}
+    {%- set mysqldb = 'MySQL-python27' %}
   {%- else %}
     {%- set mysqldb = 'MySQL-python' %}
   {%- endif %}
 {%- elif grains['os_family'] == 'Suse' %}
   {%- set mysqldb = 'python-MySQL-python' %}
+  {%- if grains['osmajorrelease'] == 15 %}
+      {%- set mysqldb = 'python2-PyMySQL' %}
+      {%- if pillar.get('py3', False) %}
+          {%- set mysqldb = 'python3-PyMySQL' %}
+      {%- endif %}
+  {%- endif %}
 {%- elif grains['os_family'] == 'FreeBSD' %}
   {%- set mysqldb = 'py27-MySQLdb' %}
 {%- else %}

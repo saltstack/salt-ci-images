@@ -3,3 +3,4 @@
 Gemfile.lock
 .bundle/
 .kitchen/
+*.sw[a-p]

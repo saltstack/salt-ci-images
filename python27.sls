@@ -1,9 +1,16 @@
 {%- if grains['os'] == 'Windows' %}
-  {%- set python2 = 'python2_x86' %}
+  {%- if grains['cpuarch'].lower() == 'x86' %}
+    {%- set python2 = 'python2_x86' %}
+  {%- else %}
+    {%- set python2 = 'python2_x64' %}
+  {%- endif %}
 {%- elif grains['os'] == 'openSUSE' %}
   {%- set python2 = 'python' %}
-{%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
+{%- elif grains['os'] in ('CentOS', 'RedHat', 'Amazon') %}
   {%- if grains['osrelease'].startswith('6') %}
+    {%- set python2 = 'python27' %}
+  {%- elif grains['osrelease'].startswith('2018') %}
+    {#- Amazon Linux 1 #}
     {%- set python2 = 'python27' %}
   {%- else %}
     {%- set python2 = 'python' %}
@@ -21,6 +28,9 @@
 {%- if grains['os'] == 'Windows' %}
 include:
   - windows.repo
+{%- elif grains['os_family'] == 'Debian' %}
+include:
+  - python.apt
 {%- endif %}
 
 python2:

@@ -74,6 +74,8 @@ def get_pip_bin(bin_env, pip_bin_name=None):
     executable itself, or from searching conventional filesystem locations
     '''
     log.debug('Calling get_pip_bin on custom pip moule. bin_env: %s, pip_bin_name: %s', bin_env, pip_bin_name)
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
     if pip_bin_name is None:
         # Always use pip3 if running with pillar="{py3: true}"
         # If running tests on CentOS 6, the Nitrogen and Develop branches run on Python2.7
@@ -163,14 +165,23 @@ def list_(prefix=None,
           env_vars=None,
           **kwargs):
     log.debug('custom pip module // pip.list called // kwargs: %s', kwargs)
-    pip_binary = get_pip_bin(bin_env)
+    try:
+        pip_binary = get_pip_bin(bin_env)
+    except CommandNotFoundError:
+        # When upgrading pip on Amazon Linux 2, the used pip to install /usr/bin/pip get's
+        # upgraded to /usr/local/bin/pip which then triggers this CommandNotFoundError.
+        # Let's try and get the binary again, from scratch.
+        pip_binary = get_pip_bin(None)
     if isinstance(pip_binary, list):
         pip_binary = pip_binary[0]
     bin_env = pip_binary
     if cwd is None:
         if salt.utils.platform.is_windows():
             # On windows, the cwd must the same directory as the pip executable
-            cwd = os.path.dirname(pip_binary)
+            if isinstance(pip_binary, list):
+                cwd = os.path.dirname(pip_binary[0])
+            else:
+                cwd = os.path.dirname(pip_binary)
         else:
             cwd = '/'
     cache_pip_version(pip_binary, cwd)

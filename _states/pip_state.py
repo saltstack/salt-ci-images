@@ -20,6 +20,7 @@ import salt.utils.args
 import salt.states.pip_state
 from salt.states.pip_state import *  # pylint: disable=wildcard-import,unused-wildcard-import
 from salt.states.pip_state import installed as pip_state_installed
+from salt.states.pip_state import removed as pip_state_removed
 
 try:
     import pip
@@ -51,6 +52,7 @@ log = logging.getLogger(__name__)
 
 # Let's namespace the pip_state_installed function
 pip_state_installed = salt.utils.functools.namespaced_function(pip_state_installed, globals())  # pylint: disable=invalid-name
+pip_state_removed = salt.utils.functools.namespaced_function(pip_state_removed, globals())  # pylint: disable=invalid-name
 # Let's namespace all other functions from the pip_state module
 for name in dir(salt.states.pip_state):
     attr = getattr(salt.states.pip_state, name)
@@ -76,6 +78,25 @@ def __virtual__():
         return __virtualname__
     return False
 
+
+def removed(name, **kwargs):
+    virtualenv_path = __salt__['config.get']('virtualenv_path', None)
+    log.debug(
+        'Searching for pip binary using bin_env(%s) or virtualenv_path(%s)',
+        kwargs.get('bin_env'),
+        virtualenv_path
+    )
+    bin_env = __salt__['pip.get_pip_bin'](
+        kwargs.get('bin_env') or __salt__['config.get']('virtualenv_path', None),
+    )
+    if isinstance(bin_env, list):
+        bin_env = bin_env[0]
+    log.warning('pip binary found: %s', bin_env)
+    kwargs.setdefault('cwd', __salt__['config.get']('pip_cwd', None))
+    kwargs.update(
+        bin_env=bin_env)
+    kwargs = salt.utils.args. clean_kwargs(**kwargs)
+    return pip_state_removed(name, **kwargs)
 
 def installed(name, **kwargs):
     index_url = kwargs.pop('index_url', None)
@@ -152,16 +173,20 @@ def mod_aggregate(low, chunks, running):
     return low
 
 
-def tornado(name, cwd, bin_env):
+def tornado(name, cwd=None, bin_env=None):
     ret = {
         'name': 'pip install tornado{version}'.format(version=name),
         'result': True,
         'changes': {},
     }
-
-    pip_bin = __salt__['pip.get_pip_bin'](bin_env)
+    if cwd is None:
+         cwd = __salt__['config.get']('pip_cwd', None)
+    pip_bin = __salt__['pip.get_pip_bin'](
+        bin_env or __salt__['config.get']('virtualenv_path', None),
+    )
     if isinstance(pip_bin, list):
         pip_bin = pip_bin[0]
+
     ret['comment'] = __salt__['cmd.run'](
         cmd='{pip} install -U --upgrade-strategy only-if-needed tornado{version}'.format(
             pip=pip_bin,

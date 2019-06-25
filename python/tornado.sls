@@ -20,7 +20,7 @@ tornado:
 {%- else %}
   pip.installed:
     - name: "tornado{{version}}"
-  {%- if grains['os_family'] in ('MacOS') %}
+  {%- if grains['os_family'] in ('MacOS',) %}
     - upgrade: True
   {%- endif %}
 {%- endif %}

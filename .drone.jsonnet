@@ -6,10 +6,9 @@ local distros = [
   { name: 'CentOS 7', slug: 'centos-7', multiplier: 4 },
   { name: 'Debian 8', slug: 'debian-8', multiplier: 5 },
   { name: 'Debian 9', slug: 'debian-9', multiplier: 6 },
-  { name: 'Fedora 28', slug: 'fedora-28', multiplier: 5 },
   { name: 'Fedora 29', slug: 'fedora-29', multiplier: 4 },
-  { name: 'Opensuse 15.0', slug: 'opensuse-15', multiplier: 3 },
-  { name: 'Opensuse 42.3', slug: 'opensuse-42', multiplier: 2 },
+  { name: 'Fedora 30', slug: 'fedora-30', multiplier: 3 },
+  { name: 'Opensuse 15.0', slug: 'opensuse-15', multiplier: 2 },
   { name: 'Ubuntu 16.04', slug: 'ubuntu-1604', multiplier: 1 },
   { name: 'Ubuntu 18.04', slug: 'ubuntu-1804', multiplier: 0 },
 ];

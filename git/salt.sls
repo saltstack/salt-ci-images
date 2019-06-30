@@ -189,12 +189,6 @@ include:
   - openssl-dev
   {%- endif %}
   - python.salttesting
-  {%- if grains['os'] != 'Ubuntu' or (grains['os'] == 'Ubuntu' and not grains['osrelease'].startswith('12.')) %}
-  - python.pytest
-  - python.pytest-tempdir
-  - python.pytest-helpers-namespace
-  - python.pytest-salt
-  {%- endif %}
   {%- if grains['os'] in ['CentOS', 'Debian', 'Fedora', 'FreeBSD', 'MacOS' , 'Ubuntu'] %}
   - python.junos-eznc
   - python.jxmlease
@@ -413,10 +407,6 @@ install-base-{{ req }}:
     - name: {{ req }}
 {%- endfor %}
 
-install-salt-pytest-pip-deps:
-  pip.installed:
-    - requirements: {{ testing_dir }}/requirements/pytest.txt
-    - onlyif: '[ -f {{ testing_dir }}/requirements/pytest.txt ]'
 {%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}

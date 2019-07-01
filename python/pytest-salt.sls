@@ -1,12 +1,14 @@
-{%- if grains['os'] not in ('Windows',) %}
 include:
+  - python.pytest
+  {%- if grains['os'] not in ('Windows',) %}
   - python.pip
-{%- endif %}
+  {%- endif %}
 
 pytest-salt:
   pip.installed:
     - name: pytest-salt
-{%- if grains['os'] not in ('Windows',) %}
     - require:
+      - pytest
+      {%- if grains['os'] not in ('Windows',) %}
       - cmd: pip-install
-{%- endif %}
+      {%- endif %}

@@ -197,6 +197,7 @@ include:
   - openssl-dev
   {%- endif %}
   - python.salttesting
+  - python.pytest-salt
   {%- if grains['os'] in ['CentOS', 'Debian', 'Fedora', 'FreeBSD', 'MacOS' , 'Ubuntu'] %}
   - python.junos-eznc
   - python.jxmlease

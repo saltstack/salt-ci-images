@@ -29,6 +29,12 @@
   {%- set on_ubuntu_14 = False %}
 {%- endif %}
 
+{%- if grains['os'] == 'MacOS' %}
+  {%- set on_macos = True %}
+{%- else %}
+  {%- set on_macos = False %}
+{%- endif %}
+
 {%- if os_family == 'Windows' %}
   {%- set on_windows=True %}
 {%- else %}

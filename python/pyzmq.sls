@@ -22,11 +22,11 @@ pyzmq:
     {%- else %}
     - name: pyzmq{{salt.pillar.get('pyzmq:version', '')}}
     {%- endif %}
-  {%- if grains['os_family'] in ('MacOS') %}
+  {%- if grains['os_family'] in ('MacOS',) %}
     - upgrade: True
   {%- endif %}
-  {%- if grains['os_family'] not in ('MacOS') and '10.14' in grains['osrelease'] %}
-    {%- if grains['os_family'] not in ('Suse') %}
+  {%- if grains['os_family'] not in ('MacOS',) and '10.14' in grains['osrelease'] %}
+    {%- if grains['os_family'] not in ('Suse',) %}
     - global_options:
       - fetch_libzmq
     {%- endif %}

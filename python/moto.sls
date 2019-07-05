@@ -1,5 +1,6 @@
 include:
   - python.requests
+  - python.docker
 {%- if grains['os'] not in ('Windows',) %}
   - python.pip
 {%- endif %}
@@ -11,6 +12,7 @@ moto:
     - name: moto==1.3.7
     - require:
       - requests
+      - docker_py
 {%- if grains['os'] != 'Windows' %}
       - cmd: pip-install
 {%- endif %}

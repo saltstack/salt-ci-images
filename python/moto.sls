@@ -9,7 +9,7 @@ include:
 
 moto:
   pip.installed:
-    - name: moto
+    - name: moto==1.3.7
     - require:
       - requests
       - docker_py

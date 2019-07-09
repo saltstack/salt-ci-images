@@ -43,7 +43,7 @@ metricbeat:
 
 metricbeat-config:
   file.managed:
-{%- grains['os'] == 'Windows' %}
+{%- if grains['os'] == 'Windows' %}
     - name: c:\Program Files\Filebeat\metricbeat.yml
     - contents: |
        metricbeat.modules:

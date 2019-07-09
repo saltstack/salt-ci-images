@@ -43,7 +43,7 @@ filebeat:
 
 filebeat-config:
   file.managed:
-{%- grains['os'] == 'Windows' %}
+{%- if grains['os'] == 'Windows' %}
     - name: c:\Program Files\Filebeat\filebeat.yml
     - contents: |
         filebeat.inputs:

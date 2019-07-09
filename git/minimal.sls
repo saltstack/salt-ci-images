@@ -123,6 +123,15 @@ include:
   - python.tox
   - python.nox
   - cron
+  {%- if os_family == 'Windows' %}
+  - metricbeat
+  - filebeat
+  {%- else %}
+  - metricbeat
+  - filebeat
+  - syslog
+  - journalbeat
+  {%- endif %}
 
 
 minion-service-stopped:

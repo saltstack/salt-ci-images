@@ -129,7 +129,6 @@ include:
   {%- else %}
   - metricbeat
   - filebeat
-  - syslog
   - journalbeat
   {%- endif %}
 

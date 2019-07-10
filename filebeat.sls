@@ -7,7 +7,7 @@
 # Unused on windows
 {%- set pkg_install_cmd = '' %}
 
-{%- elif grains['os_family'] in ['Debian', 'Ubuntu',] %}
+{%- elif grains['os_family'] == 'Debian' %}
 
 {%- set install_filebeat = true %}
 {%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-amd64.deb' %}
@@ -15,7 +15,7 @@
 {%- set filebeat_path = '/tmp/filebeat-7.2.0-amd64.deb'  %}
 {%- set pkg_install_cmd = 'dpkg -i' %}
 
-{%- elif grains['os_family'] in ['CentosOS', 'Fedora', 'RedHat'] %}
+{%- elif grains['os_family'] == 'RedHat' %}
 
 {%- set install_filebeat = true %}
 {%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-x86_64.rpm' %}

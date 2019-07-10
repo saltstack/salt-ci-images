@@ -1,9 +1,19 @@
+{%- if grains['os_family'] == 'Debian' %}
+
 {%- set journalbeat_url = 'https://artifacts.elastic.co/downloads/beats/journalbeat/journalbeat-7.2.0-amd64.deb' %}
 {%- set journalbeat_hash = '8c0cdb3e51078a97a214e5de07d22f165ceac83d19e88aa90b247b40bc4d3b5549ad31a9f32103ed2d55f55cc8c51ac519f72c4ce71345487bff3dd475fd7629' %}
 {%- set journalbeat_path = '/tmp/journalbeat-7.2.0-amd64.deb'  %}
 {%- set pkg_install_cmd = 'dpkg -i' %}
 
+{%- set install_journalbeat = true %}
 
+{%- else %}
+
+{%- set install_journalbeat = false %}
+
+{%- endif %}
+
+{%- if install_journalbeat %}
 download-journalbeat:
   file.managed:
     - name: {{ journalbeat_path }}
@@ -31,3 +41,4 @@ journalbeat-config:
         output.logstash:
           hosts:
           - logstash.saltstack.net:5044
+{%- endif %}

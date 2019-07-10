@@ -18,6 +18,7 @@
 {%- elif grains['os_family'] == 'RedHat' %}
 
 {%- set install_metricbeat = true %}
+{%- set elastic_gpg_key_url = 'https://packages.elastic.co/GPG-KEY-elasticsearch' %}
 {%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-x86_64.rpm' %}
 {%- set metricbeat_hash = '945ad400b5957cd19ac9b81cbc30df5b6ca7b65e24429d67fd08c7ba2791619b3717be2514e198252df6728007becdec21c5a30f316d5d4d9f31a14f3f45be88' %}
 {%- set metricbeat_path = '/tmp/metricbeat-7.2.0-x86_64.rpm'  %}
@@ -31,6 +32,14 @@
 {%- endif %}
 
 {%- if install_metricbeat %}
+{%- if grains['os'] == 'RedHat' %}
+rpm-gpg-key:
+  cmd.run:
+    - name: 'rpm --import {{ elastic_gpg_key_url }}'
+    - require_in:
+      - file: download-filebeat
+{%- endif %}
+
 download-metricbeat:
   file.managed:
     - name: {{ metricbeat_path }}

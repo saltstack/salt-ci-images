@@ -18,6 +18,7 @@
 {%- elif grains['os_family'] == 'RedHat' %}
 
 {%- set install_filebeat = true %}
+{%- set elastic_gpg_key_url = 'https://packages.elastic.co/GPG-KEY-elasticsearch' %}
 {%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-x86_64.rpm' %}
 {%- set filebeat_hash = 'a14fa839b9501f825993d11b202a17fceb345d2de278fc33ffc6be47a3db4df174b4ab0cc0245e1f6ee4a98fe3dc3425e7467b81843eca315bab15accc9b0205' %}
 {%- set filebeat_path = '/tmp/filebeat-7.2.0-x86_64.rpm'  %}
@@ -31,6 +32,14 @@
 {%- endif %}
 
 {%- if install_filebeat %}
+{%- if grains['os'] == 'RedHat' %}
+rpm-gpg-key:
+  cmd.run:
+    - name: 'rpm --import {{ elastic_gpg_key_url }}'
+    - require_in:
+      - file: download-filebeat
+{%- endif %}
+
 download-filebeat:
   file.managed:
     - name: {{ filebeat_path }}

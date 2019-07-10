@@ -28,7 +28,7 @@ unzip-filebeat:
     - source: {{ filebeat_path }}
 {%- endif %}
 
-filebeat:
+install-filebeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
     - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Filebeat\install-service-filebeat.ps1'

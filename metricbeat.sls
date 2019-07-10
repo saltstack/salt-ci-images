@@ -28,7 +28,7 @@ unzip-metricbeat:
     - source: {{ metricbeat_path }}
 {%- endif %}
 
-metricbeat:
+install-metricbeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
     - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Metricbeat\install-service-metricbeat.ps1'

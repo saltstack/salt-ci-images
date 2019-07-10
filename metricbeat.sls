@@ -22,6 +22,7 @@
 {%- set metricbeat_hash = '945ad400b5957cd19ac9b81cbc30df5b6ca7b65e24429d67fd08c7ba2791619b3717be2514e198252df6728007becdec21c5a30f316d5d4d9f31a14f3f45be88' %}
 {%- set metricbeat_path = '/tmp/metricbeat-7.2.0-x86_64.rpm'  %}
 {%- set pkg_install_cmd = 'rpm -vi' %}
+{%- set pkg_check_installed_cmd = 'rpm -q metricbeat' %}
 
 {%- else %}
 
@@ -35,6 +36,7 @@ download-metricbeat:
     - name: {{ metricbeat_path }}
     - source: {{ metricbeat_url }}
     - source_hash: {{ metricbeat_hash }}
+    - onlyif: '[ ! -f {{ metricbeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-metricbeat:
@@ -54,6 +56,9 @@ install-metricbeat:
     - name: {{ pkg_install_cmd}} {{ metricbeat_path }}
     - require:
       - download-metricbeat
+    {%- endif %}
+    {%- if pkg_check_installed_cmd is defined %}
+    - onlyif: {{ pkg_check_installed_cmd }}
     {%- endif %}
 
 metricbeat-config:

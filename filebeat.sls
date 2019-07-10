@@ -22,6 +22,7 @@
 {%- set filebeat_hash = 'a14fa839b9501f825993d11b202a17fceb345d2de278fc33ffc6be47a3db4df174b4ab0cc0245e1f6ee4a98fe3dc3425e7467b81843eca315bab15accc9b0205' %}
 {%- set filebeat_path = '/tmp/filebeat-7.2.0-x86_64.rpm'  %}
 {%- set pkg_install_cmd = 'rpm -vi' %}
+{%- set pkg_check_installed_cmd = 'rpm -q filebeat' %}
 
 {%- else %}
 
@@ -35,6 +36,7 @@ download-filebeat:
     - name: {{ filebeat_path }}
     - source: {{ filebeat_url }}
     - source_hash: {{ filebeat_hash }}
+    - onlyif: '[ ! -f {{ filebeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:
@@ -54,6 +56,9 @@ install-filebeat:
     - name: {{ pkg_install_cmd}} {{ filebeat_path }}
     - require:
       - download-filebeat
+    {%- endif %}
+    {%- if pkg_check_installed_cmd is defined %}
+    - onlyif: {{ pkg_check_installed_cmd }}
     {%- endif %}
 
 filebeat-config:

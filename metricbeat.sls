@@ -1,20 +1,35 @@
 {%- if grains['os'] == 'Windows' %}
 
+{%- set install_metricbeat = true %}
 {%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-windows-x86_64.zip' %}
 {%- set metricbeat_hash = '341eb34fbe361cab146f80c198dc4b05e3211e8a16b9b190e8c83ce5a997a072233b4f1cab59170e2884845b0b339dee48be32b34a89101d7e302a4423e0d18b' %}
 {%- set metricbeat_path = 'c:\\metricbeat-7.2.0-windows-x86_64.zip'  %}
 # Unused on windows
 {%- set pkg_install_cmd = '' %}
 
-{%- else %}
+{%- elif grains['os_family'] in ['Debian', 'Ubuntu',] %}
 
+{%- set install_metricbeat = true %}
 {%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-amd64.deb' %}
 {%- set metricbeat_hash = 'e4cee5c74cfecd73353b721f00df41d76c08174ac5f1f3e827aab205183ea421942fa83c345a36b36f1a53efc59f3f466acce649f1b0a90dd590d2d6aa3f5bde' %}
 {%- set metricbeat_path = '/tmp/metricbeat-7.2.0-amd64.deb'  %}
 {%- set pkg_install_cmd = 'dpkg -i' %}
 
+{%- elif grains['os_family'] in ['CentosOS', 'Fedora', 'RedHat'] %}
+
+{%- set install_metricbeat = true %}
+{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-x86_64.rpm' %}
+{%- set metricbeat_hash = '945ad400b5957cd19ac9b81cbc30df5b6ca7b65e24429d67fd08c7ba2791619b3717be2514e198252df6728007becdec21c5a30f316d5d4d9f31a14f3f45be88' %}
+{%- set metricbeat_path = '/tmp/metricbeat-7.2.0-x86_64.rpm'  %}
+{%- set pkg_install_cmd = 'rpm -vi' %}
+
+{%- else %}
+
+{%- set install_metricbeat = false %}
+
 {%- endif %}
 
+{%- if install_metricbeat %}
 download-metricbeat:
   file.managed:
     - name: {{ metricbeat_path }}
@@ -121,3 +136,4 @@ metricbeat-config:
 metricbeat:
   service.running:
     - enable: True
+{%- endif %}

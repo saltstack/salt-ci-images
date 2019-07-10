@@ -80,6 +80,9 @@ platforms:
   - name: debian-9
     driver_config:
       run_command: /lib/systemd/systemd
+  - name: debian-10
+    driver_config:
+      run_command: /lib/systemd/systemd
   - name: fedora-28
     driver_config:
       image: fedora:28

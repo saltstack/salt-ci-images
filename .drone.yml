@@ -527,6 +527,87 @@ trigger:
 
 ---
 kind: pipeline
+name: Debian 10
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 84 seconds; sleep 84'"
+
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 10
+  - docker ps -a
+  - bundle exec kitchen create debian-10
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py2-minimal-debian-10
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py2-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py2-full-debian-10
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py3-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py3-minimal-debian-10
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py3-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py3-full-debian-10
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+services:
+- name: docker
+  image: saltstack/drone-salt-jenkins-testing
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+trigger:
+  event:
+  - pull_request
+
+---
+kind: pipeline
 name: Fedora 29
 
 platform:
@@ -932,6 +1013,6 @@ trigger:
 
 ---
 kind: signature
-hmac: 7b3fca7e5ecea5807326414b7f877c18d110e81966207a75f36ff11d497e1c5c
+hmac: 94b5d11c25295ffd6e4087947904f2e405c1c10a73f24d657eb91770169ddd7c
 
 ...

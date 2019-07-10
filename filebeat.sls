@@ -93,3 +93,7 @@ filebeat-config:
           hosts:
           - logstash.saltstack.net:5044
 {%- endif %}
+
+filebeat:
+  service.running:
+    - enable: True

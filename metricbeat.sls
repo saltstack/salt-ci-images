@@ -117,3 +117,7 @@ metricbeat-config:
          hosts:
          - logstash.saltstack.net:5044
 {%- endif %}
+
+metricbeat:
+  service.running:
+    - enable: True

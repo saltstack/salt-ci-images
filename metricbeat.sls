@@ -33,7 +33,7 @@
 
 {%- if install_metricbeat %}
 {%- if grains['os_family'] == 'RedHat' %}
-rpm-gpg-key:
+metricbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:

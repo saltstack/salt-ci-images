@@ -79,6 +79,11 @@ metricbeat-config:
          period: 10s
          processes: ['.*']
        processors:
+         - add_cloud_metadata: ~
+         - add_fields:
+             target: aws
+             fields:
+               account: ACCOUNTVALUE
          - add_fields:
              target: test
              fields:
@@ -116,6 +121,11 @@ metricbeat-config:
          period: 10s
          processes: ['.*']
        processors:
+         - add_cloud_metadata: ~
+         - add_fields:
+             target: aws
+             fields:
+               account: ACCOUNTVALUE
          - add_fields:
              target: test
              fields:

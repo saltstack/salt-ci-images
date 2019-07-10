@@ -66,6 +66,11 @@ filebeat-config:
             paths:
               - c:\\kitchen\\testing\\**\\*.log
         processors:
+          - add_cloud_metadata: ~
+          - add_fields:
+              target: aws
+              fields:
+                account: ACCOUNTVALUE
           - add_fields:
               target: test
               fields:
@@ -91,6 +96,11 @@ filebeat-config:
               - /tmp/kitchen/testing/**/*.log
               - /var/log/**
         processors:
+          - add_cloud_metadata: ~
+          - add_fields:
+              target: aws
+              fields:
+                account: ACCOUNTVALUE
           - add_fields:
               target: test
               fields:

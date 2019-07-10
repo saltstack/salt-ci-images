@@ -32,7 +32,7 @@
 {%- endif %}
 
 {%- if install_metricbeat %}
-{%- if grains['os'] == 'RedHat' %}
+{%- if grains['os_family'] == 'RedHat' %}
 rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
@@ -45,7 +45,7 @@ download-metricbeat:
     - name: {{ metricbeat_path }}
     - source: {{ metricbeat_url }}
     - source_hash: {{ metricbeat_hash }}
-    - unless: '[ ! -f {{ metricbeat_path }} ]'
+    - unless: '[ -f {{ metricbeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-metricbeat:

@@ -32,7 +32,7 @@
 {%- endif %}
 
 {%- if install_filebeat %}
-{%- if grains['os'] == 'RedHat' %}
+{%- if grains['os_family'] == 'RedHat' %}
 rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
@@ -45,7 +45,7 @@ download-filebeat:
     - name: {{ filebeat_path }}
     - source: {{ filebeat_url }}
     - source_hash: {{ filebeat_hash }}
-    - unless: '[  -f {{ filebeat_path }} ]'
+    - unless: '[ -f {{ filebeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:

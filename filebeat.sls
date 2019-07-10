@@ -49,7 +49,7 @@ download-filebeat:
 
 {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:
-  archive.extract:
+  archive.unzip:
     - name: 'C:\Program Files\Filebeat'
     - source: {{ filebeat_path }}
 {%- endif %}

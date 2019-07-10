@@ -45,7 +45,7 @@ download-metricbeat:
     - name: {{ metricbeat_path }}
     - source: {{ metricbeat_url }}
     - source_hash: {{ metricbeat_hash }}
-    - onlyif: '[ ! -f {{ metricbeat_path }} ]'
+    - unless: '[ ! -f {{ metricbeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-metricbeat:
@@ -67,7 +67,7 @@ install-metricbeat:
       - download-metricbeat
     {%- endif %}
     {%- if pkg_check_installed_cmd is defined %}
-    - onlyif: {{ pkg_check_installed_cmd }}
+    - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
 
 metricbeat-config:

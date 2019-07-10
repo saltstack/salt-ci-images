@@ -45,7 +45,7 @@ download-filebeat:
     - name: {{ filebeat_path }}
     - source: {{ filebeat_url }}
     - source_hash: {{ filebeat_hash }}
-    - onlyif: '[ ! -f {{ filebeat_path }} ]'
+    - unless: '[  -f {{ filebeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:
@@ -67,7 +67,7 @@ install-filebeat:
       - download-filebeat
     {%- endif %}
     {%- if pkg_check_installed_cmd is defined %}
-    - onlyif: {{ pkg_check_installed_cmd }}
+    - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
 
 filebeat-config:

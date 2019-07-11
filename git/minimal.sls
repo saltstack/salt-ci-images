@@ -123,7 +123,8 @@ include:
   - python.tox
   - python.nox
   - cron
-{%- if os_family in ('Windows', 'RedHat', 'Debian') %}
+{%- if os_family in ('RedHat', 'Debian') %}
+{# %- if os_family in ('Windows', 'RedHat', 'Debian') % #}
   {%- if os_family == 'Windows' %}
   - metricbeat
   - filebeat

@@ -41,6 +41,12 @@
   {%- set on_ubuntu_14 = False %}
 {%- endif %}
 
+{%- if grains['os'] == 'MacOS' %}
+  {%- set on_macos = True %}
+{%- else %}
+  {%- set on_macos = False %}
+{%- endif %}
+
 {%- if os_family == 'Windows' %}
   {%- set on_windows=True %}
 {%- else %}
@@ -106,6 +112,14 @@ include:
 
 {%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
 {%- set get_pip3 = '{} {} {}'.format(python3, get_pip_path, force_reinstall) %}
+
+{%- if on_macos %}
+pip-update-path:
+   environ.setenv:
+     - name: PATH
+     - value: '/opt/salt/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin:$PATH'
+     - update_minion: True
+{%- endif %}
 
 pip-install:
   cmd.run:

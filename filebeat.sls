@@ -107,8 +107,8 @@ filebeat-config:
         filebeat.inputs:
           - type: log
             paths:
-              - /tmp/kitchen/testing/**/*.log
-              - /var/log/**
+              - /tmp/kitchen/testing/artifacts/logs/*.log
+              - /var/log/*log
         processors:
           - add_cloud_metadata: ~
           - add_fields:

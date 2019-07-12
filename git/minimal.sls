@@ -131,7 +131,8 @@ include:
   {%- else %}
   - metricbeat
   - filebeat
-  - journalbeat
+  - timesync
+  {# - journalbeat #}
   {%- endif %}
 {%- endif %}
 

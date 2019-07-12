@@ -1,5 +1,5 @@
 {%- if grains['os_family'] == 'Debian' %}
-disable-timesyncd-daemon:
+enable-timesyncd-daemon:
   service.enabled:
     - name: systemd-timesyncd
 
@@ -16,6 +16,13 @@ remove-drift-file:
     - name: /var/lib/chrony/
     - require:
       - cmd: stop-chrony
+{%- endif %}
+
+{%- if grains['os'] == 'Ubuntu' %}
+symlink-timezone-file:
+  file.symlink:
+    - name: /etc/localtime
+    - target: /usr/share/zoneinfo/Etc/UTC
 {%- endif %}
 
 set-time-zone:

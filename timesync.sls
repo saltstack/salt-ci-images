@@ -4,7 +4,7 @@ disable-timesyncd-daemon:
     - name: systemd-timesyncd
 
 stop-chrony:
-  service.stop:
+  service.dead:
     - name: chrony
 
 remove-chrony:
@@ -17,3 +17,8 @@ remove-drift-file:
     - require:
       - cmd: stop-chrony
 {%- endif %}
+
+set-time-zone:
+  timezone.system:
+    - name: Etc/UTC
+    - utc: True

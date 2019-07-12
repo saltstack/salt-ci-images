@@ -15,7 +15,7 @@ remove-drift-file:
   file.absent:
     - name: /var/lib/chrony/
     - require:
-      - stop-chrony
+      - service: stop-chrony
 {%- endif %}
 
 {%- if grains['os'] == 'Ubuntu' %}

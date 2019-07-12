@@ -80,10 +80,12 @@ platforms:
   - name: debian-9
     driver_config:
       run_command: /lib/systemd/systemd
-  - name: fedora-28
+  - name: debian-10
     driver_config:
-      image: fedora:28
-      run_command: /usr/lib/systemd/systemd
+      run_command: /lib/systemd/systemd
+      provision_command:
+        - apt-get update
+        - apt-get install -y python3-distutils
   - name: fedora-29
     driver_config:
       image: fedora:29

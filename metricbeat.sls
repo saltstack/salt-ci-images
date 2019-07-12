@@ -97,7 +97,7 @@ metricbeat-config:
          - add_fields:
              target: aws
              fields:
-               account: ACCOUNTVALUE
+               account: ci
          - add_fields:
              target: test
              fields:
@@ -139,7 +139,7 @@ metricbeat-config:
          - add_fields:
              target: aws
              fields:
-               account: ACCOUNTVALUE
+               account: ci
          - add_fields:
              target: test
              fields:

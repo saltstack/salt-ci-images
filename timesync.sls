@@ -19,6 +19,10 @@ remove-drift-file:
 {%- endif %}
 
 {%- if grains['os'] == 'Ubuntu' %}
+install-tzdata:
+  pkg.installed:
+    - name: tzdata
+
 symlink-timezone-file:
   file.symlink:
     - name: /etc/localtime

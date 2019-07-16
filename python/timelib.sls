@@ -10,9 +10,9 @@ include:
   {%- endif %}
 {%- endif %}
 
-{%- if grains['os_family'] in ('MacOS', ) -%}
+{%- if grains['os_family'] in ('MacOS', ) %}
 {#- Due to issue https://github.com/pediapress/timelib/issues/6 we need to use custom pkg for mac #}
-{%- set timelib_dir = '/tmp/timelib/' -%}
+{%- set timelib_dir = '/tmp/timelib/' %}
 get-timelib-zip:
   archive.extracted:
     - name: {{ timelib_dir }}

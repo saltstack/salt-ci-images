@@ -84,7 +84,7 @@ filebeat-config:
           - add_fields:
               target: aws
               fields:
-                account: ACCOUNTVALUE
+                account: ci
           - add_fields:
               target: test
               fields:
@@ -114,7 +114,7 @@ filebeat-config:
           - add_fields:
               target: aws
               fields:
-                account: ACCOUNTVALUE
+                account: ci
           - add_fields:
               target: test
               fields:

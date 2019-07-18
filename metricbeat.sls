@@ -98,18 +98,6 @@ metricbeat-config:
              target: aws
              fields:
                account: ci
-         - add_fields:
-             target: test
-             fields:
-               pyver: PYVERVALUE
-               transport: TRANSPORTVALUE
-               commitid: COMMITIDVALUE
-               buildnumber: BUILDNUMBERVALUE
-               buildname: BUILDNAMEVALUE
-       metricbeat.config.modules:
-         path: ${path.config}\\modules.d\\*.yml
-         reload.enabled: true
-         reload.period: 10s
        output.logstash:
          hosts:
          - logstash.saltstack.net:5044
@@ -140,18 +128,6 @@ metricbeat-config:
              target: aws
              fields:
                account: ci
-         - add_fields:
-             target: test
-             fields:
-               pyver: PYVERVALUE
-               transport: TRANSPORTVALUE
-               commitid: COMMITIDVALUE
-               buildnumber: BUILDNUMBERVALUE
-               buildname: BUILDNAMEVALUE
-       metricbeat.config.modules:
-         path: ${path.config}/modules.d/*.yml
-         reload.enabled: true
-         reload.period: 10s
        output.logstash:
          hosts:
          - logstash.saltstack.net:5044

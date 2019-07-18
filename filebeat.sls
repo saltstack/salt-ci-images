@@ -85,19 +85,6 @@ filebeat-config:
               target: aws
               fields:
                 account: ci
-          - add_fields:
-              target: test
-              fields:
-                pyver: PYVERVALUE
-                transport: TRANSPORTVALUE
-                commitid: COMMITIDVALUE
-                buildnumber: BUILDNUMBERVALUE
-                buildname: BUILDNAMEVALUE
-        filebeat.config.inputs:
-          enabled: true
-          path: c:\Program Files\Filebeat\filebeat.yml
-          reload.enabled: true
-          reload.period: 10s
         output.logstash:
           hosts:
           - logstash.saltstack.net:5044
@@ -115,19 +102,6 @@ filebeat-config:
               target: aws
               fields:
                 account: ci
-          - add_fields:
-              target: test
-              fields:
-                pyver: PYVERVALUE
-                transport: TRANSPORTVALUE
-                commitid: COMMITIDVALUE
-                buildnumber: BUILDNUMBERVALUE
-                buildname: BUILDNAMEVALUE
-        filebeat.config.inputs:
-          enabled: true
-          path: /etc/filebeat/filebeat.yml
-          reload.enabled: true
-          reload.period: 10s
         output.logstash:
           hosts:
           - logstash.saltstack.net:5044

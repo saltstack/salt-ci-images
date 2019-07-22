@@ -49,6 +49,12 @@ accept_LANG_sshd:
   {%- endif %}
 {%- endif %}
 
+{%- if grains['os'] == 'Fedora' %}
+fedora_locale:
+  pkg.installed:
+    - name: glibc-langpack-en
+{%- endif %}
+
 us_locale:
   locale.present:
     - name: en_US.UTF-8

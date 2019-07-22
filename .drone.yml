@@ -527,7 +527,7 @@ trigger:
 
 ---
 kind: pipeline
-name: Fedora 28
+name: Debian 10
 
 platform:
   os: linux
@@ -537,7 +537,7 @@ steps:
 - name: throttle-build
   image: alpine
   commands:
-  - "sh -c 'echo Sleeping 60 seconds; sleep 60'"
+  - "sh -c 'echo Sleeping 84 seconds; sleep 84'"
 
 - name: create
   image: saltstack/drone-salt-jenkins-testing
@@ -546,7 +546,7 @@ steps:
   - "echo 'Waiting for docker to start'"
   - sleep 10
   - docker ps -a
-  - bundle exec kitchen create fedora-28
+  - bundle exec kitchen create debian-10
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -556,7 +556,7 @@ steps:
   image: saltstack/drone-salt-jenkins-testing
   commands:
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-minimal-fedora-28
+  - bundle exec kitchen test py2-minimal-debian-10
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -566,7 +566,7 @@ steps:
   image: saltstack/drone-salt-jenkins-testing
   commands:
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-full-fedora-28
+  - bundle exec kitchen test py2-full-debian-10
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -576,7 +576,7 @@ steps:
   image: saltstack/drone-salt-jenkins-testing
   commands:
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py3-minimal-fedora-28
+  - bundle exec kitchen test py3-minimal-debian-10
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -586,7 +586,7 @@ steps:
   image: saltstack/drone-salt-jenkins-testing
   commands:
   - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py3-full-fedora-28
+  - bundle exec kitchen test py3-full-debian-10
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -689,7 +689,7 @@ trigger:
 
 ---
 kind: pipeline
-name: Opensuse 15.0
+name: Fedora 30
 
 platform:
   os: linux
@@ -700,6 +700,87 @@ steps:
   image: alpine
   commands:
   - "sh -c 'echo Sleeping 36 seconds; sleep 36'"
+
+- name: create
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - "echo 'Waiting for docker to start'"
+  - sleep 10
+  - docker ps -a
+  - bundle exec kitchen create fedora-30
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - throttle-build
+
+- name: py2-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py2-minimal-fedora-30
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py2-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py2-full-fedora-30
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py3-minimal
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py3-minimal-fedora-30
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+- name: py3-full
+  image: saltstack/drone-salt-jenkins-testing
+  commands:
+  - bundle install --with docker --without opennebula ec2 windows vagrant
+  - bundle exec kitchen test py3-full-fedora-30
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  depends_on:
+  - create
+
+services:
+- name: docker
+  image: saltstack/drone-salt-jenkins-testing
+  command:
+  - --storage-driver=overlay2
+  privileged: true
+
+node:
+  project: open
+
+trigger:
+  event:
+  - pull_request
+
+---
+kind: pipeline
+name: Opensuse 15.0
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: throttle-build
+  image: alpine
+  commands:
+  - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
 
 - name: create
   image: saltstack/drone-salt-jenkins-testing
@@ -749,87 +830,6 @@ steps:
   commands:
   - bundle install --with docker --without opennebula ec2 windows vagrant
   - bundle exec kitchen test py3-full-opensuse-15
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-services:
-- name: docker
-  image: saltstack/drone-salt-jenkins-testing
-  command:
-  - --storage-driver=overlay2
-  privileged: true
-
-node:
-  project: open
-
-trigger:
-  event:
-  - pull_request
-
----
-kind: pipeline
-name: Opensuse 42.3
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: throttle-build
-  image: alpine
-  commands:
-  - "sh -c 'echo Sleeping 24 seconds; sleep 24'"
-
-- name: create
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - "echo 'Waiting for docker to start'"
-  - sleep 10
-  - docker ps -a
-  - bundle exec kitchen create opensuse-42
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - throttle-build
-
-- name: py2-minimal
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-minimal-opensuse-42
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-- name: py2-full
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py2-full-opensuse-42
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-- name: py3-minimal
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py3-minimal-opensuse-42
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  depends_on:
-  - create
-
-- name: py3-full
-  image: saltstack/drone-salt-jenkins-testing
-  commands:
-  - bundle install --with docker --without opennebula ec2 windows vagrant
-  - bundle exec kitchen test py3-full-opensuse-42
   environment:
     DOCKER_HOST: tcp://docker:2375
   depends_on:
@@ -1013,6 +1013,6 @@ trigger:
 
 ---
 kind: signature
-hmac: 593aa1813d2cc4dae57f236bdba0684bdd4021d49357ef65d198d2525296b24a
+hmac: 94b5d11c25295ffd6e4087947904f2e405c1c10a73f24d657eb91770169ddd7c
 
 ...

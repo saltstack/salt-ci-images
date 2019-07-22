@@ -136,7 +136,6 @@ include:
   {%- endif %}
 {%- endif %}
 
-
 minion-service-stopped:
   service.dead:
     - name: salt-minion

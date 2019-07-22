@@ -79,32 +79,83 @@ filebeat-config:
           - type: log
             paths:
               - c:\\kitchen\\testing\\**\\*.log
-        processors:
-          - add_cloud_metadata: ~
-          - add_fields:
-              target: aws
-              fields:
-                account: ci
         output.logstash:
           hosts:
-          - logstash.saltstack.net:5044
+          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        processors:
+        - add_cloud_metadata:
+            overwrite: true
+        - add_host_metadata:
+            netinfo.enabled: true
+        - add_fields:
+            fields:
+              account: ci
+            target: aws
+        - add_fields:
+            target: test
+            fields:
+              pyver: PYVERVALUE
+              transport: TRANSPORTVALUE
+              buildnumber: BUILDNUMBERVALUE
+              buildname: BUILDNAMEVALUE
+        xpack.monitoring:
+          elasticsearch:
+            hosts:
+            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
+          enabled: true
 {%- else %}
     - name: /etc/filebeat/filebeat.yml
     - contents: |
+        filebeat.config.modules:
+          enabled: true
+          path: ${path.config}/modules.d/*.yml
         filebeat.inputs:
           - type: log
             paths:
               - /tmp/kitchen/testing/artifacts/logs/*.log
-              - /var/log/*log
-        processors:
-          - add_cloud_metadata: ~
-          - add_fields:
-              target: aws
-              fields:
-                account: ci
         output.logstash:
           hosts:
-          - logstash.saltstack.net:5044
+          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        processors:
+        - add_cloud_metadata:
+            overwrite: true
+        - add_host_metadata:
+            netinfo.enabled: true
+        - add_fields:
+            fields:
+              account: ci
+            target: aws
+        - add_fields:
+            target: test
+            fields:
+              pyver: PYVERVALUE
+              transport: TRANSPORTVALUE
+              buildnumber: BUILDNUMBERVALUE
+              buildname: BUILDNAMEVALUE
+        xpack.monitoring:
+          elasticsearch:
+            hosts:
+            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
+          enabled: true
+
+filebeat-enable-system-module:
+  cmd.run:
+    - name: filebeat modules enable system
+    - unless: test -f /etc/filebeat/modules.d/system.yml
+    - require:
+      - cmd: install-filebeat
 {%- endif %}
 
 filebeat:

@@ -75,62 +75,83 @@ metricbeat-config:
 {%- if grains['os'] == 'Windows' %}
     - name: c:\Program Files\Filebeat\metricbeat.yml
     - contents: |
-       metricbeat.modules:
-       - module: system
-         metricsets:
-           - cpu
-           - load
-           - memory
-           - network
-           - process
-           - process_summary
-           - uptime
-           - socket_summary
-           - diskio
-           - filesystem
-           - fsstat
-         enabled: true
-         period: 10s
-         processes: ['.*']
-       processors:
-         - add_cloud_metadata: ~
-         - add_fields:
-             target: aws
-             fields:
-               account: ci
-       output.logstash:
-         hosts:
-         - logstash.saltstack.net:5044
+        metricbeat.modules:
+        - module: system
+          metricsets:
+            - cpu
+            - filesystem
+            - memory
+            - network
+            - process
+          enabled: true
+          period: 10s
+          processes: ['.*']
+        output.logstash:
+          hosts:
+          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        processors:
+        - add_cloud_metadata:
+            overwrite: true
+        - add_host_metadata:
+            netinfo.enabled: true
+        - add_fields:
+            fields:
+              account: ci
+            target: aws
+        - add_fields:
+            target: test
+            fields:
+              pyver: PYVERVALUE
+              transport: TRANSPORTVALUE
+              buildnumber: BUILDNUMBERVALUE
+              buildname: BUILDNAMEVALUE
+        xpack.monitoring:
+          elasticsearch:
+            hosts:
+            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
+          enabled: true
 {%- else %}
     - name: /etc/metricbeat/metricbeat.yml
     - contents: |
-       metricbeat.modules:
-       - module: system
-         metricsets:
-           - cpu
-           - load
-           - memory
-           - network
-           - process
-           - process_summary
-           - uptime
-           - socket_summary
-           - diskio
-           - filesystem
-           - fsstat
-           - socket
-         enabled: true
-         period: 10s
-         processes: ['.*']
-       processors:
-         - add_cloud_metadata: ~
-         - add_fields:
-             target: aws
-             fields:
-               account: ci
-       output.logstash:
-         hosts:
-         - logstash.saltstack.net:5044
+        metricbeat.config.modules:
+          enabled: true
+          path: ${path.config}/modules.d/*.yml
+        output.logstash:
+          hosts:
+          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
+          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        processors:
+        - add_cloud_metadata:
+            overwrite: true
+        - add_host_metadata:
+            netinfo.enabled: true
+        - add_fields:
+            fields:
+              account: ci
+            target: aws
+        - add_fields:
+            target: test
+            fields:
+              pyver: PYVERVALUE
+              transport: TRANSPORTVALUE
+              buildnumber: BUILDNUMBERVALUE
+              buildname: BUILDNAMEVALUE
+        xpack.monitoring:
+          elasticsearch:
+            hosts:
+            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
+            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
+          enabled: true
 {%- endif %}
 
 metricbeat:

@@ -117,6 +117,18 @@ include:
   {%- endif %}
   - python.tox
   - python.nox
+{%- if os_family in ('RedHat', 'Debian') %}
+{# %- if os_family in ('Windows', 'RedHat', 'Debian') % #}
+  {%- if os_family == 'Windows' %}
+  - metricbeat
+  - filebeat
+  {%- else %}
+  - metricbeat
+  - filebeat
+  - timesync
+  {# - journalbeat #}
+  {%- endif %}
+{%- endif %}
 
 
 minion-service-stopped:

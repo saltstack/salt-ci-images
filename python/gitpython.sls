@@ -9,7 +9,8 @@ gitpython:
     # available in Python 2.6
     - name: 'GitPython < 2.0.9'
     {%- else %}
-    - name: GitPython>=2.1.8
+    # GitPython 2.1.12 and forward doesn't support python 2
+    - name: GitPython==2.1.11
     {%- endif %}
     - bin_env: {{ salt['config.get']('virtualenv_path', '') }}
     - cwd: {{ salt['config.get']('pip_cwd', '') }}

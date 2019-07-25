@@ -98,7 +98,7 @@ filebeat-config:
             fields:
               pyver: PYVERVALUE
               transport: TRANSPORTVALUE
-              buildnumber: BUILDNUMBERVALUE
+              buildnumber: 99999
               buildname: BUILDNAMEVALUE
         xpack.monitoring:
           elasticsearch:
@@ -138,7 +138,7 @@ filebeat-config:
             fields:
               pyver: PYVERVALUE
               transport: TRANSPORTVALUE
-              buildnumber: BUILDNUMBERVALUE
+              buildnumber: 99999
               buildname: BUILDNAMEVALUE
         xpack.monitoring:
           elasticsearch:

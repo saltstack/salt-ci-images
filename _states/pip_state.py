@@ -110,7 +110,7 @@ def removed(name, **kwargs):
 def installed(name, **kwargs):
     index_url = kwargs.pop('index_url', None)
     if index_url is None:
-        index_url = 'https://oss-nexus.aws.saltstack.net/repository/salt-proxy/simple'
+        index_url = 'https://artifactory.saltstack.net/artifactory/api/pypi/pypi-open/simple'
     extra_index_url = kwargs.pop('extra_index_url', None)
     if extra_index_url is None:
         extra_index_url = 'https://pypi.python.org/simple'

@@ -8,3 +8,11 @@ ncclient:
     - name: ncclient==0.6.4
     - require:
       - cmd: pip-install
+# lxml doesn't support python3.4 anymore, pinning to last version that did
+{%- if grains['osfinger'] in ['CentOS Linux-7', 'Debian-8'] %}
+      - pip: ncclient_pip_dependencies
+
+ncclient_pip_dependencies:
+  pip.installed:
+    - name: lxml==4.3.5
+{%- endif %}

@@ -233,6 +233,7 @@ vmware-provider:
           protocol: 'https'
           port: 443
           known_hosts_file: /dev/null
+    - show_changes: False
 
 vmware-profile:
   file.managed:
@@ -256,6 +257,7 @@ vmware-profile:
           host: {{ salt['pillar.get']('vmware:host', '') }}
           ssh_username: {{ salt['pillar.get']('vmware:ssh_username', '') }}
           password: {{ salt['pillar.get']('vmware:ssh_password', '') }}
+    - show_changes: False
 
 vultr-provider:
   file.managed:

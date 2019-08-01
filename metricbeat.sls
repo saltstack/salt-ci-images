@@ -79,18 +79,21 @@ metricbeat-config:
         - module: system
           metricsets:
             - cpu
-            - filesystem
+            - load
             - memory
             - network
             - process
+            - process_summary
+            - uptime
+            - socket_summary
+            - diskio
+            - filesystem
           enabled: true
           period: 10s
           processes: ['.*']
-        output.logstash:
-          hosts:
-          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+          cpu.metrics:  ["percentages"]
+        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
+        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -107,26 +110,31 @@ metricbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-        xpack.monitoring:
-          elasticsearch:
-            hosts:
-            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
-          enabled: true
 {%- else %}
     - name: /etc/metricbeat/metricbeat.yml
     - contents: |
         metricbeat.config.modules:
           enabled: true
           path: ${path.config}/modules.d/*.yml
-        output.logstash:
-          hosts:
-          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        metricbeat.modules:
+        - module: system
+          metricsets:
+            - cpu
+            - load
+            - memory
+            - network
+            - process
+            - process_summary
+            - uptime
+            - socket_summary
+            - diskio
+            - filesystem
+          enabled: true
+          period: 10s
+          processes: ['.*']
+          cpu.metrics:  ["percentages"]
+        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
+        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -143,15 +151,6 @@ metricbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-        xpack.monitoring:
-          elasticsearch:
-            hosts:
-            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
-          enabled: true
 {%- endif %}
 
 metricbeat:

@@ -79,11 +79,8 @@ filebeat-config:
           - type: log
             paths:
               - c:\\kitchen\\testing\\**\\*.log
-        output.logstash:
-          hosts:
-          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
+        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -100,15 +97,6 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-        xpack.monitoring:
-          elasticsearch:
-            hosts:
-            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
-          enabled: true
 {%- else %}
     - name: /etc/filebeat/filebeat.yml
     - contents: |
@@ -119,11 +107,8 @@ filebeat-config:
           - type: log
             paths:
               - /tmp/kitchen/testing/artifacts/logs/*.log
-        output.logstash:
-          hosts:
-          - logstash1.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash2.prod.pdx.hub.aws.saltstack.net:5044
-          - logstash3.prod.pdx.hub.aws.saltstack.net:5044
+        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
+        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -140,15 +125,6 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-        xpack.monitoring:
-          elasticsearch:
-            hosts:
-            - elasticsearch1.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch2.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch3.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch4.prod.pdx.hub.aws.saltstack.net:9200
-            - elasticsearch5.prod.pdx.hub.aws.saltstack.net:9200
-          enabled: true
 
 filebeat-enable-system-module:
   cmd.run:

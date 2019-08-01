@@ -1,27 +1,27 @@
 {%- if grains['os'] == 'Windows' %}
 
 {%- set install_metricbeat = true %}
-{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-windows-x86_64.zip' %}
-{%- set metricbeat_hash = '341eb34fbe361cab146f80c198dc4b05e3211e8a16b9b190e8c83ce5a997a072233b4f1cab59170e2884845b0b339dee48be32b34a89101d7e302a4423e0d18b' %}
-{%- set metricbeat_path = 'c:\\metricbeat-7.2.0-windows-x86_64.zip'  %}
+{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.0-windows-x86_64.zip' %}
+{%- set metricbeat_hash = 'ba02c1eb3820100b5d0cffd5b101bebd7392c3b60826d9bb47bbde2dc9191d50aa71382e3f38c2292d19ca6689b65bffbedc67bca084fa3fe2d067cc68a7dc4b' %}
+{%- set metricbeat_path = 'c:\\metricbeat-7.3.0-windows-x86_64.zip'  %}
 # Unused on windows
 {%- set pkg_install_cmd = '' %}
 
 {%- elif grains['os_family'] == 'Debian' %}
 
 {%- set install_metricbeat = true %}
-{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-amd64.deb' %}
-{%- set metricbeat_hash = 'e4cee5c74cfecd73353b721f00df41d76c08174ac5f1f3e827aab205183ea421942fa83c345a36b36f1a53efc59f3f466acce649f1b0a90dd590d2d6aa3f5bde' %}
-{%- set metricbeat_path = '/tmp/metricbeat-7.2.0-amd64.deb'  %}
+{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.0-amd64.deb' %}
+{%- set metricbeat_hash = 'ca655d5245c869c18d0fd9995573766f841c91b3aa6b1459ba87a60606086f9e90ee562794948a070e14382424721e1ffb73cd234f91806ce103ef9cc3d4b1ab' %}
+{%- set metricbeat_path = '/tmp/metricbeat-7.3.0-amd64.deb'  %}
 {%- set pkg_install_cmd = 'dpkg -i' %}
 
 {%- elif grains['os_family'] == 'RedHat' %}
 
 {%- set install_metricbeat = true %}
 {%- set elastic_gpg_key_url = 'https://packages.elastic.co/GPG-KEY-elasticsearch' %}
-{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.2.0-x86_64.rpm' %}
-{%- set metricbeat_hash = '945ad400b5957cd19ac9b81cbc30df5b6ca7b65e24429d67fd08c7ba2791619b3717be2514e198252df6728007becdec21c5a30f316d5d4d9f31a14f3f45be88' %}
-{%- set metricbeat_path = '/tmp/metricbeat-7.2.0-x86_64.rpm'  %}
+{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.0-x86_64.rpm' %}
+{%- set metricbeat_hash = 'e25e8a8061af9bd39e6f5a74354eb88b44c69607b80b71b5012da776eeac0188c2de5179ed14dabb7384b6e28c2a24cd46f6cd826b0f8051c2478cab9c53da61' %}
+{%- set metricbeat_path = '/tmp/metricbeat-7.3.0-x86_64.rpm'  %}
 {%- set pkg_install_cmd = 'rpm -vi' %}
 {%- set pkg_check_installed_cmd = 'rpm -q metricbeat' %}
 

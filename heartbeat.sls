@@ -106,7 +106,7 @@ heartbeat-config:
           path: ${path.config}/modules.d/*.yml
         heartbeat.monitors:
         - type: tcp
-          name: felippeb-lappy-localhost-ssh-22
+          name: HOSTNAMEVALUE-localhost-ssh-22
           schedule: '@every 5s'
           hosts: ["localhost:22"]
         cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"

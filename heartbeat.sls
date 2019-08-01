@@ -1,86 +1,87 @@
 {%- if grains['os'] == 'Windows' %}
 
-{%- set install_filebeat = true %}
-{%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.0-windows-x86_64.zip' %}
-{%- set filebeat_hash = '525d536dfc18218fb5c6a6e84a40b385c3c779d4ab0cee95eaee3c23449d21e8712fa95f83522cc100396dd2321637e2927c7d2507295ee421856c81fecf8249' %}
-{%- set filebeat_path = 'c:\\filebeat-7.3.0-windows-x86_64.zip'  %}
+{%- set install_heartbeat = true %}
+{%- set heartbeat_url = 'https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-7.3.0-windows-x86_64.zip' %}
+{%- set heartbeat_hash = 'bcb5412d9c9c18ff87abca3e0de4b51321479e6dfa964a4efd41287b578a645bbc957fb35a94e0d2e5a3a7f269d10865bc9dcf42c70eb0c3844b24cbb68db31b' %}
+{%- set heartbeat_path = 'c:\\heartbeat-7.3.0-windows-x86_64.zip'  %}
 # Unused on windows
 {%- set pkg_install_cmd = '' %}
 
 {%- elif grains['os_family'] == 'Debian' %}
 
-{%- set install_filebeat = true %}
-{%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.0-amd64.deb' %}
-{%- set filebeat_hash = 'dcdbf53ade1c1df29a96c661d9e10d75983b8b0621f852c3c48f325928a694d30e99680ade4edeefd1bfc4ed58e9b39d513091a55815f494d7ff7c197c538b16' %}
-{%- set filebeat_path = '/tmp/filebeat-7.3.0-amd64.deb'  %}
+{%- set install_heartbeat = true %}
+{%- set heartbeat_url = 'https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-7.3.0-amd64.deb' %}
+{%- set heartbeat_hash = '050a1c3085606289f53a4e69fa17fcc3c878f01dbb98363e366a051ad65714d79402d276853065f32ca136ff4eb25fae48c6b21c6d9a18d845763c4d81fec9e9' %}
+{%- set heartbeat_path = '/tmp/heartbeat-7.3.0-amd64.deb'  %}
 {%- set pkg_install_cmd = 'dpkg -i' %}
 
 {%- elif grains['os_family'] == 'RedHat' %}
 
-{%- set install_filebeat = true %}
+{%- set install_heartbeat = true %}
 {%- set elastic_gpg_key_url = 'https://packages.elastic.co/GPG-KEY-elasticsearch' %}
-{%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.0-x86_64.rpm' %}
-{%- set filebeat_hash = 'b2c327df5278960af2bef7a7bf4598ec833f57fbd6ba381829ad33b500123e9663c7fa8a6ec0d7bada77391618fc64ec1fe94393efb780edb077dd8fad39ed13' %}
-{%- set filebeat_path = '/tmp/filebeat-7.3.0-x86_64.rpm'  %}
+{%- set heartbeat_url = 'https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-7.3.0-x86_64.rpm' %}
+{%- set heartbeat_hash = 'fa01094e69433308cc69b21d0fbe155d62c8e6dbcbbfc8724509b04fcc63a7471ed3c5af087a85c0b3fd40bd7f6d762877333150c8623dd3b12edfb0a063c2ce' %}
+{%- set heartbeat_path = '/tmp/heartbeat-7.3.0-x86_64.rpm'  %}
 {%- set pkg_install_cmd = 'rpm -vi' %}
-{%- set pkg_check_installed_cmd = 'rpm -q filebeat' %}
+{%- set pkg_check_installed_cmd = 'rpm -q heartbeat' %}
 
 {%- else %}
 
-{%- set install_filebeat = false %}
+{%- set install_heartbeat = false %}
 
 {%- endif %}
 
-{%- if install_filebeat %}
+{%- if install_heartbeat %}
 {%- if grains['os_family'] == 'RedHat' %}
-filebeat-rpm-gpg-key:
+heartbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
       - file: download-filebeat
 {%- endif %}
 
-download-filebeat:
+download-heartbeat:
   file.managed:
-    - name: {{ filebeat_path }}
-    - source: {{ filebeat_url }}
-    - source_hash: {{ filebeat_hash }}
-    - unless: '[ -f {{ filebeat_path }} ]'
+    - name: {{ heartbeat_path }}
+    - source: {{ heartbeat_url }}
+    - source_hash: {{ heartbeat_hash }}
+    - unless: '[ -f {{ heartbeat_path }} ]'
 
 {%- if grains['os'] == 'Windows' %}
-unzip-filebeat:
+unzip-heartbeat:
   archive.unzip:
-    - name: 'C:\Program Files\Filebeat'
-    - source: {{ filebeat_path }}
+    - name: 'C:\Program Files\Heartbeat'
+    - source: {{ heartbeat_path }}
 {%- endif %}
 
-install-filebeat:
+install-heartbeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
-    - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Filebeat\install-service-filebeat.ps1'
+    - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Heartbeat\install-service-heartbeat.ps1'
     - require:
-      - unzip-filebeat
-      - download-filebeat
+      - unzip-heartbeat
+      - download-heartbeat
     {%- else %}
-    - name: {{ pkg_install_cmd}} {{ filebeat_path }}
+    - name: {{ pkg_install_cmd}} {{ heartbeat_path }}
     - require:
-      - download-filebeat
+      - download-heartbeat
     {%- endif %}
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
 
-filebeat-config:
+heartbeat-config:
   file.managed:
 {%- if grains['os'] == 'Windows' %}
-    - name: c:\Program Files\Filebeat\filebeat.yml
+    - name: c:\Program Files\Filebeat\heartbeat.yml
     - contents: |
-        filebeat.inputs:
-          - type: log
-            paths:
-              - c:\\kitchen\\testing\\**\\*.log
         cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
         cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
+        heartbeat.monitors:
+        - type: tcp
+          name: HOSTNAMEVALUE-localhost-winrm-5985
+          schedule: '@every 5s'
+          hosts: ["localhost:5985"]
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -98,15 +99,16 @@ filebeat-config:
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
 {%- else %}
-    - name: /etc/filebeat/filebeat.yml
+    - name: /etc/heartbeat/heartbeat.yml
     - contents: |
-        filebeat.config.modules:
+        heartbeat.config.modules:
           enabled: true
           path: ${path.config}/modules.d/*.yml
-        filebeat.inputs:
-          - type: log
-            paths:
-              - /tmp/kitchen/testing/artifacts/logs/*.log
+        heartbeat.monitors:
+        - type: tcp
+          name: HOSTNAMEVALUE-localhost-ssh-22
+          schedule: '@every 5s'
+          hosts: ["localhost:22"]
         cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
         cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
@@ -125,14 +127,9 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-
-filebeat-enable-system-module:
-  cmd.run:
-    - name: filebeat modules enable system
-    - unless: test -f /etc/filebeat/modules.d/system.yml
 {%- endif %}
 
-filebeat:
+heartbeat:
   service.running:
     - enable: True
 {%- endif %}

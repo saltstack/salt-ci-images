@@ -9,6 +9,7 @@ include:
   {%- endif %}
   - windows.git
   - windows.nsis
+  - windows.ca_roots
   - windows.compiler
   - windows.certs
   - windows.vcredist

@@ -92,8 +92,6 @@ metricbeat-config:
           period: 10s
           processes: ['.*']
           cpu.metrics:  ["percentages"]
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -133,8 +131,6 @@ metricbeat-config:
           period: 10s
           processes: ['.*']
           cpu.metrics:  ["percentages"]
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true

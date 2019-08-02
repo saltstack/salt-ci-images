@@ -79,8 +79,6 @@ filebeat-config:
           - type: log
             paths:
               - c:\\kitchen\\testing\\**\\*.log
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -107,8 +105,6 @@ filebeat-config:
           - type: log
             paths:
               - /tmp/kitchen/testing/artifacts/logs/*.log
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -135,6 +131,5 @@ filebeat-enable-system-module:
 {%- endif %}
 
 filebeat:
-  service.running:
-    - enable: True
+  service.enabled
 {%- endif %}

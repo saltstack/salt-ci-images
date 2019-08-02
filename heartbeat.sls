@@ -75,8 +75,6 @@ heartbeat-config:
 {%- if grains['os'] == 'Windows' %}
     - name: c:\Program Files\Filebeat\heartbeat.yml
     - contents: |
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         heartbeat.monitors:
         - type: tcp
           name: HOSTNAMEVALUE-localhost-winrm-5985
@@ -109,8 +107,6 @@ heartbeat-config:
           name: HOSTNAMEVALUE-localhost-ssh-22
           schedule: '@every 5s'
           hosts: ["localhost:22"]
-        cloud.auth: "beats_system:*QT3@-jQ*VHch!K7Towv"
-        cloud.id: "prod:dXMtd2VzdC0yLmF3cy5mb3VuZC5pbyRmNGVjMTRlYTIzZGE0Yjc3YjUyNmU2NTU5NzUyMDRjOSQzNjQ3MWViMGRkMTg0MWE0OGU5OTEyMjcyODA5OGM3ZQ=="
         processors:
         - add_cloud_metadata:
             overwrite: true
@@ -130,6 +126,5 @@ heartbeat-config:
 {%- endif %}
 
 heartbeat:
-  service.running:
-    - enable: True
+  service.enabled
 {%- endif %}

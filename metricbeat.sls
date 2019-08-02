@@ -150,5 +150,5 @@ metricbeat-config:
 {%- endif %}
 
 metricbeat:
-  service.running
+  service.enabled
 {%- endif %}

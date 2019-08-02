@@ -126,5 +126,5 @@ heartbeat-config:
 {%- endif %}
 
 heartbeat:
-  service.running
+  service.enabled
 {%- endif %}

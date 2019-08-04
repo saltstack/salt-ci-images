@@ -433,6 +433,7 @@ install-base-{{ req }}:
 bower:
   npm.installed:
     - force_reinstall: True
+    - user: jenkins
 
 {#- workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
 update-brew:

@@ -430,8 +430,6 @@ install-base-{{ req }}:
 bower:
   npm.installed:
     - force_reinstall: True
-    - require:
-      - macpackage: install_node
 
 {#- workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
 update-brew:

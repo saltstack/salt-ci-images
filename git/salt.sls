@@ -424,3 +424,28 @@ install-base-{{ req }}:
 {%- endfor %}
 
 {%- endif %}
+
+{#- npm v5 workaround for issue #41770 #}
+{%- if grains['os'] == 'MacOS' %}
+bower:
+  npm.installed:
+    - force_reinstall: True
+    - require:
+      - macpackage: install_node
+
+{#- workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
+update-brew:
+  cmd.run:
+    - name: brew update
+    - runas: jenkins
+
+node_binary:
+  file.symlink:
+    - name: /usr/bin/node
+    - target: /usr/local/bin/node
+
+npm_binary:
+  file.symlink:
+    - name: /usr/bin/npm
+    - target: /usr/local/bin/npm
+{%- endif %}

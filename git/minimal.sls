@@ -134,8 +134,8 @@ include:
   {# - journalbeat #}
   {%- endif %}
 {%- endif %}
-{%- if os_family != 'Windows' %}
-  - ssh
+{%- if os_family not in ('Windows', 'MacOS',)  %}
+  - sshd_config
 {%- endif %}
 
 

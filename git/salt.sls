@@ -429,32 +429,11 @@ install-base-{{ req }}:
 {%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}
-{#- node version 7.0.0 is not avaliable in MAC OSX 13(High Sierra) #}
-{#- installing node, npm, and bower manually for the MAC OS. #}
 {%- if grains['os'] == 'MacOS' %}
-uninstall_brewed_node:
-  cmd.run:
-    - name: brew uninstall --force node
-    - runas: jenkins
-
-download_node:
-  file.managed:
-    - source: https://nodejs.org/download/release/v7.0.0/node-v7.0.0.pkg
-    - source_hash: sha256=5d935d0e2e864920720623e629e2d4fb0d65238c110db5fbe71f73de8568c024
-    - name: /tmp/node-v7.0.0.pkg
-    - user: root
-    - group: wheel
-
-install_node:
-  macpackage.installed:
-    - name: /tmp/node-v7.0.0.pkg
-    - reload_modules: True
-
 bower:
   npm.installed:
     - force_reinstall: True
-    - require:
-      - macpackage: install_node
+    - user: jenkins
 
 {#- workaround for https://github.com/saltstack/salt-jenkins/issues/643 #}
 update-brew:
@@ -462,8 +441,6 @@ update-brew:
     - name: brew update
     - runas: jenkins
 
-{#- set npm and node symlinks on sierra #}
-{%- if '10.12' in grains['osrelease'] %}
 node_binary:
   file.symlink:
     - name: /usr/bin/node
@@ -473,5 +450,4 @@ npm_binary:
   file.symlink:
     - name: /usr/bin/npm
     - target: /usr/local/bin/npm
-{%- endif %}
 {%- endif %}

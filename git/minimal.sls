@@ -135,6 +135,9 @@ include:
   {# - journalbeat #}
   {%- endif %}
 {%- endif %}
+{%- if os_family != 'Windows' %}
+  - ssh
+{%- endif %}
 
 minion-service-stopped:
   service.dead:

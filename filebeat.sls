@@ -149,6 +149,7 @@ filebeat-config:
       {%- if grains['os_family'] == 'MacOS' %}
     - unless: test -f /usr/local/etc/filebeat/modules.d/system.yml
     - require:
+      {%- if grains['os_family'] == 'MacOS' %}
       - module: install-filebeat
       {%- else %}
     - unless: test -f /etc/filebeat/modules.d/system.yml

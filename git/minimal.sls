@@ -135,6 +135,9 @@ include:
   {# - journalbeat #}
   {%- endif %}
 {%- endif %}
+{%- if os_family not in ('Windows', 'MacOS',)  %}
+  - sshd_config
+{%- endif %}
 
 minion-service-stopped:
   service.dead:

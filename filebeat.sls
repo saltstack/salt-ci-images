@@ -25,6 +25,10 @@
 {%- set pkg_install_cmd = 'rpm -vi' %}
 {%- set pkg_check_installed_cmd = 'rpm -q filebeat' %}
 
+{%- elif grains['os_family'] == 'MacOS' %}
+
+{%- set install_filebeat = true %}
+
 {%- else %}
 
 {%- set install_filebeat = false %}
@@ -40,12 +44,14 @@ filebeat-rpm-gpg-key:
       - file: download-filebeat
 {%- endif %}
 
+{%- if not grains['os_family'] == 'MacOS' %}
 download-filebeat:
   file.managed:
     - name: {{ filebeat_path }}
     - source: {{ filebeat_url }}
     - source_hash: {{ filebeat_hash }}
     - unless: '[ -f {{ filebeat_path }} ]'
+{%- endif %}
 
 {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:
@@ -54,6 +60,7 @@ unzip-filebeat:
     - source: {{ filebeat_path }}
 {%- endif %}
 
+{%- if not grains['os_family'] == 'MacOS' %}
 install-filebeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
@@ -69,6 +76,13 @@ install-filebeat:
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
+{%- elif %}
+install-filebeat:
+  module.run:
+    - pkg.install:
+      - name: elastic/tap/filebeat-full
+      - tap: elastic/tap
+{%- endif %}
 
 filebeat-config:
   file.managed:
@@ -96,7 +110,11 @@ filebeat-config:
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
 {%- else %}
+    {%- if grains['os_family'] == 'MacOS' %}
+    - name: /usr/local/etc/filebeat/filebeat.yml
+    {%- else %}
     - name: /etc/filebeat/filebeat.yml
+    {%- endif %}
     - contents: |
         filebeat.config.modules:
           enabled: true
@@ -132,6 +150,7 @@ filebeat-enable-system-module:
 
 {%- endif %}
 
+{%- if grains['os_family'] == 'MacOS' %}
 filebeat:
   service.disabled
 {%- endif %}

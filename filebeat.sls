@@ -131,5 +131,5 @@ filebeat-enable-system-module:
 {%- endif %}
 
 filebeat:
-  service.enabled
+  service.disabled
 {%- endif %}

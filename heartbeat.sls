@@ -37,7 +37,7 @@ heartbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
-      - file: download-filebeat
+      - file: download-heartbeat
 {%- endif %}
 
 download-heartbeat:
@@ -99,9 +99,6 @@ heartbeat-config:
 {%- else %}
     - name: /etc/heartbeat/heartbeat.yml
     - contents: |
-        heartbeat.config.modules:
-          enabled: true
-          path: ${path.config}/modules.d/*.yml
         heartbeat.monitors:
         - type: tcp
           name: HOSTNAMEVALUE-localhost-ssh-22
@@ -125,6 +122,6 @@ heartbeat-config:
               buildname: BUILDNAMEVALUE
 {%- endif %}
 
-heartbeat:
-  service.enabled
+heartbeat-elastic:
+  service.disabled
 {%- endif %}

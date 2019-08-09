@@ -13,18 +13,14 @@
       {%- endif %}
     {%- endif %}
   {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
-    {%- if grains['osrelease'].startswith('5') %}
-      {%- set python_dev = 'python26-devel' %}
+    {%- if pillar.get('py3', False) %}
+      {%- set python_dev = 'python36-devel' %}
     {%- else %}
-      {%- if pillar.get('py3', False) %}
-        {%- set python_dev = 'python34-devel' %}
-      {%- else %}
-        {%- set python_dev = 'python-devel' %}
-      {%- endif %}
+      {%- set python_dev = 'python-devel' %}
     {%- endif %}
   {%- else %}
     {%- if pillar.get('py3', False) %}
-      {%- set python_dev = 'libpython34-devel' %}
+      {%- set python_dev = 'libpython36-devel' %}
     {%- else %}
       {%- set python_dev = 'libpython-devel' %}
     {%- endif %}

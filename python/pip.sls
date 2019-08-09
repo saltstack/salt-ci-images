@@ -73,7 +73,7 @@
     {%- set python2 = 'python2' %}
   {%- endif %}
   {%- if on_redhat_7 %}
-    {%- set python3 = 'python3.4' %}
+    {%- set python3 = 'python3.6' %}
   {%- else %}
     {%- set python3 = 'python3' %}
   {%- endif %}

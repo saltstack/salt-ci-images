@@ -127,11 +127,15 @@ include:
   {%- if os_family == 'Windows' %}
   - metricbeat
   - filebeat
+  - heartbeat
   {%- else %}
+  - timesync
   - metricbeat
   - filebeat
-  - timesync
-  {# - journalbeat #}
+  - heartbeat
+    {%- if grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+  - journalbeat
+    {%- endif %}
   {%- endif %}
 {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}

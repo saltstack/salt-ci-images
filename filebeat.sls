@@ -121,6 +121,15 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
+  {%- if grains.osfinger in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+filebeat-enable-system-module:
+ cmd.run:
+   - name: filebeat modules enable system
+   - unless: test -f /etc/filebeat/modules.d/system.yml
+   - require:
+     - cmd: install-filebeat
+  {%- endif %}
+
 {%- endif %}
 
 filebeat:

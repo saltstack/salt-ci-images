@@ -127,8 +127,10 @@ include:
   - timesync
   - metricbeat
   - filebeat
-  - journalbeat
   - heartbeat
+    {%- if grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+  - journalbeat
+    {%- endif %}
   {%- endif %}
 {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}

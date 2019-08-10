@@ -121,13 +121,6 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-
-filebeat-enable-system-module:
-  cmd.run:
-    - name: filebeat modules enable system
-    - unless: test -f /etc/filebeat/modules.d/system.yml
-    - require:
-      - cmd: install-filebeat
 {%- endif %}
 
 filebeat:

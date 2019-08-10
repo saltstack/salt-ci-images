@@ -122,11 +122,13 @@ include:
   {%- if os_family == 'Windows' %}
   - metricbeat
   - filebeat
+  - heartbeat
   {%- else %}
+  - timesync
   - metricbeat
   - filebeat
-  - timesync
-  {# - journalbeat #}
+  - journalbeat
+  - heartbeat
   {%- endif %}
 {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}

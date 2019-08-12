@@ -126,11 +126,15 @@ include:
   - metricbeat
   - filebeat
   - heartbeat
-  {%- if 'Linux' in grains.kernel %}
-    {%- if grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+    {%- if 'Linux' in grains.kernel %}
+      {%- if 'RedHat' in grains.os_family %}
+        {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
   - journalbeat
+        {%- endif %}
+      {%- else %}
+  - journalbeat
+      {%- endif %}
     {%- endif %}
-  {%- endif %}
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}
   - sshd_config

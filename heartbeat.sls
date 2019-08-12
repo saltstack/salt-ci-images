@@ -23,7 +23,7 @@
 {%- set heartbeat_hash = 'fa01094e69433308cc69b21d0fbe155d62c8e6dbcbbfc8724509b04fcc63a7471ed3c5af087a85c0b3fd40bd7f6d762877333150c8623dd3b12edfb0a063c2ce' %}
 {%- set heartbeat_path = '/tmp/heartbeat-7.3.0-x86_64.rpm'  %}
 {%- set pkg_install_cmd = 'rpm -vi' %}
-{%- set pkg_check_installed_cmd = 'rpm -q heartbeat' %}
+{%- set pkg_check_installed_cmd = 'rpm -q heartbeat-elastic' %}
 
 {%- elif grains['os_family'] == 'MacOS' %}
 

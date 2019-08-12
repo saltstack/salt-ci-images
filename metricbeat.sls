@@ -25,6 +25,10 @@
 {%- set pkg_install_cmd = 'rpm -vi' %}
 {%- set pkg_check_installed_cmd = 'rpm -q metricbeat' %}
 
+{%- elif grains['os_family'] == 'MacOS' %}
+
+{%- set install_metricbeat = true %}
+
 {%- else %}
 
 {%- set install_metricbeat = false %}
@@ -32,28 +36,32 @@
 {%- endif %}
 
 {%- if install_metricbeat %}
-{%- if grains['os_family'] == 'RedHat' %}
+  {%- if grains['os_family'] == 'RedHat' %}
 metricbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
-      - file: download-filebeat
-{%- endif %}
+      - file: download-metricbeat
+  {%- endif %}
 
+  {%- if not grains['os_family'] == 'MacOS' %}
 download-metricbeat:
   file.managed:
     - name: {{ metricbeat_path }}
     - source: {{ metricbeat_url }}
     - source_hash: {{ metricbeat_hash }}
     - unless: '[ -f {{ metricbeat_path }} ]'
+  {%- endif %}
 
-{%- if grains['os'] == 'Windows' %}
+  {%- if grains['os'] == 'Windows' %}
 unzip-metricbeat:
   archive.unzip:
     - name: 'C:\Program Files\Metricbeat'
     - source: {{ metricbeat_path }}
-{%- endif %}
+  {%- endif %}
 
+
+  {%- if not grains['os_family'] == 'MacOS' %}
 install-metricbeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
@@ -69,11 +77,18 @@ install-metricbeat:
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
+  {%- else %}
+install-metricbeat:
+  module.run:
+    - name: pkg.install
+    - m_name: elastic/tap/metricbeat-full
+    - tap: elastic/tap
+  {%- endif %}
 
 metricbeat-config:
   file.managed:
-{%- if grains['os'] == 'Windows' %}
-    - name: c:\Program Files\Filebeat\metricbeat.yml
+  {%- if grains['os'] == 'Windows' %}
+    - name: c:\Program Files\Metricbeat\metricbeat.yml
     - contents: |
         metricbeat.modules:
         - module: system
@@ -108,8 +123,14 @@ metricbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-{%- else %}
+  {%- else %}
+    {%- if grains['os_family'] == 'MacOS' %}
+    - name: /usr/local/etc/metricbeat/metricbeat.yml
+    - user: root
+    - group: wheel
+    {%- else %}
     - name: /etc/metricbeat/metricbeat.yml
+    {%- endif %}
     - contents: |
         metricbeat.config.modules:
           enabled: true
@@ -147,8 +168,10 @@ metricbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-{%- endif %}
+  {%- endif %}
 
+  {%- if not grains['os_family'] == 'MacOS' %}
 metricbeat:
   service.disabled
+  {%- endif %}
 {%- endif %}

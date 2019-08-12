@@ -25,6 +25,10 @@
 {%- set pkg_install_cmd = 'rpm -vi' %}
 {%- set pkg_check_installed_cmd = 'rpm -q heartbeat' %}
 
+{%- elif grains['os_family'] == 'MacOS' %}
+
+{%- set install_heartbeat = true %}
+
 {%- else %}
 
 {%- set install_heartbeat = false %}
@@ -32,28 +36,32 @@
 {%- endif %}
 
 {%- if install_heartbeat %}
-{%- if grains['os_family'] == 'RedHat' %}
+  {%- if grains['os_family'] == 'RedHat' %}
 heartbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
       - file: download-heartbeat
-{%- endif %}
+  {%- endif %}
 
+  {%- if not grains['os_family'] == 'MacOS' %}
 download-heartbeat:
   file.managed:
     - name: {{ heartbeat_path }}
     - source: {{ heartbeat_url }}
     - source_hash: {{ heartbeat_hash }}
     - unless: '[ -f {{ heartbeat_path }} ]'
+  {%- endif %}
 
-{%- if grains['os'] == 'Windows' %}
+  {%- if grains['os'] == 'Windows' %}
 unzip-heartbeat:
   archive.unzip:
     - name: 'C:\Program Files\Heartbeat'
     - source: {{ heartbeat_path }}
-{%- endif %}
+  {%- endif %}
 
+
+  {%- if not grains['os_family'] == 'MacOS' %}
 install-heartbeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
@@ -69,11 +77,18 @@ install-heartbeat:
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
+  {%- else %}
+install-heartbeat:
+  module.run:
+    - name: pkg.install
+    - m_name: elastic/tap/heartbeat-full
+    - tap: elastic/tap
+  {%- endif %}
 
 heartbeat-config:
   file.managed:
-{%- if grains['os'] == 'Windows' %}
-    - name: c:\Program Files\Filebeat\heartbeat.yml
+  {%- if grains['os'] == 'Windows' %}
+    - name: c:\Program Files\Heartbeat\heartbeat.yml
     - contents: |
         heartbeat.monitors:
         - type: tcp
@@ -96,8 +111,14 @@ heartbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-{%- else %}
+  {%- else %}
+    {%- if grains['os_family'] == 'MacOS' %}
+    - name: /usr/local/etc/heartbeat/heartbeat.yml
+    - user: root
+    - group: wheel
+    {%- else %}
     - name: /etc/heartbeat/heartbeat.yml
+    {%- endif %}
     - contents: |
         heartbeat.monitors:
         - type: tcp
@@ -120,8 +141,10 @@ heartbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-{%- endif %}
+  {%- endif %}
 
+  {%- if not grains['os_family'] == 'MacOS' %}
 heartbeat-elastic:
   service.disabled
+  {%- endif %}
 {%- endif %}

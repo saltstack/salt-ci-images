@@ -24,13 +24,13 @@
 {%- endif %}
 
 {%- if install_journalbeat %}
-{%- if grains['os_family'] == 'RedHat' %}
+  {%- if grains['os_family'] == 'RedHat' %}
 journalbeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
       - file: download-journalbeat
-{%- endif %}
+  {%- endif %}
 
 download-journalbeat:
   file.managed:

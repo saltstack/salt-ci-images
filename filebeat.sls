@@ -36,31 +36,31 @@
 {%- endif %}
 
 {%- if install_filebeat %}
-{%- if grains['os_family'] == 'RedHat' %}
+  {%- if grains['os_family'] == 'RedHat' %}
 filebeat-rpm-gpg-key:
   cmd.run:
     - name: 'rpm --import {{ elastic_gpg_key_url }}'
     - require_in:
       - file: download-filebeat
-{%- endif %}
+  {%- endif %}
 
-{%- if not grains['os_family'] == 'MacOS' %}
+  {%- if not grains['os_family'] == 'MacOS' %}
 download-filebeat:
   file.managed:
     - name: {{ filebeat_path }}
     - source: {{ filebeat_url }}
     - source_hash: {{ filebeat_hash }}
     - unless: '[ -f {{ filebeat_path }} ]'
-{%- endif %}
+  {%- endif %}
 
-{%- if grains['os'] == 'Windows' %}
+  {%- if grains['os'] == 'Windows' %}
 unzip-filebeat:
-  archive.unzip:
+  archive.extracted:
     - name: 'C:\Program Files\Filebeat'
     - source: {{ filebeat_path }}
-{%- endif %}
+  {%- endif %}
 
-{%- if not grains['os_family'] == 'MacOS' %}
+  {%- if not grains['os_family'] == 'MacOS' %}
 install-filebeat:
   cmd.run:
     {%- if grains['os'] == 'Windows' %}
@@ -76,17 +76,17 @@ install-filebeat:
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
-{%- elif %}
+  {%- else %}
 install-filebeat:
   module.run:
-    - pkg.install:
-      - name: elastic/tap/filebeat-full
-      - tap: elastic/tap
-{%- endif %}
+    - name: pkg.install
+    - m_name: elastic/tap/filebeat-full
+    - tap: elastic/tap
+  {%- endif %}
 
 filebeat-config:
   file.managed:
-{%- if grains['os'] == 'Windows' %}
+  {%- if grains['os'] == 'Windows' %}
     - name: c:\Program Files\Filebeat\filebeat.yml
     - contents: |
         filebeat.inputs:
@@ -109,9 +109,11 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-{%- else %}
+  {%- else %}
     {%- if grains['os_family'] == 'MacOS' %}
     - name: /usr/local/etc/filebeat/filebeat.yml
+    - user: root
+    - group: wheel
     {%- else %}
     - name: /etc/filebeat/filebeat.yml
     {%- endif %}
@@ -139,18 +141,24 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-  {%- if grains.osfinger in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
-filebeat-enable-system-module:
- cmd.run:
-   - name: filebeat modules enable system
-   - unless: test -f /etc/filebeat/modules.d/system.yml
-   - require:
-     - cmd: install-filebeat
   {%- endif %}
 
-{%- endif %}
+  {%- if 'MacOS' in grains.os_family or grains.osfinger in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+  cmd.run:
+    - name: filebeat modules enable system
+      {%- if grains['os_family'] == 'MacOS' %}
+    - unless: test -f /usr/local/etc/filebeat/modules.d/system.yml
+    - require:
+      - module: install-filebeat
+      {%- else %}
+    - unless: test -f /etc/filebeat/modules.d/system.yml
+    - require:
+      - cmd: install-filebeat
+      {%- endif %}
+  {%- endif %}
 
-{%- if grains['os_family'] == 'MacOS' %}
+  {%- if not grains['os_family'] == 'MacOS' %}
 filebeat:
   service.disabled
+  {%- endif %}
 {%- endif %}

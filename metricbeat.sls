@@ -55,7 +55,7 @@ download-metricbeat:
 
   {%- if grains['os'] == 'Windows' %}
 unzip-metricbeat:
-  archive.unzip:
+  archive.extracted:
     - name: 'C:\Program Files\Metricbeat'
     - source: {{ metricbeat_path }}
   {%- endif %}

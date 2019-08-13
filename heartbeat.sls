@@ -55,7 +55,7 @@ download-heartbeat:
 
   {%- if grains['os'] == 'Windows' %}
 unzip-heartbeat:
-  archive.unzip:
+  archive.extracted:
     - name: 'C:\Program Files\Heartbeat'
     - source: {{ heartbeat_path }}
   {%- endif %}

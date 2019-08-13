@@ -1,13 +1,4 @@
-{%- if grains['os'] == 'Windows' %}
-
-{%- set install_filebeat = true %}
-{%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.0-windows-x86_64.zip' %}
-{%- set filebeat_hash = '525d536dfc18218fb5c6a6e84a40b385c3c779d4ab0cee95eaee3c23449d21e8712fa95f83522cc100396dd2321637e2927c7d2507295ee421856c81fecf8249' %}
-{%- set filebeat_path = 'c:\\filebeat-7.3.0-windows-x86_64.zip'  %}
-# Unused on windows
-{%- set pkg_install_cmd = '' %}
-
-{%- elif grains['os_family'] == 'Debian' %}
+{%- if grains['os_family'] == 'Debian' %}
 
 {%- set install_filebeat = true %}
 {%- set filebeat_url = 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.3.0-amd64.deb' %}
@@ -53,26 +44,12 @@ download-filebeat:
     - unless: '[ -f {{ filebeat_path }} ]'
   {%- endif %}
 
-  {%- if grains['os'] == 'Windows' %}
-unzip-filebeat:
-  archive.extracted:
-    - name: 'C:\Program Files\Filebeat'
-    - source: {{ filebeat_path }}
-  {%- endif %}
-
   {%- if not grains['os_family'] == 'MacOS' %}
 install-filebeat:
   cmd.run:
-    {%- if grains['os'] == 'Windows' %}
-    - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Filebeat\install-service-filebeat.ps1'
-    - require:
-      - unzip-filebeat
-      - download-filebeat
-    {%- else %}
     - name: {{ pkg_install_cmd}} {{ filebeat_path }}
     - require:
       - download-filebeat
-    {%- endif %}
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
@@ -86,37 +63,13 @@ install-filebeat:
 
 filebeat-config:
   file.managed:
-  {%- if grains['os'] == 'Windows' %}
-    - name: c:\Program Files\Filebeat\filebeat.yml
-    - contents: |
-        filebeat.inputs:
-          - type: log
-            paths:
-              - c:\\kitchen\\testing\\**\\*.log
-        processors:
-        - add_cloud_metadata:
-            overwrite: true
-        - add_host_metadata:
-            netinfo.enabled: true
-        - add_fields:
-            fields:
-              account: ci
-            target: aws
-        - add_fields:
-            target: test
-            fields:
-              pyver: PYVERVALUE
-              transport: TRANSPORTVALUE
-              buildnumber: 99999
-              buildname: BUILDNAMEVALUE
-  {%- else %}
-    {%- if grains['os_family'] == 'MacOS' %}
+  {%- if grains['os_family'] == 'MacOS' %}
     - name: /usr/local/etc/filebeat/filebeat.yml
     - user: root
     - group: wheel
-    {%- else %}
+  {%- else %}
     - name: /etc/filebeat/filebeat.yml
-    {%- endif %}
+  {%- endif %}
     - contents: |
         filebeat.config.modules:
           enabled: true
@@ -141,7 +94,6 @@ filebeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-  {%- endif %}
 
   {%- if 'MacOS' in grains.os_family or grains.osfinger in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
   cmd.run:

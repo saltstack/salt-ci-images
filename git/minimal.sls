@@ -120,11 +120,6 @@ include:
   {%- endif %}
   - python.tox
   - python.nox
-  {%- if os_family == 'Windows' %}
-  - metricbeat
-  - filebeat
-  - heartbeat
-  {%- else %}
   - timesync
   - metricbeat
   - filebeat

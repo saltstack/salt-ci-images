@@ -198,6 +198,11 @@ include:
   {%- if not on_docker %}
   - sssd
   {%- endif %}
+  {%- if 'MacOS' in grains.os_family %}
+  - filebeat
+  - heartbeat
+  - metricbeat
+  {%- endif %}
 
 {%- if pillar.get('create_testing_dir', True) %}
 testing-dir:

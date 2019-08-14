@@ -207,6 +207,11 @@ include:
   {%- if grains['kernel'] == 'Linux' %}
   - ulimits
   {%- endif %}
+  {%- if 'MacOS' in grains.os_family %}
+  - filebeat
+  - heartbeat
+  - metricbeat
+  {%- endif %}
 
 {%- if pillar.get('create_testing_dir', True) %}
 testing-dir:

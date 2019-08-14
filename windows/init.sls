@@ -10,6 +10,8 @@ include:
   - windows.git
   - windows.nsis
   - windows.compiler
+  - windows.filebeat
+  - windows.metricbeat
   - windows.vcredist
   - windows.openssl
   {%- if not pillar.get('packer_golden_images_build', False) %}

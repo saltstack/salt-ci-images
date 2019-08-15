@@ -48,7 +48,7 @@ configure-metricbeat:
       - install-metricbeat
 
 start-metricbeat-service:
-  service.running:
+  service.disabled:
     - name: metricbeat
     - watch:
       - configure-metricbeat

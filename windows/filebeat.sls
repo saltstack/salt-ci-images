@@ -36,7 +36,7 @@ configure-filebeat:
       - install-filebeat
 
 start-filebeat-service:
-  service.running:
+  service.disabled:
     - name: filebeat
     - watch:
       - configure-filebeat

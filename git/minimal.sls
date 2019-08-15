@@ -27,6 +27,9 @@
 {%- endif %}
 
 include:
+  {%- if grains['os_family'] == 'Debian' %}
+  - apt
+  {%- endif %}
   {%- if grains['os'] == 'Windows' %}
   - windows
   - vim
@@ -122,29 +125,22 @@ include:
   - python.tox
   - python.nox
   - cron
-  {%- if os_family == 'Windows' %}
-  - metricbeat
-  - filebeat
-  - heartbeat
-  {%- else %}
+  {%- if 'Linux' in grains.kernel %}
   - timesync
   - metricbeat
   - filebeat
   - heartbeat
-    {%- if 'Linux' in grains.kernel %}
-      {%- if 'RedHat' in grains.os_family %}
-        {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
-  - journalbeat
-        {%- endif %}
-      {%- else %}
+    {%- if 'RedHat' in grains.os_family %}
+      {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
   - journalbeat
       {%- endif %}
+    {%- else %}
+  - journalbeat
     {%- endif %}
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}
   - sshd_config
 {%- endif %}
-
 
 minion-service-stopped:
   service.dead:

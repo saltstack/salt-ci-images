@@ -125,11 +125,11 @@ include:
   - python.tox
   - python.nox
   - cron
+  {%- if 'Linux' in grains.kernel %}
   - timesync
   - metricbeat
   - filebeat
   - heartbeat
-  {%- if 'Linux' in grains.kernel %}
     {%- if 'RedHat' in grains.os_family %}
       {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
   - journalbeat

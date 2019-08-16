@@ -1,13 +1,4 @@
-{%- if grains['os'] == 'Windows' %}
-
-{%- set install_metricbeat = true %}
-{%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.0-windows-x86_64.zip' %}
-{%- set metricbeat_hash = 'ba02c1eb3820100b5d0cffd5b101bebd7392c3b60826d9bb47bbde2dc9191d50aa71382e3f38c2292d19ca6689b65bffbedc67bca084fa3fe2d067cc68a7dc4b' %}
-{%- set metricbeat_path = 'c:\\metricbeat-7.3.0-windows-x86_64.zip'  %}
-# Unused on windows
-{%- set pkg_install_cmd = '' %}
-
-{%- elif grains['os_family'] == 'Debian' %}
+{%- if grains['os_family'] == 'Debian' %}
 
 {%- set install_metricbeat = true %}
 {%- set metricbeat_url = 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.3.0-amd64.deb' %}
@@ -53,27 +44,13 @@ download-metricbeat:
     - unless: '[ -f {{ metricbeat_path }} ]'
   {%- endif %}
 
-  {%- if grains['os'] == 'Windows' %}
-unzip-metricbeat:
-  archive.extracted:
-    - name: 'C:\Program Files\Metricbeat'
-    - source: {{ metricbeat_path }}
-  {%- endif %}
-
 
   {%- if not grains['os_family'] == 'MacOS' %}
 install-metricbeat:
   cmd.run:
-    {%- if grains['os'] == 'Windows' %}
-    - name: 'powershell -ExecutionPolicy UnRestricted -File C:\Program Files\Metricbeat\install-service-metricbeat.ps1'
-    - require:
-      - unzip-metricbeat
-      - download-metricbeat
-    {%- else %}
     - name: {{ pkg_install_cmd}} {{ metricbeat_path }}
     - require:
       - download-metricbeat
-    {%- endif %}
     {%- if pkg_check_installed_cmd is defined %}
     - unless: {{ pkg_check_installed_cmd }}
     {%- endif %}
@@ -87,43 +64,6 @@ install-metricbeat:
 
 metricbeat-config:
   file.managed:
-  {%- if grains['os'] == 'Windows' %}
-    - name: c:\Program Files\Metricbeat\metricbeat.yml
-    - contents: |
-        metricbeat.modules:
-        - module: system
-          metricsets:
-            - cpu
-            - load
-            - memory
-            - network
-            - process
-            - process_summary
-            - uptime
-            - socket_summary
-            - diskio
-            - filesystem
-          enabled: true
-          period: 10s
-          processes: ['.*']
-          cpu.metrics:  ["percentages"]
-        processors:
-        - add_cloud_metadata:
-            overwrite: true
-        - add_host_metadata:
-            netinfo.enabled: true
-        - add_fields:
-            fields:
-              account: ci
-            target: aws
-        - add_fields:
-            target: test
-            fields:
-              pyver: PYVERVALUE
-              transport: TRANSPORTVALUE
-              buildnumber: 99999
-              buildname: BUILDNAMEVALUE
-  {%- else %}
     {%- if grains['os_family'] == 'MacOS' %}
     - name: /usr/local/etc/metricbeat/metricbeat.yml
     - user: root
@@ -158,9 +98,9 @@ metricbeat-config:
         - add_host_metadata:
             netinfo.enabled: true
         - add_fields:
+            target: aws
             fields:
               account: ci
-            target: aws
         - add_fields:
             target: test
             fields:
@@ -168,7 +108,6 @@ metricbeat-config:
               transport: TRANSPORTVALUE
               buildnumber: 99999
               buildname: BUILDNAMEVALUE
-  {%- endif %}
 
   {%- if not grains['os_family'] == 'MacOS' %}
 metricbeat:

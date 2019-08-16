@@ -6,7 +6,12 @@ stage('run') {
     sh '''
     export mine=mine2
     echo $mine
+    echo ${mine}
     '''
-    
+    sh """
+    export mine=mine2
+    echo $mine
+    echo ${mine}
+    """
   }
 }

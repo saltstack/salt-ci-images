@@ -10,8 +10,6 @@ stage('run') {
     echo ${mine}
     echo $mine3
     echo ${mine3}
-    echo ${env.mine}
-    echo $env.mine
     '''
     sh """
     export mine=mine2

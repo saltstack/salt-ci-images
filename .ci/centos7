@@ -27,7 +27,8 @@ stage('Build Image') {
                     cleanWs notFailBuild: true
                     os_imager_tag = sh (
                         script: '''
-                        git ls-remote https://github.com/saltstack/os-imager.git|awk '{print $2}'|grep refs/tags/aws-ci-v|sort -V|tail -n 1
+                        #git ls-remote https://github.com/saltstack/os-imager.git|awk '{print $2}'|grep refs/tags/aws-ci-v|sort -V|tail -n 1
+                        echo ci
                         ''',
                         returnStdout: true
                         ).trim()

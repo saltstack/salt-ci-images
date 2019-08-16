@@ -1,5 +1,6 @@
 
 def mine = 'mine1'
+def mine3 = 'mine3'
 
 stage('run') {
   node('kitchen-slave') {
@@ -7,11 +8,15 @@ stage('run') {
     export mine=mine2
     echo $mine
     echo ${mine}
+    echo $mine3
+    echo ${mine3}
     '''
     sh """
     export mine=mine2
     echo $mine
     echo ${mine}
+    echo $mine3
+    echo ${mine3}
     """
   }
 }

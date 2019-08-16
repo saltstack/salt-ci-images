@@ -238,9 +238,4 @@ stage('Cleanup Old AMIs') {
     }
 }
 
-// vi: ft=groovy</script>
-    <sandbox>true</sandbox>
-  </definition>
-  <triggers/>
-  <disabled>false</disabled>
-</flow-definition>
+// vi: ft=groovy

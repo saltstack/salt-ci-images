@@ -110,7 +110,7 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                                 ],
                                 submoduleCfg: [],
                                 userRemoteConfigs: [
-                                    [url: "https:/github.com/saltstack/salt.git"]
+                                    [url: "https://github.com/saltstack/salt.git"]
                                 ]
                             ])
                         }

@@ -121,7 +121,7 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                             writeFile encoding: 'utf-8', file: '.kitchen.local.yml', text: """\
                             driver:
                               image_search:
-                                description: 'CI *'
+                                description: 'CI-STAGING *'
                             verifier:
                               coverage: false
                             """.stripIndent()

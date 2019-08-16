@@ -74,9 +74,9 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                     "NOX_ENV_NAME=runtests-zeromq",
                     "NOX_PASSTHROUGH_OPTS=",
                     'NOX_ENABLE_FROM_FILENAMES=false',
-                    "SALT_KITCHEN_PLATFORMS=/var/jenkins/workspace/nox-platforms.yml",
+                    "SALT_KITCHEN_PLATFORMS=nox-platforms.yml",
                     "SALT_KITCHEN_VERIFIER=/var/jenkins/workspace/nox-verifier.yml",
-                    "SALT_KITCHEN_DRIVER=/var/jenkins/workspace/driver.yml",
+                    "SALT_KITCHEN_DRIVER=driver.yml",
                     "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
                     "PATH=~/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
                     "RBENV_VERSION=2.4.2",
@@ -116,16 +116,13 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                         }
                         // Setup the kitchen required bundle
                         stage('Setup') {
-                            sh 'bundle install --with ec2 windows --without docker macos opennebula vagrant'
-                            // Make sure we don't get any promoted images
-                            writeFile encoding: 'utf-8', file: '.kitchen.local.yml', text: """\
-                            driver:
-                              image_search:
-                                description: 'CI-STAGING *'
-                                name: saltstack/ci-staging/${distro}/${distro_version}/${golden_images_ci_branch}/*
-                            verifier:
-                              coverage: false
-                            """.stripIndent()
+                            sh '''
+                            cp /var/jenkins/workspace/driver.yml ./driver.yml
+                            cp /var/jenkins/workspace/nox-platforms.yml ./nox-platforms.yml
+                            sed -i 's/PROMOTED/CI-STAGING/' ./driver.yml
+                            sed -i 's#saltstack/ci/#saltstack/ci-staging/#' ./nox-platforms.yml
+                            bundle install --with ec2 windows --without docker macos opennebula vagrant
+                            '''
                         }
 
                         stage('Discover AMI') {

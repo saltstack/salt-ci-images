@@ -17,6 +17,8 @@ stage('run') {
     export mine=mine2
     echo $mine
     echo ${mine}
+    echo \$mine
+    echo \${mine}
     echo $mine3
     echo ${mine3}
     echo ${env.mine}

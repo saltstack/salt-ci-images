@@ -10,6 +10,7 @@ stage('run') {
     echo ${mine}
     echo $mine3
     echo ${mine3}
+    git ls-remote https://github.com/saltstack/salt-jenkins.git|grep refs/pull/${CHANGE_ID}/head$ || true
     '''
     sh """
     export mine=mine2

@@ -122,6 +122,7 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                             driver:
                               image_search:
                                 description: 'CI-STAGING *'
+                                name: saltstack/ci-staging/${distro}/${distro_version}/${golden_images_ci_branch}/*
                             verifier:
                               coverage: false
                             """.stripIndent()

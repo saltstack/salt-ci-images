@@ -9,22 +9,18 @@ azure-provider:
     - name: {{ config_path }}azure.conf
     - contents: |
         azure-config:
-          driver: azurearm
+          driver: azure
           subscription_id: {{ salt['pillar.get']('azure:subscription_id', '') }}
+          certificate_path: {{ salt['pillar.get']('azure:certificate_path', '') }}
           cleanup_disks: True
-          cleanup_interfaces: True
           cleanup_vhds: True
           cleanup_services: True
           minion:
             master_type: str
-          username: {{ salt['pillar.get']('azure:login_username', '') }}
-          password: {{ salt['pillar.get']('azure:login_passwd', '') }}
-          location: westus
-          allocate_public_ip: True
-          network_resource_group: saltstack
-          network: saltstack-vnet
-          subnet: default
-          resource_group: saltstack
+          known_hosts_file: /dev/null
+          ssh_username: {{ salt['pillar.get']('azure:ssh_username', '') }}
+          ssh_password: {{ salt['pillar.get']('azure:ssh_password', '') }}
+          media_link: {{ salt['pillar.get']('azure:media_link', '') }}
     - show_changes: False
     - require:
       - file: ssh-directory
@@ -35,11 +31,13 @@ azure-profile:
     - contents: |
         azure-test:
           provider: azure-config
-          image: Canonical|UbuntuServer|18.04-LTS|18.04.201804262
-          size: Standard_D1
+          image: 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140724-en-us-30GB'
+          size: Medium
+          location: West US
           slot: production
           ssh_username: {{ salt['pillar.get']('azure:ssh_username', '') }}
           ssh_password: {{ salt['pillar.get']('azure:ssh_password', '') }}
+          media_link: {{ salt['pillar.get']('azure:media_link', '') }}
           script_args: '-P'
     - show_changes: False
     - require:

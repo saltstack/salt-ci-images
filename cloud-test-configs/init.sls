@@ -6,7 +6,7 @@ include:
 
 azure-provider:
   file.managed:
-    - name: {{ config_path }}azurearm.conf
+    - name: {{ config_path }}azure.conf
     - contents: |
         azure-config:
           driver: azurearm

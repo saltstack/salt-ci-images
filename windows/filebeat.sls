@@ -39,6 +39,7 @@ install-service-filebeat:
   cmd.wait:
     - name: '.\install-service-filebeat.ps1'
     - cwd: 'C:\Program Files\Filebeat'
+    - shell: powershell
     - watch:
       - file: configure-filebeat
 

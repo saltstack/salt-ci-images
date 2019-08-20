@@ -51,6 +51,7 @@ install-service-metricbeat:
   cmd.wait:
     - name: '.\install-service-metricbeat.ps1'
     - cwd: 'C:\Program Files\Metricbeat'
+    - shell: powershell
     - watch:
       - file: configure-metricbeat
 

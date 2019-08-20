@@ -11,16 +11,20 @@ azure-provider:
         azurearm-config:
           driver: azurearm
           subscription_id: {{ salt['pillar.get']('azure:subscription_id', '') }}
-          certificate_path: {{ salt['pillar.get']('azure:certificate_path', '') }}
           cleanup_disks: True
+          cleanup_interfaces: True
           cleanup_vhds: True
           cleanup_services: True
           minion:
             master_type: str
-          known_hosts_file: /dev/null
-          ssh_username: {{ salt['pillar.get']('azure:ssh_username', '') }}
-          ssh_password: {{ salt['pillar.get']('azure:ssh_password', '') }}
-          media_link: {{ salt['pillar.get']('azure:media_link', '') }}
+          username: {{ salt['pillar.get']('azure:login_username', '') }}
+          password: {{ salt['pillar.get']('azure:login_passwd', '') }}
+          location: westus
+          allocate_public_ip: True
+          network_resource_group: saltstack
+          network: saltstack-vnet
+          subnet: default
+          resource_group: saltstack
     - show_changes: False
     - require:
       - file: ssh-directory
@@ -36,7 +40,6 @@ azure-profile:
           slot: production
           ssh_username: {{ salt['pillar.get']('azure:ssh_username', '') }}
           ssh_password: {{ salt['pillar.get']('azure:ssh_password', '') }}
-          media_link: {{ salt['pillar.get']('azure:media_link', '') }}
           script_args: '-P'
     - show_changes: False
     - require:

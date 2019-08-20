@@ -21,7 +21,6 @@ configure-metricbeat:
         - module: system
           metricsets:
             - cpu
-            - load
             - memory
             - network
             - process

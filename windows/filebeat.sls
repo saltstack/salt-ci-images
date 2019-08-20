@@ -7,6 +7,12 @@ install-filebeat:
     - require:
       - win-pkg-refresh
 
+start-filebeat-service:
+  service.disabled:
+    - name: filebeat
+    - watch:
+        - install-filebeat
+
 configure-filebeat:
   file.managed:
     - name: C:\Program Files\Filebeat\filebeat.yml
@@ -34,15 +40,3 @@ configure-filebeat:
                 buildname: BUILDNAMEVALUE
     - require:
       - install-filebeat
-
-install-service-filebeat:
-  cmd.wait:
-    - name: '.\install-service-filebeat.ps1'
-    - cwd: 'C:\Program Files\Filebeat'
-    - shell: powershell
-    - watch:
-      - file: configure-filebeat
-
-disable-service-filebeat:
-  service.disabled:
-    - name: filebeat

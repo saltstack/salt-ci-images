@@ -40,3 +40,14 @@ configure-filebeat:
                 buildname: BUILDNAMEVALUE
     - require:
       - install-filebeat
+
+install-service-filebeat:
+  cmd.wait:
+    - name: '.\install-service-filebeat.ps1'
+    - cwd: 'C:\Program Files\Filebeat'
+    - watch:
+      - file: configure-filebeat
+
+disable-service-filebeat:
+  service.disabled:
+    - name: filebeat

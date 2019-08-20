@@ -1,4 +1,16 @@
-{%- if grains['os_family'] == 'Debian' %}
+{%- if 'RedHat' in grains.os_family %}
+enable-timedated-daemon:
+  service.enabled:
+    - name: systemd-timedated
+
+stop-chrony:
+  service.dead:
+    - name: chronyd
+
+remove-chrony:
+  pkg.purged:
+    - name: chrony
+{%- else %}
 enable-timesyncd-daemon:
   service.enabled:
     - name: systemd-timesyncd
@@ -10,13 +22,13 @@ stop-chrony:
 remove-chrony:
   pkg.purged:
     - name: chrony
+{%- endif %}
 
 remove-drift-file:
   file.absent:
     - name: /var/lib/chrony/
     - require:
       - stop-chrony
-{%- endif %}
 
 {%- if grains['os'] == 'Ubuntu' %}
 install-tzdata:

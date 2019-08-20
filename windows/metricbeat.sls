@@ -7,6 +7,12 @@ install-metricbeat:
     - require:
       - win-pkg-refresh
 
+start-metricbeat-service:
+  service.disabled:
+    - name: metricbeat
+    - watch:
+        - install-metricbeat
+
 configure-metricbeat:
   file.managed:
     - name: C:\Program Files\Metricbeat\metricbeat.yml
@@ -46,14 +52,3 @@ configure-metricbeat:
               buildname: BUILDNAMEVALUE
     - require:
       - install-metricbeat
-
-install-service-metricbeat:
-  cmd.wait:
-    - name: '.\install-service-metricbeat.ps1'
-    - cwd: 'C:\Program Files\Metricbeat'
-    - watch:
-      - file: configure-metricbeat
-
-disable-service-metricbeat:
-  service.disabled:
-    - name: metricbeat

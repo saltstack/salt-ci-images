@@ -7,12 +7,6 @@ install-filebeat:
     - require:
       - win-pkg-refresh
 
-start-filebeat-service:
-  service.disabled:
-    - name: filebeat
-    - watch:
-        - install-filebeat
-
 configure-filebeat:
   file.managed:
     - name: C:\Program Files\Filebeat\filebeat.yml

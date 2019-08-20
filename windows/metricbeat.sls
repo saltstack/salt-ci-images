@@ -7,12 +7,6 @@ install-metricbeat:
     - require:
       - win-pkg-refresh
 
-start-metricbeat-service:
-  service.disabled:
-    - name: metricbeat
-    - watch:
-        - install-metricbeat
-
 configure-metricbeat:
   file.managed:
     - name: C:\Program Files\Metricbeat\metricbeat.yml

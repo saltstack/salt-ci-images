@@ -218,6 +218,7 @@ include:
   {%- endif %}
   {%- if 'MacOS' in grains.os_family %}
   - filebeat
+  - heartbeat
   - metricbeat
   {%- endif %}
 

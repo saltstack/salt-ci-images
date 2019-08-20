@@ -8,7 +8,7 @@ azure-provider:
   file.managed:
     - name: {{ config_path }}azurearm.conf
     - contents: |
-        azure-config:
+        azurearm-config:
           driver: azurearm
           subscription_id: {{ salt['pillar.get']('azure:subscription_id', '') }}
           cleanup_disks: True
@@ -34,7 +34,7 @@ azure-profile:
     - name: {{ profile_config_path }}azure.conf
     - contents: |
         azure-test:
-          provider: azure-config
+          provider: azurearm-config
           image: Canonical|UbuntuServer|18.04-LTS|18.04.201804262
           size: Standard_D1
           slot: production

@@ -1,4 +1,3 @@
-{%- if grains['os_family'] == 'Debian' %}
 enable-timesyncd-daemon:
   service.enabled:
     - name: systemd-timesyncd
@@ -16,7 +15,6 @@ remove-drift-file:
     - name: /var/lib/chrony/
     - require:
       - stop-chrony
-{%- endif %}
 
 {%- if grains['os'] == 'Ubuntu' %}
 install-tzdata:

@@ -12,6 +12,11 @@ def distro = 'centos'
 def distro_version = '7'
 def golden_images_ci_branch = '2017.7'
 
+properties([
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
+    disableConcurrentBuilds()
+])
+
 stage('Fake Checkout') {
   node('kitchen-slave') {
     checkout scm

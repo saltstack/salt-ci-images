@@ -78,7 +78,6 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                 withEnv([
                     "NOX_ENV_NAME=runtests-zeromq",
                     "NOX_PASSTHROUGH_OPTS=",
-                    'NOX_ENABLE_FROM_FILENAMES=false',
                     "SALT_KITCHEN_PLATFORMS=nox-platforms.yml",
                     "SALT_KITCHEN_VERIFIER=/var/jenkins/workspace/nox-verifier.yml",
                     "SALT_KITCHEN_DRIVER=driver.yml",

@@ -1,3 +1,4 @@
+{%- set nox_version = '2019.6.25' %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
@@ -12,7 +13,7 @@ include:
 
 nox:
   pip.installed:
-    - name: 'nox-py2'
+    - name: 'nox-py2=={{ nox_version }}'
     {%- if grains['os'] == 'Windows' %}
     - unless:
       - 'WHERE nox.exe'

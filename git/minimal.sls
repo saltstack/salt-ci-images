@@ -120,17 +120,19 @@ include:
   {%- endif %}
   - python.tox
   - python.nox
-  {%- if 'Linux' in grains.kernel %}
+  {%- if pillar.get('install_metrics', True) %}
+    {%- if 'Linux' in grains.kernel %}
   - timesync
   - metricbeat
   - filebeat
   - heartbeat
-    {%- if 'RedHat' in grains.os_family %}
-      {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+      {%- if 'RedHat' in grains.os_family %}
+        {%- if grains.osfinger is defined and grains.osfinger not in ['CentOS-6', 'Amazon Linux AMI-2018'] %}
+  - journalbeat
+        {%- endif %}
+      {%- else %}
   - journalbeat
       {%- endif %}
-    {%- else %}
-  - journalbeat
     {%- endif %}
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}

@@ -65,7 +65,7 @@ stage('Build Image') {
                     }
                     ami_image_id = sh (
                         script: """
-                        cat ${golden_images_ci_branch}-manifest.json|jq ".builds[].artifact_id"|cut -f2 -d:
+                        cat ${golden_images_ci_branch}-manifest.json|jq -r ".builds[].artifact_id"|cut -f2 -d:
                         """,
                         returnStdout: true
                         ).trim()

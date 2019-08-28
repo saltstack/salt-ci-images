@@ -16,8 +16,8 @@ include:
 get-timelib-zip:
   archive.extracted:
     - name: {{ timelib_dir }}
-    - source: https://oss-nexus.aws.saltstack.net/repository/salt-dev-raw/timelib-0.2.4-mac.zip
-    - source_hash: sha512=0cb0b2f6a6249c38c8a5e043bcafde6f83f84d1d10f942d41dd8ff35f91df06b492811dbc896890a83c7feab17ba253c1517b93c9216a88e9e870e7465ac7a51
+    - source: https://artifactory.saltstack.net/artifactory/macos-files/timelib-0.2.4-mac.zip
+    - source_hash: sha256=b9849442ba06f8e225d51ed860cff4ba51c95dbfadb720b878a9befb21dce134
     - archive_format: zip
 
 timelib:

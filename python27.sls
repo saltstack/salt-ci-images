@@ -34,13 +34,17 @@ include:
 {%- endif %}
 
 python2:
+    {%- if grains['os'] != 'Windows' %}
   pkg.latest:
+    {%- else %}
+  pkg.installed:
+    {%- endif %}
     - name: {{ python2 }}
     {%- if grains['os'] != 'Windows' %}
     - aggregate: True
     {%- else %}
     - aggregate: False
-    - version: '2.7.1150'
+    - version: '2.7.15150'
     - extra_install_flags: "ADDLOCAL=DefaultFeature,SharedCRT,Extensions,pip_feature,PrependPath TargetDir=C:\\Python27"
     - require:
       - win-pkg-refresh

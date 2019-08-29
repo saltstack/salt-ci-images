@@ -11,7 +11,7 @@ def os_imager_tag
 
 def distro = 'opensuse'
 def distro_version = '15'
-def golden_images_ci_branch = 'neon'
+def golden_images_ci_branch = 'develop'
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
@@ -88,15 +88,15 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
         timestamps {
             ansiColor('xterm') {
                 withEnv([
-                    "NOX_ENV_NAME=pytest-zeromq",
-                    "NOX_PASSTHROUGH_OPTS=--log-cli-level=warning --ignore=tests/utils --ssh-tests",
+                    "NOX_ENV_NAME=runtests-zeromq",
+                    "NOX_PASSTHROUGH_OPTS=--ssh-tests",
                     "SALT_KITCHEN_PLATFORMS=/var/jenkins/workspace/nox-platforms.yml",
                     "SALT_KITCHEN_VERIFIER=/var/jenkins/workspace/nox-verifier.yml",
                     "SALT_KITCHEN_DRIVER=/var/jenkins/workspace/driver.yml",
                     "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
                     "PATH=~/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
                     "RBENV_VERSION=2.4.2",
-                    "TEST_SUITE=py2",
+                    "TEST_SUITE=py3",
                     "TEST_PLATFORM=${distro}-${distro_version}",
                     "AMI_IMAGE_ID=${ami_image_id}"
                 ]) {

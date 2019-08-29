@@ -1,4 +1,4 @@
-def global_timeout = 8
+def global_timeout = 6
 
 def ec2_region
 def image_id
@@ -9,8 +9,8 @@ def ami_name_filter
 def ami_image_id
 def os_imager_tag
 
-def distro = 'windows'
-def distro_version = '2019'
+def distro = 'debian'
+def distro_version = '10'
 def golden_images_ci_branch = 'neon'
 
 properties([
@@ -89,14 +89,14 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
             ansiColor('xterm') {
                 withEnv([
                     "NOX_ENV_NAME=pytest-zeromq",
-                    "NOX_PASSTHROUGH_OPTS=--log-cli-level=warning --ignore=tests/utils",
+                    "NOX_PASSTHROUGH_OPTS=--log-cli-level=warning --ignore=tests/utils --ssh-tests",
                     "SALT_KITCHEN_PLATFORMS=/var/jenkins/workspace/nox-platforms.yml",
                     "SALT_KITCHEN_VERIFIER=/var/jenkins/workspace/nox-verifier.yml",
                     "SALT_KITCHEN_DRIVER=/var/jenkins/workspace/driver.yml",
                     "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
                     "PATH=~/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
                     "RBENV_VERSION=2.4.2",
-                    "TEST_SUITE=py2",
+                    "TEST_SUITE=py3",
                     "TEST_PLATFORM=${distro}-${distro_version}",
                     "AMI_IMAGE_ID=${ami_image_id}"
                 ]) {

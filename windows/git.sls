@@ -7,6 +7,7 @@ git-windeps:
   {%- if not git_binary %}
   pkg.installed:
     - name: git
+    - version: 2.22.0
     - refresh_modules: True
     - require:
       - win-pkg-refresh

@@ -82,12 +82,9 @@ include:
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
   - python.xml
-  - python.hgtools
-  - python.setuptools-scm
   {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
   {%- endif %}
-  - python.certifi
   - susepkgs
   {%- endif %}
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}

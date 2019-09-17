@@ -143,9 +143,9 @@ pip3-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip3 }} "pip<=9.0.1"'
+    - name: '{{ get_pip3 }} "pip"'
     {%- else %}
-    - name: {{ get_pip3 }} 'pip<=9.0.1'
+    - name: {{ get_pip3 }} 'pip'
     {%- endif %}
     - cwd: /
     - reload_modules: True
@@ -168,21 +168,6 @@ pip3-install:
       - pkg: python-dev
       {%- endif %}
     {%- endif %}
-
-upgrade-installed-pip3:
-  pip3.installed:
-    - name: pip <=9.0.1
-    - upgrade: True
-    - onlyif:
-      {%- if on_windows %}
-      - 'if (py.exe -3 -c "import sys; print(sys.executable)") { exit 0 } else { exit 1 }'
-      - 'if (get-command pip3) { exit 0 } else { exit 1 }'
-      {%- else %}
-      - '[ "$(which {{ python3 }} 2>/dev/null)" != "" ]'
-      - '[ "$(which {{ pip3 }} 2>/dev/null)" != "" ]'
-      {%- endif %}
-    - require:
-      - cmd: pip3-install
 {%- endif %}
 
 {%- if install_pip2 %}
@@ -190,9 +175,9 @@ pip2-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip2 }} "pip<=9.0.1"'
+    - name: '{{ get_pip2 }} "pip"'
     {%- else %}
-    - name: {{ get_pip2 }} 'pip<=9.0.1'
+    - name: {{ get_pip2 }} 'pip'
     {%- endif %}
     - cwd: /
     - reload_modules: True
@@ -211,18 +196,4 @@ pip2-install:
       - pkg: python-dev
     {%- endif %}
 
-upgrade-installed-pip2:
-  pip2.installed:
-    - name: pip <=9.0.1
-    - upgrade: True
-    - onlyif:
-      {%- if on_windows %}
-      - 'py.exe -2 -c "import sys; print(sys.executable)"'
-      - 'if (get-command pip3) { exit 0 } else { exit 1 }'
-      {%- else %}
-      - '[ "$(which {{ python2 }} 2>/dev/null)" != "" ]'
-      - '[ "$(which {{ pip2 }} 2>/dev/null)" != "" ]'
-    {%- endif %}
-    - require:
-      - cmd: pip2-install
 {%- endif %}

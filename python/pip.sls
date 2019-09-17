@@ -135,7 +135,7 @@ pip-install:
 download-get-pip:
   file.managed:
     - name: {{ get_pip_path }}
-    - source: https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py
+    - source: https://github.com/pypa/get-pip/raw/309a56c5fd94bd1134053a541cb4657a4e47e09d/get-pip.py
     - skip_verify: true
 
 {%- if install_pip3 %}
@@ -143,9 +143,9 @@ pip3-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip3 }} "pip"'
+    - name: '{{ get_pip3 }} "pip" "setuptools" "wheel"'
     {%- else %}
-    - name: {{ get_pip3 }} 'pip'
+    - name: {{ get_pip3 }} pip setuptools wheel
     {%- endif %}
     - cwd: /
     - reload_modules: True
@@ -175,9 +175,9 @@ pip2-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip2 }} "pip"'
+    - name: '{{ get_pip2 }} "pip" "setuptools" "wheel"'
     {%- else %}
-    - name: {{ get_pip2 }} 'pip'
+    - name: {{ get_pip2 }} pip setuptools wheel
     {%- endif %}
     - cwd: /
     - reload_modules: True

@@ -119,7 +119,6 @@ include:
   {%- if not on_docker %}
   - sssd
   {%- endif %}
-  - python.tox
   - python.nox
   - cron
   {%- if pillar.get('install_metrics', True) %}

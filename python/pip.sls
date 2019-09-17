@@ -135,7 +135,7 @@ pip-install:
 download-get-pip:
   file.managed:
     - name: {{ get_pip_path }}
-    - source: https://github.com/pypa/get-pip/raw/b3d0f6c0faa8e02322efb00715f8460965eb5d5f/get-pip.py
+    - source: https://github.com/pypa/get-pip/raw/309a56c5fd94bd1134053a541cb4657a4e47e09d/get-pip.py
     - skip_verify: true
 
 {%- if install_pip3 %}

@@ -11,6 +11,9 @@
 include:
   - python.pip
 
+{%- set which_nox = 'nox' | which %}
+
+{%- if not which_nox %}
 nox:
   pip.installed:
     - name: 'nox-py2=={{ nox_version }}'
@@ -27,3 +30,4 @@ nox:
     {%- endif %}
     - require:
       - pip-install
+{%- endif %}

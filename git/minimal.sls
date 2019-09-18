@@ -51,8 +51,9 @@ include:
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
-  - no_show_proc
+    {%- if not on_docker %}
   - locale
+    {%- endif %}
   - gem
   - python
   - python.pip

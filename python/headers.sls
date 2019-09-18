@@ -17,7 +17,7 @@
       {%- set python_dev = 'python27-devel' %}
     {%- else %}
       {%- if pillar.get('py3', False) %}
-        {%- set python_dev = 'python36-devel' %}
+        {%- set python_dev = 'python3-devel' %}
       {%- else %}
         {%- set python_dev = 'python-devel' %}
       {%- endif %}

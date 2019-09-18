@@ -111,7 +111,17 @@ include:
   - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
 {%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
+{%- set which_pip2 = pip2 | which %}
+{%- set which_python2 = python2 | which %}
+{%- if install_pip2 and which_python2 and which_pip2 %}
+  {%- set install_pip2 = False %}
+{%- endif %}
 {%- set get_pip3 = '{} {} {}'.format(python3, get_pip_path, force_reinstall) %}
+{%- set which_pip3 = pip3 | which %}
+{%- set which_python3 = python3 | which %}
+{%- if install_pip3 and which_python3 and which_pip3 %}
+  {%- set install_pip3 = False %}
+{%- endif %}
 
 {%- if on_macos %}
 pip-update-path:
@@ -124,6 +134,7 @@ pip-update-path:
 pip-install:
   cmd.run:
     - name: 'echo "Place holder for pip2 and pip3 installs"'
+    {%- if install_pip2 or install_pip3 %}
     - require:
       {%- if install_pip2 %}
       - cmd: pip2-install
@@ -131,6 +142,7 @@ pip-install:
       {%- if install_pip3 %}
       - cmd: pip3-install
       {%- endif %}
+    {%- endif %}
 
 download-get-pip:
   file.managed:
@@ -149,13 +161,6 @@ pip3-install:
     {%- endif %}
     - cwd: /
     - reload_modules: True
-    - onlyif:
-      {%- if not on_windows %}
-      - '[ "$(which {{ python3 }} 2>/dev/null)" != "" ]'
-        {%- if os != 'Fedora' %}
-      - '[ "$(which {{ pip3 }} 2>/dev/null)" = "" ]'
-        {%- endif %}
-      {%- endif %}
     - require:
       - download-get-pip
     {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
@@ -181,13 +186,6 @@ pip2-install:
     {%- endif %}
     - cwd: /
     - reload_modules: True
-    - onlyif:
-      {%- if not on_windows %}
-      - '[ "$(which {{ python2 }} 2>/dev/null)" != "" ]'
-        {%- if os != 'Fedora' %}
-      - '[ "$(which {{ pip2 }} 2>/dev/null)" = "" ]'
-        {%- endif %}
-      {%- endif %}
     - require:
       - download-get-pip
     {%- if on_windows and not pillar.get('py3', False) %}

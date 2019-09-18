@@ -6,7 +6,7 @@
 {%- if os_family == 'RedHat' and os_major_release == 7 %}
   {%- set python3_path = '/bin/python3.6' %}
   {%- set symlink_set = True %}
-  {%- set python3 = 'python36' %}
+  {%- set python3 = 'python3' %}
 {%- elif os_family == 'Arch' %}
   {%- set python3 = 'python' %}
 {%- elif grains['os'] == 'Windows' %}

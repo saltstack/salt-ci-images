@@ -11,19 +11,16 @@
 include:
   - python.pip
 
+{%- set which_nox = 'nox' | which %}
+
+{%- if not which_nox %}
 nox:
   pip.installed:
     - name: 'nox-py2=={{ nox_version }}'
-    {%- if grains['os'] == 'Windows' %}
-    - unless:
-      - 'WHERE nox.exe'
-    {%- else %}
-    - onlyif:
-      - '[ "$(which nox 2>/dev/null)" = "" ]'
-    {%- endif %}
     {%- if on_amazonlinux_1 %}
     - install_options:
       - --prefix=/usr
     {%- endif %}
     - require:
       - pip-install
+{%- endif %}

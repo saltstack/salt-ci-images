@@ -15,7 +15,6 @@ def golden_images_ci_branch = '2017.7'
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
-    disableConcurrentBuilds()
 ])
 
 stage('Fake Checkout') {
@@ -83,8 +82,12 @@ stage('Build Image') {
     }
 }
 
-timeout(time: global_timeout + 1, unit: 'HOURS') {
-    node('kitchen-slave') {
+def buildNumber = env.BUILD_NUMBER as int
+milestone(buildNumber)
+milestone(buildNumber + 1)
+
+node('kitchen-slave') {
+    timeout(time: global_timeout + 1, unit: 'HOURS') {
         timestamps {
             ansiColor('xterm') {
                 withEnv([
@@ -224,8 +227,8 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
 
 stage('Cleanup Old AMIs') {
     if (ami_name_filter) {
-        timeout(time: 10, unit: 'MINUTES') {
-            node('kitchen-slave') {
+        node('kitchen-slave') {
+            timeout(time: 10, unit: 'MINUTES') {
                 cleanWs notFailBuild: true
                 checkout([$class: 'GitSCM',
                           branches: [[name: "$os_imager_tag"]],

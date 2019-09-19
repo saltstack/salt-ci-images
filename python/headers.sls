@@ -1,7 +1,11 @@
 {%- if grains['os_family'] == 'RedHat' %}
   {%- if grains['os'] in ('Fedora', 'Amazon') %}
     {%- if pillar.get('py3', False) %}
-      {%- set python_dev = 'python3-devel' %}
+      {%- if grains['osrelease'].startswith('2018') %}
+        {%- set python_dev = 'python36-devel' %}
+      {%- else %}
+        {%- set python_dev = 'python3-devel' %}
+      {%- endif %}
     {%- else %}
       {%- if grains['osrelease'].startswith('2018') %}
         {#- Amazon Linux 1 #}

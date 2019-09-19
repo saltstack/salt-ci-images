@@ -2,19 +2,59 @@
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
-{%- if os_family == 'RedHat' and os_major_release == 7 %}
-  {%- set python3 = 'python3' %}
-{%- elif os_family == 'RedHat' and os_major_release == 8 %}
-  {%- set python3 = 'python36' %}
-{%- elif os_family == 'Arch' %}
+{%- if os_family == 'Arch' %}
+  {%- set on_arch = True %}
+{%- else %}
+  {%- set on_arch = False %}
+{%- endif %}
+
+{%- if os_family == 'Debian' %}
+  {%- set on_debian = True %}
+{%- else %}
+  {%- set on_debian = False %}
+{%- endif %}
+
+{%- if os_family == 'MacOS' %}
+  {%- set on_macos = True %}
+{%- else %}
+  {%- set on_macos = False %}
+{%- endif %}
+
+{%- if os_family == 'RedHat' and os_major_release == 2018 %}
+  {%- set on_amazonlinux_1 = True %}
+{%- else %}
+  {%- set on_amazonlinux_1 = False %}
+{%- endif %}
+
+{%- if os_family == 'RedHat' and os_major_release == 8 %}
+  {%- set on_redhat_8 = True %}
+{%- else %}
+  {%- set on_redhat_8 = False %}
+{%- endif %}
+
+{%- if os_family == 'Ubuntu' and os_major_release >= 18 %}
+  {%- set on_ubuntu_18_or_newer = True %}
+{%- else %}
+  {%- set on_ubuntu_18_or_newer = False %}
+{%- endif %}
+
+{%- if os_family == 'Windows' %}
+  {%- set on_windows=True %}
+{%- else %}
+  {%- set on_windows=False %}
+{%- endif %}
+
+{%- if on_arch %}
   {%- set python3 = 'python' %}
-{%- elif grains['os'] == 'Windows' %}
+{%- elif on_windows %}
   {%- set python3 = 'python3_x64' %}
+{%- elif on_amazonlinux_1 or on_redhat_8 %}
+  {%- set python3 = 'python36' %}
 {%- else %}
   {%- set python3 = 'python3' %}
 {%- endif %}
 
-{%- if os_family == 'MacOS' %}
+{%- if on_macos %}
 python3:
   file.managed:
     - source: https://www.python.org/ftp/python/3.6.4/python-3.6.4-macosx10.6.pkg
@@ -30,13 +70,13 @@ install_certs:
     - name: /Applications/Python\ 3.6/Install\ Certificates.command
 {%- else %}
 
-  {%- if grains['os'] == 'Windows' %}
+  {%- if on_windows %}
 include:
   - windows.repo
-  {%- elif os_family == 'Debian' %}
+  {%- elif on_debian %}
 include:
   - python.apt
-    {%- if pillar.get('py3', False) and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
+    {%- if pillar.get('py3', False) and on_ubuntu_18_or_newer %}
   - python.distutils
     {%- endif %}
   {%- endif %}

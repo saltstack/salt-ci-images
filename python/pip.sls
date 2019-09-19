@@ -72,7 +72,7 @@
   {%- else %}
     {%- set python2 = 'python2' %}
   {%- endif %}
-  {%- if on_redhat_7 %}
+  {%- if on_amazonlinux_1 %}
     {%- set python3 = 'python3.6' %}
   {%- else %}
     {%- set python3 = 'python3' %}
@@ -93,32 +93,32 @@
 {%- endif %}
 
 include:
-{%- if pillar.get('py3', False) %}
-  {%- if not on_redhat_6 and not on_ubuntu_14 %}
+  {%- if pillar.get('py3', False) %}
+    {%- if not on_redhat_6 and not on_ubuntu_14 %}
   - python3
-  {%- endif %}
-{%- else %}
-  {%- if on_arch or on_windows %}
+    {%- endif %}
+  {%- else %}
+    {%- if on_arch or on_windows %}
   - python27
+    {%- endif %}
   {%- endif %}
-{%- endif %}
-{%- if on_debian_7 %}
+  {%- if on_debian_7 %}
   - python.headers
-{%- endif %}
+  {%- endif %}
   {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
   - python.distutils
   {%- endif %}
   - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
-{%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
 {%- set which_pip2 = pip2 | which %}
 {%- set which_python2 = python2 | which %}
+{%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
 {%- if install_pip2 and which_python2 and which_pip2 %}
   {%- set install_pip2 = False %}
 {%- endif %}
-{%- set get_pip3 = '{} {} {}'.format(python3, get_pip_path, force_reinstall) %}
 {%- set which_pip3 = pip3 | which %}
 {%- set which_python3 = python3 | which %}
+{%- set get_pip3 = '{} {} {}'.format(python3, get_pip_path, force_reinstall) %}
 {%- if install_pip3 and which_python3 and which_pip3 %}
   {%- set install_pip3 = False %}
 {%- endif %}
@@ -162,16 +162,13 @@ pip3-install:
     - cwd: /
     - reload_modules: True
     - require:
+      - python3
       - download-get-pip
     {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
       - python3-distutils
     {%- endif %}
-    {%- if pillar.get('py3', False) %}
-      - python3
-    {%- else %}
-      {%- if on_debian_7 %}
+    {%- if on_debian_7 %}
       - pkg: python-dev
-      {%- endif %}
     {%- endif %}
 {%- endif %}
 
@@ -187,10 +184,9 @@ pip2-install:
     - cwd: /
     - reload_modules: True
     - require:
+      - python2
       - download-get-pip
-    {%- if on_windows and not pillar.get('py3', False) %}
-      - pkg: python2
-    {%- elif on_debian_7 %}
+    {%- if on_debian_7 %}
       - pkg: python-dev
     {%- endif %}
 

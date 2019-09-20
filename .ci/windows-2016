@@ -26,7 +26,7 @@ stage('Fake Checkout') {
 
 stage('Build Image') {
     node('kitchen-slave') {
-        timeout(time: 1, unit: 'HOURS') {
+        timeout(time: 80, unit: 'MINUTES') {
             timestamps {
                 ansiColor('xterm') {
                     cleanWs notFailBuild: true

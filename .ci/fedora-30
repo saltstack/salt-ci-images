@@ -99,7 +99,7 @@ node('kitchen-slave') {
                     "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
                     "PATH=~/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
                     "RBENV_VERSION=2.4.2",
-                    "TEST_SUITE=py3",
+                    "TEST_SUITE=py2",
                     "TEST_PLATFORM=${distro}-${distro_version}",
                     "AMI_IMAGE_ID=${ami_image_id}"
                 ]) {

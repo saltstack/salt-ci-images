@@ -80,35 +80,17 @@
 {%- endif %}
 
 
-{%- if (not on_redhat_6 and not on_ubuntu_14 and not on_windows) or (on_windows and pillar.get('py3', False)) %}
+{%- if not on_redhat_6 and not on_ubuntu_14 and pillar.get('py3', False) %}
   {%- set install_pip3 = True %}
 {%- else %}
   {%- set install_pip3 = False %}
 {%- endif %}
 
-{%- if not on_windows or (on_windows and pillar.get('py3', False) == False) %}
+{%- if pillar.get('py3', False) == False %}
   {%- set install_pip2 = True %}
 {%- else %}
   {%- set install_pip2 = False %}
 {%- endif %}
-
-include:
-  {%- if pillar.get('py3', False) %}
-    {%- if not on_redhat_6 and not on_ubuntu_14 %}
-  - python3
-    {%- endif %}
-  {%- else %}
-    {%- if on_arch or on_windows %}
-  - python27
-    {%- endif %}
-  {%- endif %}
-  {%- if on_debian_7 %}
-  - python.headers
-  {%- endif %}
-  {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
-  - python.distutils
-  {%- endif %}
-  - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
 {%- set which_pip2 = pip2 | which %}
 {%- set which_python2 = python2 | which %}
@@ -122,6 +104,21 @@ include:
 {%- if install_pip3 and which_python3 and which_pip3 %}
   {%- set install_pip3 = False %}
 {%- endif %}
+
+include:
+  {%- if install_pip3 %}
+  - python3
+  {%- endif %}
+  {%- if install_pip2 %}
+  - python27
+  {%- endif %}
+  {%- if install_pip2 or install_pip3 %}
+  - python.headers
+  {%- endif %}
+  {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
+  - python.distutils
+  {%- endif %}
+  - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
 {%- if on_macos %}
 pip-update-path:
@@ -167,9 +164,7 @@ pip3-install:
     {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
       - python3-distutils
     {%- endif %}
-    {%- if on_debian_7 %}
       - pkg: python-dev
-    {%- endif %}
 {%- endif %}
 
 {%- if install_pip2 %}
@@ -186,8 +181,6 @@ pip2-install:
     - require:
       - python2
       - download-get-pip
-    {%- if on_debian_7 %}
       - pkg: python-dev
-    {%- endif %}
 
 {%- endif %}

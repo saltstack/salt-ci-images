@@ -112,11 +112,8 @@ include:
   {%- if install_pip2 %}
   - python27
   {%- endif %}
-  {%- if install_pip2 or install_pip3 %}
+  {%- if (install_pip2 or install_pip3) and os_family not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
   - python.headers
-  {%- endif %}
-  {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
-  - python.distutils
   {%- endif %}
   - noop-placeholder {#- Make sure there's at least an entry in this 'include' statement #}
 
@@ -161,10 +158,10 @@ pip3-install:
     - require:
       - python3
       - download-get-pip
-    {%- if install_pip3 and grains['os'] == 'Ubuntu' and os_major_release >= 18 %}
-      - python3-distutils
-    {%- endif %}
+    {%-  if os_family not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
       - pkg: python-dev
+    {%- endif %}
+
 {%- endif %}
 
 {%- if install_pip2 %}
@@ -181,6 +178,8 @@ pip2-install:
     - require:
       - python2
       - download-get-pip
+    {%-  if os_family not in ('Arch', 'Solaris', 'FreeBSD', 'Gentoo', 'MacOS', 'Windows') %}
       - pkg: python-dev
+    {%- endif %}
 
 {%- endif %}

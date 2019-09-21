@@ -10,6 +10,7 @@ include:
 PyYAML:
   pip.installed:
     - name: 'PyYAML >= 3.12, < 5.1'
+    - ignore_installed: true
     - require:
       - cmd: pip-install
     {%- if on_windows %}

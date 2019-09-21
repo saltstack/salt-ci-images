@@ -38,6 +38,7 @@
 {%- endif %}
 
 include:
+  - python.pyyaml
   {%- if grains.get('kernel') == 'Linux' %}
   - man
   {%- if os_major_release != 14 and os_family not in ('Ubuntu') %}
@@ -193,7 +194,6 @@ include:
   {%- if grains['os'] not in ('Amazon',) and os_family in ('Arch', 'RedHat', 'Debian') %}
   - nginx
   {%- endif %}
-  - python.pyyaml
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}

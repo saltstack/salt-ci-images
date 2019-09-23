@@ -86,12 +86,7 @@
   {%- set install_pip3 = False %}
 {%- endif %}
 
-{%- if pillar.get('py3', False) == False %}
-  {%- set install_pip2 = True %}
-{%- else %}
-  {%- set install_pip2 = False %}
-{%- endif %}
-
+{%- set install_pip2 = True %}
 {%- set which_pip2 = pip2 | which %}
 {%- set which_python2 = python2 | which %}
 {%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
@@ -149,9 +144,9 @@ pip3-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip3 }} "pip" "setuptools" "wheel"'
+    - name: '{{ get_pip3 }} "pip>=19.2.3" "setuptools" "wheel"'
     {%- else %}
-    - name: {{ get_pip3 }} pip setuptools wheel
+    - name: {{ get_pip3 }} pip>=19.2.3 setuptools wheel
     {%- endif %}
     - cwd: /
     - reload_modules: True
@@ -169,9 +164,9 @@ pip2-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip2 }} "pip" "setuptools" "wheel"'
+    - name: '{{ get_pip2 }} "pip>=19.2.3" "setuptools" "wheel"'
     {%- else %}
-    - name: {{ get_pip2 }} pip setuptools wheel
+    - name: {{ get_pip2 }} pip>=19.2.3 setuptools wheel
     {%- endif %}
     - cwd: /
     - reload_modules: True

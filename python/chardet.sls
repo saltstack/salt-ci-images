@@ -1,10 +1,8 @@
 include:
-  - python.requests
   - python.pip
 
-pyvmomi:
+chardet:
   pip.installed:
-    - name: pyvmomi
+    - ignore_installed: true
     - require:
-      - requests
       - pip-install

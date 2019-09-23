@@ -1,7 +1,6 @@
-{%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
-{%- endif %}
+  - python.chardet
 
 {%- if grains.get('pythonversion')[:2] < [3, 5] %}
   {%- set requests = 'requests<2.22.0'%}
@@ -12,7 +11,6 @@ include:
 requests:
   pip.installed:
     - name: '{{ requests }}'
-{%- if grains['os'] not in ('Windows',) %}
     - require:
-      - cmd: pip-install
-{%- endif %}
+      - pip-install
+      - chardet

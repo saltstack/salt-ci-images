@@ -8,6 +8,7 @@ include:
 kubernetes:
   pip.installed:
     - name: kubernetes < 4.0
+    - ignore_installed: true
     - require:
       - requests
     {%- if grains['os'] != 'Windows' %}

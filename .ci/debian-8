@@ -101,6 +101,7 @@ node('kitchen-slave') {
                     "RBENV_VERSION=2.6.3",
                     "TEST_SUITE=py2",
                     "TEST_PLATFORM=${distro}-${distro_version}",
+                    "TEST_TRANSPORT=ZeroMQ",
                     "AMI_IMAGE_ID=${ami_image_id}"
                 ]) {
                     try {

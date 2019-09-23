@@ -16,7 +16,6 @@ local distros = [
 
 local py3_blacklist = [
   'centos-6',
-  'amazonlinux-1',
 ];
 
 local Build(distro) = {

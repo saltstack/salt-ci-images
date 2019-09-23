@@ -7,4 +7,5 @@
 # Each line is a file pattern followed by one or more owners.
 
 # Default owners for everything in this repo
-* @saltstack/saltstack-sre-team @saltstack/team-core
+* @saltstack/team-core @saltstack/saltstack-sre-team
+cloud-test-configs/* @saltstack/team-cloud

@@ -11,6 +11,7 @@ include:
 requests:
   pip.installed:
     - name: '{{ requests }}'
+    - ignore_installed: true
     - require:
       - pip-install
       - chardet

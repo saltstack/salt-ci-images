@@ -15,7 +15,6 @@ def golden_images_ci_branch = '2019.2'
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
-    disableConcurrentBuilds()
 ])
 
 stage('Fake Checkout') {
@@ -83,8 +82,12 @@ stage('Build Image') {
     }
 }
 
-timeout(time: global_timeout + 1, unit: 'HOURS') {
-    node('kitchen-slave') {
+def buildNumber = env.BUILD_NUMBER as int
+milestone(buildNumber)
+milestone(buildNumber + 1)
+
+node('kitchen-slave') {
+    timeout(time: global_timeout + 1, unit: 'HOURS') {
         timestamps {
             ansiColor('xterm') {
                 withEnv([
@@ -95,9 +98,10 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
                     "SALT_KITCHEN_DRIVER=/var/jenkins/workspace/driver.yml",
                     "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
                     "PATH=~/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin",
-                    "RBENV_VERSION=2.4.2",
+                    "RBENV_VERSION=2.6.3",
                     "TEST_SUITE=py2",
                     "TEST_PLATFORM=${distro}-${distro_version}",
+                    "TEST_TRANSPORT=ZeroMQ",
                     "AMI_IMAGE_ID=${ami_image_id}"
                 ]) {
                     try {
@@ -224,8 +228,8 @@ timeout(time: global_timeout + 1, unit: 'HOURS') {
 
 stage('Cleanup Old AMIs') {
     if (ami_name_filter) {
-        timeout(time: 10, unit: 'MINUTES') {
-            node('kitchen-slave') {
+        node('kitchen-slave') {
+            timeout(time: 10, unit: 'MINUTES') {
                 cleanWs notFailBuild: true
                 checkout([$class: 'GitSCM',
                           branches: [[name: "$os_imager_tag"]],

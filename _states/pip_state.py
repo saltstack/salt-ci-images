@@ -23,9 +23,12 @@ from salt.states.pip_state import removed as pip_state_removed
 from salt.utils.functools import namespaced_function
 
 # We need to re-import some of the pip imports
-from pip._internal.req.constructors import _strip_extras
-from pip._internal.download import is_archive_file, is_url, url_to_path
-from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
+try:
+    from pip._internal.req.constructors import _strip_extras
+    from pip._internal.download import is_archive_file, is_url, url_to_path
+    from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
+except ImportError:
+    pass
 
 __virtualname__ = 'pip'
 

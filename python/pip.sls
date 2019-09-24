@@ -90,15 +90,9 @@
 {%- set which_pip2 = pip2 | which %}
 {%- set which_python2 = python2 | which %}
 {%- set get_pip2 = '{} {} {}'.format(python2, get_pip_path, force_reinstall) %}
-{%- if install_pip2 and which_python2 and which_pip2 %}
-  {%- set install_pip2 = False %}
-{%- endif %}
 {%- set which_pip3 = pip3 | which %}
 {%- set which_python3 = python3 | which %}
 {%- set get_pip3 = '{} {} {}'.format(python3, get_pip_path, force_reinstall) %}
-{%- if install_pip3 and which_python3 and which_pip3 %}
-  {%- set install_pip3 = False %}
-{%- endif %}
 
 include:
   {%- if install_pip3 %}

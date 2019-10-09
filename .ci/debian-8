@@ -11,7 +11,7 @@ def os_imager_tag
 
 def distro = 'debian'
 def distro_version = '8'
-def golden_images_ci_branch = '2019.2'
+def golden_images_ci_branch = 'master'
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
@@ -108,16 +108,10 @@ node('kitchen-slave') {
                         // Checkout the repo
                         stage('Checkout') {
                             cleanWs notFailBuild: true
-                            def branch
-                            if ( golden_images_ci_branch == "2019.2") {
-                                branch = "2019.2.1"
-                            } else {
-                                branch = golden_images_ci_branch
-                            }
                             checkout([
                                 $class: 'GitSCM',
                                 branches: [
-                                    [name: "${branch}"]
+                                    [name: "${golden_images_ci_branch}"]
                                 ],
                                 doGenerateSubmoduleConfigurations: false,
                                 extensions: [

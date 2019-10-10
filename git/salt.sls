@@ -66,7 +66,6 @@ include:
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
-  - no_show_proc
   - locale
   {%- endif %}
   {#- On Windows (Jenkins builds) this is already installed but we may need this on other windows builds. #}
@@ -173,10 +172,8 @@ include:
   - npm
   - bower
   {%- endif %}
-  {%- if grains['os'] == 'Fedora' or (grains['os'] == 'CentOS' and os_major_release == 5) %}
-  - gpg
-  {%- endif %}
   {%- if grains['os'] == 'Fedora' %}
+  - gpg
   - versionlock
   - redhat-rpm-config
   {%- endif %}

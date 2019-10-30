@@ -36,7 +36,6 @@ provisioner:
     - Gemfile
     - Gemfile.lock
     - README.rst
-    - .travis.yml
 
 platforms:
   - name: arch

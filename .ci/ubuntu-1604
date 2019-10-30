@@ -1,261 +1,40 @@
-def global_timeout = 6
+@Library('salt@master-1.2-golden') _
 
-def ec2_region
-def image_id
-def tests_passed = false
-def image_created = false
-def image_to_promote_available
-def ami_name_filter
-def ami_image_id
-def os_imager_tag
+// Define the maximum time, in hours, that a test run should run for
+def testrun_timeout = 6
 
-def distro = 'ubuntu'
+def distro_name = 'ubuntu'
 def distro_version = '1604'
-def golden_images_ci_branch = 'master'
+def nox_env_name = 'runtests-zeromq'
+def salt_target_branch = 'master'
+def golden_images_branch = 'master'
+def nox_passthrough_opts = '--ssh-tests'
+def concurrent_builds = 1
+def use_spot_instances = true
+def jenkins_slave_label = 'kitchen-slave'
+def supports_py2 = true
+def supports_py3 = true
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
 ])
 
-stage('Fake Checkout') {
-  node('kitchen-slave') {
-    checkout scm
-    cleanWs notFailBUild: true
-  }
-}
-
-stage('Build Image') {
-    node('kitchen-slave') {
-        timeout(time: 1, unit: 'HOURS') {
-            timestamps {
-                ansiColor('xterm') {
-                    cleanWs notFailBuild: true
-                    os_imager_tag = sh (
-                        script: '''
-                        git ls-remote https://github.com/saltstack/os-imager.git|awk '{print $2}'|grep refs/tags/aws-ci-v|sort -V|tail -n 1
-                        ''',
-                        returnStdout: true
-                        ).trim()
-                    checkout([$class: 'GitSCM',
-                        branches: [[name: "$os_imager_tag"]],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [],
-                        submoduleCfg: [],
-                        userRemoteConfigs: [[url: 'https://github.com/saltstack/os-imager.git']]
-                        ])
-                    ec2_region = 'us-west-2'
-                    println "Using EC2 Region: ${ec2_region}"
-                    salt_jenkins_head = sh (
-                        script: '''
-                        git ls-remote https://github.com/saltstack/salt-jenkins.git|grep refs/pull/${CHANGE_ID}/head\$ || true
-                        ''',
-                        returnStdout: true
-                        ).trim()
-                        if ( salt_jenkins_head != '' ) {
-                            addInfoBadge id: 'discovered-salt-jenkins-head-badge', text: "salt-jenkins current head: ${salt_jenkins_head}"
-                            createSummary(icon: "/images/48x48/attribute.png", text: "salt-jenkins current head: ${salt_jenkins_head}")
-                        }
-                    withAWS(credentials: 'os-imager-aws-creds', region: "${ec2_region}") {
-                        sh """
-                        mkdir -p bin
-                        curl -O https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_linux_amd64.zip
-                        curl -O https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_SHA256SUMS
-                        sha256sum -c --ignore-missing packer_1.5.1_SHA256SUMS
-                        unzip -d bin packer_1.5.1_linux_amd64.zip
-                        export PATH="\${PWD}/bin:\${PATH}"
-                        pyenv install 3.6.8 || echo "We already have this python."
-                        pyenv local 3.6.8
-                        rm -rf venv
-                        virtualenv venv
-                        . venv/bin/activate
-                        pip install -r requirements/py3.6/base.txt
-                        inv build-aws --staging --distro=${distro} --distro-version=${distro_version} --salt-branch=${golden_images_ci_branch} --salt-pr=\${CHANGE_ID}
-                        """
-                    }
-                    ami_image_id = sh (
-                        script: """
-                        cat ${golden_images_ci_branch}-manifest.json|jq -r ".builds[].artifact_id"|cut -f2 -d:
-                        """,
-                        returnStdout: true
-                        ).trim()
-                    ami_name_filter = sh (
-                        script: """
-                        cat ${golden_images_ci_branch}-manifest.json|jq -r ".builds[].custom_data.ami_name"
-                        """,
-                        returnStdout: true
-                        ).trim()
-                    cleanWs notFailBuild: true
-                }
-            }
-        }
-    }
-}
-
-def buildNumber = env.BUILD_NUMBER as int
-milestone(buildNumber)
-milestone(buildNumber + 1)
-
-node('kitchen-slave') {
-    timeout(time: global_timeout + 1, unit: 'HOURS') {
-        timestamps {
-            ansiColor('xterm') {
-                withEnv([
-                    "NOX_ENV_NAME=runtests-zeromq",
-                    "NOX_PASSTHROUGH_OPTS=--ssh-tests",
-                    "SALT_KITCHEN_PLATFORMS=/var/jenkins/workspace/nox-platforms.yml",
-                    "SALT_KITCHEN_VERIFIER=/var/jenkins/workspace/nox-verifier.yml",
-                    "SALT_KITCHEN_DRIVER=/var/jenkins/workspace/driver.yml",
-                    "GOLDEN_IMAGES_CI_BRANCH=${golden_images_ci_branch}",
-                    "RBENV_VERSION=2.6.3",
-                    "TEST_SUITE=py3",
-                    "TEST_PLATFORM=${distro}-${distro_version}",
-                    "TEST_TRANSPORT=ZeroMQ",
-                    "AMI_IMAGE_ID=${ami_image_id}"
-                ]) {
-                    try {
-                        // Checkout the repo
-                        stage('Checkout') {
-                            cleanWs notFailBuild: true
-                            checkout([
-                                $class: 'GitSCM',
-                                branches: [
-                                    [name: "${golden_images_ci_branch}"]
-                                ],
-                                doGenerateSubmoduleConfigurations: false,
-                                extensions: [
-                                    [
-                                        $class: 'CloneOption',
-                                        noTags: false,
-                                        reference: '',
-                                        shallow: true
-                                    ]
-                                ],
-                                submoduleCfg: [],
-                                userRemoteConfigs: [
-                                    [url: "https://github.com/saltstack/salt.git"]
-                                ]
-                            ])
-                        }
-                        // Setup the kitchen required bundle
-                        stage('Setup') {
-                            sh 'bundle install --with ec2 windows --without docker macos opennebula vagrant'
-                            // Make sure we don't get any promoted images
-                            writeFile encoding: 'utf-8', file: '.kitchen.local.yml', text: """\
-                            driver:
-                              image_search:
-                                description: 'CI-STAGING *'
-                            verifier:
-                              coverage: true
-                            """.stripIndent()
-                        }
-
-                        stage('Discover AMI') {
-                            command_output = sh returnStdout: true, script:
-                                '''
-                                bundle exec kitchen diagnose $TEST_SUITE-$TEST_PLATFORM | grep 'image_id:' | awk '{ print $2 }'
-                                '''
-                            image_id = command_output.trim()
-                            if ( image_id != '' ) {
-                                image_to_promote_available = true
-                                addInfoBadge id: 'discovered-ami-badge', text: "Discovered AMI ${image_id} for this running instance"
-                                createSummary(icon: "/images/48x48/attribute.png", text: "Discovered AMI: ${image_id}")
-                            } else {
-                                image_to_promote_available = false
-                                addWarningBadge id: 'discovered-ami-badge', text: "No AMI discovered to promote"
-                                createSummary(icon: "/images/48x48/warning.png", text: "No AMI discovered to promote")
-                            }
-                            command_output = sh returnStdout: true, script:
-                                '''
-                                grep 'region:' $SALT_KITCHEN_DRIVER | awk '{ print $2 }'
-                                '''
-                            ec2_region = command_output.trim()
-                            println "Discovered EC2 Region: ${ec2_region}"
-                        }
-
-                        timeout(time: global_timeout, unit: 'HOURS') {
-                            stage('Create VM') {
-                                if (image_to_promote_available) {
-                                    retry(3) {
-                                        sh '''
-                                        t=$(shuf -i 1-15 -n 1); echo "Sleeping $t seconds"; sleep $t
-                                        bundle exec kitchen create $TEST_SUITE-$TEST_PLATFORM; echo "ExitCode: $?;"
-                                        '''
-                                    }
-                                    image_created = true
-                                }
-                            }
-                            try {
-                                stage('Converge VM') {
-                                    if (image_to_promote_available) {
-                                        sh '''
-                                        ssh-agent /bin/bash -c 'ssh-add ~/.ssh/kitchen.pem; bundle exec kitchen converge $TEST_SUITE-$TEST_PLATFORM; echo "ExitCode: $?;"'
-                                        '''
-                                    }
-                                }
-                                stage('Verify VM') {
-                                    if (image_to_promote_available) {
-                                        withEnv(["DONT_DOWNLOAD_ARTEFACTS=1"]){
-                                            try {
-                                                sh '''
-                                                bundle exec kitchen verify $TEST_SUITE-$TEST_PLATFORM; echo "ExitCode: $?;"
-                                                '''
-                                                tests_passed = true
-                                            } catch (Exception e) {
-                                                error("Tests Failed")
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                // Even if tests failed, mark the build as SUCCESS
-                                currentBuild.result = 'SUCCESS'
-                                stage('Cleanup VM') {
-                                    sh '''
-                                    bundle exec kitchen destroy $TEST_SUITE-$TEST_PLATFORM; echo "ExitCode: $?;"
-                                    '''
-                                }
-                            }
-                        }
-                    } catch (Exception e1) {
-                        currentBuild.result = 'FAILURE'
-                        println "PIPELINE ERROR: ${e1}"
-                    } finally {
-                        cleanWs notFailBuild: true
-                    }
-                }
-            }
-        }
-    }
-}
-
-stage('Cleanup Old AMIs') {
-    if (ami_name_filter) {
-        node('kitchen-slave') {
-            timeout(time: 10, unit: 'MINUTES') {
-                cleanWs notFailBuild: true
-                checkout([$class: 'GitSCM',
-                          branches: [[name: "$os_imager_tag"]],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions: [],
-                          submoduleCfg: [],
-                          userRemoteConfigs: [
-                              [url: 'https://github.com/saltstack/os-imager.git']
-                          ]])
-                withAWS(credentials: 'os-imager-aws-creds', region: "${ec2_region}") {
-                    sh """
-                    pyenv install 3.6.8 || echo "We already have this python."
-                    pyenv local 3.6.8
-                    rm -rf venv
-                    virtualenv venv
-                    . venv/bin/activate
-                    pip install -r requirements/py3.6/base.txt
-                    inv cleanup-aws --staging --name-filter='${ami_name_filter}' --region=${ec2_region} --assume-yes --num-to-keep=1
-                    """
-                }
-                cleanWs notFailBuild: true
-            }
-        }
-    }
-}
+buildGoldenImage(
+    env: env,
+    distro_name: distro_name,
+    distro_version: distro_version,
+    salt_target_branch: salt_target_branch,
+    golden_images_branch: golden_images_branch,
+    nox_env_name: nox_env_name,
+    nox_passthrough_opts: nox_passthrough_opts,
+    testrun_timeout: testrun_timeout,
+    run_full: true,
+    use_spot_instances: false,
+    jenkins_slave_label: jenkins_slave_label,
+    retry_failed_builds: false,
+    concurrent_builds: concurrent_builds,
+    ec2_region: 'us-west-2',
+    supports_py2: supports_py2,
+    supports_py3: supports_py3)
 
 // vi: ft=groovy

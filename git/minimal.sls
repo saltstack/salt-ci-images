@@ -142,6 +142,7 @@ include:
     {%- endif %}
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}
+  - dhclient_conf
   - sshd_config
 {%- endif %}
 

@@ -49,7 +49,7 @@ The ``salt-jenkins`` project is welcome and open to contributions.
 The ``salt-jenkins`` repository has a few openly maintained branches. These correspond to the actively maintained
 release branches in the `Salt project`_. This helps stabilize the testing
 environments that the ``salt-jenkins`` states configure on the test VMs running at
-`jenkins.saltstack.com`_.
+`jenkinsci.saltstack.com`_.
 
 There is a node located in Salt's Jenkins installation configured to run the tests for each supported Salt
 release branch. In turn, each node is configured to run the ``salt-jenkins`` state tree based on the Salt release
@@ -59,7 +59,7 @@ For example, the Jenkins node labeled ``2016_3`` runs tests against the HEAD of 
 same ``2016_3`` node is configured to run the ``salt-jenkins`` state tree using the ``2016.3`` branch of the
 ``salt-jenkins`` repository.
 
-**Note: The "master" branch of the "salt-jenkins" repository is used to test the "develop" branch of Salt.**
+**Note: The "master" branch of the "salt-jenkins" repository is used to test the "master" branch of Salt.**
 
 Which Salt Jenkins Branch?
 --------------------------
@@ -67,7 +67,7 @@ Which Salt Jenkins Branch?
 GitHub will open pull requests against Salt Jenkins's main branch, ``master``, by default. Contributions to the
 Salt Jenkins state tree should be added to the oldest supported branch that requires the change.
 
-For example, imagine a new execution module was added to the ``develop`` branch in Salt, along with tests for
+For example, imagine a new execution module was added to the ``master`` branch in Salt, along with tests for
 the new module. The new module requires a dependency that is not currently installed by the Salt Jenkins
 states. The new state(s) would need to be added to the ``master`` branch of Salt Jenkins.
 
@@ -98,9 +98,9 @@ each branch is merged into the directly newer branch::
     2016.3    *---*---*---*---*---*---*
 
 
-.. _jenkins.saltstack.com: https://jenkins.saltstack.com/
+.. _jenkinsci.saltstack.com: https://jenkinsci.saltstack.com/
 .. _Salt project: https://github.com/saltstack/salt
-.. _Salt's Jenkins system: https://jenkins.saltstack.com/\
-.. |build|  image:: https://drone.saltstack.com/api/badges/saltstack/salt-jenkins/status.svg?ref=refs/heads/2019.2
+.. _Salt's Jenkins system: https://jenkinsci.saltstack.com/\
+.. |build|  image:: https://drone.saltstack.com/api/badges/saltstack/salt-jenkins/status.svg?ref=refs/heads/master
     :target: https://drone.saltstack.com/saltstack/salt-jenkins
     :alt: Build status on Linux

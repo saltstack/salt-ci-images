@@ -9,3 +9,4 @@
 # Default owners for everything in this repo
 * @saltstack/team-core @saltstack/saltstack-sre-team
 cloud-test-configs/* @saltstack/team-cloud
+os-images/* @saltstack/saltstack-sre-team

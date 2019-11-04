@@ -1,4 +1,5 @@
 # vim: set ft=yaml ts=2 sts=2 et:
+id: salt-jenkins-minion
 
 fileserver_backend:
   - roots
@@ -7,7 +8,7 @@ file_client: local
 
 file_roots:
   base:
-    - ./
+    - ./state-tree
 
 #pillar_roots:
 #  base:
@@ -17,7 +18,7 @@ file_roots:
 root_dir: .rootdir
 pki_dir: pki
 cachedir: cache
-log_file: salt-call.log
+log_file: logs/salt-call.log
 log_level_logfile: debug
 log_datefmt: '%H:%M:%S'
 log_fmt_console: "[%(levelname)-8s][%(name)-5s:%(lineno)-4d] %(message)s"

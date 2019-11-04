@@ -32,7 +32,7 @@ repos:
       - id: pip-tools-compile
         alias: compile-requirements
         name: Compile Requirements
-        files: ^requirements/base\.in$
+        files: ^os-images/requirements/base\.in$
         args:
           - -v
           - --py-version=3.6

@@ -45,7 +45,7 @@ def build_aws(ctx,
               salt_pr=None):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
-    distro_dir = os.path.join('AWS', distro)
+    distro_dir = os.path.join('os-images', 'AWS', distro)
     if not os.path.exists(distro_dir):
         exit_invoke(1, 'The directory {} does not exist. Are you passing the right OS?', distro_dir)
 
@@ -125,7 +125,7 @@ def build_docker(ctx,
                  validate=False):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
-    distro_dir = os.path.join('Docker', distro)
+    distro_dir = os.path.join('os-images', 'Docker', distro)
     if not os.path.exists(distro_dir):
         exit_invoke(1, 'The directory {} does not exist. Are you passing the right OS?', distro_dir)
 

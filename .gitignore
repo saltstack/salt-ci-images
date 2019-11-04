@@ -4,3 +4,10 @@ Gemfile.lock
 .bundle/
 .kitchen/
 *.sw[a-p]
+
+# From os-images
+packer_cache
+output-*
+*.idea*
+.tmp/
+*manifest.json

@@ -6,7 +6,7 @@
   "os_name": "Debian",
   "os_version": "9",
   "bootstrap_args": "-qXU",
-  "bootstrap_version": "2018.3.4",
+  "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
   "state_name": "git.minimal",
   "ami_filter": "debian-stretch-hvm-x86_64-*",

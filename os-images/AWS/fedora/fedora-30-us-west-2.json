@@ -5,7 +5,7 @@
   "os_name": "Fedora",
   "os_version": "30",
   "bootstrap_args": "-qXU",
-  "bootstrap_version": "2018.3.4",
+  "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
   "state_name": "git.minimal",
   "ami_filter": "Fedora-Cloud-Base-30-*.x86_64-hvm-us-west-2-gp2-0",

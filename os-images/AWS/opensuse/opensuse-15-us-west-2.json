@@ -5,7 +5,7 @@
   "os_name": "OpenSuse",
   "os_version": "15",
   "bootstrap_args": "-qXU -x python2",
-  "bootstrap_version": "2018.3.4",
+  "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
   "state_name": "git.minimal",
   "ami_filter": "openSUSE-Leap-15-1-v20190702-hvm-ssd-x86_64-*",

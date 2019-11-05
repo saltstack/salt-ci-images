@@ -1,12 +1,10 @@
 #!/bin/bash
 
-dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+# Call the main linux prep file
+. os-images/files/prep-uploads.sh
 
-# Clone State Tree
-. ${dir}/prep-minion-conf.sh
-. ${dir}/prep-states.sh
-. ${dir}/prep-pillar.sh
+# Prep states
+. os-images/AWS/files/prep-states.sh
 
-echo "Copying gitpython.sls to the temp states directory"
-cp ${dir}/gitpython.sls .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/states/
-ls -lah .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/states
+# Prep pillar
+. os-images/AWS/files/prep-pillar.sh

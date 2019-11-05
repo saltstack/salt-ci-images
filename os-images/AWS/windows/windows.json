@@ -56,13 +56,13 @@
   "provisioners": [
     {
       "type": "powershell",
-      "script": "AWS/windows/scripts/InstallAndConfigureOpenSSH.ps1",
+      "script": "os-images/AWS/windows/scripts/InstallAndConfigureOpenSSH.ps1",
       "elevated_user": "SYSTEM",
       "elevated_password": ""
     },
     {
       "type": "shell-local",
-      "script": "AWS/files/prep-windows.sh",
+      "script": "os-images/AWS/files/prep-windows.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -72,11 +72,11 @@
     },
     {
       "type": "powershell",
-      "script": "AWS/windows/scripts/Install-Git.ps1"
+      "script": "os-images/AWS/windows/scripts/Install-Git.ps1"
     },
     {
       "type": "powershell",
-      "script": "AWS/files/update-git-path.ps1"
+      "script": "os-images/files/update-git-path.ps1"
     },
     {
       "type": "powershell",
@@ -87,39 +87,35 @@
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
-      "destination": "C:\\salt\\conf\\minion.d\\gitfs.conf",
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
+      "destination": "C:\\salt\\conf\\minion.d\\overrides.conf",
+      "direction": "upload"
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/windows-roots.conf",
+      "destination": "C:\\salt\\conf\\minion.d\\windows-roots.conf",
       "direction": "upload"
     },
     {
       "type": "salt-masterless",
       "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
       "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "custom_state": "windows.repo",
+      "custom_state": "noop-placeholder",
       "guest_os_type": "windows",
       "disable_sudo": true,
       "salt_bin_dir": "c:\\salt",
       "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
     },
     {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar/",
-      "destination": "c:\\salt\\srv\\pillar\\",
-      "direction": "upload"
-    },
-    {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states/",
-      "destination": "c:\\salt\\srv\\salt\\",
-      "direction": "upload"
-    },
-    {
       "type": "powershell",
       "inline": [
-        "salt-call --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
-        "salt-call --local --retcode-passthrough  state.single module.run winrepo.genrepo"
+        "Get-ChildItem -Path C:/salt/state",
+        "Get-ChildItem -Path C:/salt/pillar",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls windows.repo",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.genrepo"
       ]
     },
     {
@@ -143,7 +139,7 @@
     },
     {
       "type": "shell-local",
-      "script": "AWS/files/prep-windows.sh",
+      "script": "os-images/AWS/files/prep-windows.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -175,7 +171,7 @@
     },
     {
       "type": "powershell",
-      "script": "AWS/windows/scripts/SysPrep.ps1"
+      "script": "os-images/AWS/windows/scripts/SysPrep.ps1"
     },
     {
       "type": "shell-local",

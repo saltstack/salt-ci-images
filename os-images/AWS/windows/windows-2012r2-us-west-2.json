@@ -13,5 +13,5 @@
   "ami_name_suffix": "windows/2012r2",
   "instance_type": "c5.xlarge",
   "build_type": "ci",
-  "user_data_file": "AWS/windows/scripts/SetUpWinRM.ps1"
+  "user_data_file": "os-images/AWS/windows/scripts/SetUpWinRM.ps1"
 }

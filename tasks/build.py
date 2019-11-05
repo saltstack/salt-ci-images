@@ -191,3 +191,73 @@ def build_docker(ctx,
                                                                 salt_branch,
                                                                 build_template)
     ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+
+@task
+def build_osx(ctx,
+              distro_version=None,
+              salt_branch='master',
+              debug=False,
+              staging=False,
+              validate=False,
+              salt_pr=None):
+    distro = 'macos'
+    ctx.cd(REPO_ROOT)
+    distro_dir = os.path.join('os-images', 'MacStadium', distro)
+    if not os.path.exists(distro_dir):
+        exit_invoke(1, 'The directory {} does not exist. Are you passing the right OS?', distro_dir)
+
+    distro_slug = distro
+    if distro_version:
+        distro_slug += '-{}'.format(distro_version)
+
+    template_variations = [
+        os.path.join(distro_dir, '{}.json'.format(distro))
+    ]
+    for variation in template_variations:
+        if os.path.exists(variation):
+            build_template = variation
+            break
+    else:
+        exit_invoke(1, 'Could not find the distribution build template. Tried: {}',
+                    ', '.join(template_variations))
+
+    vars_variations = [
+        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
+    ]
+    for variation in vars_variations:
+        if os.path.exists(variation):
+            build_vars = variation
+            break
+    else:
+        exit_invoke(1, 'Could not find the distribution build vars file. Tried: {}',
+                    ', '.join(vars_variations))
+
+    packer_tmp_dir = PACKER_TMP_DIR.format(distro_slug)
+    if not os.path.exists(packer_tmp_dir):
+        os.makedirs(packer_tmp_dir)
+    os.chmod(os.path.dirname(packer_tmp_dir), 0o755)
+    os.chmod(packer_tmp_dir, 0o755)
+    for name in ('states', 'pillar'):
+        path = os.path.join(packer_tmp_dir, salt_branch, name)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        os.chmod(path, 0o755)
+
+    cmd = 'packer'
+    _binary_install_check(cmd)
+    if validate is True:
+        cmd += ' validate'
+    else:
+        cmd += ' build'
+        if debug is True:
+            cmd += ' -debug -on-error=ask'
+        cmd += TIMESTAMP_UI
+    cmd += ' -var-file={}'.format(build_vars)
+    if staging is True:
+        cmd += ' -var build_type=ci-staging'
+    if salt_pr:
+        cmd += ' -var salt_pr={}'.format(salt_pr)
+    cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
+                                                                salt_branch,
+                                                                build_template)
+    ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})

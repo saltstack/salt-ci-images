@@ -6,7 +6,7 @@
   "builders": [
     {
       "communicator": "ssh",
-      "source_path": "https://{{ user `artifactory_username` }}:{{ user `artifactory_password` }}@artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{{ user `source_box_name` }}.box",
+      "source_path": "https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{{ user `source_box_name` }}.box",
       "box_name": "{{ user `box_name` }}",
       "add_force": true,
       "provider": "parallels",

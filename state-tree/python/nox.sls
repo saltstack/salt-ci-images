@@ -55,4 +55,10 @@ nox:
     - name: "{{ python }} -m pip install --prefix=/usr 'nox-py2=={{ nox_version }}'"
     - require:
       - pip-install
+
+cat-nox:
+  cmd.run:
+    - name: "cat /usr/bin/nox"
+    - require:
+      - nox
 {%- endif %}

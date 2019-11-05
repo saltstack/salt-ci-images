@@ -1,6 +1,7 @@
 {
   "_comment": "Build with `packer build -var-file=macos-mojave.json macos.json`",
   "box_name": "mojave-ci",
+  "source_box_name": "mojave-clean",
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.14",

@@ -1,6 +1,7 @@
 {
   "_comment": "Build with `packer build -var-file=macos-highsierra.json macos.json`",
   "box_name": "highsierra-ci",
+  "source_box_name": "highsierra-clean",
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.13",

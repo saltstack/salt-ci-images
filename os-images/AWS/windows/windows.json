@@ -121,6 +121,17 @@
     {
       "type": "powershell",
       "inline": [
+        "Get-ChildItem -Path C:/salt/state",
+        "Get-ChildItem -Path C:/salt/pillar",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls windows.repo",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.genrepo"
+      ],
+      "pause_before": "5s"
+    },
+    {
+      "type": "powershell",
+      "inline": [
         "salt-call --local --retcode-passthrough  state.single module.run pkg.refresh_db failhard=True"
       ],
       "pause_before": "5s"

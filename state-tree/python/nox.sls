@@ -32,12 +32,6 @@
   {%- set on_windows=False %}
 {%- endif %}
 
-{%- if on_amazonlinux_1 or on_redhat_8 %}
-  {%- set use_usr_prefix = True %}
-{%- else %}
-  {%- set use_usr_prefix = False %}
-{%- endif %}
-
 {%- if on_windows %}
   {#- TODO: Maybe run this by powershell `py.exe -3 -c "import sys; print(sys.executable)"` #}
   {%- set python = 'c:\\\\Python35\\\\python.exe' %}
@@ -58,7 +52,7 @@ include:
 {%- if not which_nox %}
 nox:
   cmd.run:
-    - name: "{{ python }} -m pip install{%- if use_usr_prefix %} --prefix=/usr{%- endif %} 'nox-py2=={{ nox_version }}'"
+    - name: "{{ python }} -m pip install --prefix=/usr 'nox-py2=={{ nox_version }}'"
     - require:
       - pip-install
 {%- endif %}

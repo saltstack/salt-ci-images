@@ -9,8 +9,8 @@ def ami_name_filter
 def ami_image_id
 def os_imager_tag
 
-def distro = 'fedora'
-def distro_version = '29'
+def distro = 'debian'
+def distro_version = '10'
 def golden_images_ci_branch = 'master'
 
 properties([

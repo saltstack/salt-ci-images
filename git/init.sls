@@ -1,4 +1,4 @@
-{%- if grains['os_family'] == 'Debian' %}
+{%- if grains['os_family'] == 'Debian' and grains['osrelease'] != '10' %}
   {%- set git = 'git-core' %}
 {%- elif grains['os'] == 'Windows' %}
   {%- set PROGRAM_FILES = "%ProgramFiles%" %}

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Call the main linux prep file
+# Call the main prep file
 . os-images/files/prep-uploads.sh
 
 # Prep states

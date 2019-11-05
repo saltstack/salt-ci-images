@@ -1,12 +1,7 @@
 #!/bin/bash
 
-echo "Building Pillar Data for Python Version: ${PY_VERSION}"
-if [ -d .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar ]; then
-    rm -rf .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar
-fi
-mkdir -p .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar
-printf "base:\n  '*':\n    - base\n" > .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar/top.sls
-printf "py$PY_VERSION: true\n" > .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar/base.sls
-printf "packer_build: true\n" >> .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar/base.sls
-printf "packer_golden_images_build: true\n" >> .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar/base.sls
-printf "create_testing_dir: false\n" >> .tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar/base.sls
+# Call the main pillar prep file
+. os-images/files/prep-pillar.sh
+
+# Tweak it some more
+printf "py$PY_VERSION: true\n" >> ${PILLAR_DIR}/base.sls

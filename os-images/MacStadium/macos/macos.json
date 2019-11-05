@@ -21,15 +21,15 @@
       ],
       "expect_disconnect": true,
       "scripts": [
-        "../files/setup-base.sh",
-        "../files/cleanup.sh"
+        "os-images/MacStadium/files/setup-base.sh",
+        "os-images/MacStadium/files/cleanup.sh"
       ],
       "start_retry_timeout": "10000s",
       "type": "shell"
     },
     {
       "type": "shell-local",
-      "script": "../files/prep-macos.sh",
+      "script": "os-images/MacStadium/files/prep-macos.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -76,7 +76,7 @@
     },
     {
       "type": "shell-local",
-      "script": "../files/prep-macos.sh",
+      "script": "os-images/MacStadium/files/prep-macos.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -103,7 +103,7 @@
     },
     {
       "type": "shell",
-      "script": "../files/cleanup.sh"
+      "script": "os-images/MacStadium/files/cleanup.sh"
     }
   ]
 }

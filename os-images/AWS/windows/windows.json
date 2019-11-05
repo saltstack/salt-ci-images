@@ -122,18 +122,20 @@
       "type": "powershell",
       "inline": [
         "salt-call --local --retcode-passthrough  state.single module.run pkg.refresh_db failhard=True"
-      ]
+      ],
+      "pause_before": "5s"
     },
     {
       "type": "powershell",
       "inline": [
         "salt-call --local --retcode-passthrough state.sls windows.compiler"
-      ]
+      ],
+      "pause_before": "5s"
     },
     {
       "type": "powershell",
       "inline": [
-        "salt-call --local --retcode-passthrough state.sls {{ user `state_name` }}",
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls {{ user `state_name` }}",
         "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
       ]
     },
@@ -157,7 +159,7 @@
     {
       "type": "powershell",
       "inline": [
-        "salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough"
+        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls {{ user `state_name` }}"
       ]
     },
     {

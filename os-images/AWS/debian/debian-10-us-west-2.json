@@ -5,7 +5,7 @@
   "device_name": "/dev/xvda",
   "os_name": "Debian",
   "os_version": "10",
-  "bootstrap_args": "-qXUP",
+  "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "2018.3.4",
   "salt_branch": "master",
   "state_name": "git.minimal",

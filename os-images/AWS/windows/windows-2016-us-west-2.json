@@ -13,6 +13,5 @@
   "ami_name_suffix": "windows/2016",
   "instance_type": "c5.xlarge",
   "build_type": "ci",
-  "source_build_type": "base",
-  "user_data_file": "AWS/windows/scripts/SetUpWinRM.ps1"
+  "user_data_file": "os-images/AWS/windows/scripts/SetUpWinRM.ps1"
 }

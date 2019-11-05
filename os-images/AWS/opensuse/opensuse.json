@@ -69,7 +69,7 @@
     },
     {
       "type": "shell-local",
-      "script": "AWS/files/prep-linux.sh",
+      "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -80,15 +80,15 @@
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
-      "destination": "/tmp/gitfs.conf",
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
+      "destination": "/tmp/overrides.conf",
       "direction": "upload"
     },
     {
       "type": "shell",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d",
-        "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
+        "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
       ]
     },
     {
@@ -96,27 +96,18 @@
       "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}",
       "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
       "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "custom_state": "gitpython"
-    },
-    {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "destination": "/tmp/pillar",
-      "direction": "upload"
+      "custom_state": "noop-placeholder"
     },
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /srv/pillar",
-        "sudo mv /tmp/pillar /srv",
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
       ]
     },
     {
       "type": "shell-local",
-      "script": "AWS/files/prep-linux.sh",
+      "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -143,7 +134,13 @@
     },
     {
       "type": "shell",
-      "script": "AWS/files/cleanup-linux.sh"
+      "inline": [
+        "sudo rm -rf /tmp/* && sudo zypper --non-interactive clean -a"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "os-images/AWS/files/cleanup-linux.sh"
     }
   ],
   "post-processors": [

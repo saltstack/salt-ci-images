@@ -1,12 +1,12 @@
 {
-  "_comment": "Build with `packer build -var-file=highsierra-atl.json macos.json`",
-  "box_name": "highsierra-base",
+  "_comment": "Build with `packer build -var-file=macos-highsierra.json macos.json`",
+  "box_name": "highsierra-ci",
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.13",
   "bootstrap_args": "-qXU",
   "bootstrap_version": "2018.3.4",
-  "salt_branch": "develop",
-  "state_name": "git.base",
+  "salt_branch": "master",
+  "state_name": "git.minimal",
   "build_type": "ci"
 }

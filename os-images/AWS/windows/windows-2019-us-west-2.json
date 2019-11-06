@@ -6,7 +6,7 @@
   "bootstrap_args": "-pythonVersion 2 -runservice false",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "ami_filter": "Windows_Server-2019-English-Full-Base-20*",
   "ami_owner": "801119661308",
   "ami_name_prefix": "saltstack",

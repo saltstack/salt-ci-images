@@ -8,7 +8,7 @@
   "bootstrap_args": "-qXU",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "ami_filter": "debian-jessie-amd64-hvm-2017-01-15-1221-ebs-*",
   "ami_owner": "679593333241",
   "ami_name_prefix": "saltstack",

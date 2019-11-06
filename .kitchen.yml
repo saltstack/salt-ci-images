@@ -170,7 +170,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - git.minimal
+            - golden-images-provision
       pillars:
         top.sls:
           base:
@@ -217,7 +217,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - git.minimal
+            - golden-images-provision
       pillars:
         top.sls:
           base:

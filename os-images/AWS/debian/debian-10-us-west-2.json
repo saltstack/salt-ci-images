@@ -8,7 +8,7 @@
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "ami_filter": "debian-10-amd64-20*",
   "ami_owner": "136693071363",
   "ami_name_prefix": "saltstack",

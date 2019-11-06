@@ -8,6 +8,6 @@
   "bootstrap_args": "-qXU",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "build_type": "ci"
 }

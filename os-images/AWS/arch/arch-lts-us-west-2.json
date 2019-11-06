@@ -7,7 +7,7 @@
   "bootstrap_args": "-qXU",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "ami_filter": "arch-linux-lts-hvm-*.x86_64-ebs",
   "ami_owner": "093273469852",
   "ami_name_prefix": "saltstack",

@@ -27,6 +27,7 @@
 {%- endif %}
 
 include:
+  - path
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
@@ -38,9 +39,6 @@ include:
   - man
   - libcurl
   - ulimits
-  {%- endif %}
-  {%- if grains['os'] == 'MacOS' %}
-  - path
   {%- endif %}
   # All VMs get docker-py so they can run unit tests
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}

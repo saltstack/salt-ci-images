@@ -48,7 +48,7 @@ include:
   - python.setuptools
   - python.more-itertools
   {%- if grains['os'] == 'MacOS' %}
-  - python.path
+  - path
   {%- endif %}
   # All VMs get docker-py so they can run unit tests
   - python.docker

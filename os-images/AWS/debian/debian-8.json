@@ -67,8 +67,7 @@
         "sudo mv /tmp/sources.list /etc/apt/sources.list",
         "sudo apt-get install -y debian-archive-keyring",
         "sudo apt-get update -y && sudo apt-get upgrade -yq",
-        "sudo apt-get install -y git vim ",
-        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+        "sudo apt-get install -y git vim "
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"

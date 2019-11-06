@@ -7,7 +7,7 @@
   "bootstrap_args": "-qXU",
   "bootstrap_version": "2019.2.2",
   "salt_branch": "master",
-  "state_name": "git.minimal",
+  "state_name": "golden-images-provision",
   "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
   "ami_owner": "099720109477",
   "ami_name_prefix": "saltstack",

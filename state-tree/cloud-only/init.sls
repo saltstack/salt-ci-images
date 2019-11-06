@@ -3,7 +3,6 @@
 {%- set on_redhat = True if os_family == 'RedHat' else False %}
 
 include:
-  - git
   - patch
   - python.salttesting
   {%- if grains.get('pythonversion')[:2] < [2, 7] %}
@@ -41,7 +40,6 @@ include:
     - target: /testing
     - require:
       - file: /testing
-      - pkg: git
       - pkg: patch
       - pip: SaltTesting
       {%- if grains.get('pythonversion')[:2] < [2, 7] %}

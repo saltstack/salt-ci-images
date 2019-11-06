@@ -40,7 +40,7 @@ include:
   - ulimits
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}
-  - python.path
+  - path
   {%- endif %}
   # All VMs get docker-py so they can run unit tests
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}

@@ -9,11 +9,17 @@
 {%- endif %}
 {%- set git_binary = 'git' | which %}
 
+system-up-to-date:
+  pkg.uptodate:
+    - refresh: True
+
 force-sync-all:
   module.run:
     - name: saltutil.sync_all
     - order: 1
     - reload_modules: True
+    - require:
+      - system-up-to-date
 
 {%- if grains['os_family'] != 'Windows' %}
   {%- if grains['os_family'] == 'RedHat' %}

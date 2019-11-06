@@ -4,9 +4,9 @@
   {%- set sed = 'sed' %}
 {%- endif %}
 
-{%- if grains['os'] in ('Windows') %}
+{%- if grains['os'] in ('Windows',) %}
 include:
-  - python.pip
+  - python-pip
   {%- set install_method = 'pip.installed' %}
 {%- else %}
   {%- set install_method = 'pkg.installed' %}
@@ -17,6 +17,7 @@ sed:
     - name: {{ sed }}
     {%- if install_method == 'pkg.installed' %}
     - aggregate: True
+    {%- else %}
     - require:
-      - cmd: pip-install
+      - pip-install
     {%- endif %}

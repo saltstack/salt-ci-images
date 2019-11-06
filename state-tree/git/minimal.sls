@@ -55,7 +55,6 @@ include:
     {%- endif %}
   - gem
   - python
-  - python.pip
   - gcc
   {%- endif %}
   - libsodium

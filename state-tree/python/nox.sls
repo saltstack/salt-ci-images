@@ -34,31 +34,43 @@
 
 {%- if on_windows %}
   {#- TODO: Maybe run this by powershell `py.exe -3 -c "import sys; print(sys.executable)"` #}
-  {%- set python = 'c:\\\\Python35\\\\python.exe' %}
+  {%- set pip = 'c:\\\\Python35\\\\python.exe -m pip' %}
 {%- else %}
-  {%- if on_debian_8 or on_redhat_6 %}
-    {%- set python = 'python2.7' %}
-  {%- elif on_amazonlinux_1 or on_redhat_8 %}
-    {%- set python = 'python3.6' %}
+  {%- if on_debian_8 %}
+    {%- set pip = 'pip2' %}
+  {%- elif on_redhat_6 %}
+    {%- set pip = 'pip2.7' %}
+  {%- elif on_amazonlinux_1 or on_debian_8 %}
+    {%- set pip = 'pip-3.6' %}
   {%- else %}
-    {%- set python = 'python3' %}
+    {%- set pip = 'pip3' %}
   {%- endif %}
 {%- endif %}
 include:
-  - python.pip
+  - python-pip
 
 {%- set which_nox = 'nox' | which %}
 
 {%- if not which_nox %}
 nox:
   cmd.run:
-    - name: "{{ python }} -m pip install --prefix=/usr 'nox-py2=={{ nox_version }}'"
+    - name: "{{ pip }} install 'nox-py2=={{ nox_version }}'"
     - require:
       - pip-install
 
-cat-nox:
+  {%- if not on_windows %}
+symlink-nox:
+  file.symlink:
+    - name: /usr/bin/nox
+    - target: /usr/local/bin/nox
+    - onlyif: '[ -f /usr/local/bin/nox ]'
+    - require:
+      - nox
+  {%- endif %}
+
+nox-version:
   cmd.run:
-    - name: "cat /usr/bin/nox"
+    - name: 'nox --version'
     - require:
       - nox
 {%- endif %}

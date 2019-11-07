@@ -6,7 +6,7 @@
   "builders": [
     {
       "communicator": "ssh",
-      "source_path": "https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{{ user `source_box_name` }}.box",
+      "source_path": ".tmp/boxes/{{ user `source_box_name` }}.box",
       "box_name": "{{ user `box_name` }}",
       "add_force": true,
       "provider": "parallels",
@@ -15,17 +15,14 @@
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "expect_disconnect": true,
+      "script": "os-images/MacStadium/files/setup-base.sh",
+      "start_retry_timeout": "10000s",
       "environment_vars": [
         "ARTIFACTORY_USERNAME={{ user `artifactory_username` }}",
         "ARTIFACTORY_PASSWORD={{ user `artifactory_password` }}"
-      ],
-      "expect_disconnect": true,
-      "scripts": [
-        "os-images/MacStadium/files/setup-base.sh",
-        "os-images/MacStadium/files/cleanup.sh"
-      ],
-      "start_retry_timeout": "10000s",
-      "type": "shell"
+      ]
     },
     {
       "type": "shell-local",
@@ -47,8 +44,20 @@
     {
       "type": "shell",
       "inline": [
-        "sudo mkdir -p /etc/salt/minion.d",
+        "sudo mkdir -p /etc/salt/minion.d /srv",
         "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "os-images/MacStadium/files/bootstrap-salt.sh",
+      "destination": "/tmp/salt-bootstrap.sh",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo sh /tmp/salt-bootstrap.sh {{ user `bootstrap_args` }} stable {{ user `bootstrap_version` }}"
       ]
     },
     {
@@ -56,13 +65,17 @@
       "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
       "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
       "custom_state": "noop-placeholder",
-      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
+      "skip_bootstrap": true,
+      "salt_bin_dir": "/opt/salt/bin"
     },
     {
       "type": "shell",
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      ],
+      "environment_vars": [
+        "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin"
       ]
     },
     {
@@ -89,6 +102,9 @@
         "sudo mv /tmp/pillar /srv",
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
+      ],
+      "environment_vars": [
+        "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/salt/bin:/usr/local/sbin"
       ],
       "pause_after": "5s"
     },

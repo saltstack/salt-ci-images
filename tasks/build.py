@@ -8,6 +8,10 @@ Bulid Tasks
 # Import Python Libs
 import os
 import sys
+import json
+import time
+import pprint
+import threading
 
 # Import invoke libs
 from invoke import task
@@ -238,7 +242,11 @@ def build_osx(ctx,
         os.makedirs(packer_tmp_dir)
     os.chmod(os.path.dirname(packer_tmp_dir), 0o755)
     os.chmod(packer_tmp_dir, 0o755)
-    for name in ('states', 'pillar', 'boxes'):
+    boxes_tmp_dir = PACKER_TMP_DIR.format('boxes')
+    if not os.path.exists(boxes_tmp_dir):
+        os.makedirs(boxes_tmp_dir)
+    os.chmod(boxes_tmp_dir, 0o755)
+    for name in ('states', 'pillar'):
         path = os.path.join(packer_tmp_dir, salt_branch, name)
         if not os.path.exists(path):
             os.makedirs(path)
@@ -247,12 +255,65 @@ def build_osx(ctx,
     def get_url_headers(url):
         cmd = 'curl'
         _binary_install_check(cmd)
-        cmd += ' -s --head {} | grep -e etag -e x-checksum'.format(url)
+        cmd += ' -s --head {} | grep -e x-checksum'.format(url)
         output = ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
-        return output.strip()
+        headers = {}
+        for line in output.stdout.strip().splitlines():
+            key, value = line.split(':')
+            headers[key.strip()] = value.strip()
+        return headers
+
+    def get_content_length(url):
+        cmd = 'curl'
+        _binary_install_check(cmd)
+        cmd += ' -s --head {} | grep -e content-length'.format(url)
+        result = ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        output = result.stdout.strip()
+        _, content_length = output.split(':')
+        content_length = int(content_length.strip())
+        return content_length
+
+    def parallel_download_url(url, dest):
+
+        def download_chunk(url, dest, start, end):
+            cmd = 'curl -sS -L -o {} --range {}-{} {}'.format(dest, start, end, url)
+            ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+
+        threads = []
+        content_length = get_content_length(url)
+        chunks = 15
+        chunk_size = content_length // chunks
+        for chunk in range(chunks):
+            start = 0
+            if chunk:
+                start = chunk * chunk_size + (1 * chunk)
+            end = start + chunk_size
+            if end > content_length:
+                end = content_length
+            part_dest = dest + '.part{}'.format(chunk)
+            t = threading.Thread(target=download_chunk, args=(url, part_dest, start, end))
+            threads.append(t)
+            t.start()
+
+        while threads:
+            t = threads.pop(0)
+            if not t.is_alive():
+                t.join()
+            else:
+                threads.append(t)
+            time.sleep(1)
+
+        cmd = 'cat'
+        for chunk in range(chunks):
+            part_dest = dest + '.part{}'.format(chunk)
+            cmd = 'cat {} >> {}'.format(part_dest, dest)
+            if not chunk:
+                cmd = cmd.replace('>>', '>')
+            ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+            os.unlink(part_dest)
 
     source_box_name = '{}-clean'.format(distro_version)
-    source_box_dest = '{}/{}'.format(PACKER_TMP_DIR.format('boxes'), source_box_name + '.box')
+    source_box_dest = os.path.join(boxes_tmp_dir, source_box_name + '.box')
     source_box_dest_headers = source_box_dest + '.headers'
     source_box_url = 'https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)
     if os.path.exists(source_box_dest):
@@ -262,20 +323,21 @@ def build_osx(ctx,
                 os.unlink(source_box_dest_headers)
         elif os.path.exists(source_box_dest_headers):
             # Let's see if the download we have is up to date
-            headers = open(source_box_dest_headers).read().strip()
-            if get_url_headers(source_box_url) != headers:
+            cached_headers = json.loads(open(source_box_dest_headers).read().strip())
+            headers = get_url_headers(source_box_url)
+            if headers != cached_headers:
+                print('Cached Headers:\n{}'.format(pprint.pformat(cached_headers)))
+                print('Current Headers:\n{}'.format(pprint.pformat(headers)))
+                print('Headers do not match. Re-downloading the image')
                 os.unlink(source_box_dest)
                 os.unlink(source_box_dest_headers)
 
     if not os.path.exists(source_box_dest):
-        cmd = 'curl'
-        _binary_install_check(cmd)
-        cmd += ' -o {}'.format(source_box_dest)
-        cmd += ' https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)
-        ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        _binary_install_check('curl')
+        parallel_download_url(source_box_url, source_box_dest)
         headers = get_url_headers(source_box_url)
         with open(source_box_dest_headers, 'w') as wfh:
-            wfh.write(headers)
+            wfh.write(json.dumps(headers))
 
     cmd = 'packer'
     _binary_install_check(cmd)

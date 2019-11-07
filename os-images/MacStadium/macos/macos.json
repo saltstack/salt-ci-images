@@ -112,5 +112,21 @@
       "type": "shell",
       "script": "os-images/MacStadium/files/cleanup.sh"
     }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "artifice",
+        "files": [
+          "output-vagrant/package.box"
+        ]
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "macos/{{ user `box_name` }}",
+        "vagrant_cloud_url": "https://artifactory.saltstack.net/artifactory/api/vagrant/vagrant-boxes",
+        "version": "0.1.{{timestamp}}"
+      }
+    ]
   ]
 }

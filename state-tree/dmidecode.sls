@@ -4,9 +4,15 @@
   {%- set install_method = 'pkg.installed' %}
 {%- endif %}
 
+{%- if grains['os'] == 'MacOS' %}
+  {%- set dmidecode = 'cavaliercoder/dmidecode/dmidecode' %}
+{%- else %}
+  {%- set dmidecode = 'dmidecode' %}
+{%- endif %}
+
 install-dmidecode:
   {{ install_method }}:
-    - name: dmidecode
+    - name: {{ dmidecode }}
     {%- if install_method == 'pkg.installed' %}
     - aggregate: True
     {%- endif %}

@@ -141,23 +141,6 @@ testing-dir:
   {%- endif %}
 {%- endif %}
 
-{#- npm v5 workaround for issue #41770 #}
-{%- if grains['os'] == 'MacOS' %}
-downgrade_node:
-  cmd.run:
-    - name: 'brew switch node 7.0.0'
-    - runas: jenkins
-
-downgrade_npm:
-  npm.installed:
-    - name: npm@3.10.8
-
-pin_npm:
-  cmd.run:
-    - name: 'brew pin node'
-    - runas: jenkins
-{%- endif %}
-
 {#- Make sure there's at least one state entry in the state file #}
 noop-{{ sls }}:
   test.succeed_without_changes

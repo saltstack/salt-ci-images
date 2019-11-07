@@ -1,6 +1,3 @@
-include:
-  - windows.repo
-
 openssl:
   module.run:
     - name: winrepo_pkg.install

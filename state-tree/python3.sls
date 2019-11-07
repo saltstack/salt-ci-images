@@ -70,10 +70,7 @@ install_certs:
     - name: /Applications/Python\ 3.6/Install\ Certificates.command
 {%- else %}
 
-  {%- if on_windows %}
-include:
-  - windows.repo
-  {%- elif on_debian %}
+  {%- if on_debian %}
 include:
   - python.apt
     {%- if pillar.get('py3', False) and on_ubuntu_18_or_newer %}
@@ -90,8 +87,6 @@ python3:
     - aggregate: False
     - version: '3.5.4150.0'
     - extra_install_flags: "TargetDir=C:\\Python35 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
-    - require:
-      - win-pkg-refresh
     {%- endif %}
 
 {%- endif %}

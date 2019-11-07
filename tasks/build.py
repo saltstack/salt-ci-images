@@ -199,7 +199,8 @@ def build_osx(ctx,
               debug=False,
               staging=False,
               validate=False,
-              salt_pr=None):
+              salt_pr=None,
+              force_download=False):
     distro = 'macos'
     ctx.cd(REPO_ROOT)
     distro_dir = os.path.join('os-images', 'MacStadium', distro)
@@ -237,11 +238,44 @@ def build_osx(ctx,
         os.makedirs(packer_tmp_dir)
     os.chmod(os.path.dirname(packer_tmp_dir), 0o755)
     os.chmod(packer_tmp_dir, 0o755)
-    for name in ('states', 'pillar'):
+    for name in ('states', 'pillar', 'boxes'):
         path = os.path.join(packer_tmp_dir, salt_branch, name)
         if not os.path.exists(path):
             os.makedirs(path)
         os.chmod(path, 0o755)
+
+    def get_url_headers(url):
+        cmd = 'curl'
+        _binary_install_check(cmd)
+        cmd += ' -s --head {} | grep -e etag -e x-checksum'.format(url)
+        output = ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        return output.strip()
+
+    source_box_name = '{}-clean'.format(distro_version)
+    source_box_dest = '{}/{}'.format(PACKER_TMP_DIR.format('boxes'), source_box_name + '.box')
+    source_box_dest_headers = source_box_dest + '.headers'
+    source_box_url = 'https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)
+    if os.path.exists(source_box_dest):
+        if force_download:
+            os.unlink(source_box_dest)
+            if os.path.exists(source_box_dest_headers):
+                os.unlink(source_box_dest_headers)
+        elif os.path.exists(source_box_dest_headers):
+            # Let's see if the download we have is up to date
+            headers = open(source_box_dest_headers).read().strip()
+            if get_url_headers(source_box_url) != headers:
+                os.unlink(source_box_dest)
+                os.unlink(source_box_dest_headers)
+
+    if not os.path.exists(source_box_dest):
+        cmd = 'curl'
+        _binary_install_check(cmd)
+        cmd += ' -o {}'.format(source_box_dest)
+        cmd += ' https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)
+        ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        headers = get_url_headers(source_box_url)
+        with open(source_box_dest_headers, 'w') as wfh:
+            wfh.write(headers)
 
     cmd = 'packer'
     _binary_install_check(cmd)
@@ -257,6 +291,7 @@ def build_osx(ctx,
         cmd += ' -var build_type=ci-staging'
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
+    cmd += ' -var source_box_name={}'.format(source_box_name)
     cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
                                                                 salt_branch,
                                                                 build_template)

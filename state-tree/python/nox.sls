@@ -73,4 +73,7 @@ nox-version:
     - name: 'nox --version'
     - require:
       - nox
+  {%- if grains['os'] == 'MacOS' %}
+    - runas: vagrant
+  {%- endif %}
 {%- endif %}

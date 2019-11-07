@@ -106,6 +106,7 @@
       "guest_os_type": "windows",
       "disable_sudo": true,
       "salt_bin_dir": "c:\\salt",
+      "log_level": "debug",
       "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
     },
     {
@@ -113,41 +114,30 @@
       "inline": [
         "Get-ChildItem -Path C:/salt/state",
         "Get-ChildItem -Path C:/salt/pillar",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls windows.repo",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.genrepo"
+        "Write-Output \"Installing GitPython\"",
+        "salt-call -l debug --local --retcode-passthrough state.single pip.installed 'GitPython == 2.0.9'",
+        "Start-Sleep -Second 2",
+        "Write-Output \"Updating Windows Git Repos\"",
+        "salt-call -l debug --local --retcode-passthrough winrepo.update_git_repos",
+        "Start-Sleep -Second 2",
+        "Write-Output \"Refreshing Windows Package Database\"",
+        "salt-call -l debug --local --retcode-passthrough pkg.refresh_db verbose=True",
+        "Start-Sleep -Second 2",
+        "Write-Output \"Sync ALL\"",
+        "salt-call -l debug --local --retcode-passthrough saltutil.sync_all",
+        "Start-Sleep -Second 2",
+        "Write-Output \"Get Windows Repo Data\"",
+        "salt-call -l debug --local --retcode-passthrough pkg.get_repo_data",
+        "Start-Sleep -Second 2",
+        "Write-Output \"List Windows Repo States\"",
+        "Get-ChildItem -Path c:\\salt\\srv\\salt\\win\\repo-ng\\salt-winrepo-ng"
       ]
     },
     {
       "type": "powershell",
       "inline": [
-        "Get-ChildItem -Path C:/salt/state",
-        "Get-ChildItem -Path C:/salt/pillar",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls windows.repo",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.single module.run winrepo.genrepo"
-      ],
-      "pause_before": "5s"
-    },
-    {
-      "type": "powershell",
-      "inline": [
-        "salt-call --local --retcode-passthrough  state.single module.run pkg.refresh_db failhard=True"
-      ],
-      "pause_before": "5s"
-    },
-    {
-      "type": "powershell",
-      "inline": [
-        "salt-call --local --retcode-passthrough state.sls windows.compiler"
-      ],
-      "pause_before": "5s"
-    },
-    {
-      "type": "powershell",
-      "inline": [
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls {{ user `state_name` }}",
-        "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
+        "salt-call -l info --local --retcode-passthrough state.sls {{ user `state_name` }}",
+        "Remove-Item C:\\salt\\pillar -Recurse -Force"
       ]
     },
     {
@@ -164,13 +154,13 @@
       "type": "file",
       "generated": true,
       "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar/",
-      "destination": "c:\\salt\\srv\\pillar\\",
+      "destination": "c:\\salt\\pillar\\",
       "direction": "upload"
     },
     {
       "type": "powershell",
       "inline": [
-        "salt-call --file-root=C:/salt/state --pillar-root=C:/salt/pillar/  --local --retcode-passthrough  state.sls {{ user `state_name` }}"
+        "salt-call -l info --local --retcode-passthrough state.sls {{ user `state_name` }}"
       ]
     },
     {

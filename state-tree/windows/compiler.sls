@@ -1,6 +1,3 @@
-include:
-  - windows.repo
-
 {%- if salt['config.get']('py3', False) %}
   {%- set vcpp_compiler = 'ms-vcpp-2015-build-tools' %}
 {%- else %}
@@ -11,5 +8,3 @@ include:
 vcpp-compiler:
   pkg.installed:
     - name: {{ vcpp_compiler }}
-    - require:
-      - win-pkg-refresh

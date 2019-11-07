@@ -25,10 +25,7 @@
   {%- set python2 = 'python' %}
 {%- endif %}
 
-{%- if grains['os'] == 'Windows' %}
-include:
-  - windows.repo
-{%- elif grains['os_family'] == 'Debian' %}
+{%- if grains['os_family'] == 'Debian' %}
 include:
   - python.apt
 {%- endif %}
@@ -46,6 +43,4 @@ python2:
     - aggregate: False
     - version: '2.7.15150'
     - extra_install_flags: "ADDLOCAL=DefaultFeature,SharedCRT,Extensions,pip_feature,PrependPath TargetDir=C:\\Python27"
-    - require:
-      - win-pkg-refresh
     {%- endif %}

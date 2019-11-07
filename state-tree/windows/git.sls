@@ -10,7 +10,6 @@ git-windeps:
     - version: 2.22.0
     - refresh_modules: True
     - require:
-      - win-pkg-refresh
       - git-exists-in-path
   {%- else %}
   test.show_notification:

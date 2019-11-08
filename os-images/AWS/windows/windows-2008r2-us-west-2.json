@@ -4,7 +4,7 @@
   "os_name": "Windows",
   "os_version": "2008r2",
   "bootstrap_args": "-pythonVersion 2 -runservice false",
-  "bootstrap_version": "2019.2.2",
+  "bootstrap_version": "2019.2.1",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "Windows_Server-2008-R2_SP1-English-64Bit-Base-*",

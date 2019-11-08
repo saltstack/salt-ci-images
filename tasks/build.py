@@ -358,4 +358,10 @@ def build_osx(ctx,
     cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
                                                                 salt_branch,
                                                                 build_template)
-    ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+    env = {
+        'PACKER_TMP_DIR': packer_tmp_dir
+    }
+    if 'ARTIFACTORY_URL' not in os.environ:
+        env['ARTIFACTORY_URL'] = 'https://artifactory.saltstack.net/artifactory'
+
+    ctx.run(cmd, echo=True, env=env)

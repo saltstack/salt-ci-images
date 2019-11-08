@@ -11,11 +11,11 @@ def golden_images_branch = 'master'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1
 def use_spot_instances = true
-def jenkins_slave_label = 'mac-bld21'
+def jenkins_slave_label = 'kitchen-slave-mac'
 def supports_py2 = true
 def supports_py3 = true
 def kitchen_driver_file = '/var/jenkins/workspace/nox-driver.yml'
-def kitchen_verifier_file = null
+def kitchen_verifier_file = '/var/jenkins/workspace/nox-verifier.yml'
 def kitchen_platforms_file = '/var/jenkins/workspace/nox-platforms.yml'
 
 properties([

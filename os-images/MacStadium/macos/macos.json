@@ -1,13 +1,17 @@
 {
   "variables": {
     "artifactory_username": "{{ env `ARTIFACTORY_USERNAME` }}",
-    "artifactory_password": "{{ env `ARTIFACTORY_PASSWORD` }}"
+    "artifactory_password": "{{ env `ARTIFACTORY_PASSWORD` }}",
+    "artifactory_url": "{{ env `ARTIFACTORY_URL` }}",
+    "artifactory_apikey": "{{ env `ARTIFACTORY_APIKEY` }}",
+    "box_timestamp_version": "{{ user `box_version` }}.{{timestamp}}",
+    "box_final_name": "{{ user `box_name` }}-ci-{{ user `salt_branch` }}",
+    "box_testing_name": "{{ user `box_name` }}-ci-staging-{{ user `salt_branch` }}"
   },
   "builders": [
     {
       "communicator": "ssh",
       "source_path": ".tmp/boxes/{{ user `source_box_name` }}.box",
-      "box_name": "{{ user `box_name` }}",
       "add_force": true,
       "provider": "parallels",
       "type": "vagrant"
@@ -114,19 +118,30 @@
     }
   ],
   "post-processors": [
-    [
-      {
-        "type": "artifice",
-        "files": [
-          "output-vagrant/package.box"
-        ]
-      },
-      {
-        "type": "vagrant-cloud",
-        "box_tag": "macos/{{ user `box_name` }}",
-        "vagrant_cloud_url": "https://artifactory.saltstack.net/artifactory/api/vagrant/vagrant-boxes",
-        "version": "0.1.{{timestamp}}"
+    {
+      "type": "shell-local",
+      "inline": [
+        "jfrog rt upload --url={{ user `artifactory_url` }} --apikey={{ user `artifactory_apikey` }} output-vagrant/package.box 'vagrant-boxes/macos/{{ user `box_testing_name` }}.box;box_name={{ user `box_testing_name` }};box_provider=parallels;box_version={{ user `box_timestamp_version` }};promoted=false'"
+      ],
+      "environment_vars": [
+        "JFROG_CLI_OFFER_CONFIG=false"
+      ]
+    },
+    {
+      "type": "manifest",
+      "output": "{{ user `salt_branch`}}-manifest.json",
+      "strip_path": true,
+      "custom_data": {
+        "box_name": "{{ user `box_final_name` }}",
+        "box_name_testing": "{{ user `box_testing_name` }}",
+        "box_version": "{{ user `box_timestamp_version` }}",
+        "box_provider": "parallels",
+        "box_artifactory_repo": "vagrant-boxes/macos",
+        "box_url": "{{ user `artifactory_url` }}/api/vagrant/vagrant-boxes/macos/{{ user `box_final_name` }}",
+        "box_versioned_url": "{{ user `artifactory_url` }}/api/vagrant/vagrant-boxes/macos/{{ user `box_final_name` }}?properties=box_version%2B={{ user `box_timestamp_version` }}",
+        "box_testing_url": "{{ user `artifactory_url` }}/api/vagrant/vagrant-boxes/macos/{{ user `box_testing_name` }}",
+        "box_testing_versioned_url": "{{ user `artifactory_url` }}/api/vagrant/vagrant-boxes/macos/{{ user `box_testing_name` }}?properties=box_version%2B={{ user `box_timestamp_version` }}"
       }
-    ]
+    }
   ]
 }

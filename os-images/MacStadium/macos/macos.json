@@ -11,7 +11,7 @@
   "builders": [
     {
       "communicator": "ssh",
-      "source_path": ".tmp/boxes/{{ user `source_box_name` }}.box",
+      "source_path": "{{ user `boxes_cache_dir` }}/{{ user `source_box_name` }}.box",
       "add_force": true,
       "provider": "parallels",
       "type": "vagrant"

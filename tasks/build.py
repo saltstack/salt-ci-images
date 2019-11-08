@@ -242,10 +242,10 @@ def build_osx(ctx,
         os.makedirs(packer_tmp_dir)
     os.chmod(os.path.dirname(packer_tmp_dir), 0o755)
     os.chmod(packer_tmp_dir, 0o755)
-    boxes_tmp_dir = PACKER_TMP_DIR.format('boxes')
-    if not os.path.exists(boxes_tmp_dir):
-        os.makedirs(boxes_tmp_dir)
-    os.chmod(boxes_tmp_dir, 0o755)
+    boxes_cache_dir = os.path.expanduser(os.path.join('~', '.local', 'cache', 'packer-vagrant-boxes'))
+    if not os.path.exists(boxes_cache_dir):
+        os.makedirs(boxes_cache_dir)
+    os.chmod(boxes_cache_dir, 0o755)
     for name in ('states', 'pillar'):
         path = os.path.join(packer_tmp_dir, salt_branch, name)
         if not os.path.exists(path):
@@ -313,7 +313,7 @@ def build_osx(ctx,
             os.unlink(part_dest)
 
     source_box_name = '{}-clean'.format(distro_version)
-    source_box_dest = os.path.join(boxes_tmp_dir, source_box_name + '.box')
+    source_box_dest = os.path.join(boxes_cache_dir, source_box_name + '.box')
     source_box_dest_headers = source_box_dest + '.headers'
     source_box_url = 'https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)
     if os.path.exists(source_box_dest):
@@ -353,6 +353,7 @@ def build_osx(ctx,
         cmd += ' -var build_type=ci-staging'
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
+    cmd += ' -var boxes_cache_dir={}'.format(boxes_cache_dir)
     cmd += ' -var source_box_name={}'.format(source_box_name)
     cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
                                                                 salt_branch,

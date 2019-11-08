@@ -12,7 +12,9 @@
     {
       "communicator": "ssh",
       "source_path": "{{ user `boxes_cache_dir` }}/{{ user `source_box_name` }}.box",
+      "box_name": "{{ user `box_testing_name` }}-v{{ user `box_timestamp_version` }}",
       "add_force": true,
+      "add_clean": true,
       "provider": "parallels",
       "type": "vagrant"
     }

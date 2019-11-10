@@ -55,9 +55,9 @@ add-python2-to-path:
       - /etc/paths.d/python:
         - text: '/Library/Frameworks/Python.framework/Versions/2.7/bin'
       - /etc/environment:
-        - text: 'export PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH'
+        - text: 'export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin'
       - /etc/profile:
-        - text: 'export PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH'
+        - text: 'export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin'
   environ.setenv:
     - name: PATH
     - value: '/Library/Frameworks/Python.framework/Versions/2.7/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'

@@ -75,8 +75,13 @@ install-certs-py3:
 
 add-python3-to-path:
   file.append:
-    - name: /etc/paths.d/python
-    - text: /Library/Frameworks/Python.framework/Versions/3.6/bin
+    - names:
+      - /etc/paths.d/python:
+        - text: '/Library/Frameworks/Python.framework/Versions/3.6/bin'
+      - /etc/environment:
+        - text: 'export PATH=/Library/Frameworks/Python.framework/Versions/3.6/bin:$PATH'
+      - /etc/profile:
+        - text: 'export PATH=/Library/Frameworks/Python.framework/Versions/3.6/bin:$PATH'
   environ.setenv:
     - name: PATH
     - value: '/Library/Frameworks/Python.framework/Versions/3.6/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'

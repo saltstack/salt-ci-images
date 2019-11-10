@@ -78,10 +78,6 @@ add-python3-to-path:
     - names:
       - /etc/paths.d/python:
         - text: '/Library/Frameworks/Python.framework/Versions/3.6/bin'
-      - /etc/environment:
-        - text: 'export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/3.6/bin'
-      - /etc/profile:
-        - text: 'export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/3.6/bin'
   environ.setenv:
     - name: PATH
     - value: '/Library/Frameworks/Python.framework/Versions/3.6/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'

@@ -1,0 +1,12 @@
+{
+  "_comment": "Build with `packer build -var-file=mojave-atl.json macos.json`",
+  "box_name": "mojave-base",
+  "ssh_username": "vagrant",
+  "os_name": "macos",
+  "os_version": "10.14",
+  "bootstrap_args": "-qXU",
+  "bootstrap_version": "2018.3.2",
+  "salt_branch": "develop",
+  "state_name": "git.base",
+  "build_type": "ci"
+}

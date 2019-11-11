@@ -1,0 +1,17 @@
+{
+  "_comment": "Build with `packer build -var-file=centos-7-us-west-2.json centos.json`",
+  "ssh_username": "centos",
+  "aws_region": "us-west-2",
+  "os_name": "CentOS",
+  "os_version": "7",
+  "bootstrap_args": "-qXU",
+  "bootstrap_version": "2018.3.4",
+  "salt_branch": "master",
+  "state_name": "git.minimal",
+  "ami_filter": "CentOS Linux 7 x86_64 HVM EBS ENA 1901_01-*",
+  "ami_owner": "679593333241",
+  "ami_name_prefix": "saltstack",
+  "ami_name_suffix": "centos/7",
+  "instance_type": "c5.xlarge",
+  "build_type": "ci"
+}

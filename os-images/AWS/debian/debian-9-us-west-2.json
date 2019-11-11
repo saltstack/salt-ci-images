@@ -1,0 +1,18 @@
+{
+  "_comment": "Build with `packer build -var-file=debian-9-us-west-2.json debian.json`",
+  "ssh_username": "admin",
+  "aws_region": "us-west-2",
+  "device_name": "xvda",
+  "os_name": "Debian",
+  "os_version": "9",
+  "bootstrap_args": "-qXU",
+  "bootstrap_version": "2018.3.4",
+  "salt_branch": "master",
+  "state_name": "git.minimal",
+  "ami_filter": "debian-stretch-hvm-x86_64-*",
+  "ami_owner": "679593333241",
+  "ami_name_prefix": "saltstack",
+  "ami_name_suffix": "debian/stretch.9",
+  "instance_type": "m5.large",
+  "build_type": "ci"
+}

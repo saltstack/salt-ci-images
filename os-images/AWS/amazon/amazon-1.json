@@ -1,0 +1,134 @@
+{
+  "_comment": "Build with `packer build amazon-1.json`",
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{ user `aws_region` }}",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "{{ user `ami_filter` }}",
+          "root-device-type": "ebs",
+          "state": "available"
+        },
+        "owners": [
+          "{{ user `ami_owner` }}"
+        ],
+        "most_recent": true
+      },
+      "instance_type": "{{ user `instance_type` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}/{{timestamp}}",
+      "ami_users": [
+        "883373499178",
+        "540082622920",
+        "989543020150",
+        "178480506716"
+      ],
+      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }}",
+      "tags": {
+        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version`}} // salt@{{ user `salt_branch`}}",
+        "OS-Name": "{{ user `os_name` }}",
+        "OS-Version": "{{ user `os_version` }}",
+        "Build-Date": "{{ isotime }}",
+        "Build-Type": "{{ user `build_type` | upper }}",
+        "created-by": "packer",
+        "Owner": "SRE",
+        "Salt-Branch": "{{ user `salt_branch` }}",
+        "Provision-State-Name": "{{ user `state_name` }}",
+        "Bootstrapped-Salt-Args": "{{ user `bootstrap_args` }}",
+        "Bootstrapped-Salt-Version": "{{ user `bootstrap_version` }}",
+        "Python-2": true,
+        "Python-3": false,
+        "Promoted": false
+      },
+      "run_tags": {
+        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} salt@{{ user `salt_branch`}} Builder",
+        "created-by": "packer",
+        "Owner": "SRE"
+      },
+      "launch_block_device_mappings": [
+        {
+          "device_name": "/dev/xvda",
+          "volume_size": 20,
+          "volume_type": "gp2",
+          "delete_on_termination": true
+        }
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum update -y",
+        "sudo yum install git vim -y",
+        "sudo rm -rf /tmp/* && sudo yum clean all"
+      ]
+    },
+    {
+      "type": "shell-local",
+      "script": "AWS/files/prep-linux.sh",
+      "environment_vars": [
+        "SALT_BRANCH={{ user `salt_branch` }}",
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "PY_VERSION=2"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
+      "destination": "/tmp/gitfs.conf",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -p /etc/salt/minion.d",
+        "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
+      ]
+    },
+    {
+      "type": "salt-masterless",
+      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "custom_state": "gitpython"
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "destination": "/tmp/pillar",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rm -rf /srv/pillar",
+        "sudo mv /tmp/pillar /srv",
+        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "sudo rm -rf /srv/pillar/* /srv/salt/* /tmp/salt /tmp/pillar"
+      ],
+      "pause_after": "5s"
+    },
+    {
+      "type": "shell",
+      "script": "AWS/files/cleanup-linux.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "{{ user `salt_branch`}}-manifest.json",
+      "strip_path": true,
+      "custom_data": {
+        "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}"
+      }
+    }
+  ]
+}

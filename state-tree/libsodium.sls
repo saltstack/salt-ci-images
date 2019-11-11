@@ -27,29 +27,36 @@ libsodium:
 {%- else %}
 
 include:
-  {%- if pillar.get('py3', False) %}
   - python3
-    {%- set python_dir = 'c:\\\\Python35' %}
-  {%- else %}
   - python27
-    {%- set python_dir = 'c:\\\\Python27' %}
+
+  {%- set python3_dir = 'c:\\\\Python35' %}
+  {%- set python2_dir = 'c:\\\\Python27' %}
+  {%- if grains['cpuarch'].lower() == 'x86' %}
+    {%- set bits = 32 %}
+  {%- else %}
+    {%- set bits = 64 %}
   {%- endif %}
 
-{%- if grains['cpuarch'].lower() == 'x86' %}
-  {%- set bits = 32 %}
-{%- else %}
-  {%- set bits = 64 %}
-{%- endif %}
-
-libsodium:
+py2-libsodium:
   file.managed:
-    - name: '{{ python_dir }}\\libsodium.dll'
+    - name: '{{ python2_dir }}\\libsodium.dll'
     - source: https://repo.saltstack.com/windows/dependencies/{{ bits }}/libsodium.dll
     - skip_verify: true
     - require:
-    {%- if pillar.get('py3', False) %}
-      - python3
-    {%- else %}
       - python2
-    {%- endif %}
+
+py3-libsodium:
+  file.managed:
+    - name: '{{ python3_dir }}\\libsodium.dll'
+    - source: https://repo.saltstack.com/windows/dependencies/{{ bits }}/libsodium.dll
+    - skip_verify: true
+    - require:
+      - python3
+
+libsodium:
+  test.succeed_without_changes:
+    - require:
+      - py2-libsodium
+      - py3-libsodium
 {%- endif %}

@@ -50,6 +50,8 @@
   {%- set python3 = 'python3_x64' %}
 {%- elif on_amazonlinux_1 or on_redhat_8 %}
   {%- set python3 = 'python36' %}
+{%- elif grains['os'] == 'CentOS' and grains['osrelease'].startswith('6') %}
+  {%- set python3 = False %}
 {%- else %}
   {%- set python3 = 'python3' %}
 {%- endif %}
@@ -82,12 +84,13 @@ add-python3-to-path:
     - name: PATH
     - value: '/Library/Frameworks/Python.framework/Versions/3.6/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'
     - update_minion: True
-{%- else %}
+
+{%- elif python3 %}
 
   {%- if on_debian %}
 include:
-  - python.apt
-    {%- if pillar.get('py3', False) and on_ubuntu_18_or_newer %}
+  - python-apt
+    {%- if on_ubuntu_18_or_newer %}
   - python.distutils
     {%- endif %}
   {%- endif %}
@@ -102,5 +105,10 @@ python3:
     - version: '3.5.4150.0'
     - extra_install_flags: "TargetDir=C:\\Python35 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
     {%- endif %}
+
+{%- else %}
+
+python3:
+  test.succeed_without_changes
 
 {%- endif %}

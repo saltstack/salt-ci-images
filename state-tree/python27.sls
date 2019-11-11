@@ -16,7 +16,11 @@
     {%- set python2 = 'python' %}
   {%- endif %}
 {%- elif grains['os'] in ('Ubuntu', 'Debian') %}
-  {%- set python2 = 'python2.7' %}
+  {%- if grains['osrelease'] == '10' %}
+    {%- set python2 = False %}
+  {%- else %}
+    {%- set python2 = 'python2.7' %}
+  {%- endif %}
 {%- elif grains['os'] == 'Fedora' %}
   {%- set python2 = 'python2' %}
 {%- elif grains['os_family'] == 'Arch' %}
@@ -25,9 +29,9 @@
   {%- set python2 = 'python' %}
 {%- endif %}
 
-{%- if grains['os_family'] == 'Debian' %}
+{%- if grains['os_family'] == 'Debian' and python2 %}
 include:
-  - python.apt
+  - python-apt
 {%- endif %}
 
 {%- if grains['os'] == 'MacOS' %}
@@ -58,7 +62,9 @@ add-python2-to-path:
     - name: PATH
     - value: '/Library/Frameworks/Python.framework/Versions/2.7/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'
     - update_minion: True
-{%- else %}
+
+{%- elif python2 %}
+
 python2:
     {%- if grains['os'] != 'Windows' %}
   pkg.latest:
@@ -73,4 +79,9 @@ python2:
     - version: '2.7.15150'
     - extra_install_flags: "ADDLOCAL=DefaultFeature,SharedCRT,Extensions,pip_feature,PrependPath TargetDir=C:\\Python27"
     {%- endif %}
+
+{%- else %}
+
+python2:
+  test.succeed_without_changes
 {%- endif %}

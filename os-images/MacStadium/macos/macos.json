@@ -5,14 +5,14 @@
     "artifactory_url": "{{ env `ARTIFACTORY_URL` }}",
     "artifactory_apikey": "{{ env `ARTIFACTORY_APIKEY` }}",
     "box_timestamp_version": "{{ user `box_version` }}.{{timestamp}}",
-    "box_final_name": "macosx-{{ user `box_name` }}-ci-{{ user `salt_branch` }}",
-    "box_testing_name": "macosx-{{ user `box_name` }}-ci-staging-{{ user `salt_branch` }}"
+    "box_final_name": "{{ user `box_name` }}-ci-{{ user `salt_branch` }}",
+    "box_testing_name": "{{ user `box_name` }}-ci-staging-{{ user `salt_branch` }}"
   },
   "builders": [
     {
       "communicator": "ssh",
       "source_path": "{{ user `boxes_cache_dir` }}/{{ user `source_box_name` }}.box",
-      "box_name": "{{ user `box_testing_name` }}-v{{ user `box_timestamp_version` }}",
+      "box_name": "{{ user `source_box_name` }}",
       "add_force": true,
       "add_clean": true,
       "provider": "parallels",
@@ -123,7 +123,7 @@
     {
       "type": "shell-local",
       "inline": [
-        "jfrog rt upload --url={{ user `artifactory_url` }} --apikey={{ user `artifactory_apikey` }} output-vagrant/package.box 'vagrant-boxes/macos/{{ user `box_testing_name` }}-v{{ user `box_timestamp_version` }}.box;box_name={{ user `box_testing_name` }};box_provider=parallels;box_version={{ user `box_timestamp_version` }};promoted=false'"
+        "jfrog rt upload --url={{ user `artifactory_url` }} --apikey={{ user `artifactory_apikey` }} output-vagrant/package.box 'vagrant-boxes/macos/{{ user `box_testing_name` }}-v{{ user `box_timestamp_version` }}.box;box_name=macosx-{{ user `box_testing_name` }};box_provider=parallels;box_version={{ user `box_timestamp_version` }};promoted=false'"
       ],
       "environment_vars": [
         "JFROG_CLI_OFFER_CONFIG=false"
@@ -134,8 +134,8 @@
       "output": "{{ user `salt_branch`}}-manifest.json",
       "strip_path": true,
       "custom_data": {
-        "box_name": "{{ user `box_final_name` }}",
-        "box_name_testing": "{{ user `box_testing_name` }}",
+        "box_name": "macosx-{{ user `box_final_name` }}",
+        "box_name_testing": "macosx-{{ user `box_testing_name` }}",
         "box_version": "{{ user `box_timestamp_version` }}",
         "box_provider": "parallels",
         "box_artifactory_repo": "vagrant-boxes/macos"

@@ -2,30 +2,6 @@
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
-{%- if pillar.get('testing_dir') %}
-  {%- set testing_dir = pillar.get('testing_dir') %}
-{%- elif os_family == 'Windows' %}
-  {%- set testing_dir = 'C:\\testing' %}
-{%- else %}
-  {%- set testing_dir = '/testing' %}
-{%- endif %}
-
-{%- if os_family == 'Arch' %}
-  {%- set on_arch = True %}
-{%- else %}
-  {%- set on_arch = False %}
-{%- endif %}
-
-{%- if pillar.get('py3', False) %}
-  {%- set python = 'python3' %}
-{%- else %}
-  {%- if on_arch %}
-    {%- set python = 'python2' %}
-  {%- else %}
-    {%- set python = 'python' %}
-  {%- endif %}
-{%- endif %}
-
 include:
   - path
   {%- if grains['os_family'] == 'Debian' %}
@@ -97,7 +73,7 @@ include:
   - versionlock
   - redhat-rpm-config
   {%- endif %}
-  {%- if grains['os'] != 'Windows' or (not (pillar.get('py3', False) and grains['os'] == 'Windows' )) %}
+  {%- if grains['os'] != 'Windows' %}
   - dmidecode
   {%- endif %}
   {%- if grains['os'] in ('MacOS', 'Debian') %}
@@ -126,19 +102,6 @@ include:
 {%- if os_family not in ('Windows', 'MacOS',)  %}
   - dhclient_conf
   - sshd_config
-{%- endif %}
-
-{%- if pillar.get('create_testing_dir', True) %}
-testing-dir:
-  file.directory:
-    - name: {{ testing_dir }}
-  {%- if grains['os'] == 'Windows' %}
-    - win_owner: 'Users'
-    - win_inheritance: true
-    - win_perms:
-        Users:
-          perms: full_control
-  {%- endif %}
 {%- endif %}
 
 {#- Make sure there's at least one state entry in the state file #}

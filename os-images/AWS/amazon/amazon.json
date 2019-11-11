@@ -73,8 +73,7 @@
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=3"
+        "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
     },
     {
@@ -103,32 +102,6 @@
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
-      ]
-    },
-    {
-      "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
-      "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
-        "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=2"
-      ]
-    },
-    {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "destination": "/tmp/pillar",
-      "direction": "upload"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "sudo rm -rf /srv/pillar",
-        "sudo mv /tmp/pillar /srv",
-        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
       ],
       "pause_after": "5s"
     },

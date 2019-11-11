@@ -72,8 +72,7 @@
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=2"
+        "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
     },
     {

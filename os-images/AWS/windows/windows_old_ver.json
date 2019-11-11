@@ -66,8 +66,7 @@
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=3"
+        "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
     },
     {
@@ -128,36 +127,14 @@
       ]
     },
     {
-      "type": "shell-local",
-      "script": "os-images/AWS/files/prep-windows.sh",
-      "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
-        "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=2"
-      ]
-    },
-    {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar/",
-      "destination": "c:\\salt\\srv\\pillar\\",
-      "direction": "upload"
-    },
-    {
-      "type": "powershell",
-      "inline": [
-        "salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough"
-      ]
-    },
-    {
       "type": "powershell",
       "inline": [
         "Remove-Item C:\\salt\\state -Recurse -Force",
         "Remove-Item C:\\salt\\pillar -Recurse -Force",
         "Remove-Item C:\\salt\\srv\\salt -Recurse -Force",
         "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
-      ]
+      ],
+      "pause_before": "5s"
     },
     {
       "type": "powershell",

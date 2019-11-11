@@ -1,7 +1,6 @@
 #!/bin/bash
 
 PILLAR_DIR=".tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar"
-echo "Building Pillar Data for Python Version: ${PY_VERSION}"
 if [ -d ${PILLAR_DIR} ]; then
     rm -rf ${PILLAR_DIR}
 fi

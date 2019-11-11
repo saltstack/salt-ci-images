@@ -1,0 +1,5 @@
+packer_cache
+output-*
+*.idea*
+.tmp/
+*manifest.json

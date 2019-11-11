@@ -1,0 +1,14 @@
+{
+  "_comment": "Build with `packer build -var-file=ubuntu-1604-vars.json ubuntu.json`",
+  "docker_image": "ubuntu:16.04",
+  "docker_repository": "saltstack",
+  "docker_image_prefix": "ci",
+  "build_type": "ci",
+  "os_name": "Ubuntu",
+  "os_version": "1604",
+  "run_command": "/lib/systemd/systemd",
+  "bootstrap_args": "-qXU -x python2",
+  "bootstrap_version": "2018.3.4",
+  "salt_branch": "master",
+  "state_name": "git.minimal"
+}

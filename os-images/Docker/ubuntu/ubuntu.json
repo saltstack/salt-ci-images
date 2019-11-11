@@ -1,0 +1,113 @@
+{
+  "_comment": "Build with `packer build ubuntu.json`",
+  "builders": [
+    {
+      "type": "docker",
+      "image": "{{ user `docker_image` }}",
+      "pull": true,
+      "commit": true,
+      "changes": [
+        "Entrypoint [\"/bin/sh\", \"-c\"]",
+        "CMD [\"/bin/bash\"]",
+        "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version`}} // salt@{{ user `salt_branch` }}\"",
+        "LABEL OS-Name={{ user `os_name` }}",
+        "LABEL OS-Version={{ user `os_version` }}",
+        "LABEL BuildDate={{ isotime }}",
+        "LABEL BuildType={{ user `build_type` | upper }}",
+        "LABEL CreatedBy=packer",
+        "LABEL Owner=SRE",
+        "LABEL Description=\"{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }}\""
+      ],
+      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }} on {{ isotime }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
+        "apt-get update -y && apt-get upgrade -y",
+        "apt-get install -y systemd git vim sudo openssh-server",
+        "rm -rf /tmp/* /var/lib/apt/lists/* && apt-get clean"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
+      "destination": "/tmp/gitfs.conf",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -p /etc/salt/minion.d",
+        "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
+      ]
+    },
+    {
+      "type": "salt-masterless",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "custom_state": "noop",
+      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "destination": "/tmp/pillar",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rm -rf /srv/pillar",
+        "sudo mv /tmp/pillar /srv",
+        "sudo salt-call -ldebug --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      ]
+    },
+    {
+      "type": "shell-local",
+      "script": "files/prep-linux.sh",
+      "environment_vars": [
+        "SALT_BRANCH={{ user `salt_branch` }}",
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "PY_VERSION=2"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "destination": "/tmp/pillar",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rm -rf /srv/pillar",
+        "sudo mv /tmp/pillar /srv",
+        "sudo salt-call -ldebug --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
+      ],
+      "pause_after": "5s"
+    },
+    {
+      "type": "shell",
+      "script": "files/cleanup-linux.sh"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "{{ user `docker_repository` }}/{{ user `docker_image_prefix` }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
+        "tag": "{{ user `build_type` | lower }}"
+      },
+      "docker-push"
+    ]
+  ]
+}

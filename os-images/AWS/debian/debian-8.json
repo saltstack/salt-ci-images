@@ -1,0 +1,166 @@
+{
+  "_comment": "Builds a packer debian image in AWS",
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{ user `aws_region` }}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "{{ user `ami_filter` }}",
+          "root-device-type": "ebs",
+          "state": "available"
+        },
+        "owners": [
+          "{{ user `ami_owner` }}"
+        ],
+        "most_recent": true
+      },
+      "instance_type": "{{ user `instance_type` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{timestamp}}",
+      "ami_users": [
+        "883373499178",
+        "540082622920",
+        "989543020150",
+        "178480506716"
+      ],
+      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
+      "tags": {
+        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version`}}",
+        "OS-Name": "{{ user `os_name` }}",
+        "OS-Version": "{{ user `os_version` }}",
+        "Build-Date": "{{ isotime }}",
+        "Build-Type": "{{ user `build_type` | upper }}",
+        "created-by": "packer",
+        "Owner": "SRE",
+        "Promoted": false
+      },
+      "run_tags": {
+        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} Builder",
+        "created-by": "packer",
+        "Owner": "SRE"
+      },
+      "launch_block_device_mappings": [
+        {
+          "device_name": "{{ user `device_name` }}",
+          "volume_size": 20,
+          "volume_type": "gp2",
+          "delete_on_termination": true
+        }
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "AWS/debian/files/sources.list",
+      "destination": "/tmp/sources.list",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo  rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
+        "echo 'Acquire::Check-Valid-Until false;' | sudo tee -a /etc/apt/apt.conf.d/10-nocheckvalid",
+        "sudo rm -rf /etc/apt/sources.list.d/*",
+        "sudo mv /tmp/sources.list /etc/apt/sources.list",
+        "sudo apt-get install -y debian-archive-keyring",
+        "sudo apt-get update -y && sudo apt-get upgrade -yq",
+        "sudo apt-get install -y git vim ",
+        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ]
+    },
+    {
+      "type": "shell-local",
+      "script": "AWS/files/prep-linux.sh",
+      "environment_vars": [
+        "SALT_BRANCH={{ user `salt_branch` }}",
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "PY_VERSION=3"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
+      "destination": "/tmp/gitfs.conf",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -p /etc/salt/minion.d",
+        "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
+      ]
+    },
+    {
+      "type": "salt-masterless",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "custom_state": "gitpython",
+      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "destination": "/tmp/pillar",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rm -rf /srv/pillar",
+        "sudo mv /tmp/pillar /srv",
+        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      ]
+    },
+    {
+      "type": "shell-local",
+      "script": "AWS/files/prep-linux.sh",
+      "environment_vars": [
+        "SALT_BRANCH={{ user `salt_branch` }}",
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "PY_VERSION=2"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "destination": "/tmp/pillar",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rm -rf /srv/pillar",
+        "sudo mv /tmp/pillar /srv",
+        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
+      ],
+      "pause_after": "5s"
+    },
+    {
+      "type": "shell",
+      "script": "AWS/files/cleanup-linux.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "{{ user `salt_branch`}}-manifest.json",
+      "strip_path": true,
+      "custom_data": {
+        "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}"
+      }
+    }
+  ]
+}

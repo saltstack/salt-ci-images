@@ -1,0 +1,17 @@
+{
+  "_comment": "Build with `packer build -var-file=windows-2012r2-us-west-2.json windows-2012r2.json`",
+  "aws_region": "us-west-2",
+  "os_name": "Windows",
+  "os_version": "2012r2",
+  "bootstrap_args": "-pythonVersion 2 -runservice false",
+  "bootstrap_version": "2018.3.4",
+  "salt_branch": "master",
+  "state_name": "git.minimal",
+  "ami_filter": "Windows_Server-2012-R2_RTM-English-64Bit-Base-*",
+  "ami_owner": "801119661308",
+  "ami_name_prefix": "saltstack",
+  "ami_name_suffix": "windows/2012r2",
+  "instance_type": "c5.xlarge",
+  "build_type": "ci",
+  "user_data_file": "AWS/windows/scripts/SetUpWinRM.ps1"
+}

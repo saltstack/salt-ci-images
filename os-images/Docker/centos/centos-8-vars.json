@@ -1,0 +1,14 @@
+{
+  "_comment": "Build with `packer build -var-file=centos-8-vars.json centos.json`",
+  "docker_image": "centos:8",
+  "docker_repository": "saltstack",
+  "docker_image_prefix": "ci",
+  "build_type": "ci",
+  "os_name": "CentOS",
+  "os_version": "8",
+  "run_command": "/usr/lib/systemd/systemd",
+  "bootstrap_args": "-qXU",
+  "bootstrap_version": "2018.3.4",
+  "salt_branch": "master",
+  "state_name": "git.minimal"
+}

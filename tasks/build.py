@@ -198,7 +198,7 @@ def build_docker(ctx,
 
 @task
 def build_osx(ctx,
-              distro_version=None,
+              distro_version,
               salt_branch='master',
               debug=False,
               staging=False,
@@ -312,7 +312,10 @@ def build_osx(ctx,
             ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
             os.unlink(part_dest)
 
-    source_box_name = '{}-clean'.format(distro_version)
+    with open(build_vars) as rfh:
+        _vars = json.load(rfh)
+        source_box_name = _vars['source_box_name']
+
     source_box_dest = os.path.join(boxes_cache_dir, source_box_name + '.box')
     source_box_dest_headers = source_box_dest + '.headers'
     source_box_url = 'https://artifactory.saltstack.net/artifactory/vagrant-boxes/macos/{}.box'.format(source_box_name)

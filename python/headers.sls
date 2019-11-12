@@ -15,6 +15,8 @@
   {%- elif grains['os'] == 'CentOS' or grains['os'] == 'RedHat' %}
     {%- if grains['osrelease'].startswith('6') %}
       {%- set python_dev = 'python27-devel' %}
+    {%- elif grains['osrelease'].startswith('8') %}
+      {%- set python_dev = 'python36-devel' %}
     {%- else %}
       {%- if pillar.get('py3', False) %}
         {%- set python_dev = 'python3-devel' %}

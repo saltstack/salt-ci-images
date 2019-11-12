@@ -2,10 +2,10 @@
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
-{%- if os_family == 'RedHat' and os_major_release == 2018 %}
-  {%- set on_amazonlinux_1 = True %}
+{%- if os_family == 'RedHat' and (os_major_release == 2018 or os_major_release == 8) %}
+  {%- set use_usr_prefix = True %}
 {%- else %}
-  {%- set on_amazonlinux_1 = False %}
+  {%- set use_usr_prefix = False %}
 {%- endif %}
 
 include:
@@ -21,7 +21,7 @@ nox:
     - onlyif:
       - '[ "$(which nox 2>/dev/null)" = "" ]'
     {%- endif %}
-    {%- if on_amazonlinux_1 %}
+    {%- if use_usr_prefix %}
     - install_options:
       - --prefix=/usr
     {%- endif %}

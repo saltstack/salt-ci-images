@@ -52,7 +52,6 @@ include:
   - dpkg
   {%- endif %}
   {%- if grains['os'] not in ('Windows',) %}
-  - no_show_proc
   - locale
   - gem
   - python

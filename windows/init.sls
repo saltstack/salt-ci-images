@@ -11,10 +11,6 @@ include:
   - windows.nsis
   - windows.ca_roots
   - windows.compiler
-  {%- if pillar.get('install_metrics', True) %}
-  - windows.filebeat
-  - windows.metricbeat
-  {%- endif %}
   - windows.vcredist
   - windows.openssl
   {%- if not pillar.get('packer_golden_images_build', False) %}

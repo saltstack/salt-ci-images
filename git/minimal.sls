@@ -73,6 +73,7 @@ include:
   {%- endif %}
   - dnsutils
   - rsync
+  - tar
   - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap

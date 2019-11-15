@@ -21,6 +21,13 @@ include:
    - python.ca-certificates
   {%- endif %}
 
+  {%- if grains['os_family'] == 'Arch' %}
+libgit2:
+  pkg.installed:
+    - name: libgit2
+    - aggregate: True
+  {%- endif %}
+
 git:
   pkg.installed:
     - name: {{ git }}

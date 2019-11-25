@@ -150,11 +150,6 @@ include:
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
   - dnsutils
   {%- endif %}
-  - python.ioflo
-  {%- if test_transport == 'raet' %}
-  - python.libnacl
-  - python.raet
-  {%- endif %}
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
@@ -331,11 +326,6 @@ clone-salt-repo:
       {%- if grains['os'] not in ('MacOS', 'Windows') %}
       - pkg: dnsutils
       - pkg: mysqldb
-      {%- endif %}
-      - pip: ioflo
-      {%- if test_transport == 'raet' %}
-      - pip: libnacl
-      - pip: raet
       {%- endif %}
       {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
       - pkg: lxc

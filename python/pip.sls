@@ -143,9 +143,9 @@ pip3-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip3 }} "pip<=9.0.1"'
+    - name: '{{ get_pip3 }} "pip<=9.0.1" "wheel" "setuptools"'
     {%- else %}
-    - name: {{ get_pip3 }} 'pip<=9.0.1'
+    - name: {{ get_pip3 }} 'pip<=9.0.1' wheel setuptools
     {%- endif %}
     - cwd: /
     - reload_modules: True
@@ -190,9 +190,9 @@ pip2-install:
   cmd.run:
     # -c <() because of https://github.com/pypa/get-pip/issues/37
     {%- if on_windows %}
-    - name: '{{ get_pip2 }} "pip<=9.0.1"'
+    - name: '{{ get_pip2 }} "pip<=9.0.1" "wheel" "setuptools"'
     {%- else %}
-    - name: {{ get_pip2 }} 'pip<=9.0.1'
+    - name: {{ get_pip2 }} 'pip<=9.0.1' wheel setuptools
     {%- endif %}
     - cwd: /
     - reload_modules: True

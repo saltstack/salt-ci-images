@@ -1,17 +1,12 @@
-include:
-  - python.requests
-{%- if grains['kernel'] == 'Darwin' %}
-  - python.wheel
-{%- endif %}
 {%- if grains['os'] not in ('Windows',) %}
+include:
   - python.pip
 {%- endif %}
 
-pylxd:
+install_wheel:
   pip.installed:
-    - name: 'pylxd>=2.2.5'
-    - require:
-      - requests
+    - name: wheel
 {%- if grains['os'] not in ('Windows',) %}
+    - require:
       - cmd: pip-install
 {%- endif %}

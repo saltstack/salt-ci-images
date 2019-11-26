@@ -1,6 +1,9 @@
 {%- if grains['os'] not in ('Windows',) %}
 include:
   - python.pip
+{%- if grains['kernel'] == 'Darwin' %}
+  - python.wheel
+{%- endif %}
 {%- endif %}
 
 install_ioflo:

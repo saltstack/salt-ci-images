@@ -25,7 +25,7 @@ boto:
 
 boto3:
   pip.installed:
-    - name: boto3
+    - name: boto3==1.9.132
 {%- if grains['os'] not in ('Windows',) %}
     - require:
       - cmd: pip-install

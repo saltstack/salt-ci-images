@@ -37,9 +37,6 @@
   {%- endif %}
 {%- endif %}
 
-{%- set dev_reqs = ['SaltPyLint'] %}
-{%- set base_reqs = ['MarkupSafe', 'tornado%s'|format(salt.pillar.get('tornado:version', '<5.0.0'))] %}
-
 include:
   {%- if grains.get('kernel') == 'Linux' %}
   - man
@@ -392,23 +389,6 @@ fetch-upstream-tags:
     - require:
       - cmd: add-upstream-repo
 {%- endif %}
-{%- endif %}
-
-{%- if pillar.get('py3', False) %}
-{#- Install Salt Dev Dependencies #}
-
-{%- for req in dev_reqs %}
-install-dev-{{ req }}:
-  pip.installed:
-    - name: {{ req }}
-{%- endfor %}
-
-{%- for req in base_reqs %}
-install-base-{{ req }}:
-  pip.installed:
-    - name: {{ req }}
-{%- endfor %}
-
 {%- endif %}
 
 {#- npm v5 workaround for issue #41770 #}

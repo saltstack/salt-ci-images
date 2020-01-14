@@ -57,9 +57,18 @@ stage('Build Image') {
                         }
                     withAWS(credentials: 'os-imager-aws-creds', region: "${ec2_region}") {
                         sh """
+                        mkdir -p bin
+                        curl -O https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_linux_amd64.zip
+                        curl -O https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_SHA256SUMS
+                        sha256sum -c --ignore-missing packer_1.5.1_SHA256SUMS
+                        unzip -d bin packer_1.5.1_linux_amd64.zip
+                        export PATH="\${PWD}/bin:\${PATH}"
                         pyenv install 3.6.8 || echo "We already have this python."
                         pyenv local 3.6.8
-                        pip freeze | grep -s invoke || pip install -r requirements/py3.6/base.txt
+                        rm -rf venv
+                        virtualenv venv
+                        . venv/bin/activate
+                        pip install -r requirements/py3.6/base.txt
                         inv build-aws --staging --distro=${distro} --distro-version=${distro_version} --salt-branch=${golden_images_ci_branch} --salt-pr=\${CHANGE_ID}
                         """
                     }
@@ -236,7 +245,10 @@ stage('Cleanup Old AMIs') {
                     sh """
                     pyenv install 3.6.8 || echo "We already have this python."
                     pyenv local 3.6.8
-                    pip freeze | grep -s invoke || pip install -r requirements/py3.6/base.txt
+                    rm -rf venv
+                    virtualenv venv
+                    . venv/bin/activate
+                    pip install -r requirements/py3.6/base.txt
                     inv cleanup-aws --staging --name-filter='${ami_name_filter}' --region=${ec2_region} --assume-yes --num-to-keep=1
                     """
                 }

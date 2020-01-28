@@ -1,4 +1,4 @@
-def global_timeout = 8
+def global_timeout = 10
 
 def ec2_region
 def image_id

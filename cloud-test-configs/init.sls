@@ -92,7 +92,7 @@ ec2-profile:
           provider: ec2-config
           image: {{ salt['pillar.get']('ec2:ami-centos7', '') }}
           size: {{ salt['pillar.get']('ec2:size', '') }}
-          sh_username: {{ salt['pillar.get']('ec2:user-centos7', '') }}
+          ssh_username: {{ salt['pillar.get']('ec2:user-centos7', '') }}
           script_args: '-P'
           tag: {'created-by': 'cloud-tests'}
         ec2-win2012r2-test:

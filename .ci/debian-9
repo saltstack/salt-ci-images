@@ -145,7 +145,7 @@ node('kitchen-slave') {
                               image_search:
                                 description: 'CI-STAGING *'
                             verifier:
-                              coverage: false
+                              coverage: true
                             """.stripIndent()
                         }
 

@@ -30,6 +30,7 @@ include:
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
+  - hosts
   {%- if grains['os'] == 'Windows' %}
   - windows
   - vim

@@ -52,7 +52,7 @@ python3:
     {%- else %}
     - aggregate: False
     {%- if grains['os'] == 'Windows' %}
-    - version: '3.6.8150.0'
+    - version: '3.7.4150.0'
     {%- else %}
     - version: '3.5.4150.0'
     {%- endif %}

@@ -36,6 +36,7 @@ include:
   {%- endif %}
   {%- if grains.get('kernel') == 'Linux' %}
   - man
+  - libcurl
   - ulimits
   {%- endif %}
   {%- if grains['os'] == 'MacOS' %}

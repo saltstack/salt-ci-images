@@ -119,7 +119,7 @@ node('kitchen-slave') {
                             checkout([
                                 $class: 'GitSCM',
                                 branches: [
-                                    [name: "${golden_images_ci_branch}"]
+                                    [name: "features/py38-compat"]
                                 ],
                                 doGenerateSubmoduleConfigurations: false,
                                 extensions: [
@@ -146,6 +146,45 @@ node('kitchen-slave') {
                                 description: 'CI-STAGING *'
                             verifier:
                               coverage: true
+                            <% salt_target_branch = (ENV['CHANGE_ID'] || ENV['SALT_TARGET_BRANCH'] || 'branch').to_s.gsub(/\\./, "-") %>
+                            <% salt_branch = (ENV['GOLDEN_IMAGES_CI_BRANCH'] || ENV['DRONE_TARGET_BRANCH'] || ENV['BRANCH_NAME'] || ENV['GIT_BRANCH'] || '2019.2').to_s.gsub('origin/', '') %>
+                            <% pyvervalue = ENV['TEST_SUITE'] || 'pyver' %>
+                            <% transportvalue = ENV['TEST_TRANSPORT'] || ENV['NOX_ENV_NAME'] || 'trnsprt' %>
+                            <% buildnumbervalue = ENV['BUILD_NUMBER'] || '0' %>
+                            <% buildnamevalue = ENV['TEST_PLATFORM'] || 'bld' %>
+                            <% vm_hostname = ENV['VM_HOSTNAME'] || "%s%s%s%s-%s" % [buildnamevalue, pyvervalue, transportvalue, buildnumbervalue, salt_target_branch] %>
+                            platforms:
+                              - name: arch-lts
+                                driver:
+                                  <% if ENV['AMI_IMAGE_ID'] %>
+                                  image_id: <%= ENV['AMI_IMAGE_ID'] %>
+                                  <% else %>
+                                  image_search:
+                                    owner-id: '540082622920'
+                                    name: saltstack/ci/arch/lts/<%= salt_branch %>/*
+                                    state: available
+                                  <% end %>
+                                  tags:
+                                    Name: kitchen-arch-lts-<%= 10.times.map{[('a'..'z').to_a, (0..9).to_a].join[rand(36)]}.join %>
+                                provisioner:
+                                  name: salt_solo
+                                  salt_install: false
+                                  run_salt_call: false
+                                  log_level: info
+                                  sudo: true
+                                  require_chef: false
+                                  max_retries: 2
+                                  remote_states: {}
+                                  testingdir: /testing
+                                  state_top: {}
+                                  pillars: {}
+                                  install_after_init_environment: true
+                                  init_environment: |
+                                    sudo hostnamectl set-hostname <%= vm_hostname %>.saltstack.net || true
+                                    sudo bash -c "sed -i '/^127.0.1.1/d' /etc/hosts" || true
+                                    sudo bash -c "echo 127.0.1.1 <%= vm_hostname %> <%= vm_hostname %>.saltstack.net >> /etc/hosts" || true
+                                transport:
+                                  username: arch
                             """.stripIndent()
                         }
 

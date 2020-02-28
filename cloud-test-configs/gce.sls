@@ -4,7 +4,7 @@ gce-key:
    - contents_pillar: gce-jenkins
    - user: {{ salt['pillar.get']('gce:user') }}
    - group: {{ salt['pillar.get']('gce:group') }}
-   - mode: {{ salt['pillar.get']('gce:mode') }}
+   - mode: 600
    - show_changes: False
 gce-ssh-key:
  file.managed:
@@ -12,5 +12,5 @@ gce-ssh-key:
    - contents_pillar: gce-ssh-key
    - user: {{ salt['pillar.get']('gce:user') }}
    - group: {{ salt['pillar.get']('gce:group') }}
-   - mode: {{ salt['pillar.get']('gce:mode') }}
+   - mode: 600
    - show_changes: False

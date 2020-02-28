@@ -4,5 +4,5 @@ vultr-key:
     - contents_pillar: jenkins-vultr
     - user: {{ salt['pillar.get']('vultr:user') }}
     - group: {{ salt['pillar.get']('vultr:group') }}
-    - mode: {{ salt['pillar.get']('vultr:mode') }}
+    - mode: 600
     - show_changes: False

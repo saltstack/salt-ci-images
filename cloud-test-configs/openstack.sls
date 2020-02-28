@@ -4,5 +4,5 @@ rackspace-key:
     - contents_pillar: jenkins-rackspace
     - user: {{ salt['pillar.get']('rackspace:ssh_user') }}
     - group: {{ salt['pillar.get']('rackspace:group') }}
-    - mode: {{ salt['pillar.get']('rackspace:mode') }}
+    - mode: 600
     - show_changes: False

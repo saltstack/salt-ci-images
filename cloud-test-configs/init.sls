@@ -267,8 +267,8 @@ vultr-provider:
     - contents: |
         vultr-config:
           driver: vultr
-          ssh_key_file: '/root/.ssh/vultr_test.pub'
-          ssh_key_name: vultr_test
+          ssh_key_file: '/root/.ssh/jenkins-vultr'
+          ssh_key_name: jenkins-vultr
           api_key: {{ salt['pillar.get']('vultr:api_key', '') }}
           location: {{ salt['pillar.get']('vultr:location', '') }}
           minion:

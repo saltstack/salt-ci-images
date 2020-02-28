@@ -4,5 +4,5 @@ joyent-key:
     - contents_pillar: joyent-jenkins
     - user: {{ salt['pillar.get']('joyent:ssh_user') }}
     - group: {{ salt['pillar.get']('joyent:group') }}
-    - mode: {{ salt['pillar.get']('joyent:mode') }}
+    - mode: 600
     - show_changes: False

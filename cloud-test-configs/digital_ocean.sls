@@ -4,5 +4,5 @@ digital-ocean-key:
     - contents_pillar: do-jenkins
     - user: {{ salt['pillar.get']('digital_ocean:user') }}
     - group: {{ salt['pillar.get']('digital_ocean:group') }}
-    - mode: {{ salt['pillar.get']('digital_ocean:mode') }}
+    - mode: 600
     - show_changes: False

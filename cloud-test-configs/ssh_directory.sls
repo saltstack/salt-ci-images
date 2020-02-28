@@ -5,6 +5,7 @@ include:
   - cloud-test-configs.joyent
   - cloud-test-configs.gce
   - cloud-test-configs.openstack
+  - cloud-test-configs.vultr
 
 ssh-directory:
   file.directory:
@@ -20,3 +21,4 @@ ssh-directory:
       - file: joyent-key
       - file: gce-key
       - file: rackspace-key
+      - file: vultr-key

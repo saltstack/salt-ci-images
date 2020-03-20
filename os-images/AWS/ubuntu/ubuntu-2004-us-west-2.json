@@ -1,17 +1,17 @@
 {
-  "_comment": "Build with `packer build -var-file=ubuntu-1604-us-west-2.json ubuntu.json`",
+  "_comment": "Build with `packer build -var-file=ubuntu-2004-us-west-2.json ubuntu.json`",
   "ssh_username": "ubuntu",
   "aws_region": "us-west-2",
   "os_name": "Ubuntu",
-  "os_version": "1604",
+  "os_version": "2004",
   "bootstrap_args": "-qXUP",
   "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
-  "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*",
+  "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
   "ami_owner": "099720109477",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "ubuntu/xenial.1604",
+  "ami_name_suffix": "ubuntu/2004",
   "instance_type": "m5.large",
   "build_type": "ci"
 }

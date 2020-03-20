@@ -75,7 +75,7 @@
     },
     {
       "type": "powershell",
-      "script": "os-images/files/update-git-path.ps1"
+      "script": "os-images/AWS/files/update-git-path.ps1"
     },
     {
       "type": "powershell",

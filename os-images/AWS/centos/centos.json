@@ -10,7 +10,9 @@
         "filters": {
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "product-code": "{{ user `ami_productcode` }}",
+          "product-code.type": "marketplace"
         },
         "owners": [
           "{{ user `ami_owner` }}"

@@ -32,7 +32,7 @@
     },
     {
       "type": "shell-local",
-      "script": "files/prep-linux.sh",
+      "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",

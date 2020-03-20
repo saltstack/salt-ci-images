@@ -7,8 +7,8 @@
   "os_name": "Ubuntu",
   "os_version": "1804",
   "run_command": "/lib/systemd/systemd",
-  "bootstrap_args": "-qXU -x python2",
-  "bootstrap_version": "2018.3.4",
+  "bootstrap_args": "-qXUP -x python2",
+  "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision"
 }

@@ -7,8 +7,8 @@
   "os_name": "CentOS",
   "os_version": "6",
   "run_command": "/sbin/init",
-  "bootstrap_args": "-qXU -P -y -x python2.7",
-  "bootstrap_version": "2018.3.4",
+  "bootstrap_args": "-qXUP -P -y -x python2.7",
+  "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision"
 }

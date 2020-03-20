@@ -61,8 +61,8 @@
     {
       "type": "shell",
       "inline": [
-        "sudo yum update -y",
-        "sudo yum install git vim -y"
+        "sudo dnf update -y",
+        "sudo dnf install git vim -y"
       ]
     },
     {
@@ -106,7 +106,7 @@
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /tmp/* && sudo yum clean all"
+        "sudo rm -rf /tmp/* && sudo dnf clean all"
       ]
     },
     {

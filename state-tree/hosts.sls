@@ -8,4 +8,3 @@ add_known_etc_hosts_entries:
     - text:
       - "::1 ipv6.saltstack-test dualstack.saltstack-test"
       - "127.0.0.1 ipv4.saltstack-test dualstack.saltstack-test"
-

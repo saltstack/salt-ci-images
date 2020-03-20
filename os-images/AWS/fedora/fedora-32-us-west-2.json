@@ -1,17 +1,17 @@
 {
-  "_comment": "Build with `packer build -var-file=fedora-31-us-west-2.json fedora.json`",
+  "_comment": "Build with `packer build -var-file=fedora-32-us-west-2.json fedora.json`",
   "ssh_username": "fedora",
   "aws_region": "us-west-2",
   "os_name": "Fedora",
-  "os_version": "31",
+  "os_version": "32",
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
-  "ami_filter": "Fedora-Cloud-Base-31-*.x86_64-hvm-us-west-2-gp2-0",
+  "ami_filter": "Fedora-Cloud-Base-32-*.x86_64-hvm-us-west-2-gp2-0",
   "ami_owner": "125523088429",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "fedora/31",
+  "ami_name_suffix": "fedora/32",
   "instance_type": "m5.large",
   "build_type": "ci"
 }

@@ -4,7 +4,7 @@
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.13",
-  "bootstrap_args": "-qXUP",
+  "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "2019.2.3",
   "salt_branch": "develop",
   "state_name": "git.base",

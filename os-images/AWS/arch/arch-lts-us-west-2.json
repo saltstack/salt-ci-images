@@ -4,7 +4,7 @@
   "aws_region": "us-west-2",
   "os_name": "Arch",
   "os_version": "lts",
-  "bootstrap_args": "-qXUP",
+  "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision",

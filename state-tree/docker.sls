@@ -2,7 +2,7 @@
 {%- set docker_pkg = 'docker.io' if salt['grains.get']('os', '') == 'Ubuntu' else 'docker' %}
 
 busybox:
-  pkg.installed
+  pkg.installed:
     - aggregate: True
 
 docker:

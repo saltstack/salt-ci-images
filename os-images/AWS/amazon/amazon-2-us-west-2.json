@@ -8,7 +8,7 @@
   "bootstrap_version": "2019.2.3",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
-  "ami_filter": "amzn-ami-hvm-2018.03.0.*-x86_64-gp2",
+  "ami_filter": "amzn2-ami-hvm-2.*-x86_64-gp2",
   "ami_owner": "137112412989",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "amazon/2",

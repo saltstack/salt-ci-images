@@ -1,16 +1,15 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "Build with `packer build fedora.json`",
   "builders": [
     {
       "type": "amazon-ebs",
       "region": "{{ user `aws_region` }}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "state": "available"
         },
         "owners": [
           "{{ user `ami_owner` }}"
@@ -62,8 +61,8 @@
     {
       "type": "shell",
       "inline": [
-        "sudo yum update -y",
-        "sudo yum install git vim -y"
+        "sudo dnf update -y",
+        "sudo dnf install git vim -y"
       ]
     },
     {
@@ -107,7 +106,7 @@
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /tmp/* && sudo yum clean all"
+        "sudo rm -rf /tmp/* && sudo dnf clean all"
       ]
     },
     {

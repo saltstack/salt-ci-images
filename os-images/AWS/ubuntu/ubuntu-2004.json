@@ -1,16 +1,15 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "Build with `packer build ubuntu.json`",
   "builders": [
     {
       "type": "amazon-ebs",
       "region": "{{ user `aws_region` }}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "state": "available"
         },
         "owners": [
           "{{ user `ami_owner` }}"
@@ -61,9 +60,22 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
-        "sudo yum update -y",
-        "sudo yum install git vim -y"
+        "echo -n ''|sudo tee /etc/apt/apt.conf.d/20auto-upgrades",
+        "echo Sleeping 60 seconds for background updates to finish",
+        "sleep 60",
+        "sudo apt-get update -yq",
+        "if test -b /dev/nvme0n1; then sudo debconf-set-selections <<< 'grub-pc grub-pc/install_devices multiselect /dev/nvme0n1'; fi",
+        "sudo debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
+        "sudo apt-get upgrade -yq",
+        "sudo apt-get dist-upgrade -yq",
+        "sudo apt-get install -yq git vim ",
+        "sudo rm -rf /tmp/* /var/lib/apt/lists/*",
+        "sudo apt-get clean"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {
@@ -107,7 +119,10 @@
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /tmp/* && sudo yum clean all"
+        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {

@@ -1,16 +1,15 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "Builds a packer debian image in AWS",
   "builders": [
     {
       "type": "amazon-ebs",
       "region": "{{ user `aws_region` }}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "state": "available"
         },
         "owners": [
           "{{ user `ami_owner` }}"
@@ -39,7 +38,7 @@
         "Provision-State-Name": "{{ user `state_name` }}",
         "Bootstrapped-Salt-Args": "{{ user `bootstrap_args` }}",
         "Bootstrapped-Salt-Version": "{{ user `bootstrap_version` }}",
-        "Python-2": false,
+        "Python-2": true,
         "Python-3": true,
         "Promoted": false
       },
@@ -50,7 +49,7 @@
       },
       "launch_block_device_mappings": [
         {
-          "device_name": "/dev/sda1",
+          "device_name": "{{ user `device_name` }}",
           "volume_size": 20,
           "volume_type": "gp2",
           "delete_on_termination": true
@@ -62,8 +61,12 @@
     {
       "type": "shell",
       "inline": [
-        "sudo yum update -y",
-        "sudo yum install git vim -y"
+        "sudo  rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
+        "sudo apt-get update -y && sudo apt-get upgrade -yq",
+        "sudo apt-get install -y git vim "
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {
@@ -107,7 +110,10 @@
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /tmp/* && sudo yum clean all"
+        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {

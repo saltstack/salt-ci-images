@@ -19,7 +19,7 @@
       {%- set python3_dev = False %}
     {%- elif grains['osrelease'].startswith('8') %}
       {%- set python3_dev = 'python36-devel' %}
-      {%- set python2_dev = 'python27-devel' %}
+      {%- set python2_dev = False %}
     {%- else %}
       {%- set python3_dev = 'python3-devel' %}
       {%- set python2_dev = 'python-devel' %}

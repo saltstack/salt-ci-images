@@ -30,7 +30,7 @@ include:
     {%- if not on_docker or (on_docker and grains['os_family'] in ('Suse', 'RedHat', 'Debian')) %}
   - locale
     {%- endif %}
-  - gem
+  - ruby
   - python
   - gcc
   {%- endif %}

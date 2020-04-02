@@ -58,7 +58,7 @@
       "type": "salt-masterless",
       "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
       "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "custom_state": "noop",
+      "custom_state": "noop-placeholder",
       "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
     },
     {

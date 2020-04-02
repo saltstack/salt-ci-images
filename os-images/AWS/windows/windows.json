@@ -104,6 +104,8 @@
       "disable_sudo": true,
       "salt_bin_dir": "c:\\salt",
       "log_level": "debug",
+      "remote_state_tree": "c:\\salt\\state\\",
+      "remote_pillar_roots": "c:\\salt\\pillar\\",
       "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
     },
     {

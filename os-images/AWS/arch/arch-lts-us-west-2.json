@@ -5,7 +5,7 @@
   "os_name": "Arch",
   "os_version": "lts",
   "bootstrap_args": "-qXUP -x python2",
-  "bootstrap_version": "2019.2.3",
+  "bootstrap_version": "3000.1",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "arch-linux-lts-hvm-*.x86_64-ebs",

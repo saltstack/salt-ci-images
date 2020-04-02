@@ -5,7 +5,7 @@
   "os_name": "Fedora",
   "os_version": "32",
   "bootstrap_args": "-qXUP -x python3",
-  "bootstrap_version": "2019.2.3",
+  "bootstrap_version": "3000.1",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "Fedora-Cloud-Base-32-*.x86_64-hvm-us-west-2-gp2-0",

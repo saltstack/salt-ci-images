@@ -1,12 +1,14 @@
 {
-  "_comment": "Build with `packer build -var-file=mojave-atl.json macos.json`",
-  "box_name": "mojave-base",
+  "_comment": "Build with `packer build -var-file=macos-mojave.json macos.json`",
+  "box_name": "mojave",
+  "box_version": "1.0",
+  "source_box_name": "mojave-clean",
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.14",
   "bootstrap_args": "-qXUP -x python3",
-  "bootstrap_version": "2018.3.2",
-  "salt_branch": "develop",
-  "state_name": "git.base",
+  "bootstrap_version": "2019.2.3",
+  "salt_branch": "master",
+  "state_name": "golden-images-provision",
   "build_type": "ci"
 }

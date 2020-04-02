@@ -89,13 +89,6 @@
       "direction": "upload"
     },
     {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/windows-roots.conf",
-      "destination": "C:\\salt\\conf\\minion.d\\windows-roots.conf",
-      "direction": "upload"
-    },
-    {
       "type": "salt-masterless",
       "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
       "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
@@ -104,8 +97,6 @@
       "disable_sudo": true,
       "salt_bin_dir": "c:\\salt",
       "log_level": "debug",
-      "remote_state_tree": "c:\\salt\\state\\",
-      "remote_pillar_roots": "c:\\salt\\pillar\\",
       "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
     },
     {

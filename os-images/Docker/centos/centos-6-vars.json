@@ -8,7 +8,7 @@
   "os_version": "6",
   "run_command": "/sbin/init",
   "bootstrap_args": "-qXUP -P -y -x python2.7",
-  "bootstrap_version": "2019.2.3",
+  "bootstrap_version": "3000.1",
   "salt_branch": "master",
   "state_name": "golden-images-provision"
 }

@@ -5,7 +5,7 @@
   "os_name": "Amazon Linux",
   "os_version": "2",
   "bootstrap_args": "-qXUP -x python3",
-  "bootstrap_version": "2019.2.3",
+  "bootstrap_version": "3000.1",
   "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "amzn2-ami-hvm-2.*-x86_64-gp2",

@@ -25,35 +25,33 @@
     {
       "type": "shell",
       "inline": [
-        "pacman -Sy --noconfirm archlinux-keyring",
+        "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim sudo awk openssh",
-        "rm -rf /tmp/* /var/cache/pacman/pkg/* && pacman -Scc --noconfirm"
+        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd"
       ]
     },
     {
       "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
+      "script": "os-images/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=3"
+        "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
     },
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/conf/minion",
-      "destination": "/tmp/gitfs.conf",
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
+      "destination": "/tmp/overrides.conf",
       "direction": "upload"
     },
     {
       "type": "shell",
       "inline": [
-        "sudo mkdir -p /etc/salt/minion.d",
-        "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
+        "mkdir -p /etc/salt/minion.d",
+        "mv /tmp/overrides.conf /etc/salt/minion.d/"
       ]
     },
     {
@@ -64,47 +62,18 @@
       "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
     },
     {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "destination": "/tmp/pillar",
-      "direction": "upload"
-    },
-    {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /srv/pillar",
-        "sudo mv /tmp/pillar /srv",
-        "sudo salt-call -ldebug --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar/* /tmp/pillar"
-      ]
-    },
-    {
-      "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
-      "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
-        "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}",
-        "PY_VERSION=2"
-      ]
-    },
-    {
-      "type": "file",
-      "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "destination": "/tmp/pillar",
-      "direction": "upload"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "sudo rm -rf /srv/pillar",
-        "sudo mv /tmp/pillar /srv",
-        "sudo salt-call -ldebug --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
+        "salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
+        "rm -rf /srv/pillar/* /tmp/pillar"
       ],
       "pause_after": "5s"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm -rf /tmp/* /var/cache/pacman/pkg/* ~/.cache && pacman -Scc"
+      ]
     },
     {
       "type": "shell",

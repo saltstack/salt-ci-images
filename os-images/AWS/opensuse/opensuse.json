@@ -38,8 +38,6 @@
         "Provision-State-Name": "{{ user `state_name` }}",
         "Bootstrapped-Salt-Args": "{{ user `bootstrap_args` }}",
         "Bootstrapped-Salt-Version": "{{ user `bootstrap_version` }}",
-        "Python-2": true,
-        "Python-3": true,
         "Promoted": false
       },
       "run_tags": {

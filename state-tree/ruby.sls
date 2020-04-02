@@ -19,4 +19,3 @@ install_ruby:
     - require:
       - pkg: openssl
     {%- endif %}
-

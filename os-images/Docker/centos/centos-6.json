@@ -32,7 +32,7 @@
     },
     {
       "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
+      "script": "os-images/Docker/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
@@ -80,7 +80,7 @@
     },
     {
       "type": "shell",
-      "script": "files/cleanup-linux.sh"
+      "script": "os-images/Docker/files/cleanup-linux.sh"
     }
   ],
   "post-processors": [

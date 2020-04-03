@@ -2,12 +2,12 @@
   "_comment": "Build with `packer build -var-file=debian-10-vars.json debian-10.json`",
   "docker_image": "debian:10",
   "docker_repository": "saltstack",
-  "build_type": "ci",
   "os_name": "Debian",
   "os_version": "10",
   "run_command": "/lib/systemd/systemd",
-  "bootstrap_args": "-qXUP -x python2",
-  "bootstrap_version": "3000.1",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
   "salt_branch": "master",
   "state_name": "golden-images-provision"
 }

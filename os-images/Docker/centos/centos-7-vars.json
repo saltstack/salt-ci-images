@@ -2,7 +2,6 @@
   "_comment": "Build with `packer build -var-file=centos-7-vars.json centos.json`",
   "docker_image": "centos:7",
   "docker_repository": "saltstack",
-  "docker_image_prefix": "ci",
   "build_type": "ci",
   "os_name": "CentOS",
   "os_version": "7",

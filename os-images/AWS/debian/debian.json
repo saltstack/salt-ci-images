@@ -59,64 +59,104 @@
     {
       "type": "shell",
       "inline": [
-        "sudo  rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
-        "sudo apt-get update -y && sudo apt-get upgrade -yq",
-        "sudo apt-get install -y git vim "
+        "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
+        "apt-get update -y && apt-get upgrade -yq",
+        "apt-get install -y git vim openssh-server curl "
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
-      ]
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
+      "script": "os-images/Docker/files/prep-linux.sh",
       "environment_vars": [
         "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}"
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "# Install Pyenv Dependencies",
+        "apt-get install -y --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev",
+        "# Install PyEnv",
+        "curl https://pyenv.run | bash"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/install-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell-local",
+      "inline": [
+        "echo LOCAL",
+        "pwd",
+        "ls -lah .tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/"
       ]
     },
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
-      "destination": "/tmp/overrides.conf",
+      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}",
+      "destination": "{{ user `salt_provision_root_dir` }}/",
       "direction": "upload"
     },
     {
       "type": "shell",
       "inline": [
-        "sudo mkdir -p /etc/salt/minion.d",
-        "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
-      ]
-    },
-    {
-      "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
-      "custom_state": "noop-placeholder",
-      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
+        "echo REMOTE",
+        "ls -lah {{ user `salt_provision_root_dir` }}/"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "inline": [
-        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      "script": "os-images/files/provision-system.sh",
+      "environment_vars": [
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
+        "SALT_STATE={{ user `state_name` }}"
       ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'",
       "pause_after": "5s"
     },
     {
       "type": "shell",
       "inline": [
-        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+        "rm -rf /var/lib/apt/lists/* && apt-get clean"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
-      ]
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "script": "os-images/AWS/files/cleanup-linux.sh"
+      "script": "os-images/files/cleanup-salt.sh",
+      "environment_vars": [
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/Docker/files/cleanup-linux.sh",
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     }
   ],
   "post-processors": [

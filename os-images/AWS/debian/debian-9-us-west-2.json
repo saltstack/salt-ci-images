@@ -5,14 +5,14 @@
   "device_name": "xvda",
   "os_name": "Debian",
   "os_version": "9",
-  "bootstrap_args": "-qXUP -x python3",
-  "bootstrap_version": "3000.1",
   "salt_branch": "master",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
   "state_name": "golden-images-provision",
   "ami_filter": "debian-stretch-hvm-x86_64-*",
   "ami_owner": "679593333241",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "debian/stretch.9",
-  "instance_type": "m5.large",
-  "build_type": "ci"
+  "instance_type": "m5.large"
 }

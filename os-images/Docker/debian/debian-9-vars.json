@@ -2,7 +2,6 @@
   "_comment": "Build with `packer build -var-file=debian-9-vars.json debian.json`",
   "docker_image": "debian:9",
   "docker_repository": "saltstack",
-  "build_type": "ci",
   "os_name": "Debian",
   "os_version": "9",
   "run_command": "/lib/systemd/systemd",

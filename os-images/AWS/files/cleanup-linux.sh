@@ -1,3 +1,6 @@
 #!/bin/bash
 
-. os-images/files/cleanup-linux.sh
+rm -rf /tmp/*
+find /var/log/ -type f -exec rm -rf {} \;
+touch /var/log/lastlog
+history -c

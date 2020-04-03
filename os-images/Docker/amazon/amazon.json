@@ -113,8 +113,8 @@
     [
       {
         "type": "docker-tag",
-        "repository": "{{ user `docker_repository` }}/{{ user `docker_image_prefix` }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
-        "tag": "{{ user `build_type` | lower }}"
+        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
+        "tag": "latest"
       },
       "docker-push"
     ]

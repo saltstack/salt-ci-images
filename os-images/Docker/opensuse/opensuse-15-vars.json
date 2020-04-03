@@ -2,7 +2,6 @@
   "_comment": "Build with `packer build -var-file=opensuse-leap-15-vars.json opensuse.json`",
   "docker_image": "opensuse/leap:15.1",
   "docker_repository": "saltstack",
-  "docker_image_prefix": "ci",
   "build_type": "ci",
   "os_name": "OpenSuse",
   "os_version": "15",

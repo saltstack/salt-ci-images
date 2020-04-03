@@ -6,8 +6,9 @@
   "os_name": "Debian",
   "os_version": "9",
   "run_command": "/lib/systemd/systemd",
-  "bootstrap_args": "-qXUP -x python2",
-  "bootstrap_version": "3000.1",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
   "salt_branch": "master",
   "state_name": "golden-images-provision"
 }

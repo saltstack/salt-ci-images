@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit on failures
+set -e
+
 if [ -z "${DISTRO_SLUG}" ]; then
     echo "The DISTRO_SLUG env variable is not set"
     exit 1
@@ -24,6 +27,7 @@ if [ -d ${DISTRO_TMP_DIR} ]; then
     rm -rf ${DISTRO_TMP_DIR}
 fi
 
-mkdir -p ${DISTRO_TMP_DIR}
+mkdir -p ${DISTRO_TMP_DIR}/conf
 
-cp os-images/files/minion ${DISTRO_TMP_DIR}/
+cp os-images/files/minion ${DISTRO_TMP_DIR}/conf/
+echo "root_dir: ${SALT_ROOT_DIR}" >> ${DISTRO_TMP_DIR}/conf/minion

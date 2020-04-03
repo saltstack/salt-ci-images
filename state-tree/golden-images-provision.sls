@@ -96,7 +96,7 @@ include:
   {%- endif %}
   - python.nox
   - cron
-  {%- if 'Linux' in grains.kernel %}
+  {%- if not on_docker and 'Linux' in grains.kernel %}
   - timesync
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}

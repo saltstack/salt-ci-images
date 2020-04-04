@@ -10,7 +10,7 @@
   "ami_filter": "openSUSE-Leap-15-1-v20190702-hvm-ssd-x86_64-*",
   "ami_owner": "679593333241",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "opensuse/leap.15",
+  "ami_name_suffix": "opensuse/15",
   "instance_type": "m5.large",
   "build_type": "ci"
 }

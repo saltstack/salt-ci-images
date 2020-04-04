@@ -5,7 +5,6 @@
   "os_version": "2012r2",
   "bootstrap_args": "-pythonVersion 3 -runservice false",
   "bootstrap_version": "3000.1",
-  "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "Windows_Server-2012-R2_RTM-English-64Bit-Base-*",
   "ami_owner": "801119661308",

@@ -39,30 +39,29 @@
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_keypair_name": "kitchen",
       "ssh_private_key_file": "~/.ssh/kitchen.pem",
-      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}/{{isotime \"2006-01-02-15-04-05\"}}",
+      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ isotime \"2006-01-02-15-04-05\" }}",
       "ami_users": [
         "883373499178",
         "540082622920",
         "989543020150",
         "178480506716"
       ],
-      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }}",
+      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
       "tags": {
-        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version`}} // salt@{{ user `salt_branch`}}",
+        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}",
         "OS-Name": "{{ user `os_name` }}",
         "OS-Version": "{{ user `os_version` }}",
         "Build-Date": "{{ isotime }}",
         "Build-Type": "{{ user `build_type` | upper }}",
         "created-by": "packer",
         "Owner": "SRE",
-        "Salt-Branch": "{{ user `salt_branch` }}",
         "Provision-State-Name": "{{ user `state_name` }}",
         "Bootstrapped-Salt-Args": "{{ user `bootstrap_args` }}",
         "Bootstrapped-Salt-Version": "{{ user `bootstrap_version` }}",
         "Promoted": false
       },
       "run_tags": {
-        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} salt@{{ user `salt_branch`}} Builder",
+        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} Builder",
         "created-by": "packer",
         "Owner": "SRE"
       },
@@ -88,7 +87,6 @@
       "type": "shell-local",
       "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
         "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
@@ -96,7 +94,7 @@
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
+      "source": ".tmp/{{ user `distro_slug` }}/minion",
       "destination": "/tmp/overrides.conf",
       "direction": "upload"
     },
@@ -109,8 +107,8 @@
     },
     {
       "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
       "custom_state": "noop-placeholder",
       "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
     },
@@ -136,10 +134,10 @@
   "post-processors": [
     {
       "type": "manifest",
-      "output": "{{ user `salt_branch`}}-manifest.json",
+      "output": "manifest.json",
       "strip_path": true,
       "custom_data": {
-        "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}"
+        "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}"
       }
     }
   ]

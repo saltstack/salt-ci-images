@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STATE_DIR=".tmp/${DISTRO_SLUG}/${SALT_BRANCH}/states"
+STATE_DIR=".tmp/${DISTRO_SLUG}/states"
 export STATE_DIR
 
 echo "Building State Tree At ${STATE_DIR}"

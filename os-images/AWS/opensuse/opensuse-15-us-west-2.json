@@ -6,7 +6,6 @@
   "os_version": "15",
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "3000.1",
-  "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "openSUSE-Leap-15-1-v20190702-hvm-ssd-x86_64-*",
   "ami_owner": "679593333241",

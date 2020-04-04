@@ -42,7 +42,6 @@ def build_aws(ctx,
               distro,
               distro_version=None,
               region='us-west-2',
-              salt_branch='master',
               debug=False,
               staging=False,
               validate=False,
@@ -94,7 +93,7 @@ def build_aws(ctx,
         with open(os.path.join(scripts_path, 'Install-Git.ps1'), 'w') as wfh:
             wfh.write('')
     for name in ('states', 'win_states', 'pillar', 'conf'):
-        path = os.path.join(packer_tmp_dir, salt_branch, name)
+        path = os.path.join(packer_tmp_dir, name)
         if not os.path.exists(path):
             os.makedirs(path)
         os.chmod(path, 0o755)
@@ -113,9 +112,7 @@ def build_aws(ctx,
         cmd += ' -var build_type=ci-staging'
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
-    cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
-                                                                salt_branch,
-                                                                build_template)
+    cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
 
 
@@ -123,7 +120,6 @@ def build_aws(ctx,
 def build_docker(ctx,
                  distro,
                  distro_version=None,
-                 salt_branch='master',
                  debug=False,
                  staging=False,
                  validate=False):
@@ -174,7 +170,7 @@ def build_docker(ctx,
         with open(os.path.join(scripts_path, 'Install-Git.ps1'), 'w') as wfh:
             wfh.write('')
     for name in ('states', 'win_states', 'pillar', 'conf'):
-        path = os.path.join(packer_tmp_dir, salt_branch, name)
+        path = os.path.join(packer_tmp_dir, name)
         if not os.path.exists(path):
             os.makedirs(path)
         os.chmod(path, 0o755)
@@ -191,15 +187,12 @@ def build_docker(ctx,
     cmd += ' -var-file={}'.format(build_vars)
     if staging is True:
         cmd += ' -var build_type=ci-staging'
-    cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
-                                                                salt_branch,
-                                                                build_template)
+    cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
 
 @task
 def build_osx(ctx,
               distro_version,
-              salt_branch='master',
               debug=False,
               staging=False,
               validate=False,
@@ -247,7 +240,7 @@ def build_osx(ctx,
         os.makedirs(boxes_cache_dir)
     os.chmod(boxes_cache_dir, 0o755)
     for name in ('states', 'pillar'):
-        path = os.path.join(packer_tmp_dir, salt_branch, name)
+        path = os.path.join(packer_tmp_dir, name)
         if not os.path.exists(path):
             os.makedirs(path)
         os.chmod(path, 0o755)
@@ -358,9 +351,7 @@ def build_osx(ctx,
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var boxes_cache_dir={}'.format(boxes_cache_dir)
     cmd += ' -var source_box_name={}'.format(source_box_name)
-    cmd += ' -var distro_slug={} -var salt_branch={} {}'.format(distro_slug,
-                                                                salt_branch,
-                                                                build_template)
+    cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     env = {
         'PACKER_TMP_DIR': packer_tmp_dir
     }

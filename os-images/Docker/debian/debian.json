@@ -9,16 +9,16 @@
       "changes": [
         "Entrypoint [\"/bin/sh\", \"-c\"]",
         "CMD [\"/bin/bash\"]",
-        "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version`}} // salt@{{ user `salt_branch` }}\"",
+        "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}\"",
         "LABEL OS-Name={{ user `os_name` }}",
         "LABEL OS-Version={{ user `os_version` }}",
         "LABEL BuildDate={{ isotime }}",
         "LABEL BuildType={{ user `build_type` | upper }}",
         "LABEL CreatedBy=packer",
         "LABEL Owner=SRE",
-        "LABEL Description=\"{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }}\""
+        "LABEL Description=\"{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}\""
       ],
-      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} for salt@{{ user `salt_branch` }} on {{ isotime }}"
+      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} on {{ isotime }}"
     }
   ],
   "provisioners": [
@@ -37,7 +37,6 @@
       "type": "shell-local",
       "script": "os-images/Docker/files/prep-linux.sh",
       "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
         "DISTRO_SLUG={{ user `distro_slug` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
@@ -77,7 +76,7 @@
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}",
+      "source": ".tmp/{{ user `distro_slug` }}",
       "destination": "{{ user `salt_provision_root_dir` }}/",
       "direction": "upload"
     },

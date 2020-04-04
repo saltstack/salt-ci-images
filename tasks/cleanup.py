@@ -84,7 +84,6 @@ def write_message(message):
 def cleanup_aws(ctx,
                 distro=None,
                 distro_version=None,
-                salt_branch=None,
                 region='us-west-2',
                 name_filter=None,
                 staging=False,
@@ -111,8 +110,6 @@ def cleanup_aws(ctx,
         name_filter += '/{}'.format(distro.lower())
         if distro_version:
             name_filter += '/{}'.format(distro_version)
-        if salt_branch:
-            name_filter += '/{}'.format(salt_branch)
 
     if not name_filter.endswith('*'):
         name_filter += '*'

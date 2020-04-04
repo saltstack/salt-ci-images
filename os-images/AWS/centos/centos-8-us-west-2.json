@@ -6,7 +6,6 @@
   "os_version": "8",
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "3000.1",
-  "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "saltstack-centos-8*",
   "ami_owner": "540082622920",

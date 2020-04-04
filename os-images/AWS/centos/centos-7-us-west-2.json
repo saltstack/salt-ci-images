@@ -6,7 +6,6 @@
   "os_version": "7",
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "3000.1",
-  "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "CentOS Linux 7 x86_64 HVM EBS ENA *",
   "ami_owner": "679593333241",

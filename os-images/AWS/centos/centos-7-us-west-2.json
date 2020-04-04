@@ -13,6 +13,6 @@
   "ami_productcode": "aw0evgkw8e5c1q413zgy5pjce",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "centos/7",
-  "instance_type": "c5.xlarge",
+  "instance_type": "m5.large",
   "build_type": "ci"
 }

@@ -24,6 +24,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "yum update -y",
         "yum install -y git vim sudo openssh-server dbus",
@@ -48,6 +49,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d",
         "sudo mv /tmp/gitfs.conf /etc/salt/minion.d/"
@@ -69,6 +71,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo rm -rf /srv/pillar",
         "sudo mv /tmp/pillar /srv",

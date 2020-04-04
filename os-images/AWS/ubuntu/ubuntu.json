@@ -87,7 +87,7 @@
         "sudo debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
         "sudo apt-get upgrade -yq",
         "sudo apt-get dist-upgrade -yq",
-        "sudo apt-get install -yq git vim ",
+        "sudo apt-get install -yq bash git vim ",
         "sudo rm -rf /tmp/* /var/lib/apt/lists/*",
         "sudo apt-get clean"
       ],
@@ -112,6 +112,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d",
         "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -126,6 +127,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
@@ -134,6 +136,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
       ],

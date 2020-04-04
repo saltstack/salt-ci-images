@@ -77,10 +77,11 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
         "apt-get update -y && apt-get upgrade -yq",
-        "apt-get install -y git vim openssh-server curl "
+        "apt-get install -y bash git vim openssh-server curl "
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
@@ -98,6 +99,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "# Install Pyenv Dependencies",
         "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
@@ -121,6 +123,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "# Un-Install Pyenv Dependencies",
         "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
@@ -151,6 +154,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
         "rm -rf /var/lib/apt/lists/* && apt-get clean"
       ],

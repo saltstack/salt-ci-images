@@ -77,6 +77,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo zypper --non-interactive --gpg-auto-import-keys refresh",
         "sudo zypper --non-interactive --gpg-auto-import-keys update",
@@ -100,6 +101,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d",
         "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -114,6 +116,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
@@ -122,6 +125,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo rm -rf /tmp/* && sudo zypper --non-interactive clean -a"
       ]

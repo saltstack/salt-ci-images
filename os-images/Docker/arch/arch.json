@@ -24,6 +24,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
@@ -48,6 +49,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "mkdir -p /etc/salt/minion.d",
         "mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -62,6 +64,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "rm -rf /srv/pillar/* /tmp/pillar"
@@ -70,6 +73,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "rm -rf /tmp/* /var/cache/pacman/pkg/* ~/.cache && pacman -Scc"
       ]

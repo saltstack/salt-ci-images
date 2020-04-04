@@ -2,6 +2,8 @@
 
 # Exit on failures
 set -e
+# Echo what runs
+set -x
 
 echo "Contents of ${SALT_ROOT_DIR}:"
 ls -lah ${SALT_ROOT_DIR}

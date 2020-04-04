@@ -2,6 +2,8 @@
 
 # Exit on failures
 set -e
+# Echo what runs
+set -x
 
 export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"

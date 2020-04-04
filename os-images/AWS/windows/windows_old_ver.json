@@ -95,6 +95,7 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "New-Item -Path C:\\salt\\conf\\minion.d -ItemType directory"
       ]
@@ -118,6 +119,7 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
         "salt-call --local --retcode-passthrough  state.single module.run winrepo.genrepo"
@@ -125,18 +127,21 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local --retcode-passthrough  state.single module.run pkg.refresh_db failhard=True"
       ]
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local --retcode-passthrough state.sls windows.compiler"
       ]
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local --retcode-passthrough state.sls {{ user `state_name` }}",
         "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
@@ -144,6 +149,7 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "Remove-Item C:\\salt\\state -Recurse -Force",
         "Remove-Item C:\\salt\\pillar -Recurse -Force",

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Exit on failures
+set -e
+# Echo what runs
+set -x
+
 PILLAR_DIR=".tmp/${DISTRO_SLUG}/pillar"
 export PILLAR_DIR
 

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Exit on failures
+set -e
+# Echo what runs
+set -x
+
 STATE_DIR=".tmp/${DISTRO_SLUG}/states"
 export STATE_DIR
 

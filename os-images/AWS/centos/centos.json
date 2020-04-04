@@ -8,7 +8,8 @@
         "filters": {
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "state": "available"
         },
         "owners": [
           "{{ user `ami_owner` }}"

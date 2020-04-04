@@ -10,7 +10,7 @@
   "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
   "ami_owner": "099720109477",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "ubuntu/bionic.1804",
+  "ami_name_suffix": "ubuntu/1804",
   "instance_type": "m5.large",
   "build_type": "ci"
 }

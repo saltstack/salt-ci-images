@@ -5,7 +5,6 @@
   "os_version": "2016",
   "bootstrap_args": "-pythonVersion 3 -runservice false",
   "bootstrap_version": "3000.1",
-  "salt_branch": "master",
   "state_name": "golden-images-provision",
   "ami_filter": "Windows_Server-2016-English-Full-Base-20*",
   "ami_owner": "801119661308",

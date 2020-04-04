@@ -5,8 +5,8 @@
     "artifactory_url": "{{ env `ARTIFACTORY_URL` }}",
     "artifactory_apikey": "{{ env `ARTIFACTORY_APIKEY` }}",
     "box_timestamp_version": "{{ user `box_version` }}.{{timestamp}}",
-    "box_final_name": "{{ user `box_name` }}-ci-{{ user `salt_branch` }}",
-    "box_testing_name": "{{ user `box_name` }}-ci-staging-{{ user `salt_branch` }}"
+    "box_final_name": "{{ user `box_name` }}-ci",
+    "box_testing_name": "{{ user `box_name` }}-ci-staging"
   },
   "builders": [
     {
@@ -34,7 +34,6 @@
       "type": "shell-local",
       "script": "os-images/MacStadium/files/prep-macos.sh",
       "environment_vars": [
-        "SALT_BRANCH={{ user `salt_branch` }}",
         "SALT_PR={{ user `salt_pr` }}",
         "DISTRO_SLUG={{ user `distro_slug` }}"
       ]
@@ -42,7 +41,7 @@
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/minion",
+      "source": ".tmp/{{ user `distro_slug` }}/minion",
       "destination": "/tmp/overrides.conf",
       "direction": "upload"
     },
@@ -67,8 +66,8 @@
     },
     {
       "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/pillar",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
       "custom_state": "noop-placeholder",
       "skip_bootstrap": true,
       "salt_bin_dir": "/opt/salt/bin"
@@ -101,7 +100,7 @@
     },
     {
       "type": "manifest",
-      "output": "{{ user `salt_branch`}}-manifest.json",
+      "output": "manifest.json",
       "strip_path": true,
       "custom_data": {
         "box_name": "macosx-{{ user `box_final_name` }}",

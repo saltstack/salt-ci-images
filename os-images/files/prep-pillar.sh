@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PILLAR_DIR=".tmp/${DISTRO_SLUG}/${SALT_BRANCH}/pillar"
+PILLAR_DIR=".tmp/${DISTRO_SLUG}/pillar"
 export PILLAR_DIR
 
 echo "Building Pillar Tree At ${PILLAR_DIR}"

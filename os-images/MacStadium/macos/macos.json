@@ -47,6 +47,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d /srv",
         "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -60,6 +61,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo sh /tmp/salt-bootstrap.sh {{ user `bootstrap_args` }} stable {{ user `bootstrap_version` }}"
       ]
@@ -74,6 +76,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar /srv/salt /tmp/salt /tmp/pillar"
@@ -91,6 +94,7 @@
   "post-processors": [
     {
       "type": "shell-local",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "jfrog rt upload --url={{ user `artifactory_url` }} --apikey={{ user `artifactory_apikey` }} output-vagrant/package.box 'vagrant-boxes/macos/{{ user `box_testing_name` }}-v{{ user `box_timestamp_version` }}.box;box_name=macosx-{{ user `box_testing_name` }};box_provider=parallels;box_version={{ user `box_timestamp_version` }};promoted=false'"
       ],

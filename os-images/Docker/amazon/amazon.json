@@ -24,6 +24,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "yum update -y",
         "yum install -y git vim sudo openssh-server dbus"
@@ -46,6 +47,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "mkdir -p /etc/salt/minion.d",
         "mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -60,6 +62,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "rm -rf /srv/pillar/* /tmp/pillar"
@@ -68,6 +71,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "rm -rf /tmp/* && yum clean all"
       ]

@@ -2,6 +2,8 @@
 
 # Exit on failures
 set -e
+# Echo what runs
+set -x
 
 OSX_VERS=$(sw_vers -productVersion | awk -F "." '{print $2}')
 echo "====> OSX Version: ${OSX_VERS}"

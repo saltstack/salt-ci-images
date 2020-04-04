@@ -95,6 +95,7 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "New-Item -Path C:\\salt\\conf\\minion.d -ItemType directory"
       ]
@@ -119,6 +120,7 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "Get-ChildItem -Path C:/salt/state",
         "Get-ChildItem -Path C:/salt/pillar",
@@ -143,12 +145,14 @@
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "salt-call -l info --local --retcode-passthrough state.sls {{ user `state_name` }}"
       ]
     },
     {
       "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "Remove-Item C:\\salt\\state -Recurse -Force",
         "Remove-Item C:\\salt\\pillar -Recurse -Force",

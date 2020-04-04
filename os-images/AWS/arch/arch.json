@@ -77,6 +77,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo pacman -Syyu --noconfirm",
         "sudo pacman -Sy --needed --noconfirm git vim"
@@ -99,6 +100,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo mkdir -p /etc/salt/minion.d",
         "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
@@ -113,6 +115,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
         "sudo rm -rf /srv/pillar/* /tmp/pillar"
@@ -121,6 +124,7 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
       "inline": [
         "sudo rm -rf /tmp/* /var/cache/pacman/pkg/* && sudo pacman -Scc"
       ]

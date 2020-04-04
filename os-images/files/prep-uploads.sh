@@ -2,6 +2,8 @@
 
 # Exit on failures
 set -e
+# Echo what runs
+set -x
 
 if [ -z "${DISTRO_SLUG}" ]; then
     echo "The DISTRO_SLUG env variable is not set"

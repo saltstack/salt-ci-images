@@ -9,6 +9,7 @@
           "virtualization-type": "hvm",
           "name": "{{ user `ami_filter` }}",
           "root-device-type": "ebs",
+          "state": "available",
           "product-code": "{{ user `ami_productcode` }}",
           "product-code.type": "marketplace"
         },

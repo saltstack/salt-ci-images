@@ -4,8 +4,6 @@
     {
       "type": "amazon-ebs",
       "region": "{{ user `aws_region` }}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
@@ -17,9 +15,29 @@
         ],
         "most_recent": true
       },
+      "subnet_filter": {
+        "filters": {
+          "tag:Name": "*-public-*"
+        },
+        "most_free": true,
+        "random": false
+      },
+      "vpc_filter": {
+        "filters": {
+          "tag:Name": "test"
+        }
+      },
+      "security_group_filter": {
+        "filters": {
+          "group-name": "kitchen-slave-auto-delete-test"
+        }
+      },
       "instance_type": "{{ user `instance_type` }}",
+      "ssh_interface": "private_ip",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}/{{timestamp}}",
+      "ssh_keypair_name": "kitchen",
+      "ssh_private_key_file": "~/.ssh/kitchen.pem",
+      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ user `salt_branch`}}/{{isotime \"2006-01-02-15-04-05\"}}",
       "ami_users": [
         "883373499178",
         "540082622920",

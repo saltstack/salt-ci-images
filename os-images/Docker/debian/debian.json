@@ -27,7 +27,7 @@
       "inline": [
         "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
         "apt-get update -y && apt-get upgrade -yq",
-        "apt-get install -y git vim openssh-server curl "
+        "apt-get install -y git vim openssh-server curl sudo lsb-release"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
@@ -47,7 +47,7 @@
       "type": "shell",
       "inline": [
         "# Install Pyenv Dependencies",
-        "apt-get install -y --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev",
+        "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
         "# Install PyEnv",
         "curl https://pyenv.run | bash"
       ],
@@ -61,6 +61,17 @@
       "environment_vars": [
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "# Un-Install Pyenv Dependencies",
+        "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
+        "apt-get autoremove --purge -y"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {

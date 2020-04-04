@@ -102,7 +102,7 @@
       "type": "shell",
       "inline": [
         "# Install Pyenv Dependencies",
-        "apt-get install -y --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev",
+        "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
         "# Install PyEnv",
         "curl https://pyenv.run | bash"
       ],
@@ -122,12 +122,16 @@
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
-      "type": "shell-local",
+      "type": "shell",
       "inline": [
-        "echo LOCAL",
-        "pwd",
-        "ls -lah .tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}/"
-      ]
+        "# Un-Install Pyenv Dependencies",
+        "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
+        "apt-get autoremove --purge -y"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "file",
@@ -135,14 +139,6 @@
       "source": ".tmp/{{ user `distro_slug` }}/{{ user `salt_branch` }}",
       "destination": "{{ user `salt_provision_root_dir` }}/",
       "direction": "upload"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "echo REMOTE",
-        "ls -lah {{ user `salt_provision_root_dir` }}/"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",

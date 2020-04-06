@@ -113,7 +113,7 @@ def build_aws(ctx,
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
-    ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+    ctx.run(cmd, echo=True)
 
 
 @task
@@ -188,7 +188,7 @@ def build_docker(ctx,
     if staging is True:
         cmd += ' -var build_type=ci-staging'
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
-    ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+    ctx.run(cmd, echo=True)
 
 @task
 def build_osx(ctx,
@@ -249,7 +249,7 @@ def build_osx(ctx,
         cmd = 'curl'
         _binary_install_check(cmd)
         cmd += ' -s --head {} | grep -e x-checksum'.format(url)
-        output = ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        output = ctx.run(cmd, echo=True)
         headers = {}
         for line in output.stdout.strip().splitlines():
             key, value = line.split(':')
@@ -260,7 +260,7 @@ def build_osx(ctx,
         cmd = 'curl'
         _binary_install_check(cmd)
         cmd += ' -s --head {} | grep -e content-length'.format(url)
-        result = ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+        result = ctx.run(cmd, echo=True)
         output = result.stdout.strip()
         _, content_length = output.split(':')
         content_length = int(content_length.strip())
@@ -270,7 +270,7 @@ def build_osx(ctx,
 
         def download_chunk(url, dest, start, end):
             cmd = 'curl -sS -L -o {} --range {}-{} {}'.format(dest, start, end, url)
-            ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+            ctx.run(cmd, echo=True)
 
         threads = []
         content_length = get_content_length(url)
@@ -302,7 +302,7 @@ def build_osx(ctx,
             cmd = 'cat {} >> {}'.format(part_dest, dest)
             if not chunk:
                 cmd = cmd.replace('>>', '>')
-            ctx.run(cmd, echo=True, env={'PACKER_TMP_DIR': packer_tmp_dir})
+            ctx.run(cmd, echo=True)
             os.unlink(part_dest)
 
     with open(build_vars) as rfh:
@@ -352,9 +352,7 @@ def build_osx(ctx,
     cmd += ' -var boxes_cache_dir={}'.format(boxes_cache_dir)
     cmd += ' -var source_box_name={}'.format(source_box_name)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
-    env = {
-        'PACKER_TMP_DIR': packer_tmp_dir
-    }
+    env = {}
     if 'ARTIFACTORY_URL' not in os.environ:
         env['ARTIFACTORY_URL'] = 'https://artifactory.saltstack.net/artifactory'
 

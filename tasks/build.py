@@ -110,6 +110,8 @@ def build_aws(ctx,
     cmd += ' -var-file={}'.format(build_vars)
     if staging is True:
         cmd += ' -var build_type=ci-staging'
+    else:
+        cmd += ' -var build_type=ci'
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
@@ -122,7 +124,8 @@ def build_docker(ctx,
                  distro_version=None,
                  debug=False,
                  staging=False,
-                 validate=False):
+                 validate=False,
+                 salt_pr=None):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
     distro_dir = os.path.join('os-images', 'Docker', distro)
@@ -187,6 +190,10 @@ def build_docker(ctx,
     cmd += ' -var-file={}'.format(build_vars)
     if staging is True:
         cmd += ' -var build_type=ci-staging'
+    else:
+        cmd += ' -var build_type=ci'
+    if salt_pr:
+        cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True)
 
@@ -347,6 +354,8 @@ def build_osx(ctx,
     cmd += ' -var-file={}'.format(build_vars)
     if staging is True:
         cmd += ' -var build_type=ci-staging'
+    else:
+        cmd += ' -var build_type=ci'
     if salt_pr:
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var boxes_cache_dir={}'.format(boxes_cache_dir)

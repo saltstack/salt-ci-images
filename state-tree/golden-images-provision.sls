@@ -7,6 +7,9 @@ include:
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
+  {%- if grains['os'] == 'CentOS' %}
+  - epel
+  {%- endif %}
   - hosts
   {%- if grains['os'] == 'Windows' %}
   - windows

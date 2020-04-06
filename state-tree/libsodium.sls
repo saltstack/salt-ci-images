@@ -19,6 +19,11 @@
     {%- set libsodium = 'libsodium' %}
   {%- endif %}
 
+  {%- if grains['os'] == 'CentOS' %}
+include:
+  - epel
+  {%- endif %}
+
 libsodium:
   pkg.installed:
     - name: {{ libsodium }}

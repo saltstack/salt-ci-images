@@ -7,7 +7,7 @@ include:
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
-  {%- if grains['os'] == 'CentOS' %}
+  {%- if grains['os'] in ('CentOS', 'Amazon') %}
   - epel
   {%- endif %}
   - hosts

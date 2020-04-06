@@ -9,7 +9,7 @@
     {%- set libsodium = 'libsodium' %}
   {%- endif %}
 
-  {%- if grains['os'] == 'CentOS' %}
+  {%- if grains['os'] in ('CentOS', 'Amazon') %}
 include:
   - epel
   {%- endif %}

@@ -8,6 +8,5 @@
   "os_version": "10.13",
   "bootstrap_args": "-qXUP -x python3",
   "bootstrap_version": "3000.1",
-  "state_name": "golden-images-provision",
-  "build_type": "ci"
+  "state_name": "golden-images-provision"
 }

@@ -3,6 +3,9 @@
 #
 # This will cause integration.shell.matcher.MatchTest.test_salt_documentation_arguments_not_assumed
 # to fail if not set correctly.
+{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set on_arch = grains['os_family'] == 'Arch' %}
+{%- set on_suse = grains['os_family'] in ('Suse', 'SUSE') %}
 
 {%- if grains['os'] in ('MacOS',) %}
 mac_locale:
@@ -15,18 +18,19 @@ mac_locale:
     - append_if_not_found: true
 {%- else %}
 
-{%- set suse = True if grains['os_family'] in ('Suse', 'SUSE') else False %}
 
-
-{%- if suse %}
+{%- if on_suse %}
 suse_local:
   pkg.installed:
     - pkgs:
       - glibc-locale
       - dbus-1
+
+  {%- if not on_docker %}
   service.running:
     - name: dbus.socket
     - onlyif: systemctl daemon-reload
+  {%- endif %}
 {%- elif grains.os_family == 'Debian' %}
 deb_locale:
   file.touch:
@@ -35,8 +39,8 @@ deb_locale:
     - pkgs:
       - locales
       - console-data
-  {%- if grains.get('init') == 'systemd' %}
       - dbus
+  {%- if grains.get('init') == 'systemd' %}
   service.running:
     - names:
       - dbus.socket
@@ -44,8 +48,7 @@ deb_locale:
   {%- endif %}
 {%- endif %}
 
-{%- set arch = True if grains['os_family'] == 'Arch' else False %}
-{%- if arch %}
+{%- if on_arch %}
 accept_LANG_sshd:
   file.append:
     - name: /etc/ssh/sshd_config

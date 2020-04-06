@@ -77,59 +77,89 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
-        "sudo yum update -y",
-        "sudo yum install git vim -y"
-      ]
+        "yum update -y",
+        "yum install -y git vim curl"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell-local",
       "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}"
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "# Install Pyenv Dependencies",
+        "yum install -y tar {{ user `salt_provision_pyenv_deps` }}",
+        "# Install PyEnv",
+        "curl https://pyenv.run | bash"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/install-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "# Un-Install Pyenv Dependencies",
+        "yum autoremove -y {{ user `salt_provision_pyenv_deps` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/minion",
-      "destination": "/tmp/overrides.conf",
+      "source": ".tmp/{{ user `distro_slug` }}",
+      "destination": "{{ user `salt_provision_root_dir` }}/",
       "direction": "upload"
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "sudo mkdir -p /etc/salt/minion.d",
-        "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
-      ]
-    },
-    {
-      "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
-      "custom_state": "noop-placeholder",
-      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      "script": "os-images/files/provision-system.sh",
+      "environment_vars": [
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
+        "SALT_STATE={{ user `state_name` }}"
       ],
-      "pause_after": "5s"
+      "pause_after": "5s",
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
-        "sudo rm -rf /tmp/* && sudo yum clean all"
-      ]
+        "yum clean all",
+        "rm -rf /var/cache/yum"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "script": "os-images/AWS/files/cleanup-linux.sh"
+      "script": "os-images/files/cleanup-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/AWS/files/cleanup-linux.sh",
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     }
   ],
   "post-processors": [

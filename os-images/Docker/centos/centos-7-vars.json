@@ -2,11 +2,12 @@
   "_comment": "Build with `packer build -var-file=centos-7-vars.json centos.json`",
   "docker_image": "centos:7",
   "docker_repository": "saltstack",
-  "build_type": "ci",
   "os_name": "CentOS",
   "os_version": "7",
   "run_command": "/usr/lib/systemd/systemd",
-  "bootstrap_args": "-qXUP",
-  "bootstrap_version": "3000.1",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
+  "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel",
   "state_name": "golden-images-provision"
 }

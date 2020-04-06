@@ -55,8 +55,6 @@
         "created-by": "packer",
         "Owner": "SRE",
         "Provision-State-Name": "{{ user `state_name` }}",
-        "Bootstrapped-Salt-Args": "{{ user `bootstrap_args` }}",
-        "Bootstrapped-Salt-Version": "{{ user `bootstrap_version` }}",
         "Promoted": false
       },
       "run_tags": {

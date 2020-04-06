@@ -79,74 +79,117 @@
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
-        "echo -n ''|sudo tee /etc/apt/apt.conf.d/20auto-upgrades",
-        "echo Sleeping 60 seconds for background updates to finish",
-        "sleep 60",
-        "sudo apt-get update -yq",
-        "if test -b /dev/nvme0n1; then sudo debconf-set-selections <<< 'grub-pc grub-pc/install_devices multiselect /dev/nvme0n1'; fi",
-        "sudo debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
-        "sudo apt-get upgrade -yq",
-        "sudo apt-get dist-upgrade -yq",
-        "sudo apt-get install -yq bash git vim ",
-        "sudo rm -rf /tmp/* /var/lib/apt/lists/*",
-        "sudo apt-get clean"
+        "echo -n ''|tee /etc/apt/apt.conf.d/20auto-upgrades",
+        "sleep 5",
+        "while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do",
+        "    echo Waiting for other software managers to finish... ",
+        "    sleep 1",
+        "done",
+        "apt-get update -yq",
+        "if test -b /dev/nvme0n1; then debconf-set-selections <<< 'grub-pc grub-pc/install_devices multiselect /dev/nvme0n1'; fi",
+        "debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
+        "apt-get upgrade -yq",
+        "apt-get dist-upgrade -yq",
+        "apt-get install -y bash git vim openssh-server curl sudo lsb-release locales",
+        "locale-gen en_US.UTF-8",
+        "update-locale LANG=en_US.UTF-8",
+        "apt-get update -yq"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
-      ]
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell-local",
       "script": "os-images/AWS/files/prep-linux.sh",
       "environment_vars": [
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}"
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
+      "inline": [
+        "# Install Pyenv Dependencies",
+        "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
+        "# Install PyEnv",
+        "curl https://pyenv.run | bash"
+      ],
+      "environment_vars": [
+        "LANG=en_US.UTF-8",
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/install-salt.sh",
+      "environment_vars": [
+        "LANG=en_US.UTF-8",
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
+      "inline": [
+        "# Un-Install Pyenv Dependencies",
+        "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
+        "apt-get autoremove --purge -y"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/minion",
-      "destination": "/tmp/overrides.conf",
+      "source": ".tmp/{{ user `distro_slug` }}",
+      "destination": "{{ user `salt_provision_root_dir` }}/",
       "direction": "upload"
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "sudo mkdir -p /etc/salt/minion.d",
-        "sudo mv /tmp/overrides.conf /etc/salt/minion.d/"
-      ]
-    },
-    {
-      "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
-      "custom_state": "noop-placeholder",
-      "bootstrap_args": "{{ user `bootstrap_args` }} git v{{ user `bootstrap_version` }}"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "sudo salt-call --local state.sls {{ user `state_name` }} --retcode-passthrough",
-        "sudo rm -rf /srv/pillar/* /tmp/pillar"
+      "script": "os-images/files/provision-system.sh",
+      "environment_vars": [
+        "LANG=en_US.UTF-8",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
+        "SALT_STATE={{ user `state_name` }}"
       ],
-      "pause_after": "5s"
+      "pause_after": "5s",
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
-        "sudo rm -rf /tmp/* /var/lib/apt/lists/* && sudo apt-get clean"
+        "rm -rf /var/lib/apt/lists/* && apt-get clean"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"
-      ]
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell",
-      "script": "os-images/AWS/files/cleanup-linux.sh"
+      "script": "os-images/files/cleanup-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/AWS/files/cleanup-linux.sh",
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     }
   ],
   "post-processors": [

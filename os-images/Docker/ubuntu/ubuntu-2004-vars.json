@@ -1,9 +1,9 @@
 {
-  "_comment": "Build with `packer build -var-file=ubuntu-1604-vars.json ubuntu.json`",
-  "docker_image": "ubuntu:16.04",
+  "_comment": "Build with `packer build -var-file=ubuntu-2004-vars.json ubuntu.json`",
+  "docker_image": "ubuntu:20.04",
   "docker_repository": "saltstack",
   "os_name": "Ubuntu",
-  "os_version": "1604",
+  "os_version": "2004",
   "run_command": "/lib/systemd/systemd",
   "salt_provision_version": "3000.1",
   "salt_provision_root_dir": "/tmp/salt-provision",

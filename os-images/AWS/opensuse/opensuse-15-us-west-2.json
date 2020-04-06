@@ -11,6 +11,5 @@
   "ami_owner": "679593333241",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "opensuse/15",
-  "instance_type": "m5.large",
-  "build_type": "ci"
+  "instance_type": "m5.large"
 }

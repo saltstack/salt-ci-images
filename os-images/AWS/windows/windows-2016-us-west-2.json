@@ -11,6 +11,5 @@
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "windows/2016",
   "instance_type": "c5.xlarge",
-  "build_type": "ci",
   "user_data_file": "os-images/AWS/windows/scripts/SetUpWinRM.ps1"
 }

@@ -11,6 +11,5 @@
   "ami_owner": "093273469852",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "arch/lts",
-  "instance_type": "m5.large",
-  "build_type": "ci"
+  "instance_type": "m5.large"
 }

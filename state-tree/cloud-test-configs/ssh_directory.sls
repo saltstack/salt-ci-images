@@ -1,11 +1,11 @@
 include:
-  - cloud-test-configs.digital_ocean
-  - cloud-test-configs.ec2
-  - cloud-test-configs.azure
-  - cloud-test-configs.joyent
-  - cloud-test-configs.gce
-  - cloud-test-configs.openstack
-  - cloud-test-configs.vultr
+  - .digital_ocean
+  - .ec2
+  - .azure
+  - .joyent
+  - .gce
+  - .openstack
+  - .vultr
 
 ssh-directory:
   file.directory:

@@ -1,5 +1,9 @@
 {
   "_comment": "Build with `packer build arch.json`",
+  "variables": {
+    "docker_username": "{{ env `DOCKER_USERNAME` }}",
+    "docker_password": "{{ env `DOCKER_PASSWORD` }}"
+  },
   "builders": [
     {
       "type": "docker",
@@ -90,7 +94,12 @@
         "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
         "tag": "latest"
       },
-      "docker-push"
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{ user `docker_username` }}",
+        "login_password": "{{ user `docker_password` }}"
+      }
     ]
   ]
 }

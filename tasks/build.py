@@ -216,6 +216,7 @@ def build_osx(ctx,
         distro_slug += '-{}'.format(distro_version)
 
     template_variations = [
+        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
         os.path.join(distro_dir, '{}.json'.format(distro))
     ]
     for variation in template_variations:
@@ -227,7 +228,8 @@ def build_osx(ctx,
                     ', '.join(template_variations))
 
     vars_variations = [
-        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
+        os.path.join(distro_dir, '{}-vars.json'.format(distro_slug)),
+        os.path.join(distro_dir, '{}-vars.json'.format(distro))
     ]
     for variation in vars_variations:
         if os.path.exists(variation):

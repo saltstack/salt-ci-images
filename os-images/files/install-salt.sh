@@ -9,9 +9,6 @@ export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-echo "Update Pyenv"
-pyenv update
-
 echo "Install Python ${SALT_PY_VERSION}"
 pyenv install -vv ${SALT_PY_VERSION}
 

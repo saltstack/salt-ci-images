@@ -99,7 +99,6 @@
       "type": "shell",
       "script": "os-images/files/cleanup-salt.sh",
       "environment_vars": [
-        "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
     },

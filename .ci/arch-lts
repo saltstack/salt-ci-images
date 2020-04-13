@@ -10,7 +10,7 @@ def nox_passthrough_opts = '-n integration.modules.test_pkg'
 def concurrent_builds = 1
 def use_spot_instances = true
 def jenkins_slave_label = 'kitchen-slave'
-def supports_py2 = true
+def supports_py2 = false
 def supports_py3 = true
 
 properties([

@@ -27,7 +27,6 @@ buildGoldenImage(
     run_full: true,
     use_spot_instances: false,
     jenkins_slave_label: jenkins_slave_label,
-    retry_failed_builds: false,
     concurrent_builds: concurrent_builds,
     ec2_region: 'us-west-2',
     supports_py2: supports_py2,

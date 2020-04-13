@@ -25,7 +25,6 @@ buildGoldenContainer(
     testrun_timeout: testrun_timeout,
     run_full: true,
     jenkins_slave_label: jenkins_slave_label,
-    retry_failed_builds: false,
     concurrent_builds: concurrent_builds,
     supports_py2: supports_py2,
     supports_py3: supports_py3)

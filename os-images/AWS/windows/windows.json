@@ -80,7 +80,8 @@
       "script": "os-images/AWS/files/prep-windows.sh",
       "environment_vars": [
         "SALT_PR={{ user `salt_pr` }}",
-        "DISTRO_SLUG={{ user `distro_slug` }}"
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
     },
     {
@@ -93,71 +94,55 @@
     },
     {
       "type": "powershell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "New-Item -Path C:\\salt\\conf\\minion.d -ItemType directory"
-      ]
+      "script": "os-images/AWS/windows/scripts/Install-Salt.ps1",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_PY_TARGET_DIR=C:\\salt",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ],
+      "elevated_user": "SYSTEM",
+      "elevated_password": ""
     },
     {
       "type": "file",
       "generated": true,
-      "source": ".tmp/{{ user `distro_slug` }}/minion",
-      "destination": "C:\\salt\\conf\\minion.d\\overrides.conf",
+      "source": ".tmp/{{ user `distro_slug` }}/",
+      "destination": "{{ user `salt_provision_root_dir` }}",
       "direction": "upload"
     },
     {
-      "type": "salt-masterless",
-      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
-      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
-      "custom_state": "noop-placeholder",
-      "guest_os_type": "windows",
-      "disable_sudo": true,
-      "salt_bin_dir": "c:\\salt",
-      "log_level": "debug",
-      "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
-    },
-    {
       "type": "powershell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "Get-ChildItem -Path C:/salt/state",
-        "Get-ChildItem -Path C:/salt/pillar",
-        "Write-Output \"Installing GitPython\"",
-        "salt-call -l debug --local --retcode-passthrough state.single pip.installed 'GitPython == 2.0.9'",
-        "Start-Sleep -Second 2",
-        "Write-Output \"Updating Windows Git Repos\"",
-        "salt-call -l debug --local --retcode-passthrough winrepo.update_git_repos",
-        "Start-Sleep -Second 2",
-        "Write-Output \"Refreshing Windows Package Database\"",
-        "salt-call -l debug --local --retcode-passthrough pkg.refresh_db verbose=True",
-        "Start-Sleep -Second 2",
-        "Write-Output \"Sync ALL\"",
-        "salt-call -l debug --local --retcode-passthrough saltutil.sync_all",
-        "Start-Sleep -Second 2",
-        "Write-Output \"Get Windows Repo Data\"",
-        "salt-call -l debug --local --retcode-passthrough pkg.get_repo_data",
-        "Start-Sleep -Second 2",
-        "Write-Output \"List Windows Repo States\"",
-        "Get-ChildItem -Path c:\\salt\\srv\\salt\\win\\repo-ng\\salt-winrepo-ng"
-      ]
-    },
-    {
-      "type": "powershell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "salt-call -l info --local --retcode-passthrough state.sls {{ user `state_name` }}"
-      ]
-    },
-    {
-      "type": "powershell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "Remove-Item C:\\salt\\state -Recurse -Force",
-        "Remove-Item C:\\salt\\pillar -Recurse -Force",
-        "Remove-Item C:\\salt\\srv\\salt -Recurse -Force",
-        "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
+      "script": "os-images/AWS/windows/scripts/Provision-System.ps1",
+      "environment_vars": [
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_PY_TARGET_DIR=C:\\salt",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
+        "SALT_STATE={{ user `state_name` }}"
       ],
-      "pause_before": "5s"
+      "elevated_user": "SYSTEM",
+      "elevated_password": ""
+    },
+    {
+      "type": "powershell",
+      "script": "os-images/AWS/windows/scripts/Uninstall-Salt.ps1",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_TARGET_DIR=C:\\salt"
+      ],
+      "elevated_user": "SYSTEM",
+      "elevated_password": ""
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Remove-Item $Env:SALT_ROOT_DIR -Recurse -Force",
+        "Remove-Item c:\\salt -Recurse -Force"
+      ],
+      "pause_before": "5s",
+      "environment_vars": [
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ]
     },
     {
       "type": "powershell",

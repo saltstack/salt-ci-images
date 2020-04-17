@@ -62,6 +62,7 @@ nox:
     - require:
       - pip-install
       - python3
+    - reload_modules: True
 
   {%- if not on_windows %}
 symlink-nox:

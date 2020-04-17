@@ -57,12 +57,11 @@ nox:
   {%- if not on_windows %}
     - name: "{{ pip }} install 'nox-py2=={{ nox_version }}'"
   {%- else %}
-    - name: {{ pip }} install -vv nox-py2=={{ nox_version }}
+    - name: {{ pip }} install -v --no-binary=:all: nox-py2=={{ nox_version }}
   {%- endif %}
     - require:
       - pip-install
       - python3
-    - reload_modules: True
 
   {%- if not on_windows %}
 symlink-nox:

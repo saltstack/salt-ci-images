@@ -33,7 +33,7 @@
 {%- endif %}
 
 {%- if on_windows %}
-  {%- set pip = 'py -3 -m pip' %}
+  {%- set pip = 'c:\\\\Python35\\\\python.exe -m pip' %}
 {%- else %}
   {%- if on_debian_8 %}
     {%- set pip = 'pip2' %}
@@ -71,13 +71,6 @@ symlink-nox:
     - onlyif: '[ -f /usr/local/bin/nox ]'
     - require:
       - nox
-  {%- else %}
-create-nox-bat-file:
-  file.managed:
-    - name: "{{ salt.cmd.run_stdout('Write-Output "${env:ProgramFiles}"', shell="powershell").replace('\\', '\\\\') }}\\nox.bat"
-    - contents:
-      - '@ echo off'
-      - 'py -3 -m nox %*'
   {%- endif %}
 
 nox-version:

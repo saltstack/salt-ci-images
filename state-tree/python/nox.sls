@@ -75,7 +75,11 @@ symlink-nox:
 
 nox-version:
   cmd.run:
+  {%- if not on_windows %}
     - name: 'nox --version'
+  {%- else %}
+    - name: 'c:\\\\Python35\\Scripts\\nox --version'
+  {%- endif %}
     - require:
       - nox
   {%- if grains['os'] == 'MacOS' %}

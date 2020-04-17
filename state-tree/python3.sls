@@ -102,8 +102,18 @@ python3:
     - aggregate: True
     {%- else %}
     - aggregate: False
+    - version: '3.7.4150.0'
+    - extra_install_flags: "TargetDir=C:\\Python37 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=0 PrependPath=1 Shortcuts=0"
+
+{#- Once we default windows to py3.7, switch to Include_launcher=1 above and delete the python35 state below #}
+python35:
+  pkg.installed:
+    - name: {{ python3 }}
+    - aggregate: False
     - version: '3.5.4150.0'
     - extra_install_flags: "TargetDir=C:\\Python35 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
+    - require:
+      - python3
     {%- endif %}
 
 {%- else %}

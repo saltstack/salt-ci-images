@@ -4,15 +4,7 @@
   {%- set patch = 'patch' %}
 {%- endif %}
 
-{%- if grains['os'] in ('Windows') %}
-  {%- set install_method = 'pip.installed' %}
-{%- else %}
-  {%- set install_method = 'pkg.installed' %}
-{%- endif %}
-
 patch:
-  {{ install_method }}:
+  pkg.installed:
     - name: {{ patch }}
-    {%- if install_method == 'pkg.installed' %}
     - aggregate: True
-    {%- endif %}

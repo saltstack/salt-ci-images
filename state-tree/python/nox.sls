@@ -71,6 +71,13 @@ symlink-nox:
     - onlyif: '[ -f /usr/local/bin/nox ]'
     - require:
       - nox
+  {%- else %}
+create-nox-bat-file:
+  file.managed:
+    - name: "{{ salt.cmd.run_stdout('Write-Output "${env:ProgramFiles}"', shell="powershell").replace('\\', '\\\\') }}\\nox.bat"
+    - contents:
+      - '@ echo off'
+      - 'py -3 -m nox %*'
   {%- endif %}
 
 nox-version:

@@ -104,16 +104,14 @@ python3:
     - aggregate: False
     - version: '3.5.4150.0'
     - extra_install_flags: "TargetDir=C:\\Python35 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
-    {%- endif %}
 
-{%- else %}
-
-{%- if on_windows %}
 append-python-scripts-directory-to-path:
   win_path.exists:
     - name: 'C:\\\\Python35\\Scripts'
     - index: 0
-{%- endif %}
+    {%- endif %}
+
+{%- else %}
 
 python3:
   test.succeed_without_changes

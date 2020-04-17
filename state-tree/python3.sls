@@ -108,6 +108,13 @@ python3:
 
 {%- else %}
 
+{%- if on_windows %}
+append-python-scripts-directory-to-path:
+  win_path.exists:
+    - name: 'C:\\\\Python35\\Scripts'
+    - index: 0
+{%- endif %}
+
 python3:
   test.succeed_without_changes
 

@@ -33,8 +33,7 @@
 {%- endif %}
 
 {%- if on_windows %}
-  {#- TODO: Maybe run this by powershell `py.exe -3 -c "import sys; print(sys.executable)"` #}
-  {%- set pip = 'c:\\\\Python35\\\\python.exe -m pip' %}
+  {%- set pip = 'py -3 -m pip' %}
 {%- else %}
   {%- if on_debian_8 %}
     {%- set pip = 'pip2' %}
@@ -48,15 +47,21 @@
 {%- endif %}
 include:
   - python-pip
+  - python3
 
 {%- set which_nox = 'nox' | which %}
 
 {%- if not which_nox %}
 nox:
   cmd.run:
+  {%- if not on_windows %}
     - name: "{{ pip }} install 'nox-py2=={{ nox_version }}'"
+  {%- else %}
+    - name: {{ pip }} install nox-py2=={{ nox_version }}
+  {%- endif %}
     - require:
       - pip-install
+      - python3
 
   {%- if not on_windows %}
 symlink-nox:

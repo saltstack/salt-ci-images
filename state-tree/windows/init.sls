@@ -1,5 +1,3 @@
-{%- set win_bootstrap = True %}
-
 include:
   - windows.git
   - windows.nsis

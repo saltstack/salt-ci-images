@@ -73,21 +73,13 @@ symlink-nox:
       - nox
   {%- endif %}
 
-windows-nox-version-1:
-  cmd.run:
-    - name: 'py -3.5 -m nox --version'
-    - require:
-      - nox
-
-windows-nox-version-2:
-  cmd.run:
-    - name: 'c:\\\\Python35\\Scripts\\nox --version'
-    - require:
-      - nox
-
 nox-version:
   cmd.run:
+  {%- if not on_windows %}
     - name: 'nox --version'
+  {%- else %}
+    - name: 'c:\\\\Python35\\Scripts\\nox --version'
+  {%- endif %}
     - require:
       - nox
   {%- if grains['os'] == 'MacOS' %}

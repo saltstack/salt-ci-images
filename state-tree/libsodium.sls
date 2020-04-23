@@ -40,7 +40,7 @@ include:
   - python3
   - python27
 
-  {%- set python3_dir = 'c:\\\\Python35' %}
+  {%- set python3_dir = 'c:\\\\Python37' %}
   {%- set python2_dir = 'c:\\\\Python27' %}
   {%- if grains['cpuarch'].lower() == 'x86' %}
     {%- set bits = 32 %}

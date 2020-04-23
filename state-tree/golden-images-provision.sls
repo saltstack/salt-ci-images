@@ -58,7 +58,7 @@ include:
   {%- endif %}
   {%- if os_family == 'Suse' %}
   {#- Yes! openSuse ships xml as separate package #}
-  - python.xml
+  - python-xml
   {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
   {%- endif %}

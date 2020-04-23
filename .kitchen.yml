@@ -36,7 +36,6 @@ provisioner:
     - Gemfile
     - Gemfile.lock
     - README.rst
-    - .travis.yml
 
 platforms:
   - name: arch
@@ -171,7 +170,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - git.minimal
+            - golden-images-provision
       pillars:
         top.sls:
           base:
@@ -218,7 +217,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - git.minimal
+            - golden-images-provision
       pillars:
         top.sls:
           base:

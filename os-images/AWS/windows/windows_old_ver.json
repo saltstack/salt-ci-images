@@ -1,0 +1,179 @@
+{
+  "_comment": "Build with `packer build windows.json`",
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{ user `aws_region` }}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "{{ user `ami_filter` }}",
+          "root-device-type": "ebs",
+          "state": "available"
+        },
+        "owners": [
+          "801119661308"
+        ],
+        "most_recent": true
+      },
+      "subnet_filter": {
+        "filters": {
+          "tag:Name": "*-public-*"
+        },
+        "most_free": true,
+        "random": false
+      },
+      "vpc_filter": {
+        "filters": {
+          "tag:Name": "test"
+        }
+      },
+      "security_group_filter": {
+        "filters": {
+          "group-name": "kitchen-slave-auto-delete-test"
+        }
+      },
+      "instance_type": "{{ user `instance_type` }}",
+      "ssh_interface": "private_ip",
+      "ssh_keypair_name": "kitchen",
+      "ssh_private_key_file": "~/.ssh/kitchen.pem",
+      "user_data_file": "{{ user `user_data_file` }}",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_use_ssl": true,
+      "winrm_insecure": true,
+      "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ isotime \"2006-01-02-15-04-05\" }}",
+      "ami_users": [
+        "883373499178",
+        "540082622920",
+        "989543020150",
+        "178480506716"
+      ],
+      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
+      "tags": {
+        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}",
+        "OS-Name": "{{ user `os_name` }}",
+        "OS-Version": "{{ user `os_version` }}",
+        "Build-Date": "{{ isotime }}",
+        "Build-Type": "{{ user `build_type` | upper }}",
+        "created-by": "packer",
+        "Owner": "SRE",
+        "Provision-State-Name": "{{ user `state_name` }}",
+        "Promoted": false
+      },
+      "run_tags": {
+        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} Builder",
+        "created-by": "packer",
+        "Owner": "SRE"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "script": "os-images/AWS/windows/scripts/InstallAndConfigureOpenSSH.ps1",
+      "elevated_user": "SYSTEM",
+      "elevated_password": ""
+    },
+    {
+      "type": "shell-local",
+      "script": "os-images/AWS/files/prep-windows.sh",
+      "environment_vars": [
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}"
+      ]
+    },
+    {
+      "type": "powershell",
+      "script": "os-images/AWS/windows/scripts/Install-Git.ps1"
+    },
+    {
+      "type": "powershell",
+      "script": "os-images/AWS/files/update-git-path.ps1"
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "New-Item -Path C:\\salt\\conf\\minion.d -ItemType directory"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}/minion",
+      "destination": "C:\\salt\\conf\\minion.d\\overrides.conf",
+      "direction": "upload"
+    },
+    {
+      "type": "salt-masterless",
+      "local_state_tree": ".tmp/{{ user `distro_slug` }}/states",
+      "local_pillar_roots": ".tmp/{{ user `distro_slug` }}/pillar",
+      "custom_state": "windows.repo",
+      "guest_os_type": "windows",
+      "disable_sudo": true,
+      "salt_bin_dir": "c:\\salt",
+      "bootstrap_args": "{{ user `bootstrap_args` }} -version {{ user `bootstrap_version` }}"
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "salt-call --local --retcode-passthrough  state.single module.run winrepo.update_git_repos clean=True",
+        "salt-call --local --retcode-passthrough  state.single module.run winrepo.genrepo"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "salt-call --local --retcode-passthrough  state.single module.run pkg.refresh_db failhard=True"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "salt-call --local --retcode-passthrough state.sls windows.compiler"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "salt-call --local --retcode-passthrough state.sls {{ user `state_name` }}",
+        "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "Remove-Item C:\\salt\\state -Recurse -Force",
+        "Remove-Item C:\\salt\\pillar -Recurse -Force",
+        "Remove-Item C:\\salt\\srv\\salt -Recurse -Force",
+        "Remove-Item C:\\salt\\srv\\pillar -Recurse -Force"
+      ],
+      "pause_before": "5s"
+    },
+    {
+      "type": "powershell",
+      "script": "os-images/AWS/windows/scripts/SysPrep.ps1"
+    },
+    {
+      "type": "shell-local",
+      "command": "echo Done",
+      "pause_before": "5s"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "manifest.json",
+      "strip_path": true,
+      "custom_data": {
+        "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}"
+      }
+    }
+  ]
+}

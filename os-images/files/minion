@@ -1,0 +1,9 @@
+# vim: set ft=yaml ts=2 sts=2 et:
+id: salt-provision-minion
+log_datefmt: '%H:%M:%S'
+log_fmt_console: "[%(levelname)-8s][%(name)-5s:%(lineno)-4d] %(message)s"
+log_fmt_logfile: '%(asctime)s,%(msecs)03.0f [%(name)-5s:%(lineno)-4d][%(levelname)-8s] %(message)s'
+minion_id_caching: false
+cachedir: cache
+pki_dir: pki
+log_file: logs/minion.log

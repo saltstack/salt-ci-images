@@ -1,0 +1,18 @@
+{
+  "_comment": "Build with `packer build -var-file=centos-7-us-west-2.json centos.json`",
+  "ssh_username": "centos",
+  "aws_region": "us-west-2",
+  "os_name": "CentOS",
+  "os_version": "7",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
+  "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel",
+  "state_name": "golden-images-provision",
+  "ami_filter": "CentOS Linux 7 x86_64 HVM EBS ENA *",
+  "ami_owner": "679593333241",
+  "ami_productcode": "aw0evgkw8e5c1q413zgy5pjce",
+  "ami_name_prefix": "saltstack",
+  "ami_name_suffix": "centos/7",
+  "instance_type": "m5.large"
+}

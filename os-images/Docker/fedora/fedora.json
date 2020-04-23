@@ -1,0 +1,133 @@
+{
+  "_comment": "Build with `packer build fedora.json`",
+  "variables": {
+    "docker_username": "{{ env `DOCKER_USERNAME` }}",
+    "docker_password": "{{ env `DOCKER_PASSWORD` }}"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "{{ user `docker_image` }}",
+      "pull": true,
+      "commit": true,
+      "changes": [
+        "Entrypoint [\"/bin/sh\", \"-c\"]",
+        "CMD [\"/bin/bash\"]",
+        "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}\"",
+        "LABEL OS-Name={{ user `os_name` }}",
+        "LABEL OS-Version={{ user `os_version` }}",
+        "LABEL BuildDate={{ isotime }}",
+        "LABEL BuildType={{ user `build_type` | upper }}",
+        "LABEL CreatedBy=packer",
+        "LABEL Owner=SRE",
+        "LABEL Description=\"{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}\""
+      ],
+      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} on {{ isotime }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "dnf update -y",
+        "dnf install -y git vim sudo openssh-server dbus curl"
+      ]
+    },
+    {
+      "type": "shell-local",
+      "script": "os-images/Docker/files/prep-linux.sh",
+      "environment_vars": [
+        "SALT_PR={{ user `salt_pr` }}",
+        "DISTRO_SLUG={{ user `distro_slug` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "# Install Pyenv Dependencies",
+        "dnf install -y {{ user `salt_provision_pyenv_deps` }}",
+        "# Install PyEnv",
+        "curl https://pyenv.run | bash"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/install-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "# Un-Install Pyenv Dependencies",
+        "dnf autoremove -y {{ user `salt_provision_pyenv_deps` }}"
+      ]
+    },
+    {
+      "type": "file",
+      "generated": true,
+      "source": ".tmp/{{ user `distro_slug` }}",
+      "destination": "{{ user `salt_provision_root_dir` }}/",
+      "direction": "upload"
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/provision-system.sh",
+      "environment_vars": [
+        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
+        "SALT_STATE={{ user `state_name` }}"
+      ],
+      "pause_after": "5s"
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/sh -ex",
+      "inline": [
+        "dnf clean all",
+        "rm -rf /var/cache/yum"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "os-images/files/cleanup-salt.sh",
+      "environment_vars": [
+        "SALT_VERSION={{ user `salt_provision_version` }}",
+        "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "os-images/Docker/files/cleanup-linux.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "manifest.json",
+      "strip_path": true,
+      "custom_data": {
+        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}"
+      }
+    },
+    [
+      {
+        "type": "docker-tag",
+        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
+        "tag": "latest"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{ user `docker_username` }}",
+        "login_password": "{{ user `docker_password` }}"
+      }
+    ]
+  ]
+}

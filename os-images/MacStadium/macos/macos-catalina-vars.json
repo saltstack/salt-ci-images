@@ -1,0 +1,13 @@
+{
+  "_comment": "Build with `packer build -var-file=macos-catalina-vars.json macos.json`",
+  "box_name": "catalina",
+  "box_version": "1.0",
+  "source_box_name": "catalina-clean",
+  "ssh_username": "vagrant",
+  "os_name": "macos",
+  "os_version": "10.15",
+  "salt_provision_version": "3000.1",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
+  "state_name": "golden-images-provision"
+}

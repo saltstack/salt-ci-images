@@ -1,4 +1,0 @@
-include:
-  - keystone
-  - glance
-  - nova

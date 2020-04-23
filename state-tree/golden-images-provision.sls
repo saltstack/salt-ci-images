@@ -33,7 +33,6 @@ include:
     {%- if not on_docker or (on_docker and grains['os_family'] in ('Suse', 'RedHat', 'Debian')) %}
   - locale
     {%- endif %}
-  - python
   - gcc
   {%- endif %}
   - libsodium
@@ -57,8 +56,6 @@ include:
     {%- endif %}
   {%- endif %}
   {%- if os_family == 'Suse' %}
-  {#- Yes! openSuse ships xml as separate package #}
-  - python.xml
   {%- if not grains['osrelease'].startswith('15') %}
   - python-zypp
   {%- endif %}

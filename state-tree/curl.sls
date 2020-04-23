@@ -16,7 +16,7 @@ include:
   {%- if grains['os'] == 'openSUSE' %}
    - ca-certificates-mozilla
   {%- elif grains['os_family'] == 'RedHat' %}
-   - python.ca-certificates
+   - ca-certificates
   {%- endif %}
 {%- endif %}
 

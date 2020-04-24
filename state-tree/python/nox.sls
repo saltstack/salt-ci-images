@@ -78,7 +78,7 @@ nox-version:
   {%- if not on_windows %}
     - name: 'nox --version'
   {%- else %}
-    - name: 'c:\\\\Python35\\Scripts\\nox --version'
+    - name: 'c:\\\\Python37\\Scripts\\nox --version'
   {%- endif %}
     - require:
       - nox

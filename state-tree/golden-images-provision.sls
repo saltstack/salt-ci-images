@@ -19,6 +19,12 @@ include:
   - man
   - libcurl
   - ulimits
+  - libxml
+  - libxslt
+  - libffi
+    {%- if grains['os'] not in ('Amazon',) %}
+  - libgit2
+    {%- endif %}
   {%- endif %}
   # All VMs get docker-py so they can run unit tests
   {%- if grains['os'] == 'CentOS' and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}

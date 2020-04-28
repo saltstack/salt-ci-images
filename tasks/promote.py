@@ -7,6 +7,7 @@ Promote an AWS AMI
 '''
 
 # Import Python Libs
+import os
 import sys
 
 # Import invoke libs

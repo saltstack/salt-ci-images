@@ -112,7 +112,7 @@ def build_aws(ctx,
         cmd += ' -var build_type=ci-staging'
     else:
         cmd += ' -var build_type=ci'
-    if salt_pr:
+    if salt_pr and salt_pr.lower() != "null":
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True)
@@ -192,7 +192,7 @@ def build_docker(ctx,
         cmd += ' -var build_type=ci-staging'
     else:
         cmd += ' -var build_type=ci'
-    if salt_pr:
+    if salt_pr and salt_pr.lower() != "null":
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True)
@@ -358,7 +358,7 @@ def build_osx(ctx,
         cmd += ' -var build_type=ci-staging'
     else:
         cmd += ' -var build_type=ci'
-    if salt_pr:
+    if salt_pr and salt_pr.lower() != "null":
         cmd += ' -var salt_pr={}'.format(salt_pr)
     cmd += ' -var boxes_cache_dir={}'.format(boxes_cache_dir)
     cmd += ' -var source_box_name={}'.format(source_box_name)

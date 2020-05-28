@@ -70,11 +70,8 @@
       "inline_shebang": "/bin/sh",
       "inline": [
         "ASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes",
-        "pkg install bash git sudo",
+        "pkg install bash curl git sudo",
         "echo 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers"
-      ],
-      "environment_vars": [
-        "DEBIAN_FRONTEND=noninteractive"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
@@ -89,39 +86,11 @@
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "# Install Pyenv Dependencies",
-        "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
-        "# Install PyEnv",
-        "curl https://pyenv.run | bash"
-      ],
-      "environment_vars": [
-        "LANG=en_US.UTF-8",
-        "DEBIAN_FRONTEND=noninteractive"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
       "script": "os-images/files/install-salt.sh",
       "environment_vars": [
         "LANG=en_US.UTF-8",
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "# Un-Install Pyenv Dependencies",
-        "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
-        "apt-get autoremove --purge -y"
-      ],
-      "environment_vars": [
-        "DEBIAN_FRONTEND=noninteractive"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
@@ -142,17 +111,6 @@
         "SALT_STATE={{ user `state_name` }}"
       ],
       "pause_after": "5s",
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "rm -rf /var/lib/apt/lists/* && apt-get clean"
-      ],
-      "environment_vars": [
-        "DEBIAN_FRONTEND=noninteractive"
-      ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
     {

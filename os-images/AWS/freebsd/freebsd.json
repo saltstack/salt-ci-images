@@ -71,7 +71,7 @@
       "inline_shebang": "/bin/sh",
       "inline": [
         "ASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes",
-        "pkg install bash curl git sudo",
+        "pkg install -y zsh bash curl git sudo",
         "echo 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"

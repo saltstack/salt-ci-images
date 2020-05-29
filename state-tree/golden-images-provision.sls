@@ -49,7 +49,7 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
-  {%- if grains['os_family'] in ('FreeBSD') %}
+  {%- if grains['os_family'] in ('FreeBSD',) %}
   - openldap
   - rsync
   - swig

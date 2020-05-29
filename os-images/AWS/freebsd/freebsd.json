@@ -87,6 +87,15 @@
     },
     {
       "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
+      "inline": [
+        "# Install PyEnv",
+        "curl https://pyenv.run | bash"
+      ],
+      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
       "script": "os-images/files/install-salt.sh",
       "environment_vars": [
         "LANG=en_US.UTF-8",

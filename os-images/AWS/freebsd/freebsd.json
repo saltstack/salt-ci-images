@@ -87,7 +87,7 @@
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
+      "inline_shebang": "/usr/local/bin/bash -ex",
       "inline": [
         "# Install PyEnv",
         "curl https://pyenv.run | bash"

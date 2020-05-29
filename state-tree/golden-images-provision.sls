@@ -49,18 +49,15 @@ include:
   - sed
   {%- endif %}
   {%- if grains['os'] not in ('MacOS', 'Windows') %}
-  {%- if grains['os_family'] in ('FreeBSD',) %}
-  - openldap
-  - rsync
-  - swig
-  {%- endif %}
   {%- if grains['os_family'] in ('Arch', 'Debian', 'Suse', 'RedHat') %}
     {%- if grains['os'] != 'CentOS' or (grains['os'] == 'CentOS' and os_major_release > 6) %} {#- Don't install openldap on CentOS 6 #}
   - openldap
     {%- endif %}
   {%- endif %}
   - dnsutils
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - rsync
+  {%- endif %}
   - tar
   - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}

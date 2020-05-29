@@ -19,6 +19,12 @@ mac_locale:
 {%- endif %}
 
 {%- if grains['os'] in ('FreeBSD',) %}
+/root/.bash_profile:
+  file.managed:
+    - user: root
+    - group: wheel
+    - mode: '0644'
+
 freebsd_locale:
   file.blockreplace:
     - name: /root/.bash_profile

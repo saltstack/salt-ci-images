@@ -16,7 +16,7 @@ mac_locale:
     - content: |
         export LANG=en_US.UTF-8
     - append_if_not_found: true
-{%- else %}
+{%- endif %}
 
 {%- if grains['os'] in ('FreeBSD',) %}
 freebsd_locale:

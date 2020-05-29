@@ -8,6 +8,9 @@ openldap:
       - libdpkg-perl
     {%- elif grains['os_family'] == 'RedHat' %}
       - openldap-devel
+    {%- elif grains['os_family'] == 'FreeBSD' %}
+      - openldap-client
+      - openldap-server
     {%- elif grains['os_family'] == 'Suse' %}
       - openldap2-devel
       - cyrus-sasl-devel

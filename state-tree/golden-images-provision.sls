@@ -55,10 +55,10 @@ include:
     {%- endif %}
   {%- endif %}
   - dnsutils
-  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - rsync
-  {%- endif %}
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - tar
+  {%- endif %}
   - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap

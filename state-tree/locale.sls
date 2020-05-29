@@ -18,6 +18,16 @@ mac_locale:
     - append_if_not_found: true
 {%- else %}
 
+{%- if grains['os'] in ('FreeBSD',) %}
+freebsd_locale:
+  file.blockreplace:
+    - name: /root/.bash_profile
+    - marker_start: '#------ start locale zone ------'
+    - marker_end: '#------ endlocale zone ------'
+    - content: |
+        export LANG=en_US.UTF-8
+    - append_if_not_found: true
+{%- else %}
 
 {%- if on_suse %}
 suse_local:
@@ -71,10 +81,11 @@ us_locale:
   locale.present:
     - name: en_US.UTF-8
 
+{%- if grains['os_family'] not in ('FreeBSD',) %}
 default_locale:
   locale.system:
     - name: en_US.UTF-8
     - require:
       - locale: us_locale
-
+  {%- endif %}
 {%- endif %}

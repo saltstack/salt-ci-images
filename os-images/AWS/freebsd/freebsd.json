@@ -33,7 +33,7 @@
           "group-name": "kitchen-slave-auto-delete-test"
         }
       },
-      "user_data": "#!/bin/sh\nASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes pkg install bash sudo\necho 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers\necho 'firstboot_freebsd_update_enable=\"NO\"'>>/etc/rc.conf",
+      "user_data": "#!/bin/sh\nASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes pkg install bash sudo\necho 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers\necho 'firstboot_freebsd_update_enable=NO'>>/etc/rc.conf",
       "instance_type": "{{ user `instance_type` }}",
       "ssh_interface": "private_ip",
       "ssh_username": "{{ user `ssh_username` }}",

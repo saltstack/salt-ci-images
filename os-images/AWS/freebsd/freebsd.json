@@ -71,7 +71,7 @@
       "inline_shebang": "/bin/sh",
       "inline": [
         "ASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes",
-        "pkg install -y bash curl git libxml2 libxslt libgit2 py-pygit2 libzmq4 libunwind sudo",
+        "pkg install -y bash curl git libxml2 libxslt libgit2 py37-pygit2 libzmq4 libunwind sudo",
         "echo 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"

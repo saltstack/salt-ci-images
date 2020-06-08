@@ -56,7 +56,9 @@ include:
   {%- endif %}
   - dnsutils
   - rsync
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
   - tar
+  {%- endif %}
   - swig  {#- Swig is required to install m2crypto #}
     {%- if pillar.get('extra-swap', True) %}
   - extra-swap
@@ -73,7 +75,7 @@ include:
   {%- if grains['os'] == 'Arch' or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('16.')) %}
   - lxc
   {%- endif %}
-  {%- if (grains['os'] not in ['Amazon', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
+  {%- if (grains['os'] not in ['Amazon', 'FreeBSD', 'Debian', 'Ubuntu', 'SUSE', 'openSUSE', 'Windows'] and not grains['osrelease'].startswith('5.')) or (grains['os'] == 'Ubuntu' and grains['osrelease'].startswith('14.')) %}
   - npm
   - bower
   {%- endif %}

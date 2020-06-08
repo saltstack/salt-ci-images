@@ -32,6 +32,12 @@
   {%- set on_windows=False %}
 {%- endif %}
 
+{%- if os_family == 'FreeBSD' %}
+  {%- set on_freebsd=True %}
+{%- else %}
+  {%- set on_freebsd=False %}
+{%- endif %}
+
 {%- if on_windows %}
   {%- set pip = 'py -3 -m pip' %}
 {%- else %}
@@ -39,6 +45,8 @@
     {%- set pip = 'pip2' %}
   {%- elif on_redhat_6 %}
     {%- set pip = 'pip2.7' %}
+  {%- elif on_freebsd %}
+    {%- set pip = 'pip-3.7' %}
   {%- elif on_amazonlinux_1 or on_debian_8 %}
     {%- set pip = 'pip-3.6' %}
   {%- else %}

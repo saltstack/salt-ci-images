@@ -41,11 +41,8 @@
       "ssh_keypair_name": "kitchen",
       "ssh_private_key_file": "~/.ssh/kitchen.pem",
       "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ isotime \"2006-01-02-15-04-05\" }}",
-      "ami_users": [
-        "883373499178",
-        "540082622920",
-        "989543020150",
-        "178480506716"
+      "ami_groups": [
+        "all"
       ],
       "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
       "tags": {

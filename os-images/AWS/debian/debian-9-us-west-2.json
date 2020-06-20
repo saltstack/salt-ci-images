@@ -11,7 +11,7 @@
   "salt_provision_pyenv_deps": "make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev",
   "state_name": "golden-images-provision",
   "ami_filter": "debian-stretch-hvm-x86_64-*",
-  "ami_owner": "679593333241",
+  "ami_owner": "379101102735",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "debian/9",
   "instance_type": "m5.large"

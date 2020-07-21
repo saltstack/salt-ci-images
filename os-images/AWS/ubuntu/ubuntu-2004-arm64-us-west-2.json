@@ -1,0 +1,18 @@
+{
+  "_comment": "Build with `packer build -var-file=ubuntu-2004-arm64-us-west-2.json ubuntu.json`",
+  "ssh_username": "ubuntu",
+  "aws_region": "us-west-2",
+  "os_name": "Ubuntu",
+  "os_version": "2004",
+  "os_arch": "arm64",
+  "salt_provision_version": "3002.2",
+  "salt_provision_root_dir": "/tmp/salt-provision",
+  "salt_provision_python_version": "3.6.10",
+  "salt_provision_pyenv_deps": "make build-essential libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgit2-dev",
+  "state_name": "golden-images-provision",
+  "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-*",
+  "ami_owner": "099720109477",
+  "ami_name_prefix": "saltstack",
+  "ami_name_suffix": "ubuntu/2004/arm64",
+  "instance_type": "m6g.large"
+}

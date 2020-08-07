@@ -4,7 +4,7 @@
   "aws_region": "us-west-2",
   "os_name": "Amazon Linux",
   "os_version": "2",
-  "salt_provision_version": "3000.1",
+  "salt_provision_version": "3001",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
   "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel",

@@ -39,11 +39,8 @@
       "ssh_keypair_name": "kitchen",
       "ssh_private_key_file": "~/.ssh/kitchen.pem",
       "ami_name": "{{ user `ami_name_prefix` }}/{{ user `build_type` }}/{{ user `ami_name_suffix` }}/{{ isotime \"2006-01-02-15-04-05\" }}",
-      "ami_users": [
-        "883373499178",
-        "540082622920",
-        "989543020150",
-        "178480506716"
+      "ami_groups": [
+        "all"
       ],
       "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
       "tags": {
@@ -78,14 +75,14 @@
       "inline_shebang": "/bin/bash -ex",
       "inline": [
         "echo -n ''|tee /etc/apt/apt.conf.d/20auto-upgrades",
-        "sleep 5",
+        "sleep 30",
         "while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do",
         "    echo Waiting for other software managers to finish... ",
-        "    sleep 1",
+        "    sleep 10",
         "done",
-        "apt-get update -yq",
         "if test -b /dev/nvme0n1; then debconf-set-selections <<< 'grub-pc grub-pc/install_devices multiselect /dev/nvme0n1'; fi",
         "debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
+        "apt-get update -yq",
         "apt-get upgrade -yq",
         "apt-get dist-upgrade -yq",
         "apt-get install -y bash git vim openssh-server curl sudo lsb-release locales",

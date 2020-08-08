@@ -16,9 +16,8 @@ mac_locale:
     - content: |
         export LANG=en_US.UTF-8
     - append_if_not_found: true
-{%- endif %}
 
-{%- if grains['os'] in ('FreeBSD',) %}
+{%- elif grains['os'] in ('FreeBSD',) %}
 /root/.bash_profile:
   file.managed:
     - user: root
@@ -35,19 +34,19 @@ freebsd_locale:
     - append_if_not_found: true
 {%- else %}
 
-{%- if on_suse %}
+  {%- if on_suse %}
 suse_local:
   pkg.installed:
     - pkgs:
       - glibc-locale
       - dbus-1
 
-  {%- if not on_docker %}
+    {%- if not on_docker %}
   service.running:
     - name: dbus.socket
     - onlyif: systemctl daemon-reload
-  {%- endif %}
-{%- elif grains.os_family == 'Debian' %}
+    {%- endif %}
+  {%- elif grains.os_family == 'Debian' %}
 deb_locale:
   file.touch:
     - name: /etc/default/keyboard  # ubuntu is stupid and this file has to exist for systemd-localed to be able to run
@@ -56,44 +55,43 @@ deb_locale:
       - locales
       - console-data
       - dbus
-  {%- if grains.get('init') == 'systemd' %}
+    {%- if grains.get('init') == 'systemd' %}
   service.running:
     - names:
       - dbus.socket
       - systemd-localed.service
+    {%- endif %}
   {%- endif %}
-{%- endif %}
 
-{%- if on_arch %}
+  {%- if on_arch %}
 accept_LANG_sshd:
   file.append:
     - name: /etc/ssh/sshd_config
     - text: AcceptEnv LANG
-  {%- if not pillar.get('packer_golden_images_build', False) %}
+    {%- if not pillar.get('packer_golden_images_build', False) %}
   service.running:
     - name: sshd
     - listen:
       - file: accept_LANG_sshd
+    {%- endif %}
   {%- endif %}
-{%- endif %}
 
 # Fedora and Centos 8
-{%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] != 7 %}
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] != 7 %}
 redhat_locale:
   pkg.installed:
     - name: glibc-langpack-en
-{%- endif %}
+  {%- endif %}
 
 us_locale:
   locale.present:
     - name: en_US.UTF-8
 
-{%- if grains['os_family'] not in ('FreeBSD',) %}
+  {%- if grains['os_family'] not in ('FreeBSD',) %}
 default_locale:
   locale.system:
     - name: en_US.UTF-8
     - require:
       - locale: us_locale
-{%- endif %}
-
+  {%- endif %}
 {%- endif %}

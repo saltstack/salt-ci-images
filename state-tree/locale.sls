@@ -77,8 +77,9 @@ accept_LANG_sshd:
   {%- endif %}
 {%- endif %}
 
-{%- if grains['os'] == 'Fedora' %}
-fedora_locale:
+# Fedora and Centos 8
+{%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] != 7 %}
+redhat_locale:
   pkg.installed:
     - name: glibc-langpack-en
 {%- endif %}

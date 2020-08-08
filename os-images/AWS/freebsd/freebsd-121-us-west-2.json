@@ -4,7 +4,7 @@
   "aws_region": "us-west-2",
   "os_name": "FreeBSD",
   "os_version": "121",
-  "salt_provision_version": "3001",
+  "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
   "salt_provision_pyenv_deps": "",

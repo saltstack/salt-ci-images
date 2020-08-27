@@ -2,7 +2,7 @@
   "_comment": "Build with `packer build -var-file=arm64-ubuntu-2004-us-west-2.json ubuntu.json`",
   "ssh_username": "ubuntu",
   "aws_region": "us-west-2",
-  "os_name": "Ubuntu",
+  "os_name": "Arm64 Ubuntu",
   "os_version": "2004",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
@@ -12,6 +12,6 @@
   "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-*",
   "ami_owner": "099720109477",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "ubuntu/2004",
+  "ami_name_suffix": "arm64/ubuntu/2004",
   "instance_type": "m6g.large"
 }

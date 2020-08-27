@@ -4,6 +4,7 @@ include:
   - .azure
   - .joyent
   - .gce
+  - .libvirt
   - .openstack
   - .vultr
 
@@ -20,5 +21,6 @@ ssh-directory:
       - file: azure-key
       - file: joyent-key
       - file: gce-key
+      - file: libvirt-key
       - file: rackspace-key
       - file: vultr-key

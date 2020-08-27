@@ -171,6 +171,29 @@ joyent-provider:
           known_hosts_file: /dev/null
     - show_changes: False
 
+libvirt-provider:
+  file.managed:
+    - name: {{ config_path }}libvirt.conf
+    - contents: |
+        libvirt-config:
+          driver: libvirt
+          url: {{ salt['pillar.get']('libvirt:url') }}
+          minion:
+            master_type: str
+          known_hosts_file: /dev/null
+    - show_changes: False
+
+libvirt-profile:
+  file.managed:
+    - name: {{ profile_config_path }}libvirt.conf
+    - contents: |
+        libvirt-test:
+          provider: libvirt-config
+          base_domain: {{ salt['pillar.get']('libvirt:base_domain') }}
+          ssh_username: {{ salt['pillar.get']('libvirt:ssh_username') }}
+          password: {{ salt['pillar.get']('libvirt:password') }}
+    - show_changes: False
+
 linode-provider:
   file.managed:
     - name: {{ config_path }}linode.conf

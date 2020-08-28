@@ -13,10 +13,12 @@
 #  openSUSE  -->  obs://build.opensuse.org/devel:libraries:c_c++
 # Solution 2: do not install libsodium-devel-1.0.18-lp151.78.1.x86_64
 # Solution 3: break libsodium-devel-1.0.18-lp151.78.1.x86_64 by ignoring some of its dependencies
-      #}
+
+# Note that Cloud-Tools is not included in 15.2 so we commented this out
 'zypper mr -d openSUSE-Leap-Cloud-Tools':
   cmd.run:
     - order: 1
+    #}
     {%- endif %}
   {%- elif grains['os'] in ('Debian', 'Ubuntu') %}
     {%- set libsodium = 'libsodium-dev' %}

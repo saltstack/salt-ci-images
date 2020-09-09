@@ -1,5 +1,6 @@
 include:
   - windows.git
+  - windows.7zip
   - windows.nsis
   - windows.ca_roots
   - windows.compiler

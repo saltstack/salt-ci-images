@@ -1,13 +1,13 @@
 @Library('salt@master-1.8-golden') _
 
 // Define the maximum time, in hours, that a test run should run for
-def testrun_timeout = 6
+def testrun_timeout = 8
 
-def distro_name = 'debian'
-def distro_version = '9'
+def distro_name = 'windows'
+def distro_version = '2019'
 def nox_env_name = 'runtests-zeromq'
-def nox_passthrough_opts = '--ssh-tests'
-def concurrent_builds = 1
+def nox_passthrough_opts = '--unit'
+def concurrent_builds = 2
 def use_spot_instances = true
 def jenkins_slave_label = 'kitchen-slave'
 def supports_py2 = false
@@ -24,7 +24,7 @@ buildGoldenImage(
     nox_env_name: nox_env_name,
     nox_passthrough_opts: nox_passthrough_opts,
     testrun_timeout: testrun_timeout,
-    run_full: true,
+    force_run_full: true,
     use_spot_instances: false,
     jenkins_slave_label: jenkins_slave_label,
     concurrent_builds: concurrent_builds,

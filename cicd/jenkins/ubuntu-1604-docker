@@ -23,7 +23,7 @@ buildGoldenContainer(
     nox_env_name: nox_env_name,
     nox_passthrough_opts: nox_passthrough_opts,
     testrun_timeout: testrun_timeout,
-    run_full: true,
+    force_run_full: true,
     jenkins_slave_label: jenkins_slave_label,
     concurrent_builds: concurrent_builds,
     supports_py2: supports_py2,

@@ -202,10 +202,33 @@ linode-provider:
           apikey: {{ salt['pillar.get']('linode:apikey', '') }}
           password: {{ salt['pillar.get']('linode:password', '') }}
           driver: linode
-          location: Fremont, CA, USA
           minion:
             master_type: str
           known_hosts_file: /dev/null
+        linode-config-v4:
+          apikey: {{ salt['pillar.get']('linode:apikey-v4', '') }}
+          password: {{ salt['pillar.get']('linode:password', '') }}
+          driver: linode
+          api_version: v4
+          minion:
+            master_type: str
+          known_hosts_file: /dev/null
+    - show_changes: False
+
+linode-profile:
+  file.managed:
+    - name: {{ profile_config_path }}linode.conf
+    - contents: |
+        linode-test:
+          provider: linode-config
+          size: Linode 2GB
+          image: Ubuntu 20.04 LTS
+          location: Fremont, CA, USA
+        linode-test-v4:
+          provider: linode-config-v4
+          size: g6-standard-1
+          image: linode/ubuntu20.04
+          location: us-west
     - show_changes: False
 
 {#- "<=2017.7" #}

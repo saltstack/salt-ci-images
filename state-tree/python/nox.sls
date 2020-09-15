@@ -1,4 +1,4 @@
-{%- set nox_version = '2019.6.25' %}
+{%- set nox_version = '2020.8.22' %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
@@ -63,9 +63,9 @@ include:
 nox:
   cmd.run:
   {%- if not on_windows %}
-    - name: "{{ pip }} install 'nox-py2=={{ nox_version }}'"
+    - name: "{{ pip }} install 'nox=={{ nox_version }}'"
   {%- else %}
-    - name: {{ pip }} install nox-py2=={{ nox_version }}
+    - name: {{ pip }} install nox=={{ nox_version }}
   {%- endif %}
     - require:
       - pip-install

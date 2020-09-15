@@ -17,8 +17,9 @@ azure-provider:
           cleanup_services: True
           minion:
             master_type: str
-          username: {{ salt['pillar.get']('azure:login_username', '') }}
-          password: {{ salt['pillar.get']('azure:login_passwd', '') }}
+          tenant: '{{ salt['pillar.get']('azure:tenant', '') }}'
+          client_id: '{{ salt['pillar.get']('azure:client_id', '') }}'
+          secret: '{{ salt['pillar.get']('azure:secret', '') }}'
           location: westus
           allocate_public_ip: True
           network_resource_group: saltstack

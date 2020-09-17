@@ -1,29 +1,11 @@
-{%- set nox_version = '2019.6.25' %}
+{%- set os = salt['grains.get']('os', '') %}
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
 
-{%- if os_family == 'RedHat' and os_major_release == 6 %}
-  {%- set on_redhat_6 = True %}
+{%- if os == 'Ubuntu' and os_major_release == 16 %}
+  {%- set nox_version = '2019.11.9' %}
 {%- else %}
-  {%- set on_redhat_6 = False %}
-{%- endif %}
-
-{%- if os_family == 'RedHat' and os_major_release == 2018 %}
-  {%- set on_amazonlinux_1 = True %}
-{%- else %}
-  {%- set on_amazonlinux_1 = False %}
-{%- endif %}
-
-{%- if os_family == 'RedHat' and os_major_release == 8 %}
-  {%- set on_redhat_8 = True %}
-{%- else %}
-  {%- set on_redhat_8 = False %}
-{%- endif %}
-
-{%- if os_family == 'Debian' and os_major_release == 8 %}
-  {%- set on_debian_8 = True %}
-{%- else %}
-  {%- set on_debian_8 = False %}
+  {%- set nox_version = '2020.8.22' %}
 {%- endif %}
 
 {%- if os_family == 'Windows' %}
@@ -41,14 +23,8 @@
 {%- if on_windows %}
   {%- set pip = 'py -3 -m pip' %}
 {%- else %}
-  {%- if on_debian_8 %}
-    {%- set pip = 'pip2' %}
-  {%- elif on_redhat_6 %}
-    {%- set pip = 'pip2.7' %}
-  {%- elif on_freebsd %}
+  {%- if on_freebsd %}
     {%- set pip = 'pip-3.7' %}
-  {%- elif on_amazonlinux_1 or on_debian_8 %}
-    {%- set pip = 'pip-3.6' %}
   {%- else %}
     {%- set pip = 'pip3' %}
   {%- endif %}
@@ -63,9 +39,9 @@ include:
 nox:
   cmd.run:
   {%- if not on_windows %}
-    - name: "{{ pip }} install 'nox-py2=={{ nox_version }}'"
+    - name: "{{ pip }} install 'nox=={{ nox_version }}'"
   {%- else %}
-    - name: {{ pip }} install nox-py2=={{ nox_version }}
+    - name: {{ pip }} install nox=={{ nox_version }}
   {%- endif %}
     - require:
       - pip-install

@@ -13,5 +13,5 @@
   "ami_owner": "782442783595",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "freebsd/121",
-  "instance_type": "m5.large"
+  "instance_type": "m5.xlarge"
 }

@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build -var-file=freebsd-12-us-west-2.json freebsd.json`",
+  "_comment": "Build with `packer build -var-file=freebsd-121-us-west-2.json freebsd.json`",
   "ssh_username": "ec2-user",
   "aws_region": "us-west-2",
   "os_name": "FreeBSD",

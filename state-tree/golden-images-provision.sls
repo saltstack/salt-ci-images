@@ -114,6 +114,15 @@ include:
   - dhclient_conf
   - sshd_config
 {%- endif %}
+{%- if grains['os'] in ('CentOS', 'Amazon') %}
+{#- This is to be able to run pkgbuild tests on Salt #}
+  - gpg
+  - rpm
+  - mock
+  - rpm-build
+  - rpm-sign
+  - createrepo
+{%- endif %}
 
 {#- Make sure there's at least one state entry in the state file #}
 noop-{{ sls }}:

@@ -30,13 +30,13 @@ fi
 if [ "$OSX_VERS" -eq 15 ]; then
     /usr/bin/sudo /usr/bin/xcode-select --reset
     os=$(sw_vers -productVersion | awk -F. '{print $1 "." $2}')
-    if /usr/bin/sudo /usr/sbin/softwareupdate --history | grep --silent "Command Line Tools.*${os}"; then
+    if /usr/bin/sudo /usr/sbin/softwareupdate --history | grep --silent "Command Line Tools.*${os}.*"; then
         echo 'Command-line tools already installed.'
     else
         echo 'Installing Command-line tools...'
         in_progress=/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
         touch ${in_progress}
-        product=$(/usr/bin/sudo /usr/sbin/softwareupdate --list | awk "/\* Command Line.*${os}/ { sub(/^   \* /, \"\"); print }")
+        product=$(/usr/bin/sudo /usr/sbin/softwareupdate --list | awk "/\* Command Line.*${os}.*/ { sub(/^   \* /, \"\"); print }")
         /usr/bin/sudo /usr/sbin/softwareupdate --verbose --install "${product}" || echo 'Installation failed.' 1>&2 && rm ${in_progress} && exit 1
         rm ${in_progress}
         echo 'Installation succeeded.'

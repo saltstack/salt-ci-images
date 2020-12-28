@@ -28,6 +28,7 @@ if [ "$OSX_VERS" -eq 13 ]; then
 fi
 
 if [ "$OSX_VERS" -eq 15 ]; then
+    /usr/bin/sudo /usr/bin/xcode-select --reset
     os=$(sw_vers -productVersion | awk -F. '{print $1 "." $2}')
     if /usr/bin/sudo /usr/sbin/softwareupdate --history | grep --silent "Command Line Tools.*${os}"; then
         echo 'Command-line tools already installed.'

@@ -118,10 +118,12 @@ include:
 {#- This is to be able to run pkgbuild tests on Salt #}
   - gpg
   - rpm
-  - mock
   - rpm-build
   - rpm-sign
   - createrepo
+  {%- if grains['os'] == 'CentOS' %}
+  - mock
+  {%- endif %}
 {%- endif %}
 
 {#- Make sure there's at least one state entry in the state file #}

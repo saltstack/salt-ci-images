@@ -27,5 +27,10 @@ if [ "$OSX_VERS" -eq 13 ]; then
     /usr/bin/sudo /usr/bin/xcode-select --switch /Library/Developer/CommandLineTools
 fi
 
+if [ "$OSX_VERS" -eq 15 ]; then
+    /usr/bin/sudo /usr/bin/xcode-select --reset
+    /usr/bin/sudo /usr/bin/xcode-select --install
+fi
+
 echo "====> Installing homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"

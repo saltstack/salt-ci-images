@@ -5,9 +5,9 @@ rpm-forge:
     - name: "rpm -i 'http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm'"
 
 rpm-key:
-  cmd.run: 
+  cmd.run:
     - name: "rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt"
-    - require: 
+    - require:
       - cmd: rpm-forge
 
 rpmforge_repo:
@@ -23,5 +23,5 @@ rpmforge_repo:
 update_git:
   pkg.latest:
     - name: git
-    - require: 
+    - require:
       - file: rpmforge_repo

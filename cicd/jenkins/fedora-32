@@ -3,8 +3,8 @@
 // Define the maximum time, in hours, that a test run should run for
 def testrun_timeout = 6
 
-def distro_name = 'debian'
-def distro_version = '10'
+def distro_name = 'fedora'
+def distro_version = '32'
 def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1

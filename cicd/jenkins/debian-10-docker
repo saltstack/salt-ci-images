@@ -5,7 +5,7 @@ def testrun_timeout = 6
 
 def distro_name = 'debian'
 def distro_version = '10'
-def nox_env_name = 'runtests-zeromq'
+def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1
 def jenkins_slave_label = 'docker-slave'

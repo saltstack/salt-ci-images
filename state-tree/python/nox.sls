@@ -39,9 +39,9 @@ include:
 nox:
   cmd.run:
   {%- if not on_windows %}
-    - name: "{{ pip }} install 'nox=={{ nox_version }}'"
+    - name: "{{ pip }} install 'nox=={{ nox_version }}' 'virtualenv==20.0.20'"
   {%- else %}
-    - name: {{ pip }} install nox=={{ nox_version }}
+    - name: {{ pip }} install nox=={{ nox_version }} virtualenv==20.0.20
   {%- endif %}
     - require:
       - pip-install

@@ -1,4 +1,25 @@
-=======================
+============
+Salt Jenkins
+============
+
+These are states and related packer configuration for creating golden images and containers that are used for testing
+salt.  These also hold the states that are run at the beginning of the cloud tests.
+
+
+Contributing
+============
+
+The ``salt-jenkins`` project is welcome and open to contributions.  All PRs should go into the master branch.
+
+If you want to open a PR to this repo that the CI should run on, push your change to a branch on the upstream repo
+(https://github.com/saltstack/salt-jenkins).  CI does not run on PRs from forks.  If you are unable to do that, open
+your change from a fork and ask someone on the core team to push your changes to a branch on the upstream repo after
+they have read through and agree with the changes and then open a PR from that branch.
+
+If you are only making a doc change, or a cloud-test change, or something that doesn't need the CI to run, just opening
+a PR from a fork is fine.
+
+
 Salt Jenkins State Tree
 =======================
 
@@ -14,88 +35,4 @@ For example, if a contributor adds a test file for Salt's docker execution modul
 to be installed on the test VMs. This repository is the place to perform that package installation by adding
 a state.
 
-
-Locally Running States
-======================
-
-You can clone this repository, and, as long as you already have salt installed, you can run this state tree
-directly (instead of using ``gitfs``).
-
-For example::
-
-    salt-call state.sls git.salt pillar="{py3: true, test_transport: zeromq, with_coverage: true}"
-
-The minion configuration file also needs to be edited to direct the ``file_roots`` to the ``salt-jenkins`` cloned
-directory. For example, if the ``salt-jenkins`` repository was cloned directly into the ``/root`` dirctory, the
-minion config file would look like this::
-
-    # /etc/salt/minion
-
-    file_roots:
-      base:
-        - /root/salt-jenkins
-
-This is possible due to the fact that included in this state tree repository there are ``Saltfile`` and ``minion``
-configuration files which set everything up in order to run ``salt-call`` locally against this state tree.
-
-
-Contributing
-============
-
-The ``salt-jenkins`` project is welcome and open to contributions.
-
-The ``salt-jenkins`` repository has a few openly maintained branches. These correspond to the actively maintained
-release branches in the `Salt project`_. This helps stabilize the testing
-environments that the ``salt-jenkins`` states configure on the test VMs running at
-`jenkinsci.saltstack.com`_.
-
-There is a node located in Salt's Jenkins installation configured to run the tests for each supported Salt
-release branch. In turn, each node is configured to run the ``salt-jenkins`` state tree based on the Salt release
-branch it supports.
-
-For example, the Jenkins node labeled ``2016_3`` runs tests against the HEAD of the ``2016.3`` branch of Salt. This
-same ``2016_3`` node is configured to run the ``salt-jenkins`` state tree using the ``2016.3`` branch of the
-``salt-jenkins`` repository.
-
-**Note: The "master" branch of the "salt-jenkins" repository is used to test the "master" branch of Salt.**
-
-Which Salt Jenkins Branch?
---------------------------
-
-GitHub will open pull requests against Salt Jenkins's main branch, ``master``, by default. Contributions to the
-Salt Jenkins state tree should be added to the oldest supported branch that requires the change.
-
-For example, imagine a new execution module was added to the ``master`` branch in Salt, along with tests for
-the new module. The new module requires a dependency that is not currently installed by the Salt Jenkins
-states. The new state(s) would need to be added to the ``master`` branch of Salt Jenkins.
-
-If new tests are written against an older release branch in Salt, such as the ``2016.11`` branch, then the
-change for the Salt Jenkins states needs to also be submitted against the ``2016.11`` branch in the
-``salt-jenkins`` repository.
-
-Merge Forward Policy
-~~~~~~~~~~~~~~~~~~~~
-
-The Salt Jenkins repository follows a "Merge Forward" policy. The merge-forward behavior means that changes
-that are submitted to older "release" branches will automatically be merged forward into the newer branches.
-(The Salt repository follows this same behavior.) This makes is easy for contributors to make only one
-pull-request against an older branch, but allow the change to propagate to all ``salt-jenkins`` branches as the
-tests make their way forward in the Salt repository.
-
-Here's a simple example of changes merging forward from older branches to newer branches, where the ``HEAD`` of
-each branch is merged into the directly newer branch::
-
-    master    *---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*------------>
-                                                                 /
-                                                                / (Merge Forward from 2016.11 to master)
-                                                               /
-    2016.11   *---*---*---*---*---*---*---*---*---*---*---*---*
-                                         /
-                                        / (Merge Forward from 2016.3 to 2016.11)
-                                       /
-    2016.3    *---*---*---*---*---*---*
-
-
-.. _jenkinsci.saltstack.com: https://jenkinsci.saltstack.com/
-.. _Salt project: https://github.com/saltstack/salt
-.. _Salt's Jenkins system: https://jenkinsci.saltstack.com/
+.. _Salt's Jenkins system: https://jenkins.saltproject.io/

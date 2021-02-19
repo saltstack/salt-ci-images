@@ -1,10 +1,11 @@
-@Library('salt@master-1.9-golden') _
+@Library('salt@master-1.10-golden') _
 
 // Define the maximum time, in hours, that a test run should run for
 def testrun_timeout = 6
 
 def distro_name = 'ubuntu'
 def distro_version = '2004'
+def distro_arch = 'amd64'
 def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1
@@ -21,6 +22,7 @@ buildGoldenImage(
     env: env,
     distro_name: distro_name,
     distro_version: distro_version,
+    distro_arch: distro_arch,
     nox_env_name: nox_env_name,
     nox_passthrough_opts: nox_passthrough_opts,
     testrun_timeout: testrun_timeout,

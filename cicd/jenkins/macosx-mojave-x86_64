@@ -1,17 +1,21 @@
-@Library('salt@master-1.9-golden') _
+@Library('salt@master-1.10-golden') _
 
 // Define the maximum time, in hours, that a test run should run for
 def testrun_timeout = 6
 
-def distro_name = 'freebsd'
-def distro_version = '122'
+def distro_name = 'macosx'
+def distro_version = 'mojave'
+def distro_arch = 'x86_64'
 def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
-def concurrent_builds = 1
+def concurrent_builds = 2
 def use_spot_instances = true
-def jenkins_slave_label = 'packer'
+def jenkins_slave_label = 'packer-mac'
 def supports_py2 = false
 def supports_py3 = true
+def kitchen_driver_file = '/var/jenkins/workspace/nox-driver.yml'
+def kitchen_verifier_file = '/var/jenkins/workspace/nox-verifier.yml'
+def kitchen_platforms_file = '/var/jenkins/workspace/nox-platforms.yml'
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
@@ -21,6 +25,7 @@ buildGoldenImage(
     env: env,
     distro_name: distro_name,
     distro_version: distro_version,
+    distro_arch: distro_arch,
     nox_env_name: nox_env_name,
     nox_passthrough_opts: nox_passthrough_opts,
     testrun_timeout: testrun_timeout,
@@ -28,8 +33,10 @@ buildGoldenImage(
     use_spot_instances: false,
     jenkins_slave_label: jenkins_slave_label,
     concurrent_builds: concurrent_builds,
-    ec2_region: 'us-west-2',
     supports_py2: supports_py2,
-    supports_py3: supports_py3)
+    supports_py3: supports_py3,
+    kitchen_driver_file: kitchen_driver_file,
+    kitchen_verifier_file: kitchen_verifier_file,
+    kitchen_platforms_file: kitchen_platforms_file)
 
 // vi: ft=groovy

@@ -1,16 +1,17 @@
 {
-  "_comment": "Build with `packer build -var-file=windows-2016-us-west-2.json windows.json`",
+  "_comment": "Build with `packer build -var-file=windows-2019-x64-us-west-2.json windows.json`",
   "aws_region": "us-west-2",
   "os_name": "Windows",
-  "os_version": "2016",
+  "os_version": "2019",
+  "os_arch": "x64",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "c:\\salt-provision",
   "salt_provision_python_version": "3",
   "state_name": "golden-images-provision",
-  "ami_filter": "Windows_Server-2016-English-Full-Base-20*",
+  "ami_filter": "Windows_Server-2019-English-Full-Base-20*",
   "ami_owner": "801119661308",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "windows/2016",
+  "ami_name_suffix": "windows/2019/x64",
   "instance_type": "c5.xlarge",
   "user_data_file": "os-images/AWS/windows/scripts/SetUpWinRM.ps1"
 }

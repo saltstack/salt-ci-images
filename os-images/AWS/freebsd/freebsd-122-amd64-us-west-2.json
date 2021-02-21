@@ -1,9 +1,10 @@
 {
-  "_comment": "Build with `packer build -var-file=freebsd-122-us-west-2.json freebsd.json`",
+  "_comment": "Build with `packer build -var-file=freebsd-122-amd64-us-west-2.json freebsd.json`",
   "ssh_username": "ec2-user",
   "aws_region": "us-west-2",
   "os_name": "FreeBSD",
   "os_version": "122",
+  "os_arch": "amd64",
   "salt_provision_version": "3002",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
@@ -12,6 +13,6 @@
   "ami_filter": "FreeBSD 12.2-RELEASE-amd64",
   "ami_owner": "782442783595",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "freebsd/122",
+  "ami_name_suffix": "freebsd/122/amd64",
   "instance_type": "r5d.large"
 }

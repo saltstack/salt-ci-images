@@ -45,7 +45,8 @@ def build_aws(ctx,
               debug=False,
               staging=False,
               validate=False,
-              salt_pr=None):
+              salt_pr=None,
+              distro_arch=None):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
     distro_dir = os.path.join('os-images', 'AWS', distro)
@@ -55,11 +56,18 @@ def build_aws(ctx,
     distro_slug = distro
     if distro_version:
         distro_slug += '-{}'.format(distro_version)
+    if distro_arch:
+        distro_slug += '-{}'.format(distro_arch)
 
     template_variations = [
-        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
-        os.path.join(distro_dir, '{}.json'.format(distro))
+        os.path.join(distro_dir, '{}.json'.format(distro_slug))
     ]
+    if distro_arch:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_arch)))
+    if distro_version:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_version)))
+    template_variations.append(os.path.join(distro_dir, '{}.json'.format(distro)))
+
     for variation in template_variations:
         if os.path.exists(variation):
             build_template = variation
@@ -69,9 +77,14 @@ def build_aws(ctx,
                     ', '.join(template_variations))
 
     vars_variations = [
-        os.path.join(distro_dir, '{}-{}.json'.format(distro_slug, region)),
-        os.path.join(distro_dir, '{}-{}.json'.format(distro, region))
+        os.path.join(distro_dir, '{}-{}.json'.format(distro_slug, region))
     ]
+    if distro_arch:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.json'.format(distro, distro_arch, region)))
+    if distro_version:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.json'.format(distro, distro_version, region)))
+    vars_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, region)))
+
     for variation in vars_variations:
         if os.path.exists(variation):
             build_vars = variation
@@ -125,7 +138,8 @@ def build_docker(ctx,
                  debug=False,
                  staging=False,
                  validate=False,
-                 salt_pr=None):
+                 salt_pr=None,
+                 distro_arch=None):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
     distro_dir = os.path.join('os-images', 'Docker', distro)
@@ -135,11 +149,18 @@ def build_docker(ctx,
     distro_slug = distro
     if distro_version:
         distro_slug += '-{}'.format(distro_version)
+    if distro_arch:
+        distro_slug += '-{}'.format(distro_arch)
 
     template_variations = [
-        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
-        os.path.join(distro_dir, '{}.json'.format(distro))
+        os.path.join(distro_dir, '{}.json'.format(distro_slug))
     ]
+    if distro_arch:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_arch)))
+    if distro_version:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_version)))
+    template_variations.append(os.path.join(distro_dir, '{}.json'.format(distro)))
+
     for variation in template_variations:
         if os.path.exists(variation):
             build_template = variation
@@ -149,9 +170,14 @@ def build_docker(ctx,
                     ', '.join(template_variations))
 
     vars_variations = [
-        os.path.join(distro_dir, '{}-vars.json'.format(distro_slug)),
-        os.path.join(distro_dir, '{}-vars.json'.format(distro))
+        os.path.join(distro_dir, '{}-vars.json'.format(distro_slug))
     ]
+    if distro_arch:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-vars.json'.format(distro, distro_arch)))
+    if distro_version:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-vars.json'.format(distro, distro_version)))
+    vars_variations.append(os.path.join(distro_dir, '{}-vars.json'.format(distro)))
+
     for variation in vars_variations:
         if os.path.exists(variation):
             build_vars = variation
@@ -204,7 +230,8 @@ def build_osx(ctx,
               staging=False,
               validate=False,
               salt_pr=None,
-              force_download=False):
+              force_download=False,
+              distro_arch=None):
     distro = 'macos'
     ctx.cd(REPO_ROOT)
     distro_dir = os.path.join('os-images', 'MacStadium', distro)
@@ -214,11 +241,18 @@ def build_osx(ctx,
     distro_slug = distro
     if distro_version:
         distro_slug += '-{}'.format(distro_version)
+    if distro_arch:
+        distro_slug += '-{}'.format(distro_arch)
 
     template_variations = [
-        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
-        os.path.join(distro_dir, '{}.json'.format(distro))
+        os.path.join(distro_dir, '{}.json'.format(distro_slug))
     ]
+    if distro_arch:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_arch)))
+    if distro_version:
+        template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_version)))
+    template_variations.append(os.path.join(distro_dir, '{}.json'.format(distro)))
+
     for variation in template_variations:
         if os.path.exists(variation):
             build_template = variation
@@ -228,9 +262,14 @@ def build_osx(ctx,
                     ', '.join(template_variations))
 
     vars_variations = [
-        os.path.join(distro_dir, '{}-vars.json'.format(distro_slug)),
-        os.path.join(distro_dir, '{}-vars.json'.format(distro))
+        os.path.join(distro_dir, '{}-vars.json'.format(distro_slug))
     ]
+    if distro_arch:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-vars.json'.format(distro, distro_arch)))
+    if distro_version:
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-vars.json'.format(distro, distro_version)))
+    vars_variations.append(os.path.join(distro_dir, '{}-vars.json'.format(distro)))
+
     for variation in vars_variations:
         if os.path.exists(variation):
             build_vars = variation

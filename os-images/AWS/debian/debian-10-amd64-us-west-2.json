@@ -1,10 +1,11 @@
 {
-  "_comment": "Build with `packer build -var-file=debian-10-us-west-2.json debian.json`",
+  "_comment": "Build with `packer build -var-file=debian-10-amd64-us-west-2.json debian.json`",
   "ssh_username": "admin",
   "aws_region": "us-west-2",
   "device_name": "/dev/xvda",
   "os_name": "Debian",
   "os_version": "10",
+  "os_arch": "amd64",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
@@ -13,6 +14,6 @@
   "ami_filter": "debian-10-amd64-20*",
   "ami_owner": "136693071363",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "debian/10",
+  "ami_name_suffix": "debian/10/amd64",
   "instance_type": "m5.large"
 }

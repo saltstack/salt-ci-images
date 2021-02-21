@@ -1,9 +1,10 @@
 {
-  "_comment": "Build with `packer build -var-file=arch-lts-us-west-2.json arch.json`",
+  "_comment": "Build with `packer build -var-file=arch-lts-x86_64-us-west-2.json arch.json`",
   "ssh_username": "arch",
   "aws_region": "us-west-2",
   "os_name": "Arch",
   "os_version": "lts",
+  "os_arch": "x86_64",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
@@ -12,6 +13,6 @@
   "ami_filter": "arch-linux-lts-hvm-*.x86_64-ebs",
   "ami_owner": "093273469852",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "arch/lts",
+  "ami_name_suffix": "arch/lts/x86_64",
   "instance_type": "m5.large"
 }

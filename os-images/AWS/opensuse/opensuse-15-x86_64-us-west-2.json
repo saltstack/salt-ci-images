@@ -1,9 +1,10 @@
 {
-  "_comment": "Build with `packer build -var-file=opensuse-leap-15-us-west-2.json opensuse.json`",
+  "_comment": "Build with `packer build -var-file=opensuse-15-x86_64-us-west-2.json opensuse.json`",
   "ssh_username": "ec2-user",
   "aws_region": "us-west-2",
   "os_name": "OpenSuse",
   "os_version": "15",
+  "os_arch": "x86_64",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
@@ -12,6 +13,6 @@
   "ami_filter": "openSUSE-Leap-15-?-v????????-hvm-ssd-x86_64-*",
   "ami_owner": "679593333241",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "opensuse/15",
+  "ami_name_suffix": "opensuse/15/x86_64",
   "instance_type": "m5.large"
 }

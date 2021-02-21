@@ -43,11 +43,12 @@
       "ami_groups": [
         "all"
       ],
-      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}",
+      "ami_description": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} {{ user `os_arch` }}",
       "tags": {
-        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}",
+        "Name": "{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }} {{ user `os_arch` }}",
         "OS-Name": "{{ user `os_name` }}",
         "OS-Version": "{{ user `os_version` }}",
+        "OS-Arch": "{{ user `os_arch` }}",
         "Build-Date": "{{ isotime }}",
         "Build-Type": "{{ user `build_type` | upper }}",
         "created-by": "packer",
@@ -56,7 +57,7 @@
         "Promoted": false
       },
       "run_tags": {
-        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} Builder",
+        "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} {{ user `os_arch` }} Builder",
         "created-by": "packer",
         "Owner": "SRE"
       }

@@ -5,7 +5,7 @@ def testrun_timeout = 6
 
 def distro_name = 'centos'
 def distro_version = '7'
-def distro_arch = 'x86_64'
+def distro_arch = 'x86-64'
 def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1

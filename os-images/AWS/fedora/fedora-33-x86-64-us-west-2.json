@@ -1,18 +1,18 @@
 {
-  "_comment": "Build with `packer build -var-file=fedora-32-x86_64-us-west-2.json fedora.json`",
+  "_comment": "Build with `packer build -var-file=fedora-33-x86-64-us-west-2.json fedora.json`",
   "ssh_username": "fedora",
   "aws_region": "us-west-2",
   "os_name": "Fedora",
-  "os_version": "32",
+  "os_version": "33",
   "os_arch": "x86_64",
   "salt_provision_version": "3001.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
   "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel tar findutils",
   "state_name": "golden-images-provision",
-  "ami_filter": "Fedora-Cloud-Base-32-*.x86_64-hvm-us-west-2-gp2-0",
+  "ami_filter": "Fedora-Cloud-Base-33-*.x86_64-hvm-us-west-2-gp2-0",
   "ami_owner": "125523088429",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "fedora/32/x86_64",
+  "ami_name_suffix": "fedora/33/x86_64",
   "instance_type": "m5.large"
 }

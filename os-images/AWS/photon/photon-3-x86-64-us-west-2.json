@@ -1,9 +1,10 @@
 {
-  "_comment": "Build with `packer build -var-file=photon-3-us-west-2.json photon.json`",
+  "_comment": "Build with `packer build -var-file=photon-3-x86-64-us-west-2.json photon.json`",
   "ssh_username": "root",
   "aws_region": "us-west-2",
   "os_name": "Photon",
   "os_version": "3",
+  "os_arch": "x86_64",
   "salt_provision_version": "3001.3",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
@@ -12,6 +13,6 @@
   "ami_filter": "photon-ami-3.0-*",
   "ami_owner": "073736783432",
   "ami_name_prefix": "saltstack",
-  "ami_name_suffix": "photon/3",
+  "ami_name_suffix": "photon/3/x86_64",
   "instance_type": "m5.large"
 }

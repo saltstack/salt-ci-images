@@ -5,7 +5,7 @@
   "os_name": "Ubuntu",
   "os_version": "2004",
   "os_arch": "arm64",
-  "salt_provision_version": "3002.2",
+  "salt_provision_version": "3002.6",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
   "salt_provision_pyenv_deps": "make build-essential libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libgit2-dev",

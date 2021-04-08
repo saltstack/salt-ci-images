@@ -27,7 +27,7 @@ repos:
         files: '\.json$'
         types: [file]
   - repo: https://github.com/saltstack/pip-tools-compile-impersonate
-    rev: master
+    rev: dff9089c1003af49665064067ff63c75b9b69dcd
     hooks:
       - id: pip-tools-compile
         alias: compile-requirements

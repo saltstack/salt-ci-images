@@ -10,7 +10,7 @@
   "salt_provision_python_version": "3.6.10",
   "salt_provision_pyenv_deps": "",
   "state_name": "golden-images-provision",
-  "ami_filter": "FreeBSD 13.0-RC3-amd64",
+  "ami_filter": "FreeBSD 13.0-RC5-amd64",
   "ami_owner": "782442783595",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "freebsd/130/amd64",

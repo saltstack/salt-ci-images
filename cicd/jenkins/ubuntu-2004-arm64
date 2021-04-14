@@ -4,8 +4,8 @@
 def testrun_timeout = 6
 
 def distro_name = 'ubuntu'
-def distro_version = '1604'
-def distro_arch = 'amd64'
+def distro_version = '2004'
+def distro_arch = 'arm64'
 def nox_env_name = 'pytest-zeromq'
 def nox_passthrough_opts = '--ssh-tests'
 def concurrent_builds = 1

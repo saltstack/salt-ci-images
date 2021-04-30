@@ -60,7 +60,7 @@ add-python2-to-path:
         - text: '/Library/Frameworks/Python.framework/Versions/2.7/bin'
   environ.setenv:
     - name: PATH
-    - value: '/Library/Frameworks/Python.framework/Versions/2.7/bin:{{ salt.cmd.run_stdout('echo $PATH', python_shell=True).strip() }}'
+    - value: '/Library/Frameworks/Python.framework/Versions/2.7/bin:{{ salt.cmd.run_stdout("echo $PATH", python_shell=True).strip() }}'
     - update_minion: True
 
 {%- elif python2 %}

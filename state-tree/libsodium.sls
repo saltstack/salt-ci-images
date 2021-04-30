@@ -40,23 +40,13 @@ libsodium:
 
 include:
   - python3
-  - python27
 
-  {%- set python3_dir = 'c:\\\\Python37' %}
-  {%- set python2_dir = 'c:\\\\Python27' %}
+  {%- set python3_dir = 'c:\\\\Python38' %}
   {%- if grains['cpuarch'].lower() == 'x86' %}
     {%- set bits = 32 %}
   {%- else %}
     {%- set bits = 64 %}
   {%- endif %}
-
-py2-libsodium:
-  file.managed:
-    - name: '{{ python2_dir }}\\libsodium.dll'
-    - source: https://repo.saltstack.com/windows/dependencies/{{ bits }}/libsodium.dll
-    - skip_verify: true
-    - require:
-      - python2
 
 py3-libsodium:
   file.managed:
@@ -69,6 +59,5 @@ py3-libsodium:
 libsodium:
   test.succeed_without_changes:
     - require:
-      - py2-libsodium
       - py3-libsodium
 {%- endif %}

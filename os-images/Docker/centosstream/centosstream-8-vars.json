@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build -var-file=centosstream-8-vars.json centos.json`",
+  "_comment": "Build with `packer build -var-file=centosstream-8-vars.json centosstream.json`",
   "docker_image": "centosstream:8",
   "docker_repository": "saltstack",
   "os_name": "CentOS Stream",

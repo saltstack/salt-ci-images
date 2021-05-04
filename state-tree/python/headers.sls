@@ -11,7 +11,7 @@
   {%- else %}
     {%- set python2_dev = 'python2-devel' %}
   {%- endif %}
-{%- elif grains['os'] in ('CentOS', 'RedHat') %}
+{%- elif grains['os'] in ('CentOS', 'CentOS Stream', 'RedHat') %}
   {%- if grains['osrelease'].startswith('8') %}
     {%- set python3_dev = 'python36-devel' %}
     {%- set python2_dev = False %}
@@ -39,7 +39,7 @@ python2-dev:
   pkg.installed:
     - name: {{ python2_dev }}
     - aggregate: True
-    {%- if grains['os'] == 'CentOS' and grains['osrelease'].startswith('6') %}
+    {%- if grains['os'] in ('CentOS', 'CentOS Stream') and grains['osrelease'].startswith('6') %}
     - fromrepo: saltstack
     {%- endif %}
 {%- endif %}

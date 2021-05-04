@@ -26,7 +26,7 @@
     {%- set libsodium = 'libsodium' %}
   {%- endif %}
 
-  {%- if grains['os'] in ('CentOS', 'Amazon') %}
+  {%- if grains['os'] in ('CentOS', 'CentOS Stream', 'Amazon') %}
 include:
   - epel
   {%- endif %}

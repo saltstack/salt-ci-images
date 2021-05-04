@@ -50,8 +50,6 @@
   {%- set python3 = 'python3_x64' %}
 {%- elif on_amazonlinux_1 or on_redhat_8 %}
   {%- set python3 = 'python36' %}
-{%- elif grains['os'] == 'CentOS' and grains['osrelease'].startswith('6') %}
-  {%- set python3 = False %}
 {%- else %}
   {%- set python3 = 'python3' %}
 {%- endif %}

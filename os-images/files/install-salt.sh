@@ -6,6 +6,7 @@ set -e
 set -x
 
 export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 

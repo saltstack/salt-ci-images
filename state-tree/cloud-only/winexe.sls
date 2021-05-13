@@ -1,4 +1,4 @@
-{%- if grains['os'] in ('CentOS', 'CentOS Stream') %}
+{%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 winexe:
   pkg.installed:
     - name: winexe

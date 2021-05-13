@@ -7,7 +7,7 @@ include:
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
-  {%- if grains['os'] in ('CentOS', 'CentOS Stream', 'Amazon') %}
+  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
   - epel
   {%- endif %}
   - hosts
@@ -27,7 +27,7 @@ include:
     {%- endif %}
   {%- endif %}
   # All VMs get docker-py so they can run unit tests
-  {%- if grains['os'] in ('CentOS', 'CentOS Stream') and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
+  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
   # Docker integration tests only on CentOS 7 (for now)
   - docker
   - vault
@@ -112,14 +112,14 @@ include:
   - dhclient_conf
   - sshd_config
 {%- endif %}
-{%- if grains['os'] in ('CentOS', 'CentOS Stream', 'Amazon') %}
+{%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
 {#- This is to be able to run pkgbuild tests on Salt #}
   - gpg
   - rpm
   - rpm-build
   - rpm-sign
   - createrepo
-  {%- if grains['os'] in ('CentOS', 'CentOS Stream') %}
+  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
   - mock
   {%- endif %}
 {%- endif %}

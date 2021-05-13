@@ -6,7 +6,7 @@
   {%- endif %}
 {%- elif grains['os'] == 'openSUSE' %}
   {%- set python2 = 'python' %}
-{%- elif grains['os'] in ('CentOS', 'CentOS Stream', 'RedHat', 'Amazon') %}
+{%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'RedHat', 'Amazon') %}
   {%- if grains['osrelease'].startswith('6') %}
     {%- set python2 = 'python27' %}
   {%- elif grains['osrelease'].startswith('2018') %}

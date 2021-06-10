@@ -60,7 +60,15 @@
         "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} {{ user `os_arch` }} Builder",
         "created-by": "packer",
         "Owner": "SRE"
-      }
+      },
+      "launch_block_device_mappings": [
+        {
+          "device_name": "/dev/sda1",
+          "volume_size": 40,
+          "volume_type": "gp3",
+          "delete_on_termination": true
+        }
+      ]
     }
   ],
   "provisioners": [
@@ -70,9 +78,12 @@
       "inline": [
         "ASSUME_ALWAYS_YES=yes DEFAULT_ALWAYS_YES=yes",
         "pkg install -y bash curl git libxml2 libxslt libgit2 py37-pygit2 py37-sqlite3 libzmq4 libunwind sudo",
-        "echo 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers"
+        "echo 'ec2-user ALL=(ALL) NOPASSWD: ALL'>>/usr/local/etc/sudoers",
+        "gpart show",
+        "df -h",
+        "df -h|grep '/$'|grep '39G\\|40G'"
       ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+      "execute_command": "sudo -E -H bash -ec '{{ .Vars }} {{ .Path }}'"
     },
     {
       "type": "shell-local",

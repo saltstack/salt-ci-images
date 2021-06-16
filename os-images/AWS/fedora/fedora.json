@@ -76,6 +76,7 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
+        "systemctl mask tmp.mount",
         "dnf update -y",
         "dnf install -y git vim sudo openssh-server dbus curl"
       ],

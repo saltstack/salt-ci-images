@@ -1,4 +1,10 @@
 {%- if grains['os_family'] == 'Debian' %}
+  {%- if not grains['osmajorrelease'] in (9, 10, 18) %}
+install-systemd-timesyncd:
+  pkg.installed:
+    - name: systemd-timesyncd
+  {%- endif %}
+
 enable-timesyncd-daemon:
   service.enabled:
     - name: systemd-timesyncd

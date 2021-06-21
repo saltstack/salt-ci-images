@@ -1,6 +1,6 @@
 {
   "_comment": "Build with `packer build -var-file=arch-lts-vars.json arch.json`",
-  "docker_image": "archlinux/base",
+  "docker_image": "archlinux/archlinux",
   "docker_repository": "saltstack",
   "os_name": "Arch",
   "os_version": "lts",

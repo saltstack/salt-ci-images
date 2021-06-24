@@ -308,6 +308,18 @@ vmware-profile:
           password: {{ salt['pillar.get']('vmware:ssh_password', '') }}
     - show_changes: False
 
+{%- if salt['pillar.get']('vmware:ca-cert', '') != '' %}
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == 7 %}
+vmware-ca-cert:
+  file.managed:
+    - name: /etc/pki/ca-trust/source/anchors/vmware.crt
+    - contents_pillar: vmware:ca-cert
+
+update-ca-trust:
+  cmd.run
+  {%- endif %}
+{%- endif %}
+
 vultr-provider:
   file.managed:
     - name: {{ config_path }}vultr.conf

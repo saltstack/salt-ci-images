@@ -35,7 +35,7 @@ dockerepo:
 docker:
   pkg.installed:
     - pkgs:
-      {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('CentOS', 'CentOS Stream') %}
+      {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

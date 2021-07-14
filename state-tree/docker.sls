@@ -16,7 +16,9 @@ docker-prereqs:
       - ca-certificates
       - curl
       - gnupg
+{%- endif %}
 
+{%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 dockerepo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -24,18 +26,23 @@ dockerepo:
     - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/ubuntu {{ os_codename }} stable
     - key_url: https://download.docker.com/linux/ubuntu/gpg
     - dist: {{ os_codename }}
+    - file: /etc/apt/sources.list.d/docker.list
     {%- elif grains['os'] == 'Debian' %}
     - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
-    {%- endif %}
     - file: /etc/apt/sources.list.d/docker.list
+    {%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+    - name: https://download.docker.com/linux/centos/7/x86_64/stable
+    - key_url: https://download.docker.com/linux/centos/gpg
+    - file: /etc/yum.repos.d/docker-ce.repo
+    {%- endif %}
 {%- endif %}
 
 docker:
   pkg.installed:
     - pkgs:
-      {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') %}
+      {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

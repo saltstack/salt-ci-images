@@ -32,7 +32,11 @@ dockerepo:
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
-    {%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and grains[osmajorrelease] == '8' %}
+    - name: https://download.docker.com/linux/centos/8/x86_64/stable
+    - key_url: https://download.docker.com/linux/centos/gpg
+    - file: /etc/yum.repos.d/docker-ce.repo
+    {%- elif grains['os'] == 'CentOS' and grains[osmajorrelease] == '7' %}
     - name: https://download.docker.com/linux/centos/7/x86_64/stable
     - key_url: https://download.docker.com/linux/centos/gpg
     - file: /etc/yum.repos.d/docker-ce.repo

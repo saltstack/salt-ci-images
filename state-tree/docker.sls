@@ -19,7 +19,7 @@ docker-prereqs:
 {%- endif %}
 
 {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
-dockerepo:
+docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
     {%- if grains['os'] == 'Ubuntu' %}
@@ -32,21 +32,25 @@ dockerepo:
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
-    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and grains[osmajorrelease] == '8' %}
-    - name: https://download.docker.com/linux/centos/8/x86_64/stable
-    - key_url: https://download.docker.com/linux/centos/gpg
-    - file: /etc/yum.repos.d/docker-ce.repo
-    {%- elif grains['os'] == 'CentOS' and grains[osmajorrelease] == '7' %}
-    - name: https://download.docker.com/linux/centos/7/x86_64/stable
-    - key_url: https://download.docker.com/linux/centos/gpg
-    - file: /etc/yum.repos.d/docker-ce.repo
+    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and  grains['osmajorrelease'] == 8 %}
+    - name: docker-ce-stable
+    - baseurl: https://download.docker.com/linux/centos/8/x86_64/stable
+    - gpgkey: https://download.docker.com/linux/centos/gpg
+    - gpgcheck: 1
+    - enabled: 1
+    {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 %}
+    - name: docker-ce-stable
+    - baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+    - gpgkey: https://download.docker.com/linux/centos/gpg
+    - gpgcheck: 1
+    - enabled: 1
     {%- endif %}
 {%- endif %}
 
 docker:
   pkg.installed:
     - pkgs:
-      {%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+      {%- if (grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

@@ -76,6 +76,7 @@
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
+        "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
         "tdnf install -y linux",
         "tdnf remove -y linux-aws",
         "tdnf install -y fipsify linux-hmacgen",

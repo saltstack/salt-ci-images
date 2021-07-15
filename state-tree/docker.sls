@@ -66,7 +66,7 @@ amazon-docker-service:
 {%- endif %}
 {%- endif %}
 
-{%- if (grains['os'] != 'Amazon' %}
+{%- if grains['os'] != 'Amazon' %}
 docker:
   pkg.installed:
     - pkgs:

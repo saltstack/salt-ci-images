@@ -1,14 +1,14 @@
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- set docker_pkg = 'docker.io' if salt['grains.get']('os', '') == 'Ubuntu' else 'docker' %}
-{%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os', '') in ('Ubuntu', 'Debian') %}
-{%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os', '') in ('Ubuntu', 'Debian') %}
+{%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os_family', '') == 'Debian' %}
+{%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 
 {%- if on_docker == False %}
 include:
   - busybox
 {%- endif %}
 
-{%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') %}
+{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') %}
 docker-prereqs:
   pkg.installed:
     - pkgs:
@@ -18,7 +18,7 @@ docker-prereqs:
       - gnupg
 {%- endif %}
 
-{%- if grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os_family'] == 'RedHat' %}
 docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -38,7 +38,7 @@ docker-repo:
     - gpgkey: https://download.docker.com/linux/centos/gpg
     - gpgcheck: 1
     - enabled: 1
-    {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 %}
+    {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 or grains['os'] == 'Amazon' %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
     - gpgkey: https://download.docker.com/linux/centos/gpg
@@ -50,7 +50,7 @@ docker-repo:
 docker:
   pkg.installed:
     - pkgs:
-      {%- if (grains['os'] in ('Ubuntu', 'Debian') and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os_family'] == 'RedHat' %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

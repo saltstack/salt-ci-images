@@ -54,7 +54,7 @@ docker-repo:
 {%- if grains['os'] == 'Amazon' %}
 amazon-install-docker:
   cmd.run:
-    - name: 'amazon-linux-extras install docker'
+    - name: 'amazon-linux-extras install docker -y'
     - creates: /usr/bin/docker
 
 {%- if on_docker == False %}

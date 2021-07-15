@@ -51,10 +51,26 @@ docker-repo:
     {%- endif %}
 {%- endif %}
 
+{%- if grains['os'] == 'Amazon' %}
+amazon-install-docker:
+  cmd.run:
+    - name: 'amazon-linux-extras install docker'
+    - creates: /usr/bin/docker
+
+{%- if on_docker == False %}
+amazon-docker-service:
+  service.running:
+    - name: docker
+    - require:
+      - file: /usr/bin/busybox
+{%- endif %}
+{%- endif %}
+
+{%- if (grains['os'] != 'Amazon' %}
 docker:
   pkg.installed:
     - pkgs:
-      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os_family'] == 'RedHat' %}
+      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS Stream', 'CentOS') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io
@@ -62,10 +78,11 @@ docker:
       - {{ docker_pkg }}
       {%- endif %}
     - aggregate: True
-{%- if on_docker == False %}
+  {%- if on_docker == False %}
   service.running:
     - enable: True
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
+  {%- endif %}
 {%- endif %}

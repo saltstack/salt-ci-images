@@ -22,7 +22,7 @@ docker-prereqs:
       {%- endif %}
 {%- endif %}
 
-{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -48,15 +48,10 @@ docker-repo:
     - gpgkey: https://download.docker.com/linux/centos/gpg
     - gpgcheck: 1
     - enabled: 1
-    {%- elif grains['os'] == 'Fedora' %}
-    - name: docker-ce-stable
-    - baseurl: https://download.docker.com/linux/fedora/{{ grains['os_major_release'] }}/x86_64/stable
-    - gpgkey: https://download.docker.com/linux/fedora/gpg
-    - gpgcheck: 1
-    - enabled: 1
     {%- endif %}
 {%- endif %}
 
+# Amazon Linux 2 installs docker from OS distro repos
 {%- if grains['os'] == 'Amazon' %}
 amazon-install-docker:
   cmd.run:
@@ -72,11 +67,12 @@ amazon-docker-service:
 {%- endif %}
 {%- endif %}
 
+# SUSE, Fedora, Photon, and more install Docker from OS distro repos
 {%- if grains['os'] != 'Amazon' %}
 docker:
   pkg.installed:
     - pkgs:
-      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

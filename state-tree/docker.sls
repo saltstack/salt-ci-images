@@ -32,13 +32,13 @@ docker-repo:
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
-    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and  grains['osmajorrelease'] == 8 %}
+    {%- elif grains['os'] in ('Amazon', 'AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and  grains['osmajorrelease'] == 8 %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/8/x86_64/stable
     - gpgkey: https://download.docker.com/linux/centos/gpg
     - gpgcheck: 1
     - enabled: 1
-    {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 or grains['os'] == 'Amazon' %}
+    {%- elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == 7 %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
     - gpgkey: https://download.docker.com/linux/centos/gpg

@@ -6,6 +6,8 @@
   {%- set libgit2 = "libgit2" %}
 {%- endif %}
 
+{%- if grains['os'] != 'VMware Photon OS' %}
 {{ libgit2 }}:
   pkg.installed:
     - aggregate: True
+{%- endif %}

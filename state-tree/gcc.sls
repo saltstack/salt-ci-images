@@ -22,3 +22,8 @@ gcc:
 {%- if grains['os_family'] in ('MacOS',) %}
     - aggregate: True
 {%- endif %}
+
+{%- if grains['os'] == 'VMware Photon OS' %}
+build-essential:
+  pkg.installed
+{%- endif %}

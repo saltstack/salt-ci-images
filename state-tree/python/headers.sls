@@ -29,6 +29,9 @@
   {%- else %}
     {%- set python2_dev = False %}
   {%- endif %}
+{%- elif grains['os'] == 'VMware Photon OS' %}
+  {%- set python2_dev = False %}
+  {%- set python3_dev = 'python3-devel' %}
 {%- else %}
   {%- set python3_dev = 'python3-dev' %}
   {%- set python2_dev = 'python-dev' %}

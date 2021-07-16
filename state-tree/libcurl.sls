@@ -1,5 +1,7 @@
 {%- set libcurl_pkg = ['libcurl-devel'] %}
-{%- if grains['os_family'] == 'Debian' %}
+{%- if grains['os'] == 'VMware Photon OS' %}
+  {%- set libcurl_pkg = ['curl-devel'] %}
+{%- elif grains['os_family'] == 'Debian' %}
   {%- set libcurl_pkg = ['libcurl4-openssl-dev', 'libssl-dev', 'libgnutls28-dev'] %}
 {%- endif %}
 

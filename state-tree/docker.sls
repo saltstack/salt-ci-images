@@ -1,5 +1,5 @@
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
-{%- set docker_pkg = 'docker.io' if salt['grains.get']('os', '') == 'Ubuntu' else 'docker' %}
+{%- set docker_pkg = 'docker' %}
 {%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 
@@ -22,7 +22,7 @@ docker-prereqs:
       {%- endif %}
 {%- endif %}
 
-{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -72,7 +72,7 @@ amazon-docker-service:
 docker:
   pkg.installed:
     - pkgs:
-      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

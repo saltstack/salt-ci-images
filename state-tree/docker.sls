@@ -22,7 +22,7 @@ docker-prereqs:
       {%- endif %}
 {%- endif %}
 
-{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] == ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -36,7 +36,7 @@ docker-repo:
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
-    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or grains['os'] == 'CentOS' and  grains['osmajorrelease'] == 8 %}
+    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream') or (grains['os'] == 'CentOS' and  grains['osmajorrelease'] == 8) %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/8/x86_64/stable
     - gpgkey: https://download.docker.com/linux/centos/gpg

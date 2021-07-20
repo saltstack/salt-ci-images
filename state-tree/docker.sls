@@ -2,7 +2,7 @@
 {%- set docker_pkg = 'docker' %}
 {%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
-{%- set os_major_release = salt['grains.get']('osmajorrelease', '') if salt['grains.get']('os', '') in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
 {%- if on_docker == False or grains['os_family'] == 'Debian' %}
 include:

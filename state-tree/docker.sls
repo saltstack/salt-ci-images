@@ -2,7 +2,7 @@
 {%- set docker_pkg = 'docker' %}
 {%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
-{%- set os_majorrelease = salt['grains.get']('osmajorrelease', '') if salt['grains.get']('os', '') in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+{%- set os_major_release = salt['grains.get']('osmajorrelease', '') if salt['grains.get']('os', '') in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
 
 {%- if on_docker == False or grains['os_family'] == 'Debian' %}
 include:
@@ -14,7 +14,7 @@ include:
   {%- endif %}
 {%- endif %}
 
-{%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) %}
+{%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) %}
 docker-prereqs:
   pkg.installed:
     - pkgs:
@@ -28,7 +28,7 @@ docker-prereqs:
       {%- endif %}
 {%- endif %}
 
-{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
 docker-repo:
   pkgrepo.managed:
     - humanname: Docker Official
@@ -44,13 +44,13 @@ docker-repo:
     - file: /etc/apt/sources.list.d/docker.list
     {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
     - name: docker-ce-stable
-    - baseurl: https://download.docker.com/linux/centos/{{ os_majorrelease }}/x86_64/stable
+    - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable
     - gpgkey: https://download.docker.com/linux/centos/gpg
     - gpgcheck: 1
     - enabled: 1
     {%- elif grains['os'] == 'Fedora' %}
     - name: docker-ce-stable
-    - baseurl: https://download.docker.com/linux/fedora/{{ os_majorrelease }}/x86_64/stable
+    - baseurl: https://download.docker.com/linux/fedora/{{ os_major_release }}/x86_64/stable
     - gpgkey: https://download.docker.com/linux/fedora/gpg
     - gpgcheck: 1
     - enabled: 1
@@ -78,7 +78,7 @@ amazon-docker-service:
 docker:
   pkg.installed:
     - pkgs:
-      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+      {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
       - docker-ce
       - docker-ce-cli
       - containerd.io

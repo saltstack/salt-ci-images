@@ -41,7 +41,7 @@
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
-        "tdnf install -y git vim sudo openssh-server dbus curl"
+        "tdnf install -y git vim sudo openssh-server dbus curl rpm"
       ]
     },
     {

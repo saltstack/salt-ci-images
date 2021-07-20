@@ -89,7 +89,7 @@ docker:
       - pkgrepo: docker-repo
     - aggregate: False
     {%- endif %}
-  {%- if on_docker == False %}
+  {%- if on_docker == False and (grains['os'] == 'Debian' and os_major_release != 11) %}
   service.running:
     - enable: True
     - require:

@@ -33,11 +33,15 @@ docker-repo:
     - key_url: https://download.docker.com/linux/ubuntu/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
+    - require:
+      - sls: python-apt
     {%- elif grains['os'] == 'Debian' %}
     - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
+    - require:
+      - sls: python-apt
     {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable

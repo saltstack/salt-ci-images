@@ -3,11 +3,6 @@
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 
 include:
-  # All VMs get docker-py so they can run unit tests
-  {%- if (grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release >= 7) or (grains['os_family'] == 'Debian' or grains['os'] in ('Amazon', 'Arch', 'Fedora', 'SUSE', 'VMware Photon OS')) %}
-  - docker
-  - vault
-  {%- endif %}
   - path
   {%- if grains['os_family'] == 'Debian' %}
   - apt

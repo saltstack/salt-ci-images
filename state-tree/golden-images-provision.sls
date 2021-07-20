@@ -6,6 +6,7 @@ include:
   - path
   {%- if grains['os_family'] == 'Debian' %}
   - apt
+  - python-apt
   {%- endif %}
   {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
   - epel

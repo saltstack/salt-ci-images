@@ -4,14 +4,9 @@
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 
-{%- if on_docker == False or grains['os_family'] == 'Debian' %}
+{%- if on_docker == False %}
 include:
-  {%- if on_docker == False %}
   - busybox
-  {%- endif %}
-  {%- if grains['os_family'] == 'Debian' %}
-  - python-apt
-  {%- endif %}
 {%- endif %}
 
 {%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) %}
@@ -37,11 +32,15 @@ docker-repo:
     - key_url: https://download.docker.com/linux/ubuntu/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
+    - require:
+      - sls: python-apt
     {%- elif grains['os'] == 'Debian' %}
     - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
     - key_url: https://download.docker.com/linux/debian/gpg
     - dist: {{ os_codename }}
     - file: /etc/apt/sources.list.d/docker.list
+    - require:
+      - sls: python-apt
     {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable

@@ -3,20 +3,10 @@
 {%- set os_codename = salt['grains.get']('oscodename', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
-{%- set salt_provision_python_version = '3.6.10' %}
-{%- set salt_pyenv = 'admin' if salt['grains.get']('osarch', '') == 'Debian' else 'ubuntu' %}
 
 {%- if on_docker == False %}
 include:
   - busybox
-{%- endif %}
-
-{%- if grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11 %}
-pip-python-apt:
-  pip.installed:
-    - name: python-apt
-    - bin_env: /home/{{ salt_pyenv }}/.pyenv/versions/{{ salt_provision_python_version }}/bin/pip
-    - cwd: /home/{{ salt_pyenv }}/.pyenv/versions/{{ salt_provision_python_version }}/bin
 {%- endif %}
 
 {%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) %}
@@ -44,7 +34,6 @@ docker-repo:
     - file: /etc/apt/sources.list.d/docker.list
     - require:
       - sls: python-apt
-      - pip: pip-python-apt
     {%- elif grains['os'] == 'Debian' %}
     - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
     - key_url: https://download.docker.com/linux/debian/gpg
@@ -52,7 +41,6 @@ docker-repo:
     - file: /etc/apt/sources.list.d/docker.list
     - require:
       - sls: python-apt
-      - pip: pip-python-apt
     {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
     - name: docker-ce-stable
     - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable

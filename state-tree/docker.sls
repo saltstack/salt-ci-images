@@ -4,9 +4,14 @@
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_majorrelease = salt['grains.get']('osmajorrelease', '') if salt['grains.get']('os', '') in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
 
-{%- if on_docker == False %}
+{%- if on_docker == False or grains['os_family'] == 'Debian' %}
 include:
+  {%- if on_docker == False %}
   - busybox
+  {%- endif %}
+  {%- if grains['os_family'] == 'Debian' %}
+  - python-apt
+  {%- endif %}
 {%- endif %}
 
 {%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64')) %}
@@ -18,7 +23,6 @@ docker-prereqs:
       - ca-certificates
       - curl
       - gnupg
-      - python-apt
       {%- elif grains['os'] == 'Amazon' %}
       - amazon-linux-extras
       {%- endif %}

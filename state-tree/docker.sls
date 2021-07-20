@@ -4,7 +4,7 @@
 {%- set os_arch = salt['grains.get']('osarch', '') if salt['grains.get']('os_family', '') == 'Debian' %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', '') %}
 {%- set salt_provision_python_version = '3.6.10' %}
-{%- set salt_pyenv = 'admin' if salt['grains.get']('osarch', '') = 'Debian' else 'ubuntu' %}
+{%- set salt_pyenv = 'admin' if salt['grains.get']('osarch', '') == 'Debian' else 'ubuntu' %}
 
 {%- if on_docker == False %}
 include:

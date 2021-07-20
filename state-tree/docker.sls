@@ -81,7 +81,6 @@ docker:
       {%- else %}
       - {{ docker_pkg }}
       {%- endif %}
-    - aggregate: True
   {%- if on_docker == False %}
   service.running:
     - enable: True

@@ -18,6 +18,7 @@ docker-prereqs:
       - ca-certificates
       - curl
       - gnupg
+      - python-apt
       {%- elif grains['os'] == 'Amazon' %}
       - amazon-linux-extras
       {%- endif %}

@@ -18,7 +18,6 @@ docker-prereqs:
       - ca-certificates
       - curl
       - gnupg
-      - python3-apt
       {%- elif grains['os'] == 'Amazon' %}
       - amazon-linux-extras
       {%- endif %}
@@ -88,6 +87,8 @@ docker:
     {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
     - require:
       - pkgrepo: docker-repo
+      - pkg: docker-prereqs
+    - aggregate: False
     {%- endif %}
   {%- if on_docker == False %}
   service.running:

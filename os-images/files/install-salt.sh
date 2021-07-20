@@ -14,7 +14,12 @@ echo "Install Python ${SALT_PY_VERSION}"
 pyenv install -vv ${SALT_PY_VERSION}
 
 echo "Install salt v${SALT_VERSION}"
-# Select the instaled Python
+# Select the installed Python
 pyenv shell ${SALT_PY_VERSION}
 # Install Salt
-pip install salt==${SALT_VERSION}
+if [ "${SALT_VERSION}" == "master" ]
+then
+  pip install git+https://github.com/saltstack/salt.git@master
+else
+  pip install salt==${SALT_VERSION}
+fi

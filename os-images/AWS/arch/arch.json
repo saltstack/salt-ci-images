@@ -75,6 +75,7 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
+        "systemctl mask tmp.mount",
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",

@@ -1,4 +1,4 @@
-{%- if grains['os_family'] == 'RedHat' %}
+{%- if grains['os_family'] == 'RedHat' and grains['os'] != 'SUSE' %}
   {%- set openssl_dev = 'openssl-devel' %}
 {%- elif grains['os'] in ('SUSE', 'openSUSE') %}
   {%- set openssl_dev = 'libopenssl-devel' %}

@@ -77,10 +77,17 @@ accept_LANG_sshd:
   {%- endif %}
 
 # Fedora and Centos 8
-  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] != 7 %}
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] != 7 and grains['os'] != 'VMware Photon OS' %}
 redhat_locale:
   pkg.installed:
     - name: glibc-langpack-en
+  {%- endif %}
+
+# Photon OS 3
+  {%- if grains['os'] == 'VMware Photon OS' %}
+photon_locale:
+  pkg.installed:
+    - name: glibc-lang
   {%- endif %}
 
 us_locale:

@@ -81,6 +81,9 @@ include:
   - versionlock
   - redhat-rpm-config
   {%- endif %}
+  {%- if grains['os'] == 'VMware Photon OS' %}
+  - gpg
+  {% endif %}
   {%- if grains['os'] != 'Windows' %}
   - dmidecode
   {%- endif %}

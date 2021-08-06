@@ -5,6 +5,13 @@ set -e
 # Echo what runs
 set -x
 
+# Check if in container
+# https://stackoverflow.com/questions/52065842/python-docker-ascii-codec-cant-encode-character
+if [ -f /.dockerenv ]; then
+    echo "Running in container. Updating env var: LANG=C.UTF-8"
+    export LANG=C.UTF-8
+fi
+
 export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"

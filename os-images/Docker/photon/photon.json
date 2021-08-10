@@ -121,14 +121,14 @@
       "output": "manifest.json",
       "strip_path": true,
       "custom_data": {
-        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}"
+        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}:{{ user `docker_arch` }}"
       }
     },
     [
       {
         "type": "docker-tag",
         "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
-        "tags": "latest"
+        "tags": "{{ user `docker_arch` }}"
       },
       {
         "type": "docker-push",

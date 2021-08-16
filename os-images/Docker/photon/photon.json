@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build arch.json`",
+  "_comment": "Build with `packer build photon.json`",
   "variables": {
     "docker_username": "{{ env `DOCKER_USERNAME` }}",
     "docker_password": "{{ env `DOCKER_PASSWORD` }}"
@@ -28,19 +28,26 @@
   "provisioners": [
     {
       "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
+      "inline_shebang": "/bin/bash -ex",
       "inline": [
-        "pacman -Sy --noconfirm --needed archlinux-keyring",
-        "pacman-db-upgrade",
-        "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd"
+        "tdnf install -y openssh-server",
+        "tdnf update -y",
+        "if ! grep -q 'FipsMode yes' /etc/ssh/sshd_config; then echo 'FipsMode yes' >> /etc/ssh/sshd_config; fi",
+        "mkdir -p /etc/vmware",
+        "touch /etc/vmware/system_fips"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline_shebang": "/bin/bash -ex",
+      "inline": [
+        "tdnf install -y git vim sudo openssh-server dbus curl rpm"
       ]
     },
     {
       "type": "shell-local",
       "script": "os-images/Docker/files/prep-linux.sh",
       "environment_vars": [
-        "SALT_PR={{ user `salt_pr` }}",
         "DISTRO_SLUG={{ user `distro_slug` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
@@ -50,7 +57,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "# Install Pyenv Dependencies",
-        "pacman -Sy --needed --noconfirm {{ user `salt_provision_pyenv_deps` }}",
+        "tdnf install -y tar bzip2 {{ user `salt_provision_pyenv_deps` }}",
         "# Install PyEnv",
         "curl https://pyenv.run | bash"
       ]
@@ -68,7 +75,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "# Un-Install Pyenv Dependencies",
-        "pacman -Rc --noconfirm  {{ user `salt_provision_pyenv_deps` }}"
+        "tdnf remove -y {{ user `salt_provision_pyenv_deps` }}"
       ]
     },
     {
@@ -92,7 +99,8 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
-        "pacman -Scc --noconfirm "
+        "tdnf clean all",
+        "rm -rf /var/cache/tdnf"
       ]
     },
     {

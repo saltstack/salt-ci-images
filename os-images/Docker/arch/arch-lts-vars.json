@@ -1,13 +1,13 @@
 {
   "_comment": "Build with `packer build -var-file=arch-lts-vars.json arch.json`",
-  "docker_image": "archlinux/base",
+  "docker_image": "archlinux/archlinux",
   "docker_repository": "saltstack",
   "os_name": "Arch",
   "os_version": "lts",
   "run_command": "/usr/lib/systemd/systemd",
-  "salt_provision_version": "3001.1",
+  "salt_provision_version": "master",
   "salt_provision_root_dir": "/tmp/salt-provision",
-  "salt_provision_python_version": "3.6.10",
+  "salt_provision_python_version": "3.9.5",
   "salt_provision_pyenv_deps": "make gcc tk",
   "state_name": "golden-images-provision"
 }

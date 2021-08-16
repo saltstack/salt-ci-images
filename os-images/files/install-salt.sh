@@ -9,8 +9,7 @@ set -x
 # https://stackoverflow.com/questions/52065842/python-docker-ascii-codec-cant-encode-character
 if [ -f /.dockerenv ]; then
     echo "Running in container!"
-    CURRENT_OS=$(cat /etc/*ease* | egrep '^NAME=|^VERSION=')
-    IS_CENTOS7=$(echo $CURRENT_OS | grep CentOS | grep 7)
+    IS_CENTOS7=$(echo $(cat /etc/*ease* | grep '^NAME=\|^VERSION=') | grep CentOS | grep 7)
     if [[ -z $IS_CENTOS7 ]]; then
         echo "Container is NOT running CentOS 7."
         echo "Updating env var: C.UTF-8"

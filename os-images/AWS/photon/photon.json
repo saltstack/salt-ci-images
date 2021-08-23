@@ -64,7 +64,7 @@
       "launch_block_device_mappings": [
         {
           "device_name": "/dev/xvda",
-          "volume_size": 20,
+          "volume_size": 40,
           "volume_type": "gp3",
           "delete_on_termination": true
         }
@@ -76,6 +76,10 @@
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
+        "growpart /dev/nvme0n1 3",
+        "resize2fs /dev/nvme0n1p3",
+        "df -h|grep /$|grep '39G\\|40G'",
+        "systemctl mask tmp.mount",
         "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
         "tdnf install -y linux",
         "tdnf remove -y linux-aws",

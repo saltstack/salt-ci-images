@@ -94,8 +94,6 @@ amazon-install-docker:
   cmd.run:
     - name: 'amazon-linux-extras install docker -y'
     - creates: /usr/bin/docker
-  - require:
-    - cmd: docker-prereqs
 
 {%- if on_docker == False %}
 amazon-docker-service:

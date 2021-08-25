@@ -18,37 +18,69 @@ docker-prereqs:
       - ca-certificates
       - curl
       - gnupg
+      - lsb-release
       {%- elif grains['os'] == 'Amazon' %}
       - amazon-linux-extras
       {%- endif %}
 {%- endif %}
 
-{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
-docker-repo:
-  pkgrepo.managed:
-    - humanname: Docker Official
+# The following will not work in tiamat-generated, and otherwise isolated,
+# Python envs of salt due to requiring system-level Python packages for
+# pkgrepo to properly function:
+# apt: https://gitlab.com/saltstack/open/salt-pkg/-/issues/38
+# rpm: https://gitlab.com/saltstack/open/salt-pkg/-/issues/36
+#
+# Currently commented out until it is resolved, and Tiamat-generated salt builds
+# are used in salt-jenkins
+#{%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+#docker-repo:
+#  pkgrepo.managed:
+#    - humanname: Docker Official
+#    {%- if grains['os'] == 'Ubuntu' %}
+#    - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/ubuntu {{ os_codename }} stable
+#    - key_url: https://download.docker.com/linux/ubuntu/gpg
+#    - dist: {{ os_codename }}
+#    - file: /etc/apt/sources.list.d/docker.list
+#    {%- elif grains['os'] == 'Debian' %}
+#    - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
+#    - key_url: https://download.docker.com/linux/debian/gpg
+#    - dist: {{ os_codename }}
+#    - file: /etc/apt/sources.list.d/docker.list
+#    {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
+#    - name: docker-ce-stable
+#    - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable
+#    - gpgkey: https://download.docker.com/linux/centos/gpg
+#    - gpgcheck: 1
+#    - enabled: 1
+#    {%- elif grains['os'] == 'Fedora' %}
+#    - name: docker-ce-stable
+#    - baseurl: https://download.docker.com/linux/fedora/{{ os_major_release }}/x86_64/stable
+#    - gpgkey: https://download.docker.com/linux/fedora/gpg
+#    - gpgcheck: 1
+#    - enabled: 1
+#    {%- endif %}
+#{%- endif %}
+
+# Workaround for pkgrepo bug
+{%- if (grains['os_family'] == 'Debian' and os_arch in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+docker-repo-workaround:
+  cmd.run:
     {%- if grains['os'] == 'Ubuntu' %}
-    - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/ubuntu {{ os_codename }} stable
-    - key_url: https://download.docker.com/linux/ubuntu/gpg
-    - dist: {{ os_codename }}
-    - file: /etc/apt/sources.list.d/docker.list
+    - name:
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      - echo "deb [arch={{ os_arch }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     {%- elif grains['os'] == 'Debian' %}
-    - name: deb [arch={{ os_arch }}] https://download.docker.com/linux/debian {{ os_codename }} stable
-    - key_url: https://download.docker.com/linux/debian/gpg
-    - dist: {{ os_codename }}
-    - file: /etc/apt/sources.list.d/docker.list
+    - name:
+      - curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      - echo "deb [arch={{ os_arch }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
-    - name: docker-ce-stable
-    - baseurl: https://download.docker.com/linux/centos/{{ os_major_release }}/x86_64/stable
-    - gpgkey: https://download.docker.com/linux/centos/gpg
-    - gpgcheck: 1
-    - enabled: 1
+    - name: |
+        yum install -y yum-utils
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     {%- elif grains['os'] == 'Fedora' %}
-    - name: docker-ce-stable
-    - baseurl: https://download.docker.com/linux/fedora/{{ os_major_release }}/x86_64/stable
-    - gpgkey: https://download.docker.com/linux/fedora/gpg
-    - gpgcheck: 1
-    - enabled: 1
+    - name: |
+        dnf -y install dnf-plugins-core
+        dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     {%- endif %}
 {%- endif %}
 

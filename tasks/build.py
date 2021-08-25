@@ -12,6 +12,7 @@ import json
 import time
 import pprint
 import threading
+import platform
 
 # Import invoke libs
 from invoke import task
@@ -220,6 +221,10 @@ def build_docker(ctx,
         cmd += ' -var build_type=ci'
     if salt_pr and salt_pr.lower() != "null":
         cmd += ' -var salt_pr={}'.format(salt_pr)
+    if platform.machine() == "x86_64":
+        cmd += ' -var docker_arch=amd64'
+    else:
+        cmd += ' -var docker_arch=arm64'
     cmd += ' -var distro_slug={} {}'.format(distro_slug, build_template)
     ctx.run(cmd, echo=True)
 

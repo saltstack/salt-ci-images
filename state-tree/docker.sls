@@ -113,6 +113,8 @@ docker:
       - {{ docker_pkg }}
       {%- endif %}
     {%- if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and os_major_release != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') %}
+    - require:
+      - docker-repo-workaround
     - aggregate: False
     {%- endif %}
   {%- if on_docker == False and (grains['os'] == 'Debian' and os_major_release != 11) %}

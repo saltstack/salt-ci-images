@@ -29,10 +29,11 @@ include:
   - libgit2
     {%- endif %}
   {%- endif %}
-  # All VMs get docker-py so they can run unit tests
-  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
-  # Docker integration tests only on CentOS 7 (for now)
+  # Make Docker available on all Linux systems
+  {%- if grains['kernel'] == "Linux" %}
   - docker
+  {%- endif %}
+  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release == 7 %}
   - vault
   {%- endif %}
   {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}

@@ -16,4 +16,4 @@
 dnsutils:
   pkg.installed:
     - name: {{ dnsutils }}
-    - aggregate: True
+    - aggregate: False

@@ -17,5 +17,5 @@ openldap:
     {%- elif grains['os_family'] == 'Arch' or grains['os'] == 'VMware Photon OS' %}
       - openldap
     {%- endif %}
-    - aggregate: True
+    - aggregate: False
 {%- endif %}

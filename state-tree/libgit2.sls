@@ -9,5 +9,5 @@
 {%- if grains['os'] != 'VMware Photon OS' %}
 {{ libgit2 }}:
   pkg.installed:
-    - aggregate: True
+    - aggregate: False
 {%- endif %}

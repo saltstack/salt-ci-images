@@ -25,6 +25,7 @@ include:
   - libxml
   - libxslt
   - libffi
+  - zlib
     {%- if grains['os'] not in ('Amazon',) %}
   - libgit2
     {%- endif %}
@@ -88,6 +89,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'VMware Photon OS' %}
   - gpg
+  - ssh_config
   {% endif %}
   {%- if grains['os'] != 'Windows' %}
   - dmidecode

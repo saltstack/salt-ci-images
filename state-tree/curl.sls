@@ -11,9 +11,9 @@
   {%- set install_method = 'pkg.installed' %}
 {%- endif %}
 
-{%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
+{%- if grains['os_family'] == 'RedHat' or grains['os_family'] == 'Suse' %}
 include:
-  {%- if grains['os'] == 'openSUSE' %}
+  {%- if grains['os_family'] == 'Suse' %}
    - ca-certificates-mozilla
   {%- elif grains['os_family'] == 'RedHat' %}
    - ca-certificates
@@ -26,9 +26,9 @@ curl:
     {%- if install_method == 'pkg.installed' %}
     - aggregate: False
     {%- endif %}
-    {%- if grains['os_family'] == 'RedHat' or grains['os'] == 'openSUSE' %}
+    {%- if grains['os_family'] == 'RedHat' or grains['os_family'] == 'Suse' %}
     - require:
-      {%- if grains['os'] == 'openSUSE' %}
+      {%- if grains['os_family'] == 'Suse' %}
       - pkg: ca-certificates-mozilla
       {%- elif grains['os_family'] == 'RedHat' %}
       - pkg: ca-certificates

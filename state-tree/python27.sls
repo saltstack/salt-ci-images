@@ -4,7 +4,7 @@
   {%- else %}
     {%- set python2 = 'python2_x64' %}
   {%- endif %}
-{%- elif grains['os'] == 'openSUSE' %}
+{%- elif grains['os_family'] == 'Suse' %}
   {%- set python2 = 'python' %}
 {%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'RedHat', 'Amazon') %}
   {%- if grains['osrelease'].startswith('6') %}

@@ -5,7 +5,7 @@
 # to fail if not set correctly.
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- set on_arch = grains['os_family'] == 'Arch' %}
-{%- set on_suse = grains['os_family'] in ('Suse', 'SUSE') %}
+{%- set on_suse = grains['os_family'] == 'Suse' %}
 
 {%- if grains['os'] in ('MacOS',) %}
 mac_locale:

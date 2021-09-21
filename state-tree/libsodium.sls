@@ -2,7 +2,7 @@
 {%- if grains['os'] != 'Windows' %}
   {%- if grains['os'] == 'Gentoo' %}
     {%- set libsodium = 'dev-libs/libsodium' %}
-  {%- elif grains['os'] in ('SUSE', 'openSUSE') %}
+  {%- elif grains['os_family'] == 'Suse' %}
     {%- set libsodium = 'libsodium-devel' %}
     {%- if not on_docker %}
       {#-

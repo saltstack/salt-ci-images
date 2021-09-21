@@ -120,7 +120,7 @@ docker:
       - cmd: docker-repo-workaround
     - aggregate: False
   {%- endif %}
-  {%- if on_docker == False and (grains['os'] == 'Debian' and grains['osmajorrelease'] != 11) %}
+  {%- if on_docker == False %}
   service.running:
     - enable: True
     - require:

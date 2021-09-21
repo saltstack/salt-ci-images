@@ -105,6 +105,7 @@ amazon-install-docker:
   {%- if on_docker == False %}
 amazon-docker-service:
   service.running:
+    - enable: True
     - name: docker
     - enable: True
     - require:

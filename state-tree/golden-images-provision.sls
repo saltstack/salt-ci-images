@@ -46,6 +46,9 @@ include:
     {%- endif %}
   - python
   - gcc
+    {%- if grains['os'] in ('Fedora',) %}
+  - g++
+    {%- endif %}
   {%- endif %}
   - libsodium
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}

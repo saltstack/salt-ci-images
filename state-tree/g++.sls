@@ -1,0 +1,2 @@
+gcc-c++:
+  pkg.installed

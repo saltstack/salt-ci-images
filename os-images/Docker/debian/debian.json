@@ -22,7 +22,8 @@
         "LABEL Owner=SRE",
         "LABEL Description=\"{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }}\""
       ],
-      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} on {{ isotime }}"
+      "message": "{{ user `build_type` | upper }} Image of {{ user `os_name` }} {{ user `os_version` }} on {{ isotime }}",
+      "user_data": "#!/bin/bash\nsed -i -r -e 's/^(PubkeyAcceptedKeyTypes )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsed -i -r -e 's/^(PubkeyAcceptedAlgorithms )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsystemctl restart sshd"
     }
   ],
   "provisioners": [

@@ -8,7 +8,7 @@
   "salt_provision_version": "3003.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.7.5",
-  "salt_provision_pyenv_deps": "make gcc binutils binutils-libs linux-api-headers glibc-devel zlib-devel bzip2-devel readline-devel sqlite-devel openssl-devel libffi-devel",
+  "salt_provision_pyenv_deps": "make gcc binutils binutils-libs linux-api-headers glibc-devel zlib-devel bzip2-devel readline-devel sqlite-devel openssl-devel libffi-devel ncurses-devel",
   "state_name": "golden-images-provision",
   "ami_architecture": "x86_64",
   "ami_filter": "photon-ami-3.0-9be8115",

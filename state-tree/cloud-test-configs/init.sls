@@ -361,7 +361,7 @@ vultr-profile:
     - contents: |
         vultr-test:
           provider: vultr-config
-          size: 2048 MB RAM,64 GB SSD,2.00 TB BW
+          size: 2048 MB RAM,55 GB SSD,2.00 TB BW
           image: CentOS 7 x64
           enable_private_network: False
           location: New Jersey

@@ -1,6 +1,6 @@
 {
   "_comment": "Build with `packer build -var-file=centosstream-8-vars.json centosstream.json`",
-  "docker_image": "quay.io/centos/centos:stream8",
+  "docker_image": "quay.io/centos/centos:stream9",
   "docker_repository": "saltstack",
   "os_name": "CentOS Stream",
   "os_version": "8",

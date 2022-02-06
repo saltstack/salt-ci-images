@@ -113,13 +113,13 @@
       "output": "manifest.json",
       "strip_path": true,
       "custom_data": {
-        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}:{{ user `docker_arch` }}"
+        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name_slug` | lower }}-{{ user `os_version` }}:{{ user `docker_arch` }}"
       }
     },
     [
       {
         "type": "docker-tag",
-        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
+        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name_slug` | lower }}-{{ user `os_version` }}",
         "tags": "{{ user `docker_arch` }}"
       },
       {

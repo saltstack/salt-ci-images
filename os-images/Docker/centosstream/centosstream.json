@@ -14,7 +14,7 @@
         "Entrypoint [\"/bin/sh\", \"-c\"]",
         "CMD [\"/bin/bash\"]",
         "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}\"",
-        "LABEL OS-Name={{ user `os_name` }}",
+        "LABEL OS-Name=\"{{ user `os_name` }}\"",
         "LABEL OS-Version={{ user `os_version` }}",
         "LABEL BuildDate={{ isotime }}",
         "LABEL BuildType={{ user `build_type` | upper }}",

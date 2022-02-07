@@ -7,7 +7,7 @@
   "run_command": "/usr/lib/systemd/systemd",
   "salt_provision_version": "3002.6",
   "salt_provision_root_dir": "/tmp/salt-provision",
-  "salt_provision_python_version": "3.6.10",
+  "salt_provision_python_version": "3.9.10",
   "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel",
   "state_name": "golden-images-provision"
 }

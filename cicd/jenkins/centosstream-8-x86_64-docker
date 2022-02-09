@@ -3,7 +3,7 @@
 // Define the maximum time, in hours, that a test run should run for
 def testrun_timeout = 6
 
-def distro_name = 'centos'
+def distro_name = 'centosstream'
 def distro_version = '8'
 def distro_arch = 'x86-64'
 def nox_env_name = 'pytest-zeromq'

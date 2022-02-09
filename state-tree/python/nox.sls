@@ -5,7 +5,7 @@
 {%- if os == 'Ubuntu' and os_major_release == 16 %}
   {%- set nox_version = '2019.11.9' %}
 {%- else %}
-  {%- set nox_version = '2020.8.22' %}
+  {%- set nox_version = '2022.1.7' %}
 {%- endif %}
 
 {%- if os_family == 'Windows' %}

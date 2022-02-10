@@ -68,7 +68,7 @@
           "delete_on_termination": true
         }
       ],
-      "user_data": "#!/bin/bash\nsed -i -r -e 's/^(PubkeyAcceptedKeyTypes )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsed -i -r -e 's/^(PubkeyAcceptedAlgorithms )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsystemctl restart sshd"
+      "user_data": "#!/bin/bash\necho 'PubkeyAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp256-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,rsa-sha2-256,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com' >> /etc/ssh/sshd_config\necho 'PubkeyAcceptedAlgorithms +ssh-rsa' >> /etc/ssh/sshd_config\necho 'HostKeyAlgorithms +ssh-rsa' >> /etc/ssh/sshd_config\nsystemctl restart sshd"
     }
   ],
   "provisioners": [

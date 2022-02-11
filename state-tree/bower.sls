@@ -5,7 +5,7 @@ nodejs-legacy:
 {%- endif %}
 
 {#- for MacOS we want to install node, npm, and bower at the end for issue #41770, so skipping install here. #}
-{%- if grains['os'] != 'MacOS' or grains["os"] == "VMware Photon OS" %}
+{%- if grains['os'] != 'MacOS' %}
 
 bower:
   npm.installed:

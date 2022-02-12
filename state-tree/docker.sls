@@ -2,6 +2,12 @@
 # Currently there are no Docker provided packages available for CentOS Stream 9, so we skip all of this.
 #
 {%- if grains['os'] == 'CentOS Stream' and grains['osmajorrelease'] >= 9 %}
+{% set install_docker = False %}
+{%- else %}
+{% set install_docker = True %}
+{%- endif %}
+
+{%- if install_docker == True %}
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- set install_from_docker_repos = True if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') else False %}
 

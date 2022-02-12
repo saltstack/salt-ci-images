@@ -4,7 +4,7 @@
   "docker_repository": "saltstack",
   "os_name": "CentOS Stream",
   "os_name_slug": "centosstream",
-  "os_version": "8",
+  "os_version": "9",
   "run_command": "/usr/lib/systemd/systemd",
   "salt_provision_version": "3004",
   "salt_provision_root_dir": "/tmp/salt-provision",

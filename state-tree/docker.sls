@@ -137,6 +137,11 @@ docker:
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
+  {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
+  service.running:
+    - enable: True
+    - require:
+      - pkg: docker
   {%- endif %}
 {%- endif %}
 {%- endif %}

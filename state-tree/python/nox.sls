@@ -4,6 +4,8 @@
 
 {%- if os in ('Ubuntu', 'Debian') and os_major_release in (16, 9) %}
   {%- set nox_version = '2019.11.9' %}
+{%- elif os == 'VMware Photon OS' %}
+  {%- set nox_version = '2019.11.9' %}
 {%- else %}
   {%- set nox_version = '2020.8.22' %}
 {%- endif %}

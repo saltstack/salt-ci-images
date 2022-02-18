@@ -88,7 +88,7 @@
         "if ! grep -q fips=1 /boot/systemd.cfg; then sed -i 's/^systemd_cmdline=.*/& fips=1/' /boot/systemd.cfg; fi",
         "if ! grep -q 'FipsMode yes' /etc/ssh/sshd_config; then echo 'FipsMode yes' >> /etc/ssh/sshd_config; fi",
         "echo umask 022 >> /root/.profile",
-        'echo alias rsync="rsync -zz" >> /root/.profile',
+        "echo alias rsync=\"rsync -zz\" >> /root/.profile",
         "reboot"
       ],
       "expect_disconnect": true,

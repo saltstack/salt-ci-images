@@ -96,6 +96,7 @@ amazon-install-docker:
 amazon-docker-service:
   service.running:
     - name: docker
+    - enable: True
     - require:
       - file: /usr/bin/busybox
   {%- endif %}

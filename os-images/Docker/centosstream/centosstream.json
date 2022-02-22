@@ -32,7 +32,7 @@
       "inline": [
         "yum install -y dnf || true",
         "dnf update -y",
-        "dnf install -y git vim sudo openssh-server dbus curl"
+        "dnf install -y git vim sudo openssh-server dbus"
       ]
     },
     {

@@ -10,7 +10,7 @@
   "salt_provision_python_version": "3.9.9",
   "salt_provision_pyenv_deps": "make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite-devel openssl-devel tk-devel libffi-devel",
   "state_name": "golden-images-provision",
-  "ami_filter": "CentOS Stream 9*x86_64 20211203",
+  "ami_filter": "CentOS Stream 9*x86_64*",
   "ami_owner": "125523088429",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "centosstream/9/x86_64",

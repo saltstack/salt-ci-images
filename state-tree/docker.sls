@@ -2,9 +2,9 @@
 # Currently there are no Docker provided packages available for CentOS Stream 9, so we skip all of this.
 #
 {%- if grains['os'] == 'CentOS Stream' and grains['osmajorrelease'] >= 9 %}
-{% set install_docker = False %}
+  {% set install_docker = False %}
 {%- else %}
-{% set install_docker = True %}
+  {% set install_docker = True %}
 {%- endif %}
 
 {%- if install_docker == True %}

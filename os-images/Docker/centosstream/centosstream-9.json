@@ -131,22 +131,6 @@
         "login_username": "{{ user `docker_username` }}",
         "login_password": "{{ user `docker_password` }}"
       }
-    ],
-    [
-      {
-        "type": "docker-tag",
-        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-centos-{{ user `os_version` }}",
-        "tags": [
-          "{{ user `docker_arch` }}",
-          "latest"
-        ]
-      },
-      {
-        "type": "docker-push",
-        "login": true,
-        "login_username": "{{ user `docker_username` }}",
-        "login_password": "{{ user `docker_password` }}"
-      }
     ]
   ]
 }

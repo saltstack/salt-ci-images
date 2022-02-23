@@ -9,14 +9,14 @@
 
 {%- if install_docker == True %}
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
-{%- set install_from_docker_repos = True if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') else False %}
+{%- set install_from_docker_repos = True if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] > 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') else False %}
 
 {%- if on_docker == False %}
 include:
   - busybox
 {%- endif %}
 
-{%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] != 11) %}
+{%- if grains['os'] == 'Amazon' or (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] > 11) %}
 docker-prereqs:
   pkg.installed:
     - pkgs:

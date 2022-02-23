@@ -7,7 +7,7 @@
 {%- elif os == 'VMware Photon OS' %}
   {%- set nox_version = '2019.11.9' %}
 {%- else %}
-  {%- set nox_version = '2022.1.7' %}
+  {%- set nox_version = '2020.8.22' %}
 {%- endif %}
 
 {%- if os_family == 'Windows' %}

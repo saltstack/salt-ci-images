@@ -105,7 +105,9 @@ amazon-install-docker:
   {%- if on_docker == False %}
 amazon-docker-service:
   service.running:
+    - enable: True
     - name: docker
+    - enable: True
     - require:
       - file: /usr/bin/busybox
   {%- endif %}
@@ -130,18 +132,11 @@ docker:
     - aggregate: False
   {%- endif %}
   {%- if on_docker == False %}
-  {%- if grains['os'] == 'Debian' and grains['osmajorrelease'] < 11 %}
   service.running:
     - enable: True
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
-  {%- elif grains['os'] in ('AlmaLinux', 'CentOS Stream', 'CentOS') and grains['osmajorrelease'] >= 7 %}
-  service.running:
-    - enable: True
-    - require:
-      - pkg: docker
-  {%- endif %}
   {%- endif %}
 {%- endif %}
 {%- endif %}

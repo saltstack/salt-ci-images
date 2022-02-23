@@ -1,3 +1,13 @@
+#
+# Currently there are no Docker provided packages available for CentOS Stream 9, so we skip all of this.
+#
+{%- if grains['os'] == 'CentOS Stream' and grains['osmajorrelease'] >= 9 %}
+{% set install_docker = False %}
+{%- else %}
+{% set install_docker = True %}
+{%- endif %}
+
+{%- if install_docker == True %}
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- set install_from_docker_repos = True if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') else False %}
 
@@ -95,6 +105,7 @@ amazon-install-docker:
   {%- if on_docker == False %}
 amazon-docker-service:
   service.running:
+    - enable: True
     - name: docker
     - enable: True
     - require:
@@ -120,11 +131,12 @@ docker:
       - cmd: docker-repo-workaround
     - aggregate: False
   {%- endif %}
-  {%- if on_docker == False and (grains['os'] == 'Debian' and grains['osmajorrelease'] != 11) %}
+  {%- if on_docker == False %}
   service.running:
     - enable: True
     - require:
       - file: /usr/bin/busybox
       - pkg: docker
   {%- endif %}
+{%- endif %}
 {%- endif %}

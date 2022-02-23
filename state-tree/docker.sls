@@ -92,6 +92,10 @@ docker-repo-workaround:
     - name: |
         dnf -y install dnf-plugins-core
         dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+  {%- elif grains['os'] == 'SUSE' %}
+    - name: |
+        zypper addrepo https://download.opensuse.org/repositories/security:SELinux/SLE_{{ grains['osrelease_info'][0] }}_SP{{ grains['osrelease_info'][1] }}/security:SELinux.repo
+        zypper addrepo https://download.docker.com/linux/sles/docker-ce.repo
   {%- endif %}
 {%- endif %}
 

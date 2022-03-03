@@ -33,7 +33,8 @@
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd"
+        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd",
+        "echo 'export ON_DOCKER=1' > /etc/profile.d/on_docker.sh"
       ]
     },
     {

@@ -32,7 +32,8 @@
       "inline": [
         "zypper --non-interactive --gpg-auto-import-keys refresh",
         "zypper --non-interactive --gpg-auto-import-keys update",
-        "zypper --non-interactive install --auto-agree-with-licenses dbus-1 systemd git vim sudo curl openssh"
+        "zypper --non-interactive install --auto-agree-with-licenses dbus-1 systemd git vim sudo curl openssh",
+        "echo 'export ON_DOCKER=1' > /etc/profile.d/on_docker.sh"
       ]
     },
     {

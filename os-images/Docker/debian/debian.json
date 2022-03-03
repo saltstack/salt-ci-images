@@ -32,7 +32,8 @@
       "inline": [
         "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
         "apt-get update -y && apt-get upgrade -yq",
-        "apt-get install -y bash git vim openssh-server curl sudo lsb-release"
+        "apt-get install -y bash git vim openssh-server curl sudo lsb-release",
+        "echo 'export ON_DOCKER=1' > /etc/profile.d/on_docker.sh"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"

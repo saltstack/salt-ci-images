@@ -34,7 +34,8 @@
         "tdnf update -y",
         "if ! grep -q 'FipsMode yes' /etc/ssh/sshd_config; then echo 'FipsMode yes' >> /etc/ssh/sshd_config; fi",
         "mkdir -p /etc/vmware",
-        "touch /etc/vmware/system_fips"
+        "touch /etc/vmware/system_fips",
+        "echo 'export ON_DOCKER=1' > /etc/profile.d/on_docker.sh"
       ]
     },
     {

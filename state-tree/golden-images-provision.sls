@@ -1,9 +1,12 @@
 {%- set os_family = salt['grains.get']('os_family', '') %}
 {%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
-{%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
+{%- set on_docker = salt['environ.get']('ON_DOCKER', '0') %}
 
 include:
   - path
+  {%- if on_docker %}
+  - docker_environment
+  {%- endif %}
   {%- if grains['os'] == 'FreeBSD' %}
   - sysctl
   {%- endif %}

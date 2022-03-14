@@ -84,7 +84,7 @@
     },
     {
       "type": "shell-local",
-      "script": "os-images/AWS/files/prep-linux.sh",
+      "script": "os-images/Docker/files/prep-linux.sh",
       "environment_vars": [
         "SALT_PR={{ user `salt_pr` }}",
         "DISTRO_SLUG={{ user `distro_slug` }}",
@@ -157,7 +157,7 @@
     },
     {
       "type": "shell",
-      "script": "os-images/AWS/files/cleanup-linux.sh",
+      "script": "os-images/Docker/files/cleanup-linux.sh",
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     }
   ],

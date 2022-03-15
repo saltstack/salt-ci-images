@@ -12,6 +12,7 @@ include:
   {%- endif %}
   {%- if grains['os_family'] == 'Debian' %}
   - apt
+  - iputils_ping
   {%- endif %}
   {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
   - epel

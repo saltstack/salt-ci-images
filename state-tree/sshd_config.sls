@@ -35,10 +35,3 @@ sshd_config.TCPKeepAlive:
     - mode: insert
     - location: end
   {%- endif %}
-
-# Remove this, which prevents kitchen from finishing via SSH
-{%- if grains['os'] == 'CentOS Stream' and grains['osmajorrelease'] >= 9 %}
-remove_50_redhat_conf
-  file.absent:
-    - name: /etc/ssh/sshd_config.d/50-redhat.conf
-{%- endif %}

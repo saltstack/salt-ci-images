@@ -1,4 +1,6 @@
 {% set ssh_config = '/etc/ssh/sshd_config' %}
+{% set on_docker = salt['environ.get']('ON_DOCKER', '0') %}
+{% set fifty_redhat_conf = '/etc/ssh/sshd_config.d/50-redhat.conf' %}
 
 sshd_config.ClientAliveInterval:
   file.line:
@@ -35,3 +37,13 @@ sshd_config.TCPKeepAlive:
     - mode: insert
     - location: end
   {%- endif %}
+
+{%- if grains['os_family'] in ('RedHat') and on_docker %}
+{%- if salt['file.file_exists'](fifty_redhat_conf) %}
+edit_fifty_redhat_conf:
+  file.replace:
+    - name: {{ fifty_redhat_conf }}
+    - pattern: '(.*)opensshserver.config$'
+    - repl: ''
+{%- endif %}
+{%- endif %}

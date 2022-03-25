@@ -35,10 +35,9 @@ echo "Install salt v${SALT_VERSION}"
 pyenv shell ${SALT_PY_VERSION}
 pip install -U pip setuptools wheel
 # Install Salt
-pip install git+https://github.com/garethgreenaway/salt.git@kitchen_docker_test
-#if [ "${SALT_VERSION}" == "master" ]
-#then
-#  #pip install git+https://github.com/saltstack/salt.git@master
-#else
-#  pip install salt==${SALT_VERSION}
-#fi
+if [ "${SALT_VERSION}" == "master" ]
+then
+  #pip install git+https://github.com/saltstack/salt.git@master
+else
+  pip install salt==${SALT_VERSION}
+fi

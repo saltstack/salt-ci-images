@@ -124,6 +124,9 @@ include:
   - dhclient_conf
   - sshd_config
 {%- endif %}
+{%- if os_family in ('RedHat', 'Debian') %}
+  - rng-tools
+{%- endif %}
 {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
 {#- This is to be able to run pkgbuild tests on Salt #}
   - gpg

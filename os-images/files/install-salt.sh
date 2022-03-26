@@ -37,7 +37,7 @@ pip install -U pip setuptools wheel
 # Install Salt
 if [ "${SALT_VERSION}" == "master" ]
 then
-  #pip install git+https://github.com/saltstack/salt.git@master
+  pip install git+https://github.com/saltstack/salt.git@master
 else
   pip install salt==${SALT_VERSION}
 fi

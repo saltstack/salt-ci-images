@@ -4,19 +4,13 @@
 {%- set os = salt['grains.get']('os', '') %}
 
 {%- if os_family == 'RedHat' %}
-  {%- if os_major_release == 6 %}
-    {%- set pip_pkg_name = 'python27-pip' %}
-  {%- elif os_major_release == 2018 %}
+  {%- if os_major_release == 2018 %}
     {%- set pip_pkg_name = 'python36-pip' %}
   {%- else %}
     {%- set pip_pkg_name = 'python3-pip' %}
   {%- endif %}
 {%- elif os_family in ('Debian', 'Ubuntu') %}
-  {%- if os_major_release == 8 %}
-    {%- set pip_pkg_name = 'python-pip' %}
-  {%- else %}
-    {%- set pip_pkg_name = 'python3-pip' %}
-  {%- endif %}
+  {%- set pip_pkg_name = 'python3-pip' %}
 {%- elif os_family == 'Arch' %}
   {%- set pip_pkg_name = 'python-pip' %}
 {%- elif os_family == 'FreeBSD' %}

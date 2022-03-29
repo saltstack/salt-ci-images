@@ -4,7 +4,7 @@
 
 include:
   - path
-  {%- if on_docker %}
+  {%- if on_docker == 1 %}
   - docker_environment
   {%- endif %}
   {%- if grains['os'] == 'FreeBSD' %}

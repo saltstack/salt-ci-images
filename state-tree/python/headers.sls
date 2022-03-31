@@ -15,6 +15,9 @@
   {%- if grains['osrelease'].startswith('8') %}
     {%- set python3_dev = 'python36-devel' %}
     {%- set python2_dev = False %}
+  {%- elif grains['osrelease'].startswith('9') %}
+    {%- set python3_dev = 'python3-devel' %}
+    {%- set python2_dev = False %}
   {%- else %}
     {%- set python3_dev = 'python3-devel' %}
     {%- set python2_dev = 'python-devel' %}
@@ -41,7 +44,7 @@
 python2-dev:
   pkg.installed:
     - name: {{ python2_dev }}
-    - aggregate: True
+    - aggregate: False
     {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and grains['osrelease'].startswith('6') %}
     - fromrepo: saltstack
     {%- endif %}
@@ -51,7 +54,7 @@ python2-dev:
 python3-dev:
   pkg.installed:
     - name: {{ python3_dev }}
-    - aggregate: True
+    - aggregate: False
 {%- endif %}
 
 python-dev:

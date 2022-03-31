@@ -306,6 +306,26 @@ vmware-profile:
           host: {{ salt['pillar.get']('vmware:host', '') }}
           ssh_username: {{ salt['pillar.get']('vmware:ssh_username', '') }}
           password: {{ salt['pillar.get']('vmware:ssh_password', '') }}
+        vmware-test-instant-clone:
+          provider: vmware-config
+          clonefrom: {{ salt['pillar.get']('vmware:instantclonefrom', '') }}
+          instant_clone: true
+          num_cpus: 1
+          memory: 2GB
+          devices:
+            disk:
+              Hard disk 1:
+                size: 30
+              Hard disk 2:
+                size: 5
+                datastore: {{ salt['pillar.get']('vmware:datastore_disk', '') }}
+          cluster: {{ salt['pillar.get']('vmware:cluster', '') }}
+          datastore: {{ salt['pillar.get']('vmware:datastore', '') }}
+          datacenter: {{ salt['pillar.get']('vmware:datacenter', '') }}
+          host: {{ salt['pillar.get']('vmware:host', '') }}
+          ssh_username: {{ salt['pillar.get']('vmware:ssh_username', '') }}
+          password: {{ salt['pillar.get']('vmware:ssh_password', '') }}
+
     - show_changes: False
 
 {%- if salt['pillar.get']('vmware:ca-cert', '') != '' %}
@@ -341,7 +361,7 @@ vultr-profile:
     - contents: |
         vultr-test:
           provider: vultr-config
-          size: 2048 MB RAM,64 GB SSD,2.00 TB BW
+          size: 2048 MB RAM,55 GB SSD,2.00 TB BW
           image: CentOS 7 x64
           enable_private_network: False
           location: New Jersey

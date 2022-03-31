@@ -4,6 +4,9 @@
 
 include:
   - path
+  {%- if grains['os'] == 'FreeBSD' %}
+  - sysctl
+  {%- endif %}
   {%- if grains['os_family'] == 'Debian' %}
   - apt
   {%- endif %}
@@ -22,14 +25,16 @@ include:
   - libxml
   - libxslt
   - libffi
+  - zlib
     {%- if grains['os'] not in ('Amazon',) %}
   - libgit2
     {%- endif %}
   {%- endif %}
-  # All VMs get docker-py so they can run unit tests
-  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release == 7 or grains['os'] == 'Ubuntu' and os_major_release == 16 %}
-  # Docker integration tests only on CentOS 7 (for now)
+  # Make Docker available on all Linux systems
+  {%- if grains['kernel'] == "Linux" %}
   - docker
+  {%- endif %}
+  {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') and os_major_release == 7 %}
   - vault
   {%- endif %}
   {%- if grains['os'] == 'Ubuntu' and os_major_release >= 17 %}
@@ -41,6 +46,9 @@ include:
     {%- endif %}
   - python
   - gcc
+    {%- if grains['os'] in ('Fedora',) %}
+  - g++
+    {%- endif %}
   {%- endif %}
   - libsodium
   {#- On OSX these utils are available from the system rather than the pkg manager (brew) #}
@@ -84,6 +92,7 @@ include:
   {%- endif %}
   {%- if grains['os'] == 'VMware Photon OS' %}
   - gpg
+  - ssh_config
   {% endif %}
   {%- if grains['os'] != 'Windows' %}
   - dmidecode

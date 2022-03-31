@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build opensuse.json`",
+  "_comment": "Build with `packer build centos.json`",
   "variables": {
     "docker_username": "{{ env `DOCKER_USERNAME` }}",
     "docker_password": "{{ env `DOCKER_PASSWORD` }}"
@@ -14,7 +14,7 @@
         "Entrypoint [\"/bin/sh\", \"-c\"]",
         "CMD [\"/bin/bash\"]",
         "LABEL Name=\"{{ user `build_type` | upper }} // {{ user `os_name` }} {{ user `os_version` }}\"",
-        "LABEL OS-Name={{ user `os_name` }}",
+        "LABEL OS-Name=\"{{ user `os_name` }}\"",
         "LABEL OS-Version={{ user `os_version` }}",
         "LABEL BuildDate={{ isotime }}",
         "LABEL BuildType={{ user `build_type` | upper }}",
@@ -30,9 +30,9 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
-        "zypper --non-interactive --gpg-auto-import-keys refresh",
-        "zypper --non-interactive --gpg-auto-import-keys update",
-        "zypper --non-interactive install --auto-agree-with-licenses dbus-1 systemd git vim sudo curl openssh"
+        "yum install -y dnf || true",
+        "dnf update -y",
+        "dnf install -y git vim sudo openssh-server dbus"
       ]
     },
     {
@@ -49,7 +49,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "# Install Pyenv Dependencies",
-        "zypper --non-interactive install --auto-agree-with-licenses {{ user `salt_provision_pyenv_deps` }}",
+        "dnf install -y tar {{ user `salt_provision_pyenv_deps` }}",
         "# Install PyEnv",
         "curl https://pyenv.run | bash"
       ]
@@ -67,7 +67,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "# Un-Install Pyenv Dependencies",
-        "zypper --non-interactive remove --clean-deps {{ user `salt_provision_pyenv_deps` }}"
+        "dnf autoremove -y {{ user `salt_provision_pyenv_deps` }}"
       ]
     },
     {
@@ -91,14 +91,14 @@
       "type": "shell",
       "inline_shebang": "/bin/sh -ex",
       "inline": [
-        "zypper --non-interactive clean -a"
+        "dnf clean all",
+        "rm -rf /var/cache/yum"
       ]
     },
     {
       "type": "shell",
       "script": "os-images/files/cleanup-salt.sh",
       "environment_vars": [
-        "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
     },
@@ -113,13 +113,29 @@
       "output": "manifest.json",
       "strip_path": true,
       "custom_data": {
-        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}:{{ user `docker_arch` }}"
+        "container_name": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name_slug` | lower }}-{{ user `os_version` }}:{{ user `docker_arch` }}"
       }
     },
     [
       {
         "type": "docker-tag",
-        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name` | lower }}-{{ user `os_version` }}",
+        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-{{ user `os_name_slug` | lower }}-{{ user `os_version` }}",
+        "tags": [
+          "{{ user `docker_arch` }}",
+          "latest"
+        ]
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{ user `docker_username` }}",
+        "login_password": "{{ user `docker_password` }}"
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
+        "repository": "{{ user `docker_repository` }}/{{ user `build_type` | lower }}-centos-{{ user `os_version` }}",
         "tags": [
           "{{ user `docker_arch` }}",
           "latest"

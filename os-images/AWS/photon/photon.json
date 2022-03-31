@@ -76,6 +76,10 @@
       "type": "shell",
       "inline_shebang": "/bin/bash -ex",
       "inline": [
+        "growpart /dev/nvme0n1 3",
+        "resize2fs /dev/nvme0n1p3",
+        "df -h|grep /$|grep '39G\\|40G'",
+        "systemctl mask tmp.mount",
         "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
         "tdnf install -y linux",
         "if tdnf list linux-aws|grep @System; then tdnf remove -y linux-aws; fi",

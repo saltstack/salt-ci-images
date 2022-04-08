@@ -33,7 +33,7 @@ pyenv install -vv ${SALT_PY_VERSION}
 echo "Install salt v${SALT_VERSION}"
 # Select the installed Python
 pyenv shell ${SALT_PY_VERSION}
-pip install -U pip setuptools wheel
+pip install -U pip setuptools wheel jinja2==3.0.3
 # Install Salt
 if [ "${SALT_VERSION}" == "master" ]
 then

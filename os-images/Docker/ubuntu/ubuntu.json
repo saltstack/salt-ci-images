@@ -42,7 +42,7 @@
         "debconf-set-selections <<< 'libc6 libraries/restart-without-asking boolean true'",
         "apt-get upgrade -yq",
         "apt-get dist-upgrade -yq",
-        "apt-get install -y bash git vim openssh-server curl sudo lsb-release locales",
+        "apt-get install -y bash git vim openssh-server curl sudo lsb-release locales tar",
         "locale-gen en_US.UTF-8",
         "update-locale LANG=en_US.UTF-8"
       ],

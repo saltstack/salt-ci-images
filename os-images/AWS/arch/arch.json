@@ -79,7 +79,7 @@
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim"
+        "pacman -Sy --needed --noconfirm git vim tar"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },

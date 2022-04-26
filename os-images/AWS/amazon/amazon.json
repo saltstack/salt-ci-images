@@ -76,7 +76,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "yum update -y",
-        "yum install -y git vim curl"
+        "yum install -y git vim curl tar"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },

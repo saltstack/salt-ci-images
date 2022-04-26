@@ -77,7 +77,7 @@
       "inline": [
         "yum install -y dnf || true",
         "dnf update -y",
-        "dnf install -y git vim sudo openssh-server dbus curl"
+        "dnf install -y git vim sudo openssh-server dbus curl tar"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },

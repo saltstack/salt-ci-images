@@ -77,7 +77,7 @@
       "inline": [
         "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
         "apt-get update -y && apt-get upgrade -yq",
-        "apt-get install -y bash git vim openssh-server curl "
+        "apt-get install -y bash git vim openssh-server curl tar"
       ],
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive"

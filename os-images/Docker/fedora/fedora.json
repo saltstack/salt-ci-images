@@ -31,7 +31,7 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "dnf update -y",
-        "dnf install -y git vim sudo openssh-server dbus curl"
+        "dnf install -y git vim sudo openssh-server dbus curl tar"
       ]
     },
     {

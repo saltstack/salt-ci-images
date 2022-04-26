@@ -33,7 +33,7 @@
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd tar"
+        "pacman -Sy --needed --noconfirm git vim sudo awk openssh systemd tar which curl"
       ]
     },
     {

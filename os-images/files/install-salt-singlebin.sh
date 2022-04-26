@@ -8,6 +8,10 @@ set -x
 SALT_ARCHIVE_NAME=salt-${SALT_VERSION}-linux-amd64.tar.gz
 SALT_DOWNLOAD_URL=https://repo.saltproject.io/salt-singlebin/${SALT_VERSION}/${SALT_ARCHIVE_NAME}
 
+# While we don't have a stable working singlebin release
+SALT_ARCHIVE_NAME=salt-${SALT_VERSION}-linux-amd64.tar.gz
+SALT_DOWNLOAD_URL=https://repo.saltproject.io/salt-dev/singlebin/${SALT_VERSION}/${SALT_ARCHIVE_NAME}
+
 echo "Downloading ${SALT_DOWNLOAD_URL}"
 
 if [ "$(which curl)x" != "x" ]; then

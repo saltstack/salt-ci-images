@@ -1,7 +1,7 @@
 include:
   - curl
 
-install-pytenv:
+install-pyenv:
   cmd.run:
     - name: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
     - require:

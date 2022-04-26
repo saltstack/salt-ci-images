@@ -5,7 +5,7 @@
   "os_name": "Arch",
   "os_version": "lts",
   "os_arch": "x86_64",
-  "salt_provision_version": "3004-1",
+  "salt_provision_version": "3003rc1+2068.g98cd52d79b-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "golden-images-provision",
   "ami_filter": "arch-linux-lts-hvm-*.x86_64-ebs",

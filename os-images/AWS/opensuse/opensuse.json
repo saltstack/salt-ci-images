@@ -95,30 +95,10 @@
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "# Install Pyenv Dependencies",
-        "zypper --non-interactive install --auto-agree-with-licenses {{ user `salt_provision_pyenv_deps` }}",
-        "# Install PyEnv",
-        "curl https://pyenv.run | bash"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "script": "os-images/files/install-salt.sh",
+      "script": "os-images/files/install-salt-singlebin.sh",
       "environment_vars": [
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "# Un-Install Pyenv Dependencies",
-        "zypper --non-interactive remove --clean-deps {{ user `salt_provision_pyenv_deps` }}"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
@@ -150,7 +130,7 @@
     },
     {
       "type": "shell",
-      "script": "os-images/files/cleanup-salt.sh",
+      "script": "os-images/files/cleanup-salt-singlebin.sh",
       "environment_vars": [
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ],

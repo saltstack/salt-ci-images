@@ -61,37 +61,11 @@
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "# Install Pyenv Dependencies",
-        "apt-get install -y --no-install-recommends {{ user `salt_provision_pyenv_deps` }}",
-        "# Install PyEnv",
-        "curl https://pyenv.run | bash"
-      ],
-      "environment_vars": [
-        "LANG=en_US.UTF-8",
-        "DEBIAN_FRONTEND=noninteractive"
-      ]
-    },
-    {
-      "type": "shell",
-      "script": "os-images/files/install-salt.sh",
+      "script": "os-images/files/install-salt-singlebin.sh",
       "environment_vars": [
         "LANG=en_US.UTF-8",
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
-      ]
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/bash -ex",
-      "inline": [
-        "# Un-Install Pyenv Dependencies",
-        "apt-get purge -y {{ user `salt_provision_pyenv_deps` }}",
-        "apt-get autoremove --purge -y"
-      ],
-      "environment_vars": [
-        "DEBIAN_FRONTEND=noninteractive"
       ]
     },
     {
@@ -124,7 +98,7 @@
     },
     {
       "type": "shell",
-      "script": "os-images/files/cleanup-salt.sh",
+      "script": "os-images/files/cleanup-salt-singlebin.sh",
       "environment_vars": [
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"

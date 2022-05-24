@@ -35,10 +35,9 @@ echo "Install salt v${SALT_VERSION}"
 pyenv shell ${SALT_PY_VERSION}
 pip install -U pip setuptools wheel jinja2==3.0.3
 # Install Salt
-pip install git+https://github.com/MKLeb/salt.git@hotfix/centostream9-test-fixes
-# if [ "${SALT_VERSION}" == "master" ]
-# then
-#   pip install git+https://github.com/saltstack/salt.git@master
-# else
-#   pip install salt==${SALT_VERSION}
-# fi
+if [ "${SALT_VERSION}" == "master" ]
+then
+  pip install git+https://github.com/saltstack/salt.git@master
+else
+  pip install salt==${SALT_VERSION}
+fi

@@ -35,6 +35,17 @@ symlink-timezone-file:
     - target: /usr/share/zoneinfo/Etc/UTC
 {%- endif %}
 
+{%- if grains['os'] == 'AlmaLinux' and grains['osmajorrelease'] >= 9 %}
+install-tzdata:
+  pkg.installed:
+    - name: tzdata
+
+symlink-timezone-file:
+  file.symlink:
+    - name: /etc/localtime
+    - target: /usr/share/zoneinfo/UTC
+{%- endif %}
+
 set-time-zone:
   timezone.system:
     - name: Etc/UTC

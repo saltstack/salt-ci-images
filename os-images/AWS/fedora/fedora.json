@@ -68,7 +68,7 @@
           "delete_on_termination": true
         }
       ],
-      "user_data": "#!/bin/bash\nsed -i -r -e 's/^(PubkeyAcceptedKeyTypes )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsystemctl restart sshd"
+      "user_data": "#!/bin/bash\nsed -i -r -e 's/^(PubkeyAcceptedKeyTypes )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsed -i -r -e 's/^(PubkeyAcceptedAlgorithms )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsystemctl restart sshd"
     }
   ],
   "provisioners": [

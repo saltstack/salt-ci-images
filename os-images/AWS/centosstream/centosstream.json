@@ -63,11 +63,12 @@
       "launch_block_device_mappings": [
         {
           "device_name": "/dev/sda1",
-          "volume_size": 20,
+          "volume_size": 40,
           "volume_type": "gp3",
           "delete_on_termination": true
         }
-      ]
+      ],
+      "user_data": "#!/bin/bash\nsed -i -r -e 's/^(PubkeyAcceptedKeyTypes )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsed -i -r -e 's/^(PubkeyAcceptedAlgorithms )(.*)/\\1ssh-rsa,\\2/' /etc/crypto-policies/back-ends/opensshserver.config\nsystemctl restart sshd"
     }
   ],
   "provisioners": [

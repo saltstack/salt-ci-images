@@ -6,7 +6,7 @@
   "ssh_username": "vagrant",
   "os_name": "macos",
   "os_version": "10.13",
-  "salt_provision_version": "3001.1",
+  "salt_provision_version": "3004.2",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.6.10",
   "state_name": "golden-images-provision"

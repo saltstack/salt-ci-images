@@ -5,7 +5,7 @@
   "os_name": "FreeBSD",
   "os_version": "131",
   "os_arch": "amd64",
-  "salt_provision_version": "3004.1",
+  "salt_provision_version": "3004.2",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "salt_provision_python_version": "3.9.12",
   "salt_provision_pyenv_deps": "",

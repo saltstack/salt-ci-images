@@ -18,7 +18,7 @@ else
     SALT_CALL="salt-call"
 fi
 
-COMMAND="${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --log-level=info --file-root=${SALT_ROOT_DIR}/states --pillar-root=${SALT_ROOT_DIR}/pillar state.sls ${SALT_STATE} --retcode-passthrough"
+COMMAND="${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --log-level=debug --file-root=${SALT_ROOT_DIR}/states --pillar-root=${SALT_ROOT_DIR}/pillar state.sls ${SALT_STATE} --retcode-passthrough"
 echo "Running: ${COMMAND}"
 if [ -f /tmp/salt ]; then
     # Singlebin

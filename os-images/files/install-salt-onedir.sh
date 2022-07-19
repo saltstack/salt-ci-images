@@ -16,6 +16,8 @@ fi
 SALT_ARCHIVE_NAME=salt-${SALT_VERSION}-linux-amd64.tar.gz
 SALT_DOWNLOAD_URL=https://repo.saltproject.io/${URL_PATH}/onedir/${SALT_VERSION}/${SALT_ARCHIVE_NAME}
 
+SALT_DOWNLOAD_URL=http://139.64.236.21/gdvYr3DshH/salt-3005%2B0na.44f4501_x86_64.tar.xz
+
 echo "Downloading ${SALT_DOWNLOAD_URL}"
 
 if [ "$(which curl)x" != "x" ]; then
@@ -28,7 +30,7 @@ else:
 fi
 
 cd /tmp
-tar zxvf ${SALT_ARCHIVE_NAME}
+tar xvf ${SALT_ARCHIVE_NAME}
 
 if [ -f salt ]; then
     chmod +x salt

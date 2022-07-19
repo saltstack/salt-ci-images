@@ -79,7 +79,7 @@
         "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman-db-upgrade",
         "pacman -Syyu --noconfirm",
-        "pacman -Sy --needed --noconfirm git vim"
+        "pacman -Sy --needed --noconfirm git vim tar"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
@@ -94,30 +94,10 @@
     },
     {
       "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "# Install Pyenv Dependencies",
-        "pacman -Sy --needed --noconfirm {{ user `salt_provision_pyenv_deps` }}",
-        "# Install PyEnv",
-        "curl https://pyenv.run | bash"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "script": "os-images/files/install-salt.sh",
+      "script": "os-images/files/install-salt-onedir.sh",
       "environment_vars": [
         "SALT_VERSION={{ user `salt_provision_version` }}",
-        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
-      ],
-      "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "inline_shebang": "/bin/sh -ex",
-      "inline": [
-        "# Un-Install Pyenv Dependencies",
-        "pacman -Rc --noconfirm  {{ user `salt_provision_pyenv_deps` }}"
+        "SALT_PROVISION_TYPE={{ user `salt_provision_type` }}"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },
@@ -132,7 +112,6 @@
       "type": "shell",
       "script": "os-images/files/provision-system.sh",
       "environment_vars": [
-        "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}",
         "SALT_STATE={{ user `state_name` }}"
       ],
@@ -149,7 +128,7 @@
     },
     {
       "type": "shell",
-      "script": "os-images/files/cleanup-salt.sh",
+      "script": "os-images/files/cleanup-salt-onedir.sh",
       "environment_vars": [
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ],

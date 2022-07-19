@@ -35,3 +35,10 @@ sshd_config.TCPKeepAlive:
     - mode: insert
     - location: end
   {%- endif %}
+
+sshd_config:
+  test.succeed_without_changes:
+    - require:
+      - sshd_config.ClientAliveInterval
+      - sshd_config.ClientAliveCount
+      - sshd_config.TCPKeepAlive

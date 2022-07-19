@@ -122,7 +122,7 @@ include:
   {%- endif %}
 {%- if os_family not in ('Windows', 'MacOS',)  %}
   - dhclient_conf
-  - sshd_config
+  - sshd
 {%- endif %}
 {%- if os_family in ('RedHat', 'Debian') %}
   - rng-tools

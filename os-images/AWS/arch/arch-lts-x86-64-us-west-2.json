@@ -5,6 +5,7 @@
   "os_name": "Arch",
   "os_version": "lts",
   "os_arch": "x86_64",
+  "salt_provision_type": "stable",
   "salt_provision_version": "3004-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "golden-images-provision",

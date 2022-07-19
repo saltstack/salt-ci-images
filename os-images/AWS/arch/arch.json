@@ -97,7 +97,7 @@
       "script": "os-images/files/install-salt-onedir.sh",
       "environment_vars": [
         "SALT_VERSION={{ user `salt_provision_version` }}",
-        "SALT_PROVISION_TYPE={{ user `salt_provision_type` }}"
+        "SALT_PROVISION_TYPE={{ user `SALT_PROVISION_TYPE` }}"
       ],
       "execute_command": "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     },

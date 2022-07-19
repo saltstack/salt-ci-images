@@ -131,6 +131,11 @@ install-docker:
     - aggregate: False
 
   {%- if on_docker == False %}
+reload-systemd-units:
+  module.run:
+    - name: service.systemctl_reload
+    - order: 1
+
 enable-docker-service:
   service.running:
     - name: docker
@@ -138,6 +143,7 @@ enable-docker-service:
     - require:
       - install-docker
       - /usr/bin/busybox
+      - reload-systemd-units
   {%- endif %}
 {%- endif %}
 {%- endif %}

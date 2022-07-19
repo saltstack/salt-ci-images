@@ -132,6 +132,8 @@ docker:
     - aggregate: False
   {%- endif %}
   {%- if on_docker == False %}
+  module.run:
+    - systemd_service.systemctl_reload
   service.running:
     - enable: True
     - require:

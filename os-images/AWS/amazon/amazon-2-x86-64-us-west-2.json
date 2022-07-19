@@ -5,6 +5,7 @@
   "os_name": "Amazon Linux",
   "os_version": "2",
   "os_arch": "x86_64",
+  "salt_provision_type": "stable",
   "salt_provision_version": "3004.2-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "golden-images-provision",

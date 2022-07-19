@@ -5,8 +5,16 @@ set -e
 # Echo what runs
 set -x
 
+if [ "x${SALT_PROVISION_TYPE}" = "xrc" ]; then
+    URL_PATH="salt_rc/salt"
+elif [ "x${SALT_PROVISION_TYPE}" = "xdev" ]; then
+    URL_PATH="salt-dev/salt"
+else
+    URL_PATH="salt"
+fi
+
 SALT_ARCHIVE_NAME=salt-${SALT_VERSION}-linux-amd64.tar.gz
-SALT_DOWNLOAD_URL=https://repo.saltproject.io/salt/onedir/${SALT_VERSION}/${SALT_ARCHIVE_NAME}
+SALT_DOWNLOAD_URL=https://repo.saltproject.io/${URL_PATH}/onedir/${SALT_VERSION}/${SALT_ARCHIVE_NAME}
 
 echo "Downloading ${SALT_DOWNLOAD_URL}"
 

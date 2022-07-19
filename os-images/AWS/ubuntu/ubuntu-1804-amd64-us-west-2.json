@@ -5,6 +5,7 @@
   "os_name": "Ubuntu",
   "os_version": "1804",
   "os_arch": "amd64",
+  "salt_provision_type": "stable",
   "salt_provision_version": "3004.2-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "golden-images-provision",

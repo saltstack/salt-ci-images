@@ -130,7 +130,8 @@ install-docker:
   {%- endif %}
     - aggregate: False
 
-  {%- if on_docker == False %}
+  {%- if grains['os_family'] != 'Debian' %}
+    {%- if on_docker == False %}
 reload-systemd-units:
   module.run:
     - name: service.systemctl_reload
@@ -144,6 +145,7 @@ enable-docker-service:
       - install-docker
       - /usr/bin/busybox
       - reload-systemd-units
+    {%- endif %}
   {%- endif %}
 {%- endif %}
 {%- endif %}

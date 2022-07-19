@@ -12,6 +12,8 @@ if [ -f /tmp/salt ]; then
     SALT_CALL="/tmp/salt call"
 elif [ -f /tmp/salt/run/run ]; then
     SALT_CALL="/tmp/salt/run/run call"
+elif [ -f /tmp/salt/salt-call ]; then
+    SALT_CALL=/tmp/salt/salt-call
 else
     SALT_CALL="salt-call"
 fi
@@ -23,6 +25,8 @@ if [ -f /tmp/salt ]; then
     eval "${COMMAND}"
 elif [ -f /tmp/salt/run/run ]; then
     # Onedir
+    eval "${COMMAND}"
+elif [ -f /tmp/salt/salt-call ]; then
     eval "${COMMAND}"
 else
     # Pyenv

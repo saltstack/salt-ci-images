@@ -115,7 +115,7 @@ amazon-docker-service:
 
 # SUSE, Fedora, Photon, and more install Docker from OS distro repos
 {%- if grains['os'] != 'Amazon' %}
-docker:
+install-docker:
   pkg.installed:
     - refresh: True
     - pkgs:
@@ -123,22 +123,21 @@ docker:
       - docker-ce
       - docker-ce-cli
       - containerd.io
+    - require:
+      - docker-repo-workaround
   {%- else %}
       - docker
   {%- endif %}
-  {%- if install_from_docker_repos == True %}
-    - require:
-      - cmd: docker-repo-workaround
     - aggregate: False
-  {%- endif %}
+
   {%- if on_docker == False %}
-  module.run:
-    - systemd_service.systemctl_reload
+enable-docker-service:
   service.running:
+    - name: docker
     - enable: True
     - require:
-      - file: /usr/bin/busybox
-      - pkg: docker
+      - install-docker
+      - /usr/bin/busybox
   {%- endif %}
 {%- endif %}
 {%- endif %}

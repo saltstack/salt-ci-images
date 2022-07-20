@@ -112,11 +112,13 @@ include:
   {%- if os_family == 'Arch' %}
   - lsb_release
   {%- endif %}
-  {%- if not on_docker %}
+  {%- if not on_docker and grains['os'] != 'Windows' %}
   - sssd
   {%- endif %}
   - python.nox
+  {%- if grains['os'] != 'Windows' %}
   - cron
+  {%- endif %}
   {%- if not on_docker and 'Linux' in grains.kernel %}
   - timesync
   {%- endif %}

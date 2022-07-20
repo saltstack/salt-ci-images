@@ -8,9 +8,9 @@ openssl:
           openssl:
             'openssl':
               full_name: 'Openssl'
-              installer: 'https://slproweb.com/download/Win64OpenSSL-1_0_2u.exe'
+              installer: 'https://slproweb.com/download/Win64OpenSSL-1_1_1q.exe'
               install_flags: '/silent'
-              uninstaller: 'https://slproweb.com/download/Win64OpenSSL-1_0_2u.exe'
+              uninstaller: 'https://slproweb.com/download/Win64OpenSSL-1_1_1q.exe'
               uninstall_flags: ''
               msiexec: False
               locale: en_US

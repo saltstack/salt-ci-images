@@ -30,7 +30,7 @@ include:
   - libgit2
     {%- endif %}
   {%- endif %}
-  # Make Docker available on all Linux systems
+  {#- Make Docker available on all Linux systems #}
   {%- if grains['kernel'] == "Linux" %}
   - docker
   {%- endif %}

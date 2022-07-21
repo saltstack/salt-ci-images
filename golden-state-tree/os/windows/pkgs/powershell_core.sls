@@ -1,0 +1,2 @@
+powershell-core:
+  pkg.installed

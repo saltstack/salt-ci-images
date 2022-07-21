@@ -1,0 +1,2 @@
+curl:
+  pkg.latest

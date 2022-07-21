@@ -1,0 +1,2 @@
+libdpkg-perl:
+  pkg.installed

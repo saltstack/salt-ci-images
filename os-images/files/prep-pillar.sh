@@ -15,7 +15,7 @@ if [ -d ${PILLAR_DIR} ]; then
 fi
 
 mkdir -p ${PILLAR_DIR}
-cp pillar-tree/*.sls ${PILLAR_DIR}/
+cp golden-pillar-tree/*.sls ${PILLAR_DIR}/
 
 echo "Pillar Tree Contents:"
 ls -lah ${PILLAR_DIR}/

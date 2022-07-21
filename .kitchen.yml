@@ -154,7 +154,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - golden-images-provision
+            - provision
       pillars:
         top.sls:
           base:
@@ -201,7 +201,7 @@ suites:
             - match: grain
             - windows
           "*":
-            - golden-images-provision
+            - provision
       pillars:
         top.sls:
           base:

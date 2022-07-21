@@ -1,0 +1,2 @@
+openssl:
+  pkg.latest

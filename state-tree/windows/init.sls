@@ -6,6 +6,7 @@ include:
   - windows.vcredist
   - windows.openssl
   - windows.powershell_core
+  - windows.libs
 
 stop-minion:
   service.dead:

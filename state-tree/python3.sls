@@ -93,12 +93,16 @@ include:
     {%- endif %}
   {%- endif %}
 
+{%- if on_windows %}
+  {%- set python3_dir = 'c:\\\\Python38' %}
+{%- endif %}
+
 python3:
   pkg.installed:
     - name: {{ python3 }}
-    {%- if grains['os'] == 'Windows' %}
+    {%- if on_windows %}
     - version: '3.8.10150.0'
-    - extra_install_flags: "TargetDir=C:\\Python38 Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
+    - extra_install_flags: "TargetDir={{ python3_dir }} Include_doc=0 Include_tcltk=0 Include_test=0 Include_launcher=1 PrependPath=1 Shortcuts=0"
     {%- endif %}
     - aggregate: False
 

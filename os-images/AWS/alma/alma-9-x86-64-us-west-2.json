@@ -7,7 +7,7 @@
   "os_arch": "x86_64",
   "salt_provision_version": "3004.2-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
-  "state_name": "golden-images-provision",
+  "state_name": "provision",
   "ami_filter": "AlmaLinux OS 9*x86_64",
   "ami_owner": "764336703387",
   "ami_name_prefix": "saltstack",

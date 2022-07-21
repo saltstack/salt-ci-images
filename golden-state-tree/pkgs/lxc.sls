@@ -1,0 +1,2 @@
+lxc:
+  pkg.latest

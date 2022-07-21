@@ -9,7 +9,7 @@
   "salt_provision_type": "stable",
   "salt_provision_version": "3004.2-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
-  "state_name": "golden-images-provision",
+  "state_name": "provision",
   "ami_filter": "debian-10-amd64-20*",
   "ami_owner": "136693071363",
   "ami_name_prefix": "saltstack",

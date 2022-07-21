@@ -1,0 +1,2 @@
+tzdata:
+  pkg.installed

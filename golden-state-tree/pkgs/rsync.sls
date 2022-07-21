@@ -1,0 +1,2 @@
+rsync:
+  pkg.installed

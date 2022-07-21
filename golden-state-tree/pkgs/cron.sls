@@ -1,0 +1,2 @@
+cronie:
+  pkg.installed

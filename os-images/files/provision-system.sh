@@ -18,6 +18,9 @@ else
     SALT_CALL="salt-call"
 fi
 
+printf "\n\nSystem Grains Information:\n"
+eval "${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --grains && sleep 1; printf '\n\n'; "
+
 COMMAND="${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --log-level=debug --file-root=${SALT_ROOT_DIR}/states --pillar-root=${SALT_ROOT_DIR}/pillar state.sls ${SALT_STATE} --retcode-passthrough"
 echo "Running: ${COMMAND}"
 if [ -f /tmp/salt ]; then

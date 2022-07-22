@@ -1,10 +1,12 @@
 include:
   - .epel-release
+  {%- if grains['osarch'] not in ('amd64', 'armhf', 'arm64') %}
+  - .docker
+  {%- endif %}
   - pkgs.cron
   - pkgs.curl
   - pkgs.dmidecode
   - pkgs.dnsutils
-  - pkgs.docker
   - pkgs.gcc
   - pkgs.gpg
   - pkgs.libcurl

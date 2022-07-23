@@ -6,5 +6,6 @@
   {%- set gnupg = 'gnupg' %}
 {%- endif %}
 
-{{ gnupg }}:
-  pkg.installed
+gnupg:
+  pkg.installed:
+    - name: {{ gnupg }}

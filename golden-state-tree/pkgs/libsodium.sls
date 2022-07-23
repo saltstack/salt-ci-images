@@ -14,5 +14,6 @@ include:
   - os.centos-stream.pkgs.epel-release
 {%- endif %}
 
-{{ libsodium }}:
-  pkg.installed
+libsodium:
+  pkg.installed:
+    - name: {{ libsodium }}

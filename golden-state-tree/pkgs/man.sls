@@ -4,5 +4,6 @@
   {%- set man = 'man-db' %}
 {%- endif %}
 
-{{ man }}:
-  pkg.installed
+man:
+  pkg.installed:
+    - name: {{ man }}

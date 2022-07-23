@@ -14,4 +14,3 @@ openssl-dev:
     - name: {{ openssl_dev }}
     - require:
       - openssl
-    - aggregate: False

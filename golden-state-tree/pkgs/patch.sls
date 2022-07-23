@@ -4,5 +4,6 @@
   {%- set patch = 'patch' %}
 {%- endif %}
 
-{{ patch }}:
-  pkg.installed
+patch:
+  pkg.installed:
+    - name: {{ patch }}

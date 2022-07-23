@@ -13,5 +13,6 @@
   {%- set dnsutils = 'dnsutils' %}
 {%- endif %}
 
-{{ dnsutils }}:
-  pkg.installed
+dnsutils:
+  pkg.installed:
+    - name: {{ dnsutils }}

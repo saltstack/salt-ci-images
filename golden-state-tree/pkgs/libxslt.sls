@@ -6,5 +6,6 @@
   {%- set libxslt = "libxslt" %}
 {%- endif %}
 
-{{ libxslt }}:
-  pkg.installed
+libxslt:
+  pkg.installed:
+    - name: {{ libxslt }}

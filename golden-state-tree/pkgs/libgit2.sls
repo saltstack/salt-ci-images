@@ -9,7 +9,15 @@
 {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
 include:
   - os.centos-stream.pkgs.epel-release
+{%- elif grains['os_family'] == 'Suse' %}
+include:
+  - pkgs.openssl-dev
 {%- endif %}
 
-{{ libgit2 }}:
-  pkg.installed
+libgit2-dev:
+  pkg.installed:
+    - name: {{ libgit2 }}
+{%- if grains['os_family'] == 'Suse' %}
+    - require:
+      - openssl-dev
+{%- endif %}

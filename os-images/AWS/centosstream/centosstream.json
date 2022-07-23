@@ -67,8 +67,7 @@
           "volume_type": "gp3",
           "delete_on_termination": true
         }
-      ],
-      "user_data": "#!/bin/bash\n/bin/update-crypto-policies --set LEGACY\nsystemctl restart sshd"
+      ]
     }
   ],
   "provisioners": [

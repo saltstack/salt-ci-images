@@ -6,5 +6,11 @@
   {%- set openssl_dev = 'libssl-dev' %}
 {%- endif %}
 
+include:
+  - pkgs.openssl
+
 {{ openssl_dev }}:
-  pkg.installed
+  pkg.installed:
+    - require:
+      - openssl
+    - aggregate: False

@@ -6,9 +6,12 @@
   {%- set libgit2 = "libgit2" %}
 {%- endif %}
 
-{%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Amazon') %}
+{%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 include:
   - os.centos-stream.pkgs.epel-release
+{%- elif grains['os'] == 'Amazon' %}
+include:
+  - os.amazon.pkgs.epel-release
 {%- elif grains['os_family'] == 'Suse' %}
 include:
   - pkgs.openssl-dev

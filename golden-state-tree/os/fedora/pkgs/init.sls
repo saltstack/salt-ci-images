@@ -1,5 +1,6 @@
 include:
   - .g++
+  - .python3
   - pkgs.cron
   - pkgs.curl
   - pkgs.dmidecode
@@ -19,7 +20,6 @@ include:
   - pkgs.openssl
   - pkgs.openssl-dev
   - pkgs.patch
-  - pkgs.python3
   - pkgs.python3-pip
   - pkgs.rng-tools
   - pkgs.rsync

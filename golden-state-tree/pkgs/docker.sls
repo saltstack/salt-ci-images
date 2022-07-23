@@ -9,7 +9,11 @@
 {%- if install_docker == True %}
 
   {%- if grains['os_family'] in ('Debian', 'RedHat') %}
-    {%- set install_from_docker_repos = True %}
+    {%- if grains['os'] != 'VMware Photon OS' %}
+      {%- set install_from_docker_repos = True %}
+    {%- else %}
+      {%- set install_from_docker_repos = False %}
+    {%- endif %}
   {%- else %}
     {%- set install_from_docker_repos = False %}
   {%- endif %}

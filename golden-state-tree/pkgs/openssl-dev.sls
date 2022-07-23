@@ -9,8 +9,9 @@
 include:
   - pkgs.openssl
 
-{{ openssl_dev }}:
+openssl-dev:
   pkg.installed:
+    - name: {{ openssl_dev }}
     - require:
       - openssl
     - aggregate: False

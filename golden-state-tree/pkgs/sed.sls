@@ -4,5 +4,6 @@
   {%- set sed = 'sed' %}
 {%- endif %}
 
-{{ sed }}:
-  pkg.installed
+sed:
+  pkg.installed:
+    - name: {{ sed }}

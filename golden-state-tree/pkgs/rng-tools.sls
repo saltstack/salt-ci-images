@@ -4,5 +4,6 @@
   {%- set rng_tools = 'rng-tools' %}
 {%- endif %}
 
-{{ rng_tools }}:
-  pkg.installed
+rng_tools:
+  pkg.installed:
+    - name: {{ rng_tools }}

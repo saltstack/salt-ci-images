@@ -4,5 +4,6 @@
   {%- set dmidecode = 'dmidecode' %}
 {%- endif %}
 
-{{ dmidecode }}:
-  pkg.installed
+dmidecode:
+  pkg.installed:
+    - name: {{ dmidecode }}

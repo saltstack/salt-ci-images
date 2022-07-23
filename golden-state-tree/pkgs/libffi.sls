@@ -6,5 +6,6 @@
   {%- set libffi = "libffi" %}
 {%- endif %}
 
-{{ libffi }}:
-  pkg.installed
+libffi:
+  pkg.installed:
+    - name: {{ libffi }}

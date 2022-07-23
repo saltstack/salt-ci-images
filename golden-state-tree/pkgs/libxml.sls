@@ -6,5 +6,6 @@
   {%- set libxml2 = "libxml2" %}
 {%- endif %}
 
-{{ libxml2 }}:
-  pkg.installed
+libxml2:
+  pkg.installed:
+    - name: {{ libxml2 }}

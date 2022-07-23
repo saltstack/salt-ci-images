@@ -1,8 +1,4 @@
 include:
-  - .epel-release
-  {%- if grains['osarch'] not in ('amd64', 'armhf', 'arm64') %}
-  - .docker
-  {%- endif %}
   - pkgs.cron
   - pkgs.curl
   - pkgs.dmidecode
@@ -28,3 +24,9 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+
+  {#- OS Specific packages install #}
+  - .epel-release
+  {%- if grains['osarch'] not in ('amd64', 'armhf', 'arm64') %}
+  - .docker
+  {%- endif %}

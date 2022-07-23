@@ -1,7 +1,4 @@
 include:
-  - .apt-utils
-  - .libdpkg-perl
-  - .timesync
   - pkgs.curl
   - pkgs.dmidecode
   - pkgs.dnsutils
@@ -28,3 +25,7 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  {#- OS Specific packages install #}
+  - .apt-utils
+  - .libdpkg-perl
+  - .timesync

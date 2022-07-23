@@ -1,5 +1,4 @@
 include:
-  - .epel-release
   - pkgs.cron
   - pkgs.curl
   - pkgs.dmidecode
@@ -27,3 +26,5 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  {#- OS Specific packages install #}
+  - .epel-release

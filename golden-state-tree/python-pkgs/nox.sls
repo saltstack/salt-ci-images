@@ -1,20 +1,29 @@
-{%- set os = salt['grains.get']('os', '') %}
-{%- set os_family = salt['grains.get']('os_family', '') %}
-{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
+{%- if grains['os'] == 'VMware Photon OS' %}
+  {#-
+    The latest version of nox pulls in packaging, which is already installed
+    on PhotonOS AMIs. If we try to uninstall that the following would also
+    be uninstalled:
+      python3-requests
+      python3-pyOpenSSL
+      python3-packaging
+      python3-cryptography
+      minimal
+      cloud-init
 
-{%- if os == 'Ubuntu' and os_major_release == 16 %}
-  {%- set nox_version = '2019.11.9' %}
+    The last one seems important, so we'll just use an older version of nox
+  #}
+  {%- set nox_version = '2020.12.31' %}
 {%- else %}
-  {%- set nox_version = '2020.8.22' %}
+  {%- set nox_version = '2022.1.7' %}
 {%- endif %}
 
-{%- if os_family == 'Windows' %}
+{%- if grains['os_family'] == 'Windows' %}
   {%- set on_windows=True %}
 {%- else %}
   {%- set on_windows=False %}
 {%- endif %}
 
-{%- if os_family == 'FreeBSD' %}
+{%- if grains['os_family'] == 'FreeBSD' %}
   {%- set on_freebsd=True %}
 {%- else %}
   {%- set on_freebsd=False %}
@@ -36,9 +45,9 @@
 nox:
   cmd.run:
   {%- if not on_windows %}
-    - name: "{{ pip }} install 'nox=={{ nox_version }}' 'virtualenv==20.0.20'"
+    - name: "{{ pip }} install 'nox=={{ nox_version }}'"
   {%- else %}
-    - name: {{ pip }} install nox=={{ nox_version }} virtualenv==20.0.20
+    - name: {{ pip }} install nox=={{ nox_version }}
   {%- endif %}
 
   {%- if not on_windows %}

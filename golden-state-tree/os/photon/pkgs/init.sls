@@ -1,4 +1,5 @@
 include:
+  - pkgs.cron
   - pkgs.bower
   - pkgs.curl
   - pkgs.dmidecode

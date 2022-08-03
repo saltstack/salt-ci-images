@@ -37,12 +37,20 @@ TCPKeepAlive:
   {%- endif %}
 
 
-enable-and-restart-sshd:
+stop-sshd:
+  service.dead:
+    - name: sshd
+    - enable: True
+    - require:
+      - ClientAliveInterval
+      - ClientAliveCount
+      - TCPKeepAlive
+
+
+start-sshd:
   service.enabled:
     - name: sshd
     - enable: True
     - reload: True
     - require:
-      - ClientAliveInterval
-      - ClientAliveCount
-      - TCPKeepAlive
+      - stop-sshd

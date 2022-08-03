@@ -35,3 +35,14 @@ TCPKeepAlive:
     - mode: insert
     - location: end
   {%- endif %}
+
+
+enable-and-restart-sshd:
+  service.enabled:
+    - name: sshd
+    - enable: True
+    - reload: True
+    - require:
+      - ClientAliveInterval
+      - ClientAliveCount
+      - TCPKeepAlive

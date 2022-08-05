@@ -29,6 +29,7 @@ buildGoldenImage(
     jenkins_slave_label: jenkins_slave_label,
     concurrent_builds: concurrent_builds,
     ec2_region: 'us-west-2',
+    kitchen_platforms_file: '/var/jenkins/workspace/platforms-sulfur.yml',
 )
 
 // vi: ft=groovy

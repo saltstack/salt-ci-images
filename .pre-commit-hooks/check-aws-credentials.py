@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 # Import Python libs
-import json
+from __future__ import annotations
+
 import argparse
+import json
 
 
 def check_for_credentials(data, disallowed_keys_with_values):
@@ -20,20 +20,18 @@ def check_for_credentials(data, disallowed_keys_with_values):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-k', '--key',
-        dest='keys',
-        metavar='KEY',
-        action='append',
-        default=[
-            'aws_access_key',
-            'aws_secret_key'
-        ]
+        "-k",
+        "--key",
+        dest="keys",
+        metavar="KEY",
+        action="append",
+        default=["aws_access_key", "aws_secret_key"],
     )
-    parser.add_argument('files', nargs='+')
+    parser.add_argument("files", nargs="+")
 
     args = parser.parse_args()
     if not args.files:
-        parser.exit('No files were passed in')
+        parser.exit("No files were passed in")
 
     collected_errors = {}
     for fname in args.files:
@@ -41,16 +39,16 @@ def main():
             with open(fname) as rfh:
                 data = json.loads(rfh.read())
         except ValueError:
-            parser.exit('Failed to JSON load {}'.format(fname))
+            parser.exit(f"Failed to JSON load {fname}")
         errors = check_for_credentials(data, args.keys)
         if errors:
             collected_errors[fname] = errors
 
     if collected_errors:
         for fname, errors in collected_errors.items():
-            print('Found a populated secret key value in {}:'.format(fname))
+            print(f"Found a populated secret key value in {fname}:")
             for error in errors:
-                print('  - {}'.format(error))
+                print(f"  - {error}")
         parser.exit(1)
 
 

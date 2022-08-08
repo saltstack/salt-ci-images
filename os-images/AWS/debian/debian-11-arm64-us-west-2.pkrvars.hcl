@@ -1,8 +1,0 @@
-ami_filter = "debian-11-arm64*"
-ami_name_suffix = "debian/11/arm64"
-instance_type = "m6g.large"
-os_arch = "arm64"
-os_version = "11"
-salt_provision_pyenv_deps = "make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev"
-salt_provision_python_version = "3.8.13"
-salt_provision_version = "3004.2"

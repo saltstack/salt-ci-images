@@ -9,13 +9,33 @@ import pprint
 import sys
 import threading
 import time
+from datetime import datetime
 from shutil import which
 
 from invoke import task
+from invoke.exceptions import UnexpectedExit
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TIMESTAMP_UI = " -timestamp-ui" if "DRONE" in os.environ else ""
+TIMESTAMP_UI = " -timestamp-ui" if "CI" in os.environ else ""
 PACKER_TMP_DIR = os.path.join(REPO_ROOT, ".tmp", "{}")
+
+DISTRO_DISPLAY_NAMES = {
+    "almalinux": "AlmaLinux",
+    "amazon": "Amazon",
+    "arch": "Arch",
+    "centos": "CentOS",
+    "centos-stream": "CentOS Stream",
+    "opensuse-tumbleweed": "Opensuse Tumbleweed",
+    "oraclelinux": "Oracle Linux",
+    "freebsd": "FreeBSD",
+    "openbsd": "OpenBSD",
+}
+
+
+class BuildFailed(Exception):
+    """
+    Exception raised when a box build fails.
+    """
 
 
 def _binary_install_check(binary):
@@ -352,8 +372,13 @@ def build_vagrant(
     staging=False,
     validate=False,
     salt_pr=None,
-    distro_arch=None,
+    distro_arch="amd64",
     init=False,
+    pull=False,
+    no_test=False,
+    vagrantcloud_user="salt-project-ci",
+    test_command="nox --version",
+    test_command_expected_std="stderr",
 ):
     distro = distro.lower()
     ctx.cd(REPO_ROOT)
@@ -366,6 +391,9 @@ def build_vagrant(
         distro_slug += f"-{distro_version}"
     if distro_arch:
         distro_slug += f"-{distro_arch}"
+
+    output_box_name = f"{distro_slug.replace('-amd64', '')}"
+    output_box_version = datetime.utcnow().strftime("%Y%m%d.%H%M")
 
     template_variations = [
         os.path.join(distro_dir, f"{distro_slug}.pkr.hcl"),
@@ -428,22 +456,121 @@ def build_vagrant(
     cmd = "packer"
     _binary_install_check(cmd)
     if validate is True:
-        cmd += " validate"
+        packer_command = "validate"
+        cmd += f" {packer_command}"
     elif init is True:
-        cmd += " init"
+        packer_command = "init"
+        cmd += f" {packer_command}"
+    elif pull is True:
+        packer_command = "console"
+        cmd += f" {packer_command}"
     else:
-        cmd += " build"
+        packer_command = "build"
+        cmd += f" {packer_command}"
         if debug is True:
             cmd += " -debug -on-error=ask"
         if force:
-            cmd += " --force"
+            cmd += " -force"
         cmd += TIMESTAMP_UI
     cmd += f" -var-file={build_vars}"
+    cmd += f" -only=vagrant.{distro}-{distro_arch}"
     if staging is True:
-        cmd += " -var build_type=ci-staging"
+        build_type = "ci-staging"
     else:
-        cmd += " -var build_type=ci"
+        build_type = "ci"
+    cmd += f" -var build_type={build_type}"
     if salt_pr and salt_pr.lower() != "null":
         cmd += f" -var salt_pr={salt_pr}"
+
+    cmd += f" -var vagrantcloud_user={vagrantcloud_user}"
+    cmd += f" -var output_box_name={output_box_name}"
+    cmd += f" -var output_box_version={output_box_version}"
     cmd += f" -var distro_slug={distro_slug} {build_template}"
-    ctx.run(cmd, echo=True)
+    if pull is True:
+        cmd = f"echo variables | {cmd}"
+        ret = ctx.run(cmd, echo=False)
+        variables = {}
+        for line in ret.stdout.splitlines():
+            if not line:
+                continue
+            if line.startswith(">"):
+                continue
+            key, value = line.split(":")
+            key = key.strip().replace("var.", "")
+            value = value.strip()[1:-1]
+            variables[key] = value
+        try:
+            cmd = f"vagrant box list | grep {variables['src_box_name']}"
+            if variables.get("src_box_version"):
+                cmd += f" | grep {variables['src_box_version']}"
+            ctx.run(cmd, echo=True)
+            if force is not True:
+                pull = False
+            print(
+                f"The image {variables['src_box_name']} already exists...",
+                file=sys.stderr,
+                flush=True,
+            )
+        except UnexpectedExit:
+            pass
+
+        if pull is True:
+            cmd = "vagrant box add --provider=virtualbox"
+            if variables.get("src_box_version"):
+                cmd += f" --box-version={variables['src_box_version']}"
+            cmd += f" {variables['src_box_name']}"
+            ctx.run(cmd, echo=True)
+    else:
+        try:
+            ctx.run(cmd, echo=True)
+            if no_test is False and packer_command == "build":
+                with ctx.cd("target"):
+                    try:
+                        ctx.run(
+                            f"vagrant box add --provider=virtualbox --name={output_box_name}-test --force package.box",
+                            echo=True,
+                        )
+                        ctx.run("vagrant up --provider=virtualbox output", echo=True)
+                        ret = ctx.run(f"vagrant ssh -c '{test_command}' output", echo=True)
+                        if getattr(ret, test_command_expected_std).strip() == "":
+                            raise BuildFailed("Failed to get nox version from the box")
+                    finally:
+                        try:
+                            ctx.run("vagrant destroy --force output")
+                        finally:
+                            ctx.run(f"vagrant box remove --force {output_box_name}-test", echo=True)
+                    try:
+                        ctx.run(
+                            f"vagrant cloud box create --no-private {vagrantcloud_user}/{output_box_name}"
+                        )
+                    except UnexpectedExit:
+                        # The command will fail if we already created the box
+                        pass
+
+                    # Get the sha256sum of the newly built image
+                    ret = ctx.run("sha256sum package.box", echo=True)
+                    sha256sum = ret.stdout.split()[0].strip()
+                    # Publish the newly built image
+                    distro_display_name = DISTRO_DISPLAY_NAMES.get(distro, distro.title())
+                    short_description = (
+                        f"'{build_type.upper()} Image of {distro_display_name} "
+                        f"{distro_version} For {distro_arch.upper()}"
+                    )
+                    ctx.run(
+                        "vagrant cloud publish --force --no-private --no-tty "
+                        f"--short-description='{short_description}' "
+                        f"--checksum={sha256sum} --checksum-type=sha256 "
+                        f"{vagrantcloud_user}/{output_box_name} {output_box_version} "
+                        "virtualbox package.box",
+                        echo=True,
+                    )
+                    # Release the newly built image
+                    ctx.run(
+                        "vagrant cloud version release --force "
+                        f"{vagrantcloud_user}/{output_box_name} {output_box_version}",
+                        echo=True,
+                    )
+        except (UnexpectedExit, BuildFailed) as exc:
+            if isinstance(exc, BuildFailed):
+                print(exc, file=sys.stderr, flush=True)
+            sys.exit(1)

@@ -8,4 +8,5 @@ set -x
 rm -rf /tmp/* || true
 find /var/log/ -type f -exec rm -rf {} \;
 touch /var/log/lastlog
+sync
 history -c

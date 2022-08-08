@@ -15,10 +15,16 @@ botocore==1.24.36
     #   awscli
     #   boto3
     #   s3transfer
+certifi==2022.6.15
+    # via requests
+charset-normalizer==2.0.12
+    # via requests
 colorama==0.4.3
     # via awscli
 docutils==0.15.2
     # via awscli
+idna==3.3
+    # via requests
 invoke==1.5.0
     # via -r os-images/requirements/base.in
 jmespath==0.10.0
@@ -31,6 +37,8 @@ python-dateutil==2.8.1
     # via botocore
 pyyaml==5.4.1
     # via awscli
+requests==2.27.1
+    # via -r os-images/requirements/base.in
 rsa==4.7.2
     # via awscli
 s3transfer==0.5.0
@@ -42,4 +50,6 @@ six==1.15.0
     #   blessings
     #   python-dateutil
 urllib3==1.26.5
-    # via botocore
+    # via
+    #   botocore
+    #   requests

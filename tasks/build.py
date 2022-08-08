@@ -61,38 +61,48 @@ def build_aws(ctx,
         distro_slug += '-{}'.format(distro_arch)
 
     template_variations = [
-        os.path.join(distro_dir, '{}.json'.format(distro_slug))
+        os.path.join(distro_dir, '{}.json'.format(distro_slug)),
+        os.path.join(distro_dir, '{}.pkr.hcl'.format(distro_slug))
     ]
     if distro_arch:
         template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_arch)))
+        template_variations.append(os.path.join(distro_dir, '{}-{}.pkr.hcl'.format(distro, distro_arch)))
     if distro_version:
         template_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, distro_version)))
+        template_variations.append(os.path.join(distro_dir, '{}-{}.pkr.hcl'.format(distro, distro_version)))
     template_variations.append(os.path.join(distro_dir, '{}.json'.format(distro)))
+    template_variations.append(os.path.join(distro_dir, '{}.pkr.hcl'.format(distro)))
 
     for variation in template_variations:
         if os.path.exists(variation):
             build_template = variation
             break
     else:
-        exit_invoke(1, 'Could not find the distribution build template. Tried: {}',
-                    ', '.join(template_variations))
+        exit_invoke(1, 'Could not find the distribution build template.\nTried:\n{}',
+                    '\n'.join(" - {}".format(tv) for tv in template_variations))
 
     vars_variations = [
-        os.path.join(distro_dir, '{}-{}.json'.format(distro_slug, region))
+        os.path.join(distro_dir, '{}-{}.json'.format(distro_slug, region)),
+        os.path.join(distro_dir, '{}-{}.pkrvars.hcl'.format(distro_slug, region))
     ]
     if distro_arch:
         vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.json'.format(distro, distro_arch, region)))
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.pkrvars.hcl'.format(distro, distro_arch, region)))
     if distro_version:
         vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.json'.format(distro, distro_version, region)))
+        vars_variations.append(os.path.join(distro_dir, '{}-{}-{}.pkrvars.hcl'.format(distro, distro_version, region)))
     vars_variations.append(os.path.join(distro_dir, '{}-{}.json'.format(distro, region)))
+    vars_variations.append(os.path.join(distro_dir, '{}-{}.pkrvars.hcl'.format(distro, region)))
 
     for variation in vars_variations:
         if os.path.exists(variation):
             build_vars = variation
             break
     else:
-        exit_invoke(1, 'Could not find the distribution build vars file. Tried: {}',
-                    ', '.join(vars_variations))
+        exit_invoke(1, 'Could not find the distribution build vars file.\nTried:\n{}',
+                    '\n'.join(" - {}".format(vv) for vv in vars_variations))
+
+    common_variables_path = os.path.join(distro_dir, "variables.pkr.hcl")
 
     packer_tmp_dir = PACKER_TMP_DIR.format(distro_slug)
     if not os.path.exists(packer_tmp_dir):
@@ -121,6 +131,8 @@ def build_aws(ctx,
         if debug is True:
             cmd += ' -debug -on-error=ask'
         cmd += TIMESTAMP_UI
+    if os.path.exists(common_variables_path):
+        cmd += " -var-file={}".format(common_variables_path)
     cmd += ' -var-file={}'.format(build_vars)
     if staging is True:
         cmd += ' -var build_type=ci-staging'

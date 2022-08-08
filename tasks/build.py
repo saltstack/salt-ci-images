@@ -340,3 +340,110 @@ def build_osx(
         env["ARTIFACTORY_URL"] = "https://artifactory.saltstack.net/artifactory"
 
     ctx.run(cmd, echo=True, env=env)
+
+
+@task
+def build_vagrant(
+    ctx,
+    distro,
+    distro_version=None,
+    force=False,
+    debug=False,
+    staging=False,
+    validate=False,
+    salt_pr=None,
+    distro_arch=None,
+    init=False,
+):
+    distro = distro.lower()
+    ctx.cd(REPO_ROOT)
+    distro_dir = os.path.join("os-images", "Vagrant", distro)
+    if not os.path.exists(distro_dir):
+        exit_invoke(1, "The directory {} does not exist. Are you passing the right OS?", distro_dir)
+
+    distro_slug = distro
+    if distro_version:
+        distro_slug += f"-{distro_version}"
+    if distro_arch:
+        distro_slug += f"-{distro_arch}"
+
+    template_variations = [
+        os.path.join(distro_dir, f"{distro_slug}.pkr.hcl"),
+    ]
+    if distro_arch:
+        template_variations.append(os.path.join(distro_dir, f"{distro}-{distro_arch}.pkr.hcl"))
+    if distro_version:
+        template_variations.append(os.path.join(distro_dir, f"{distro}-{distro_version}.pkr.hcl"))
+    template_variations.append(os.path.join(distro_dir, f"{distro}.pkr.hcl"))
+
+    for variation in template_variations:
+        if os.path.exists(variation):
+            build_template = variation
+            break
+    else:
+        exit_invoke(
+            1,
+            "Could not find the distribution build template.\nTried:\n{}",
+            "\n".join(f" - {tv}" for tv in template_variations),
+        )
+
+    vars_variations = [
+        os.path.join(distro_dir, f"{distro_slug}.pkrvars.hcl"),
+    ]
+    if distro_arch:
+        vars_variations.append(os.path.join(distro_dir, f"{distro}-{distro_arch}.pkrvars.hcl"))
+    if distro_version:
+        vars_variations.append(os.path.join(distro_dir, f"{distro}-{distro_version}.pkrvars.hcl"))
+    vars_variations.append(os.path.join(distro_dir, f"{distro}.pkrvars.hcl"))
+
+    for variation in vars_variations:
+        if os.path.exists(variation):
+            build_vars = variation
+            break
+    else:
+        exit_invoke(
+            1,
+            "Could not find the distribution build vars file.\nTried:\n{}",
+            "\n".join(f" - {vv}" for vv in vars_variations),
+        )
+
+    packer_tmp_dir = PACKER_TMP_DIR.format(distro_slug)
+    if not os.path.exists(packer_tmp_dir):
+        os.makedirs(packer_tmp_dir)
+    os.chmod(os.path.dirname(packer_tmp_dir), 0o755)
+    os.chmod(packer_tmp_dir, 0o755)
+    if distro_slug.startswith("windows"):
+        scripts_path = os.path.join(packer_tmp_dir, "scripts")
+        if not os.path.exists(scripts_path):
+            os.makedirs(scripts_path)
+        os.chmod(scripts_path, 0o755)
+        with open(os.path.join(scripts_path, "Install-Git.ps1"), "w") as wfh:
+            wfh.write("")
+    for name in ("states", "win_states", "pillar", "conf"):
+        path = os.path.join(packer_tmp_dir, name)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        os.chmod(path, 0o755)
+
+    cmd = "packer"
+    _binary_install_check(cmd)
+    if validate is True:
+        cmd += " validate"
+    elif init is True:
+        cmd += " init"
+    else:
+        cmd += " build"
+        if debug is True:
+            cmd += " -debug -on-error=ask"
+        if force:
+            cmd += " --force"
+        cmd += TIMESTAMP_UI
+    cmd += f" -var-file={build_vars}"
+    if staging is True:
+        cmd += " -var build_type=ci-staging"
+    else:
+        cmd += " -var build_type=ci"
+    if salt_pr and salt_pr.lower() != "null":
+        cmd += f" -var salt_pr={salt_pr}"
+    cmd += f" -var distro_slug={distro_slug} {build_template}"
+    ctx.run(cmd, echo=True)

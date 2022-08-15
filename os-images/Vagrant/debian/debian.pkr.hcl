@@ -3,6 +3,8 @@ variable "distro_slug" { type = string }
 variable "os_version" { type = string }
 variable "output_box_name" { type = string }
 variable "output_box_version" { type = string }
+variable "vagrantcloud_user" { type = string }
+variable "os_name" { type = string }
 variable "salt_pr" {
   type = string
   default = ""
@@ -13,14 +15,6 @@ variable "src_box_name" { type = string }
 variable "src_box_version" {
   type = string
   default = ""
-}
-variable "vagrantcloud_user" {
-  type = string
-  default = "salt-project-ci"
-}
-variable "os_name" {
-  type = string
-  default = "Debian"
 }
 variable "os_arch" {
   type = string

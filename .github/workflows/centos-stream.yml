@@ -6,7 +6,7 @@ on:
 
 concurrency:
   # If changes are pushed to a PR, stop all running workflows before starting new ones
-  group: ${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
+  group: centos-stream-${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
   cancel-in-progress: true
 
 permissions: read-all

@@ -3,6 +3,7 @@ variable "distro_slug" { type = string }
 variable "os_version" { type = string }
 variable "output_box_name" { type = string }
 variable "output_box_version" { type = string }
+variable "src_box_name" { type = string }
 variable "vagrantcloud_user" { type = string }
 variable "os_name" { type = string }
 variable "salt_pr" {
@@ -11,7 +12,6 @@ variable "salt_pr" {
 }
 
 # Common variables with their defaults
-variable "src_box_name" { type = string }
 variable "src_box_version" {
   type = string
   default = ""
@@ -60,7 +60,7 @@ packer {
 }
 
 
-source "vagrant" "centos-stream-amd64" {
+source "vagrant" "fedora-amd64" {
   provider = "virtualbox"
   communicator = "ssh"
 
@@ -76,13 +76,13 @@ source "vagrant" "centos-stream-amd64" {
 
 build {
   sources = [
-    "source.vagrant.centos-stream-amd64",
+    "source.vagrant.fedora-amd64",
   ]
 
   provisioner "shell" {
     execute_command = "sudo bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
-      "yum install -y dnf || true",
+      "systemctl mask tmp.mount",
       "dnf update -y",
       "dnf install -y git vim sudo openssh-server dbus curl tar"
     ]

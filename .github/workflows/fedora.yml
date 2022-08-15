@@ -1,4 +1,4 @@
-name: Debian
+name: Fedora
 
 on:
   - push
@@ -6,7 +6,7 @@ on:
 
 concurrency:
   # If changes are pushed to a PR, stop all running workflows before starting new ones
-  group: debian-${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
+  group: fedora-${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
   cancel-in-progress: true
 
 permissions: read-all
@@ -23,13 +23,9 @@ jobs:
       matrix:
         os-arch:
           - amd64
-          - arm64
         os-version:
-          - 10
-          - 11
-        exclude:
-          - {"os-arch": "arm64", "os-version": "10"}
-          - {"os-arch": "arm64", "os-version": "11"}  # There's only a parallels image, no virtualbox
+          - 35
+          - 36
 
     steps:
 
@@ -95,7 +91,7 @@ jobs:
         path: |
           ~/.vagrant.d/boxes
           ~/.vagrant.d/gems/${{ env.VAGRANT_VERSION }}/gems/
-        key: vagrant|${{ runner.os }}|${{ env.VAGRANT_VERSION }}|${{ env.VIRTUALBOX_VERSION }}|debian|${{ matrix.os-version }}|${{ matrix.os-arch }}
+        key: vagrant|${{ runner.os }}|${{ env.VAGRANT_VERSION }}|${{ env.VIRTUALBOX_VERSION }}|fedora|${{ matrix.os-version }}|${{ matrix.os-arch }}
 
     - name: Vagrant Boxes List
       run: |
@@ -124,13 +120,13 @@ jobs:
       env:
         PACKER_GITHUB_API_TOKEN: "${{ secrets.PACKER_INIT_GH_TOKEN }}"
       run: |
-        inv -e build-vagrant --distro=debian --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --init
+        inv -e build-vagrant --distro=fedora --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --init
 
     - name: Validate Packer Configs
       env:
         VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
       run: |
-        inv -e build-vagrant --distro=debian --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --validate
+        inv -e build-vagrant --distro=fedora --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --validate
 
     - name: Pull Image
       env:
@@ -140,14 +136,14 @@ jobs:
         attempt_limit: 3
         attempt_delay: 90000
         command: |
-          inv -e build-vagrant --distro=debian --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --pull
+          inv -e build-vagrant --distro=fedora --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --pull
 
     - name: Build Packer Staging Image
       if: github.event_name == 'pull_request'
       env:
         VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
       run: |
-        inv -e build-vagrant --distro=debian --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force --staging
+        inv -e build-vagrant --distro=fedora --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force --staging
 
     - name: Build Packer Image
       if: github.event_name != 'pull_request'
@@ -156,4 +152,4 @@ jobs:
         PACKER_LOG: "1"
         PACKER_DEBUG: "1"
       run: |
-        inv -e build-vagrant --distro=debian --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force
+        inv -e build-vagrant --distro=fedora --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force

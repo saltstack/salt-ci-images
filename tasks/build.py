@@ -482,6 +482,7 @@ def build_vagrant(
     if salt_pr and salt_pr.lower() != "null":
         cmd += f" -var salt_pr={salt_pr}"
 
+    cmd += f" -var os_name={distro}"
     cmd += f" -var vagrantcloud_user={vagrantcloud_user}"
     cmd += f" -var output_box_name={output_box_name}"
     cmd += f" -var output_box_version={output_box_version}"
@@ -553,7 +554,7 @@ def build_vagrant(
                     # Publish the newly built image
                     distro_display_name = DISTRO_DISPLAY_NAMES.get(distro, distro.title())
                     short_description = (
-                        f"'{build_type.upper()} Image of {distro_display_name} "
+                        f"{build_type.upper()} Image of {distro_display_name} "
                         f"{distro_version} For {distro_arch.upper()}"
                     )
                     ctx.run(

@@ -11,6 +11,12 @@
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
 {%- set install_from_docker_repos = True if (grains['os_family'] == 'Debian' and grains['osarch'] in ('amd64', 'armhf', 'arm64') and grains['osmajorrelease'] != 11) or grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'Fedora') else False %}
 
+{%- if install_from_docker_repos == True %}
+remove-docker:
+  pkg.removed:
+    - name: docker-common
+{%- endif %}
+
 {%- if on_docker == False %}
 include:
   - busybox

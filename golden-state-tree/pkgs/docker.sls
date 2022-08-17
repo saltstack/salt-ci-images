@@ -82,14 +82,27 @@ reload-systemd-units:
     - name: service.systemctl_reload
     - order: 1
 
-enable-docker-service:
-  service.running:
-    - name: docker
+  {%- if grains['os_family'] == "Arch" %}
+enable-docker-socket-unit:
+  service.enabled:
+    - name: docker.socket
     - enable: True
     - require:
       - install-docker
       - /usr/bin/busybox
       - reload-systemd-units
+  {%- endif %}
+
+enable-docker-service-unit:
+  service.enabled:
+    - name: docker
+    - require:
+      - install-docker
+      - /usr/bin/busybox
+      - reload-systemd-units
+      {%- if grains['os_family'] == "Arch" %}
+      - enable-docker-socket-unit
+      {%- endif %}
     {%- endif %}
   {%- endif %}
 {%- endif %}

@@ -1,0 +1,188 @@
+name: Build Golden Image
+
+on:
+  workflow_call:
+    inputs:
+
+      os-name:
+        required: true
+        type: string
+        description: The OS to build
+
+      os-version-matrix:
+        required: true
+        type: string
+        description: The OS Version Matrix to build
+
+      os-arch-matrix:
+        required: true
+        type: string
+        description: The OS Arch Matrix to build
+
+      exclude-matrix:
+        required: true
+        type: string
+        default: ""
+        description: The matrix excludes
+
+      packer-version:
+        required: false
+        type: string
+        default: 1.8.2
+        description: The packer version to use
+
+    secrets:
+      VAGRANT_CLOUD_TOKEN:
+        required: true
+        description: The vagrant cloud token user to interact with vagrant cloud
+
+
+concurrency:
+  # If changes are pushed to a PR, stop all running workflows before starting new ones
+  group: ${{ inputs.os-name }}-${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  Build:
+    runs-on: macos-12
+
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os-arch: ${{ fromJSON(inputs.os-arch-matrix) }}
+        os-version: ${{ fromJSON(inputs.os-version-matrix) }}
+        exclude: ${{ fromJSON(inputs.exclude-matrix) }}
+
+    steps:
+      - name: Install System Dependencies
+        run: |
+          if [ "x$(which sha256sum)" == "x" ]
+          then
+            brew install coreutils
+          fi
+          if [ "x$(which sha256sum)" == "x" ]
+          then
+            export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          fi
+          if [ "x$(which gsed)" == "x" ]
+          then
+            brew install gnu-sed
+          fi
+          if [ "x$(which tree)" == "x" ]
+          then
+            brew install tree
+          fi
+
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+
+      - name: Set Python Cache Key
+        run: echo "PY=$(python --version --version | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Setup Python Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: python|${{ runner.os }}|${{ env.PY }}|${{ hashFiles('os-images/requirements/**/*.txt') }}
+
+      - name: Install Python Requirements
+        run: |
+          python -m pip install -r os-images/requirements/py3.6/base.txt
+
+      - name: Get Virtualbox Version
+        run: |
+          export VIRTUALBOX_VERSION=$(VBoxManage --version)
+          echo "VIRTUALBOX_VERSION=${VIRTUALBOX_VERSION}" >> $GITHUB_ENV
+
+      - name: Get Vagrant Information
+        run: |
+          export VAGRANT_VERSION=$(vagrant --version | cut -d' ' -f2)
+          echo "Vagrant version: ${VAGRANT_VERSION}"
+          vagrant plugin list
+          echo "VAGRANT_VERSION=${VAGRANT_VERSION}"  >> $GITHUB_ENV
+
+      - name: Cache Vagrant boxes and plugins
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.vagrant.d/boxes
+            ~/.vagrant.d/gems/${{ env.VAGRANT_VERSION }}/gems/
+          key: vagrant|${{ runner.os }}|${{ env.VAGRANT_VERSION }}|${{ env.VIRTUALBOX_VERSION }}|${{ inputs.os-name }}|${{ matrix.os-version }}|${{ matrix.os-arch }}
+
+      - name: Vagrant Boxes List
+        run: |
+          vagrant global-status
+          vagrant box list
+          # vagrant box update
+
+      - name: Setup Packer
+        uses: hashicorp-contrib/setup-packer@v1
+        with:
+          packer-version: ${{ inputs.packer-version }}
+
+      - name: Download Packer Plugins
+        uses: actions/download-artifact@v3
+        with:
+          name: packer-plugins
+          path: ~/.config/packer/plugins
+
+      - name: Fix Permissions & List Packer Plugins
+        run: |
+          tree ~/.config/packer/plugins
+          for fname in $(find ~/.config/packer/plugins -type f -print)
+          do
+            chmod +x $fname
+          done
+
+      - name: Validate Packer Configs
+        env:
+          VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+        run: |
+          inv -e build-vagrant --distro=${{ inputs.os-name }} --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --validate
+
+      - name: Pull Image
+        env:
+          VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          attempt_limit: 3
+          attempt_delay: 90000
+          command: |
+            inv -e build-vagrant --distro=${{ inputs.os-name }} --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --pull
+
+      - name: Build Packer Staging Image
+        if: github.event_name == 'pull_request'
+        env:
+          VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+        run: |
+          inv -e build-vagrant --distro=${{ inputs.os-name }} --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force --staging
+
+      - name: Build Packer Image
+        if: github.event_name != 'pull_request'
+        env:
+          VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+        run: |
+          inv -e build-vagrant --distro=${{ inputs.os-name }} --distro-version=${{ matrix.os-version }} --distro-arch=${{ matrix.os-arch }} --force
+
+      - name: Set Exit Status
+        if: always()
+        run: |
+          mkdir exitstatus
+          echo "${{ job.status }}" > exitstatus/${{ github.job }}
+
+      - name: Upload Exit Status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: exitstatus
+          path: exitstatus

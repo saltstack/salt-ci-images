@@ -1,0 +1,114 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+concurrency:
+  # If changes are pushed to a PR, stop all running workflows before starting new ones
+  group: ${{ github.head_ref || (github.repository == 'saltstack/salt-jenkins' && github.run_id || github.ref_name) }}
+  cancel-in-progress: true
+
+jobs:
+
+  generate-actions-workflow:
+    name: Generate The Actions Workflow
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Set Python Cache Key
+        run: echo "PY=$(python --version --version | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Setup Pre-Commit Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/pre-commit/
+          key: python|${{ runner.os }}|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Install Pre-Commit
+        run: |
+          python3 -m pip install pre-commit
+          pre-commit install --install-hooks
+
+      - name: Run Pre-Commit
+        run: |
+          pre-commit run --color=always --show-diff-on-failure -av
+
+      - name: Set Exit Status
+        if: always()
+        run: |
+          mkdir exitstatus
+          echo "${{ job.status }}" > exitstatus/${{ github.job }}
+
+      - name: Upload Exit Status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: exitstatus
+          path: exitstatus
+
+  install-packer-plugins:
+    name: Install And Cache Packer Plugins
+    runs-on: macos-12
+    needs:
+      - generate-actions-workflow
+
+    steps:
+      - name: Install System Dependencies
+        run: |
+          if [ "x$(which tree)" == "x" ]
+          then
+            brew install tree
+          fi
+
+      - name: Setup Packer
+        uses: hashicorp-contrib/setup-packer@v1
+        with:
+          packer-version: {PACKER_VERSION}
+
+      - name: Cache Packer Plugins
+        uses: actions/cache@v3
+        with:
+          path: ~/.config/packer/plugins
+          key: packer-plugins|${{ runner.os }}|{PACKER_VERSION}|{PACKER_VAGRANT_PLUGIN_VERSION}
+
+      - name: Install Packer Plugins
+        env:
+          PACKER_GITHUB_API_TOKEN: "${{ secrets.PACKER_INIT_GH_TOKEN }}"
+        run: |
+          if [ "x$(ls ~/.config/packer/plugins/github.com/hashicorp/vagrant/ | grep {PACKER_VAGRANT_PLUGIN_VERSION})" = "x" ]
+          then
+            packer plugins install github.com/hashicorp/vagrant {PACKER_VAGRANT_PLUGIN_VERSION}
+          fi
+
+      - name: List Packer Plugins
+        run: |
+          tree ~/.config/packer/plugins
+
+      - name: Upload Packer Plugins
+        uses: actions/upload-artifact@v3
+        with:
+          name: packer-plugins
+          path: |
+            ~/.config/packer/plugins
+
+      - name: Set Exit Status
+        if: always()
+        run: |
+          mkdir exitstatus
+          echo "${{ job.status }}" > exitstatus/${{ github.job }}
+
+      - name: Upload Exit Status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: exitstatus
+          path: exitstatus

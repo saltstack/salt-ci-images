@@ -21,6 +21,8 @@ per-file-ignores =
   # F403 'from .build import *' used; unable to detect undefined names
   # F401 '.build.*' imported but unused
   tasks/__init__.py: F401, F403
+  # D100 Missing docstring in public module
+  .github/workflows/templates/generate.py: D100
 
 ignore =
   # D101 Missing docstring in public class
@@ -38,7 +40,9 @@ ignore =
   # D200 One-line docstring should fit on one line with quotes
   D200,
   # D212 Multi-line docstring summary should start at the first line
-  D212
+  D212,
+  # W503 line break before binary operator
+  W503
 
 # flake8-docstrings config
 docstring-convention = google

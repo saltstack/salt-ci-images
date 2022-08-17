@@ -28,6 +28,13 @@ repos:
         files: '\.json$'
         types: [file]
 
+      - id: generate-actions-workflow
+        name: Generate Github Actions Workflow
+        entry: .github/workflows/templates/generate.py
+        pass_filenames: false
+        files: '^(os-images/Vagrant/|.github/workflows/).*$'
+        language: script
+
   # ----- Formatting ---------------------------------------------------------------------------->
   - repo: https://github.com/asottile/reorder_python_imports
     rev: v3.8.2

@@ -21,6 +21,7 @@ DISTRO_TMP_DIR="${REPO_ROOT}/.tmp/${DISTRO_SLUG}"
 export DISTRO_TMP_DIR
 
 if [ -d ${DISTRO_TMP_DIR} ]; then
+    echo "Deleting old ${DISTRO_TMP_DIR}"
     rm -rf ${DISTRO_TMP_DIR}
 fi
 

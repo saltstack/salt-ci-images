@@ -26,5 +26,6 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  - pkgs.vault
   {#- OS Specific packages install #}
   - .epel-release

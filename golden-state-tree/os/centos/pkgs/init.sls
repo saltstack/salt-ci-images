@@ -27,3 +27,4 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  - pkgs.vault

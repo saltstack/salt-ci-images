@@ -1,0 +1,5 @@
+os_version = "13.1"
+src_box_name = "bento/freebsd-13.1"
+salt_provision_pyenv_deps = "libxml2 libxslt libgit2 py39-Jinja2 py39-pygit2 py39-sqlite3 libzmq4 libunwind"
+salt_provision_python_version = "3.9.13"
+salt_provision_version = "3004.2"

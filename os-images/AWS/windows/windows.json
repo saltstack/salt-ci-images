@@ -69,6 +69,10 @@
   "provisioners": [
     {
       "type": "powershell",
+      "script": "os-images/AWS/windows/scripts/Install-Git.ps1"
+    },
+    {
+      "type": "powershell",
       "script": "os-images/AWS/windows/scripts/InstallAndConfigureOpenSSH.ps1",
       "elevated_user": "SYSTEM",
       "elevated_password": ""
@@ -81,10 +85,6 @@
         "DISTRO_SLUG={{ user `distro_slug` }}",
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
-    },
-    {
-      "type": "powershell",
-      "script": "os-images/AWS/windows/scripts/Install-Git.ps1"
     },
     {
       "type": "powershell",
@@ -141,6 +141,15 @@
       "environment_vars": [
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced' -Name 'Hidden' -Value 1",
+        "Set-Itemproperty -path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced' -Name 'HideFileExt' -value 0"
+      ],
+      "elevated_user": "SYSTEM",
+      "elevated_password": ""
     },
     {
       "type": "powershell",

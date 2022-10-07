@@ -2,8 +2,8 @@ Write-Host -NoNewline "Who Am I? "
 & whoami
 
 # Version and download URL
-$OPENSSH_VERSION = "8.6.0.0p1-Beta"
-$OPENSSH_URL = "https://github.com/PowerShell/Win32-OpenSSH/releases/download/V$OPENSSH_VERSION/OpenSSH-Win64.zip"
+$OPENSSH_VERSION = "8.9.1.0p1-Beta"
+$OPENSSH_URL = "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v$OPENSSH_VERSION/OpenSSH-Win64.zip"
 
 # GitHub became TLS 1.2 only on Feb 22, 2018
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
@@ -37,10 +37,10 @@ Invoke-WebRequest -Uri $OPENSSH_URL `
     -OutFile $OPENSSH_ZIP `
     -ErrorAction Stop
 
-#if ($LASTEXITCODE -ne 0) {
-#    Write-Error "Failed to download OpenSSH Server from $OPENSSH_URL"
-#    exit 1
-#}
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to download OpenSSH Server from $OPENSSH_URL"
+    exit 1
+}
 
 Write-Host "Unzipping $OPENSSH_ZIP to $INSTALL_DIR"
 Unzip -ZipFile $OPENSSH_ZIP `
@@ -111,7 +111,8 @@ Set-Service sshd -StartupType Automatic `
 New-Item -Path HKLM:\SOFTWARE\OpenSSH -Force
 New-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH `
     -Name DefaultShell `
-    -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" `
+#    -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" `
+    -Value "C:\Program Files\Git\bin\bash.exe" `
     -ErrorAction Stop
 
 # Make sure ssh's program data dir is populated
@@ -151,6 +152,10 @@ Get-ChildItem $DATA_DIR\ssh_host_*_key -ErrorAction SilentlyContinue | % {
 }
 
 $keyDownloadScript = @'
+$INSTALL_DIR = [io.path]::combine($env:ProgramFiles, 'OpenSSH')
+$OPENSSH_UTILS_MODULE = [io.path]::combine($INSTALL_DIR, 'OpenSSHUtils.psd1')
+
+Import-Module $OPENSSH_UTILS_MODULE -Force
 # Download the instance key pair and authorize Administrator logins using it
 
 $ProgramDataDir = $env:ProgramData
@@ -161,6 +166,7 @@ If (-Not (Test-Path $openSSHAdminUser)) {
     New-Item -Path $openSSHAdminUser -Type Directory
 }
 
+Write-Host "Downloading the current EC2 Instance Public Key from AWS"
 $keyUrl = "http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key"
 $keyReq = [System.Net.WebRequest]::Create($keyUrl)
 $keyResp = $keyReq.GetResponse()
@@ -169,22 +175,11 @@ $keyRespStream = $keyResp.GetResponseStream()
 $keyMaterial = $streamReader.ReadToEnd()
 
 $keyMaterial | Out-File -Append -FilePath $openSSHAuthorizedKeys -Encoding ASCII
+Write-Host "EC2 Instance Public Key Written To $openSSHAuthorizedKeys"
 
 # Ensure access control on administrators_authorized_keys meets the requirements
-$acl = Get-ACL -Path $openSSHAuthorizedKeys
-$acl.SetAccessRuleProtection($True, $True)
-Set-Acl -Path $openSSHAuthorizedKeys -AclObject $acl
-$acl = Get-ACL -Path $openSSHAuthorizedKeys
-$ar = New-Object System.Security.AccessControl.FileSystemAccessRule( `
-  "NT Authority\Authenticated Users", "ReadAndExecute", "Allow")
-$acl.RemoveAccessRule($ar)
-$ar = New-Object System.Security.AccessControl.FileSystemAccessRule( `
-  "BUILTIN\Administrators", "FullControl", "Allow")
-$acl.RemoveAccessRule($ar)
-$ar = New-Object System.Security.AccessControl.FileSystemAccessRule( `
-  "BUILTIN\Users", "FullControl", "Allow")
-$acl.RemoveAccessRule($ar)
-Set-Acl -Path $openSSHAuthorizedKeys -AclObject $acl
+Write-Host "Repairing permissions on $openSSHAuthorizedKeys"
+Repair-AdministratorsAuthorizedKeysPermission -FilePath $openSSHAuthorizedKeys -Confirm:$false
 
 Disable-ScheduledTask -TaskName "Download EC2 PubKey"
 '@
@@ -220,8 +215,13 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+
 # Clear the keys file from it's content
 $openSSHAuthorizedKeys = [io.path]::combine($env:ProgramData, 'ssh', 'administrators_authorized_keys')
 Write-Host "Wiping the contents of $openSSHAuthorizedKeys"
 Clear-Content $openSSHAuthorizedKeys -ErrorAction Stop
+
+Write-Host "Repairing permissions on $openSSHAuthorizedKeys"
+Repair-AdministratorsAuthorizedKeysPermission -FilePath $openSSHAuthorizedKeys -Confirm:$false
+Write-Host "Permissions on $openSSHAuthorizedKeys repaired"
 exit 0

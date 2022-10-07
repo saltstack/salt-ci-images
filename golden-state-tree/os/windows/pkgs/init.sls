@@ -7,3 +7,5 @@ include:
   - .powershell_core
   - .python3
   - .vcredist
+  - .chrome
+  - .rsync

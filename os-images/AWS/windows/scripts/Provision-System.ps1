@@ -28,7 +28,10 @@ function Run-Process
 
 $SALT_CALL = "$Env:SALT_PY_TARGET_DIR\salt-call.bat"
 $CONFIG_DIR = "$Env:SALT_ROOT_DIR\conf"
-$DEFAULT_ARGUMENTS = "--local --log-level=debug --config-dir=$CONFIG_DIR --retcode-passthrough"
+$DEFAULT_ARGUMENTS = "--local --log-level=warning --config-dir=$CONFIG_DIR --retcode-passthrough"
+
+Write-Host "`nBootstrapping Chocolatey" -ForegroundColor Yellow
+Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS chocolatey.bootstrap"
 
 Write-Host "`nUpdating Windows Git Repos" -ForegroundColor Yellow
 Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS winrepo.update_git_repos"

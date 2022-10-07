@@ -72,7 +72,7 @@ if (!($IsLinux -or $IsOSX))
     #Added TLS negotiation Fork jmangan68
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
-    $dlurl = 'https://github.com/git-for-windows/git/releases/download/v2.22.0.windows.1/Git-2.22.0-64-bit.exe'
+    $dlurl = 'https://github.com/git-for-windows/git/releases/download/v2.38.0.windows.1/Git-2.38.0-64-bit.exe'
     try
     {
         $ProgressPreference = 'SilentlyContinue'

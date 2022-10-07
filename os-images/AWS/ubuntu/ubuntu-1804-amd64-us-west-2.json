@@ -6,7 +6,7 @@
   "os_version": "1804",
   "os_arch": "amd64",
   "salt_provision_type": "stable",
-  "salt_provision_version": "3004.2-1",
+  "salt_provision_version": "3005.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "provision",
   "ami_filter": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",

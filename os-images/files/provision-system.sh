@@ -8,45 +8,22 @@ set -x
 echo "Contents of ${SALT_ROOT_DIR}:"
 ls -lah ${SALT_ROOT_DIR}
 
-if [ -f /tmp/salt ]; then
-    SALT_CALL="/tmp/salt call"
-elif [ -f /tmp/salt/run/run ]; then
-    SALT_CALL="/tmp/salt/run/run call"
-elif [ -f /tmp/salt/salt-call ]; then
-    SALT_CALL=/tmp/salt/salt-call
+if [ -f /tmp/salt/bin/salt-call ]; then
+    # Mayflower
+    SALT_CALL=/tmp/salt/bin/salt-call
+elif [ -f ~/.pyenv/versions/${SALT_PY_VERSION}/bin/salt-call ]; then
+    # Pyenv
+    SALT_CALL="~/.pyenv/versions/${SALT_PY_VERSION}/bin/salt-call"
 else
-    SALT_CALL="salt-call"
+    echo "Could not find a Salt mayflower build or Salt install in a PyEnv environment"
+    exit 1
 fi
 
 printf "\n\nSystem Grains Information:\n"
 GRAINS_COMMAND="${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --grains && sleep 1; printf '\n\n'; "
-if [ -f /tmp/mayflower/bin/python3 ]; then
-    # Mayflower
-    eval "${GRAINS_COMMAND}"
-elif [ -f /tmp/salt ]; then
-    # Singlebin
-    eval "${GRAINS_COMMAND}"
-elif [ -f /tmp/salt/run/run ]; then
-    # Onedir
-    eval "${GRAINS_COMMAND}"
-elif [ -f /tmp/salt/salt-call ]; then
-    eval "${GRAINS_COMMAND}"
-else
-    # Pyenv
-    eval "~/.pyenv/versions/${SALT_PY_VERSION}/bin/${GRAINS_COMMAND}"
-fi
+echo "Running: ${GRAINS_COMMAND}"
+eval "${GRAINS_COMMAND}"
 
 COMMAND="${SALT_CALL} --config-dir=${SALT_ROOT_DIR}/conf --local --log-level=debug --file-root=${SALT_ROOT_DIR}/states --pillar-root=${SALT_ROOT_DIR}/pillar state.sls ${SALT_STATE} --retcode-passthrough"
 echo "Running: ${COMMAND}"
-if [ -f /tmp/salt ]; then
-    # Singlebin
-    eval "${COMMAND}"
-elif [ -f /tmp/salt/run/run ]; then
-    # Onedir
-    eval "${COMMAND}"
-elif [ -f /tmp/salt/salt-call ]; then
-    eval "${COMMAND}"
-else
-    # Pyenv
-    eval "~/.pyenv/versions/${SALT_PY_VERSION}/bin/${COMMAND}"
-fi
+eval "${COMMAND}"

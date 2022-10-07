@@ -108,6 +108,7 @@
       "script": "os-images/files/install-salt.sh",
       "environment_vars": [
         "LANG=en_US.UTF-8",
+        "OS_ARCH={{ user `os_arch` }}",
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}"
       ],

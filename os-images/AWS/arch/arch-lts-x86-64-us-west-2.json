@@ -6,7 +6,7 @@
   "os_version": "lts",
   "os_arch": "x86_64",
   "salt_provision_type": "stable",
-  "salt_provision_version": "3004-1",
+  "salt_provision_version": "3005.1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "provision",
   "ami_filter": "arch-linux-ec2-hvm-*.x86_64-ebs",

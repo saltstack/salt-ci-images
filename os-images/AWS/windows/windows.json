@@ -94,6 +94,7 @@
       "type": "powershell",
       "script": "os-images/AWS/windows/scripts/Install-Salt.ps1",
       "environment_vars": [
+        "OS_ARCH={{ user `os_arch` }}",
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PY_VERSION={{ user `salt_provision_python_version` }}",
         "SALT_PY_TARGET_DIR=C:\\salt",

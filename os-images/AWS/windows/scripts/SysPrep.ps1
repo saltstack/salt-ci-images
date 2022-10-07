@@ -1,5 +1,3 @@
-Enable-ScheduledTask "Download EC2 PubKey"
-
 $EC2ConfigDir = [io.path]::combine($env:ProgramFiles, 'Amazon', 'Ec2ConfigService')
 $EC2WindowsLaunch = [io.path]::combine($env:ProgramData, 'Amazon', 'EC2-Windows', 'Launch')
 
@@ -29,3 +27,5 @@ ElseIf (Test-Path $EC2WindowsLaunch) {
 Else {
   throw("Neither $EC2ConfigDir nor $EC2WindowsLaunch were found")
 }
+Enable-ScheduledTask "Download EC2 PubKey"
+Get-ScheduledTask | where state -eq 'Ready'

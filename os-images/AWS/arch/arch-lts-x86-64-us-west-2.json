@@ -9,8 +9,8 @@
   "salt_provision_version": "3004-1",
   "salt_provision_root_dir": "/tmp/salt-provision",
   "state_name": "provision",
-  "ami_filter": "arch-linux-lts-hvm-*.x86_64-ebs",
-  "ami_owner": "093273469852",
+  "ami_filter": "arch-linux-ec2-hvm-*.x86_64-ebs",
+  "ami_owner": "647457786197",
   "ami_name_prefix": "saltstack",
   "ami_name_suffix": "arch/lts/x86_64",
   "instance_type": "m5.large"

@@ -11,3 +11,4 @@ output-*
 *.idea*
 .tmp/
 *manifest.json
+*~

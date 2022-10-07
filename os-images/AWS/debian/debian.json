@@ -97,6 +97,7 @@
       "type": "shell",
       "script": "os-images/files/install-salt-onedir.sh",
       "environment_vars": [
+        "OS_ARCH={{ user `os_arch` }}",
         "SALT_VERSION={{ user `salt_provision_version` }}",
         "SALT_PROVISION_TYPE={{ user `SALT_PROVISION_TYPE` }}"
       ],
@@ -132,7 +133,7 @@
     },
     {
       "type": "shell",
-      "script": "os-images/files/cleanup-salt-onedir.sh",
+      "script": "os-images/files/cleanup-salt.sh",
       "environment_vars": [
         "SALT_ROOT_DIR={{ user `salt_provision_root_dir` }}"
       ],

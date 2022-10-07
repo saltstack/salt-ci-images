@@ -8,3 +8,4 @@ set -x
 rm -rf ${SALT_ROOT_DIR}
 rm -rf ~/.pyenv
 rm -rf ~/.cache/pip
+rm -rf /tmp/salt

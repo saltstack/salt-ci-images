@@ -76,8 +76,11 @@
       "inline_shebang": "/bin/sh -ex",
       "inline": [
         "systemctl mask tmp.mount",
-        "pacman -Sy --noconfirm --needed archlinux-keyring",
+        "pacman-key --init",
+        "pacman-key --populate",
+        "reflector --country '' --protocol https --score 20 --sort rate --save /etc/pacman.d/mirrorlist",
         "pacman-db-upgrade",
+        "pacman -Sy --noconfirm --needed archlinux-keyring",
         "pacman -Syyu --noconfirm",
         "pacman -Sy --needed --noconfirm git vim tar libxcrypt-compat"
       ],

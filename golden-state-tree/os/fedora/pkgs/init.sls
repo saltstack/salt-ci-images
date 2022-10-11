@@ -25,9 +25,9 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
-  - pkgs.vault
+  - pkgs.vault {#-
   - pkgs.awscli
-  - pkgs.amazon-cloudwatch-agent
+  - pkgs.amazon-cloudwatch-agent #}
 
   {#- OS Specific packages install #}
   - .g++

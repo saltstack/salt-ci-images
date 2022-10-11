@@ -1,6 +1,6 @@
-include:
+include: {#-
   - pkgs.awscli
-  - pkgs.amazon-cloudwatch-agent
+  - pkgs.amazon-cloudwatch-agent #}
   {#- OS Specific packages install #}
   - .7zip
   - .compiler

@@ -25,9 +25,9 @@ include:
   - pkgs.sed
   - pkgs.swig
   - pkgs.tar
-  - pkgs.zlib
+  - pkgs.zlib {#-
   - pkgs.awscli
-  - pkgs.amazon-cloudwatch-agent
+  - pkgs.amazon-cloudwatch-agent #}
   {#- OS Specific packages install #}
   - .python-xml   {#- Yes! openSuse ships xml as separate package #}
   {%- if not grains['osrelease'].startswith('15') %}

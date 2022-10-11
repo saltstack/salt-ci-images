@@ -26,3 +26,5 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  - pkgs.awscli
+  - pkgs.amazon-cloudwatch-agent

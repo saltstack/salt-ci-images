@@ -25,6 +25,8 @@ include:
   - pkgs.tar
   - pkgs.zlib
   - pkgs.vault
+  - pkgs.awscli
+  - pkgs.amazon-cloudwatch-agent
 
   {#- OS Specific packages install #}
   - .epel-release

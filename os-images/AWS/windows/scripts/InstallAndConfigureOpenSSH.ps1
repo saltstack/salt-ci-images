@@ -166,15 +166,11 @@ If (-Not (Test-Path $openSSHAdminUser)) {
     New-Item -Path $openSSHAdminUser -Type Directory
 }
 
-Write-Host "Downloading the current EC2 Instance Public Key from AWS"
-$keyUrl = "http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key"
-$keyReq = [System.Net.WebRequest]::Create($keyUrl)
-$keyResp = $keyReq.GetResponse()
-$keyRespStream = $keyResp.GetResponseStream()
-    $streamReader = New-Object System.IO.StreamReader $keyRespStream
-$keyMaterial = $streamReader.ReadToEnd()
+Write-Host "Retrieving TOKEN from AWS API"
+$token=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "180"}
 
-$keyMaterial | Out-File -Append -FilePath $openSSHAuthorizedKeys -Encoding ASCII
+Write-Host "Downloading the current EC2 Instance Public Key from AWS"
+Invoke-WebRequest "http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key" -Headers @{"X-aws-ec2-metadata-token" = $token} -Outfile $openSSHAuthorizedKeys
 Write-Host "EC2 Instance Public Key Written To $openSSHAuthorizedKeys"
 
 # Ensure access control on administrators_authorized_keys meets the requirements

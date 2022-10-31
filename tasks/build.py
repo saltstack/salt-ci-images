@@ -145,7 +145,7 @@ def build_aws(
         cmd += " -var build_type=ci"
     if salt_pr and salt_pr.lower() != "null":
         cmd += f" -var salt_pr={salt_pr}"
-    cmd += f" -var distro_slug={distro_slug} {build_template}"
+    cmd += f" -var aws_region={region} -var distro_slug={distro_slug} {build_template}"
     ctx.run(cmd, echo=True)
 
 

@@ -1,7 +1,6 @@
 {
   "_comment": "Build with `packer build -var-file=alma-8-x86-64-us-west-2.json alma.json`",
   "ssh_username": "ec2-user",
-  "aws_region": "us-west-2",
   "os_name": "AlmaLinux",
   "os_version": "8",
   "os_arch": "x86_64",

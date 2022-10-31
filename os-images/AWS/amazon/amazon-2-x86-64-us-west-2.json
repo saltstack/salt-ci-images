@@ -1,7 +1,6 @@
 {
   "_comment": "Build with `packer build -var-file=amazon-2-x86-64-us-west-2.json amazon.json`",
   "ssh_username": "ec2-user",
-  "aws_region": "us-west-2",
   "os_name": "Amazon Linux",
   "os_version": "2",
   "os_arch": "x86_64",

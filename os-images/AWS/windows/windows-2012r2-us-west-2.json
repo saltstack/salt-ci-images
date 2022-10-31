@@ -1,6 +1,5 @@
 {
   "_comment": "Build with `packer build -var-file=windows-2012r2-us-west-2.json windows-2012r2.json`",
-  "aws_region": "us-west-2",
   "os_name": "Windows",
   "os_version": "2012r2",
   "bootstrap_args": "-pythonVersion 3 -runservice false",

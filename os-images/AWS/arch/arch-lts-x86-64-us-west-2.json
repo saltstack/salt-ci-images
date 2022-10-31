@@ -1,7 +1,6 @@
 {
   "_comment": "Build with `packer build -var-file=arch-lts-x86-64-us-west-2.json arch.json`",
   "ssh_username": "arch",
-  "aws_region": "us-west-2",
   "os_name": "Arch",
   "os_version": "lts",
   "os_arch": "x86_64",

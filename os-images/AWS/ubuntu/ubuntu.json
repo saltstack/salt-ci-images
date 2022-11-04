@@ -53,12 +53,14 @@
         "created-by": "packer",
         "Owner": "SRE",
         "Provision-State-Name": "{{ user `state_name` }}",
-        "Promoted": false
+        "Promoted": false,
+        "Salt-Golden-Image": true
       },
       "run_tags": {
         "Name": "Packer {{ user `build_type` | upper }} {{ user `os_name` }} {{ user `os_version` }} {{ user `os_arch` }} Builder",
         "created-by": "packer",
-        "Owner": "SRE"
+        "Owner": "SRE",
+        "Salt-Golden-Image": true
       },
       "launch_block_device_mappings": [
         {

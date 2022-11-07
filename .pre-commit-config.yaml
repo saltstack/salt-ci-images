@@ -27,6 +27,12 @@ repos:
         language: script
         files: '\.json$'
         types: [file]
+      - id: format-packer-files
+        name: Format packer files
+        entry: .pre-commit-hooks/format-packer-files.py
+        language: script
+        files: '\.hcl$'
+        types: [file]
 
   # ----- Formatting ---------------------------------------------------------------------------->
   - repo: https://github.com/asottile/reorder_python_imports

@@ -1,0 +1,69 @@
+name: Build Golden Image
+
+on:
+  workflow_call:
+    inputs:
+      distro-name:
+        required: true
+        type: string
+        description: The OS distribution to build
+      distro-versions:
+        required: true
+        type: string
+        description: JSON list of the OS distribution versions to build
+      distro-arches:
+        required: true
+        type: string
+        description: JSON list of the OS distribution architectures to build
+      changed-files:
+        required: true
+        type: string
+        description: JSON string containing information about changed files
+
+
+env:
+  COLUMNS: 160
+
+jobs:
+
+  build:
+    name: Build Image
+    runs-on:
+      - self-hosted
+      - image-builder
+    timeout-minutes: 60  # 1 Hour
+    strategy:
+      fail-fast: false
+      matrix:
+        distro-arch: ${{ jsonloads(inputs.distro-arches) }}
+        distro-version: ${{ jsonloads(inputs.distro-versions) }}
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: PyPi Proxy
+        run: |
+          sed -i '7s;^;--index-url=https://pypi-proxy.saltstack.net/root/local/+simple/ --extra-index-url=https://pypi.org/simple\n;' requirements/static/ci/*/*.txt
+
+      - name: Install Python Tools Scripts
+        run: |
+          python3 -m pip install -r requirements/tools.txt
+
+      - name: Build Image
+        run: |
+          tools --timestamps images build-ami --region=${{ inputs.aws-region }} --arch=${{ matrix.distro-arch }} ${{ inputs.distro-name }} ${{ matri.distro-version }}
+
+      - name: Set Exit Status
+        if: always()
+        run: |
+          mkdir exitstatus
+          echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-name }}-${{ matrix.distro-version }}-${{ matrix.distro-arch }}
+
+      - name: Upload Exit Status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: exitstatus
+          path: exitstatus
+          if-no-files-found: error

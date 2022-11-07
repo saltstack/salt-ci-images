@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  - push
+  - pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  get-changed-files:
+    name: Get Changed Files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read  # for dorny/paths-filter to fetch a list of changed files
+      pull-requests: read  # for dorny/paths-filter to read pull requests
+    outputs:
+      changed-files: ${{ toJSON(steps.changed-files.outputs) }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Changed Files
+        id: changed-files
+        uses: dorny/paths-filter@v2
+        with:
+          token: ${{ github.token }}
+          list-files: json
+          filters: |
+            repo:
+              - added|modified:
+                - '**'
+            deleted:
+              - deleted:
+                - '**'
+            docs:
+              - doc/**
+            state-tree:
+              - added|modified:
+                - setup.py
+                - golden-pillar-tree/*
+                - golden-state-tree/*
+                - tools/**/*.py
+            os-images:
+              - added|modified:
+                - os-images/AWS/**/*.hcl
+
+  pre-commit:
+    name: Pre-Commit
+    uses: ./.github/workflows/pre-commit-action.yml
+    needs:
+      - get-changed-files
+    with:
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
+  almalinux:
+    name: AlmaLinux
+    needs:
+      - get-changed-files
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: almalinux
+      distro-versions: ${{ toJSON(['8', '9']) }}
+      distro-arches: ${{ toJSON(['x86_64']) }}
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
+  set-pipeline-exit-status:
+    # This step is just so we can make github require this step, to pass checks
+    # on a pull request instead of requiring all
+    name: Set the ${{ github.workflow }} Pipeline Exit Status
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - pre-commit
+      - almalinux
+    steps:
+    - name: Download Exit Status Files
+      if: always()
+      uses: actions/download-artifact@v3
+      with:
+        name: exitstatus
+        path: exitstatus
+
+    - name: Delete Exit Status Artifacts
+      if: always()
+      uses: geekyeggo/delete-artifact@v1
+      with:
+        name: exitstatus
+        failOnError: false
+
+    - name: Set Pipeline Exit Status
+      run: |
+        tree exitstatus
+        grep -RE 'failure|cancelled' exitstatus/ && exit 1 || exit 0
+
+    - name: Done
+      if: always()
+      run:
+        echo "All worflows finished"

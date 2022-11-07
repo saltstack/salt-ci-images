@@ -82,14 +82,15 @@ repos:
 
 
   # ----- Requirements -------------------------------------------------------------------------->
-  - repo: https://github.com/saltstack/pip-tools-compile-impersonate
-    rev: '4.5'
+  - repo: https://github.com/jazzband/pip-tools
+    rev: "6.9.0"
     hooks:
-      - id: pip-tools-compile
-        alias: compile-requirements
-        name: Compile Requirements
-        files: ^os-images/requirements/base\.in$
+      - id: pip-compile
+        alias: pip-compile-tools
+        name: Compile requirements/tools.in
+        files: ^requirements/tools\.(in|txt)$
         args:
           - -v
-          - --py-version=3.6
+          - --output-file=requirements/tools.txt
+          - requirements/tools.in
   # <---- Requirements ---------------------------------------------------------------------------

@@ -58,8 +58,6 @@ jobs:
     uses: ./.github/workflows/build-image-action.yml
     with:
       distro-name: almalinux
-      distro-versions: ${{ toJSON(['8', '9']) }}
-      distro-arches: ${{ toJSON(['x86_64']) }}
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
   set-pipeline-exit-status:

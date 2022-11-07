@@ -16,27 +16,7 @@
         ],
         "most_recent": true
       },
-      "subnet_filter": {
-        "filters": {
-          "tag:Name": "*-public-*"
-        },
-        "most_free": true,
-        "random": false
-      },
-      "vpc_filter": {
-        "filters": {
-          "tag:Name": "test"
-        }
-      },
-      "security_group_filter": {
-        "filters": {
-          "group-name": "kitchen-slave-auto-delete-test"
-        }
-      },
       "instance_type": "{{ user `instance_type` }}",
-      "ssh_interface": "private_ip",
-      "ssh_keypair_name": "kitchen_windows",
-      "ssh_private_key_file": "~/.ssh/kitchen-win.pem",
       "user_data_file": "{{ user `user_data_file` }}",
       "communicator": "winrm",
       "winrm_username": "Administrator",

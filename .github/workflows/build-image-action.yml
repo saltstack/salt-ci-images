@@ -7,14 +7,6 @@ on:
         required: true
         type: string
         description: The OS distribution to build
-      distro-versions:
-        required: true
-        type: string
-        description: JSON list of the OS distribution versions to build
-      distro-arches:
-        required: true
-        type: string
-        description: JSON list of the OS distribution architectures to build
       changed-files:
         required: true
         type: string
@@ -25,34 +17,70 @@ env:
   COLUMNS: 160
 
 jobs:
+  generate-matrix:
+    name: Generate The Build Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      arches: ${{ steps.generate-arches.outputs.arches }}
+      versions: ${{ steps.generate-versions.outputs.versions }}
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Install Python Tools Scripts
+        env:
+          PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
+          PIP_EXTRA_INDEX_URL: https://pypi.org/simple
+        run: |
+          python3 -m pip install -r requirements/tools.txt
+
+      - name: Generate Versions List
+        id: generate-versions
+        run: |
+          VERSIONS=$(tools images matrix --versions ${{ inputs.distro-name }})
+          echo $VERSIONS
+          echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
+
+      - name: Generate Arches List
+        id: generate-arches
+        run: |
+          ARCHES=$(tools images matrix --arches ${{ inputs.distro-name }})
+          echo $ARCHES
+          echo "arches=$ARCHES" >> $GITHUB_OUTPUT
 
   build:
     name: Build Image
     runs-on:
       - self-hosted
       - image-builder
+    needs:
+      - generate-matrix
     timeout-minutes: 60  # 1 Hour
     strategy:
       fail-fast: false
       matrix:
-        distro-arch: ${{ jsonloads(inputs.distro-arches) }}
-        distro-version: ${{ jsonloads(inputs.distro-versions) }}
+        distro-arch: ${{ fromJSON(needs.generate-matrix.outputs.arches) }}
+        distro-version: ${{ fromJSON(needs.generate-matrix.outputs.versions) }}
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: PyPi Proxy
-        run: |
-          sed -i '7s;^;--index-url=https://pypi-proxy.saltstack.net/root/local/+simple/ --extra-index-url=https://pypi.org/simple\n;' requirements/static/ci/*/*.txt
+      - name: Setup Packer
+        uses: hashicorp-contrib/setup-packer@v1
+        with:
+          packer-version: 1.8.4
 
       - name: Install Python Tools Scripts
+        env:
+          PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
+          PIP_EXTRA_INDEX_URL: https://pypi.org/simple
         run: |
           python3 -m pip install -r requirements/tools.txt
 
       - name: Build Image
         run: |
-          tools --timestamps images build-ami --region=${{ inputs.aws-region }} --arch=${{ matrix.distro-arch }} ${{ inputs.distro-name }} ${{ matri.distro-version }}
+          tools --timestamps images build-ami --region=${{ inputs.aws-region }} --arch=${{ matrix.distro-arch }} ${{ inputs.distro-name }} ${{ matrix.distro-version }}
 
       - name: Set Exit Status
         if: always()

@@ -120,10 +120,6 @@ def build_ami(
         )
 
     command = []
-    if "CI" in os.environ:
-        command.append("-timestamp-ui")
-    if debug:
-        command.append("-debug")
     for var_file in var_files:
         command.append(f"-var-file={var_file}")
     command.extend(
@@ -143,12 +139,19 @@ def build_ami(
             str(packer_file),
         ]
     )
-    build_command = [packer, "build"] + command
+
     validate_command = [packer, "validate"] + command
     ctx.info(f"Running command: {validate_command}")
     ret = ctx.run(*validate_command, check=False)
     if ret.returncode != 0:
         ctx.exit(ret.returncode)
+
+    build_command = [packer, "build"]
+    if "CI" in os.environ:
+        build_command.append("-timestamp-ui")
+    if debug:
+        build_command.append("-debug")
+    build_command.extend(command)
     ctx.info(f"Running command: {build_command}")
     ret = ctx.run(*build_command, check=False)
     if ret.returncode != 0:
@@ -162,37 +165,35 @@ def build_ami(
             "help": "The os name to build. Example: ubuntu",
             "choices": os.listdir(PACKER_IMAGES_PATH / "AWS"),
         },
-        "arches": {
-            "help": "The arches available to build.",
-        },
-        "versions": {
-            "help": "The versions available to build.",
-        },
     },
 )
-def matrix(ctx: Context, distro: str, arches: bool = False, versions: bool = False):
-    if not arches and not versions:
-        ctx.exit(1, "One of '--arches/--versions' is mandatory")
-    if arches and versions:
-        ctx.exit(1, "Pass only one of '--arches/--versions'")
+def matrix(ctx: Context, distro: str):
 
     packer_files_dir = PACKER_IMAGES_PATH / "AWS" / distro.lower()
     if not packer_files_dir.exists():
         ctx.exit(1, f"The '{packer_files_dir.relative_to(REPO_ROOT)}' directory does not exit.")
 
-    _arches = set()
-    _versions = set()
+    matrix = {}
     for fname in packer_files_dir.glob("*.pkrvars.hcl"):
         parts = fname.stem.rsplit(".", 1)[0].split("-")
         # Remove the distro name
         parts.pop(0)
         # Add to versions
-        _versions.add(parts.pop(0))
+        version = parts.pop(0)
+        matrix.setdefault(version, set())
         # Add the arch
-        _arches.add(parts.pop(0))
+        arch = parts.pop(0)
+        matrix[version].add(arch)
         assert not parts
-    if arches:
-        print(json.dumps(sorted(_arches)))
-    if versions:
-        print(json.dumps(sorted(_versions)))
+
+    build_matrix = []
+    for version in sorted(matrix):
+        for arch in sorted(matrix[version]):
+            build_matrix.append(
+                {
+                    "version": version,
+                    "arch": arch,
+                }
+            )
+    print(json.dumps(build_matrix))
     ctx.exit(0)

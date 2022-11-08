@@ -147,8 +147,6 @@ def build_ami(
         ctx.exit(ret.returncode)
 
     build_command = [packer, "build"]
-    if "CI" in os.environ:
-        build_command.append("-timestamp-ui")
     if debug:
         build_command.append("-debug")
     build_command.extend(command)

@@ -60,6 +60,15 @@ jobs:
       distro-name: almalinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  debian:
+    name: Debian
+    needs:
+      - get-changed-files
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: debian
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   set-pipeline-exit-status:
     # This step is just so we can make github require this step, to pass checks
     # on a pull request instead of requiring all

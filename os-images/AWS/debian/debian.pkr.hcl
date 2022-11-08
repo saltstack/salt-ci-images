@@ -1,15 +1,12 @@
 # CLI Variables
 variable "ci_build" { type = bool }
+variable "distro_arch" { type = string }
 variable "aws_region" { type = string }
 variable "ssh_keypair_name" { type = string }
 variable "ssh_private_key_file" { type = string }
 variable "build_type" {
   type    = string
   default = "ci"
-}
-variable "distro_arch" {
-  type    = string
-  default = "x86_64"
 }
 variable "distro_version" {
   type = string
@@ -22,18 +19,18 @@ variable "instance_type" {
 }
 variable "ssh_username" {
   type    = string
-  default = "ec2-user"
+  default = "admin"
 }
 
 # Remaining variables
 variable "ami_owner" {
   type    = string
-  default = "764336703387"
+  default = "903794441882"
 }
 
 variable "distro_name" {
   type    = string
-  default = "AlmaLinux"
+  default = "Debian"
 }
 
 variable "ami_filter" {
@@ -96,7 +93,7 @@ source "amazon-ebs" "image" {
 
   launch_block_device_mappings {
     delete_on_termination = true
-    device_name           = "/dev/sda1"
+    device_name           = "/dev/xvda"
     volume_size           = 40
     volume_type           = "gp3"
   }
@@ -150,9 +147,9 @@ build {
   provisioner "shell" {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
-      "yum install -y dnf || true",
-      "dnf update -y",
-      "dnf install -y git vim sudo openssh-server dbus curl tar"
+      "rm -rf /etc/apt/apt.conf.d/20auto-upgrades",
+      "apt-get update -y && apt-get upgrade -yq",
+      "apt-get install -y bash git vim openssh-server curl tar"
     ]
     inline_shebang = "/bin/sh -ex"
   }
@@ -167,7 +164,7 @@ build {
 
   provisioner "shell" {
     environment_vars = [
-      "OS_ARCH=${var.distro_arch}",
+      "OS_ARCH=${var.distro_arch == "arm64" ? "aarch64" : "x86_64"}",
       "SALT_VERSION=${var.salt_provision_version}",
       "SALT_PROVISION_TYPE=${var.salt_provision_type}"
     ]
@@ -196,8 +193,8 @@ build {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline_shebang  = "/bin/sh -ex"
     inline = [
-      "dnf clean all",
-      "rm -rf /var/cache/yum"
+      "rm -rf /var/lib/apt/lists/*",
+      "apt-get clean"
     ]
   }
 

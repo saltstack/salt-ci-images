@@ -137,8 +137,6 @@ def build_ami(
             "-var",
             f"distro_arch={distro_arch}",
             "-var",
-            f"distro_slug={distro}-{distro_version}-{distro_arch}",
-            "-var",
             f"ssh_keypair_name={key_name}",
             "-var",
             f"ssh_private_key_file={key_path}",

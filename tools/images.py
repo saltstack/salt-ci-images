@@ -29,9 +29,8 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "distro_version": {
             "help": "The os version to build. Example: 22.04",
         },
-        "arch": {
-            "help": "The os arch to build. One of 'x86_64', 'aarch64'.",
-            "choices": ["x86_64", "arm64"],
+        "distro_arch": {
+            "help": "The os arch to build.",
         },
         "region": {
             "help": "Which AWS region to build image and publish image.",
@@ -55,7 +54,7 @@ def build_ami(
     ctx: Context,
     distro: str,
     distro_version: str,
-    arch: str = "x86_64",
+    distro_arch: str,
     key_name: str = os.environ.get("RUNNER_NAME"),  # type: ignore[assignment]
     key_path: pathlib.Path = None,
     debug: bool = False,
@@ -88,8 +87,8 @@ def build_ami(
 
     packer_images_path = PACKER_IMAGES_PATH / "AWS"
     packer_files = [
-        packer_images_path / distro / f"{distro}-{distro_version}-{arch}.pkr.hcl",
-        packer_images_path / distro / f"{distro}-{distro_version}.pkr.hcl",
+        packer_images_path / distro / f"{distro}-{distro_version}-{distro_arch}.pkr.hcl",
+        packer_images_path / distro / f"{distro}-{distro_arch}.pkr.hcl",
         packer_images_path / distro / f"{distro}.pkr.hcl",
     ]
     for packer_file in packer_files:
@@ -105,31 +104,20 @@ def build_ami(
         )
 
     var_files = []
-    required_packer_var_files = [
-        packer_images_path / distro / f"{distro}-{distro_version}-{arch}.pkrvars.hcl",
-        packer_images_path / distro / f"{distro}-{distro_version}.pkrvars.hcl",
+    packer_var_files = [
+        packer_images_path / distro / f"{distro}-{distro_version}-{distro_arch}.pkrvars.hcl",
     ]
-    for packer_var_file in required_packer_var_files:
+    for packer_var_file in packer_var_files:
         if packer_var_file.exists():
             var_files.append(packer_var_file.relative_to(REPO_ROOT))
             break
     else:
         ctx.exit(
             1,
-            "Could not find a '{}' specific packer vars file. Searched:\n{}".format(
-                arch,
-                "\n".join(
-                    [f" - {path.relative_to(REPO_ROOT)}" for path in required_packer_var_files]
-                ),
+            "Could not find a packer vars file. Searched:\n{}".format(
+                "\n".join([f" - {path.relative_to(REPO_ROOT)}" for path in packer_var_files]),
             ),
         )
-    packer_var_files = [
-        packer_images_path / distro / f"{distro}-{distro_version}.pkrvars.hcl",
-        packer_images_path / distro / f"{distro}.pkrvars.hcl",
-    ]
-    for packer_var_file in packer_var_files:
-        if packer_var_file.exists():
-            var_files.append(packer_var_file.relative_to(REPO_ROOT))
 
     command = []
     if "CI" in os.environ:
@@ -147,9 +135,9 @@ def build_ami(
             "-var",
             f"distro_version={distro_version}",
             "-var",
-            f"distro_arch={arch}",
+            f"distro_arch={distro_arch}",
             "-var",
-            f"distro_slug={distro}-{distro_version}-{arch}",
+            f"distro_slug={distro}-{distro_version}-{distro_arch}",
             "-var",
             f"ssh_keypair_name={key_name}",
             "-var",
@@ -194,30 +182,19 @@ def matrix(ctx: Context, distro: str, arches: bool = False, versions: bool = Fal
     if not packer_files_dir.exists():
         ctx.exit(1, f"The '{packer_files_dir.relative_to(REPO_ROOT)}' directory does not exit.")
 
+    _arches = set()
+    _versions = set()
+    for fname in packer_files_dir.glob("*.pkrvars.hcl"):
+        parts = fname.stem.rsplit(".", 1)[0].split("-")
+        # Remove the distro name
+        parts.pop(0)
+        # Add to versions
+        _versions.add(parts.pop(0))
+        # Add the arch
+        _arches.add(parts.pop(0))
+        assert not parts
     if arches:
-        _arches = {"x86_64"}
-        for fname in packer_files_dir.glob("*.hcl"):
-            if ".pkrvars" in fname.stem:
-                continue
-            parts = fname.stem.split("-")
-            # Remove the distro name
-            parts.pop(0)
-            if not parts:
-                continue
-            if len(parts) > 1:
-                # Remove versions
-                parts.pop(0)
-            _arches.add(parts.pop(0))
-            assert not parts
         print(json.dumps(sorted(_arches)))
     if versions:
-        _versions = set()
-        for fname in packer_files_dir.glob("*.pkrvars.hcl"):
-            parts = fname.stem.rsplit(".", 1)[0].split("-")
-            # Remove the distro name
-            parts.pop(0)
-            # Add to versions
-            _versions.add(parts.pop(0))
-            continue
         print(json.dumps(sorted(_versions)))
     ctx.exit(0)

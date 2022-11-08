@@ -11,7 +11,7 @@ else
     PLATFORM="macos"
 fi
 
-SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-mayflower-${OS_ARCH}-${PLATFORM}.tar.xz"
+SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-${OS_ARCH}-${PLATFORM}.tar.xz
 SALT_DOWNLOAD_URL="http://139.64.236.21/gdvYr3DshH/${SALT_ARCHIVE_NAME}"
 
 if [ "$(which curl)x" != "x" ]; then

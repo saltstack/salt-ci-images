@@ -84,6 +84,11 @@ jobs:
                 - *state_tree_added_modified
                 - os-images/AWS/files/*
                 - os-images/AWS/opensuse/*.hcl
+            os-images-photon:
+              - added|modified:
+                - *state_tree_added_modified
+                - os-images/AWS/files/*
+                - os-images/AWS/photon/*.hcl
             os-images-ubuntu:
               - added|modified:
                 - *state_tree_added_modified
@@ -178,6 +183,16 @@ jobs:
       distro-name: opensuse
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  photon:
+    name: PhotonOS
+    needs:
+      - get-changed-files
+    if: ${{ fromJSON(needs.get-changed-files.outputs.changed-files)['os-images-photon'] == 'true' }}
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: photon
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   ubuntu:
     name: Ubuntu
     needs:
@@ -205,6 +220,7 @@ jobs:
       - debian
       - fedora
       - opensuse
+      - photon
       - ubuntu
     steps:
     - name: Download Exit Status Files

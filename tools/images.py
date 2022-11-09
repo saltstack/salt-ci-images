@@ -7,8 +7,6 @@ import json
 import os
 import pathlib
 import shutil
-from datetime import datetime
-from datetime import timedelta
 
 from ptscripts import command_group
 from ptscripts import Context
@@ -46,6 +44,9 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "debug": {
             "help": "Pass --debug to packer",
         },
+        "skip_create_ami": {
+            "help": "Skip pulishing the AMI.",
+        },
     },
 )
 def build_ami(
@@ -57,6 +58,7 @@ def build_ami(
     key_path: pathlib.Path = None,
     debug: bool = False,
     region: str = "eu-central-1",
+    skip_create_ami: bool = False,
 ):
     """
     Build EC2 AMIs.
@@ -116,32 +118,23 @@ def build_ami(
             ),
         )
 
+    gh_event_path = os.environ.get("GITHUB_EVENT_PATH") or None
+    if gh_event_path is not None:
+        gh_event = json.loads(open(gh_event_path).read())
+        default_branch = gh_event["repository"]["default_branch"]
+        if gh_event["ref"] != f"refs/heads/{default_branch}":
+            skip_create_ami = True
+            ctx.warn("The AMI will not be published. Just testing the build process.")
     ci_build = os.environ.get("RUNNER_NAME") is not None
-    build_type = "ci"
-    if ci_build:
-        if os.environ.get("GITHUB_EVENT_NAME", "") == "pull_request":
-            build_type += "-staging"
-    else:
-        # Developer builds are also staging builds
-        build_type += "-staging"
     command = []
     for var_file in var_files:
         command.append(f"-var-file={var_file}")
-    if ci_build and os.environ.get("GITHUB_EVENT_NAME", "") == "pull_request":
-        # Deprecate the image in 7 days
-        deprecate_at = datetime.utcnow() + timedelta(days=7)
-        command.extend(
-            [
-                "-var",
-                f"deprecate_at={deprecate_at.strftime('%Y%m%dT%H:%M:00')}",
-            ]
-        )
     command.extend(
         [
             "-var",
-            f"ci_build={str(ci_build).lower()}",
+            f"skip_create_ami={str(skip_create_ami).lower()}",
             "-var",
-            f"build_type={build_type}",
+            f"ci_build={str(ci_build).lower()}",
             "-var",
             f"aws_region={region}",
             "-var",

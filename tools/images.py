@@ -43,10 +43,6 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "key_path": {
             "help": "The path to the SSH private key.",
         },
-        "build_type": {
-            "help": "The type of image build. Choices: ['ci', 'ci-staging'].",
-            "choices": ["ci", "ci-staging"],
-        },
         "debug": {
             "help": "Pass --debug to packer",
         },
@@ -60,7 +56,6 @@ def build_ami(
     key_name: str = os.environ.get("RUNNER_NAME"),  # type: ignore[assignment]
     key_path: pathlib.Path = None,
     debug: bool = False,
-    build_type: str = "ci",
     region: str = "eu-central-1",
 ):
     """
@@ -122,6 +117,13 @@ def build_ami(
         )
 
     ci_build = os.environ.get("RUNNER_NAME") is not None
+    build_type = "ci"
+    if ci_build:
+        if os.environ.get("GITHUB_EVENT_NAME", "") == "pull_request":
+            build_type += "-staging"
+    else:
+        # Developer builds are also staging builds
+        build_type += "-staging"
     command = []
     for var_file in var_files:
         command.append(f"-var-file={var_file}")
@@ -138,6 +140,8 @@ def build_ami(
         [
             "-var",
             f"ci_build={str(ci_build).lower()}",
+            "-var",
+            f"build_type={build_type}",
             "-var",
             f"aws_region={region}",
             "-var",

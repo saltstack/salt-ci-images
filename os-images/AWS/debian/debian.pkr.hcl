@@ -11,6 +11,10 @@ variable "build_type" {
 variable "distro_version" {
   type = string
 }
+variable "deprecate_at" {
+  type    = string
+  default = null
+}
 
 # Variables set by pkrvars file
 variable "instance_type" {
@@ -90,6 +94,8 @@ source "amazon-ebs" "image" {
 
   ebs_optimized     = true
   shutdown_behavior = "terminate"
+
+  deprecate_at = var.deprecate_at
 
   launch_block_device_mappings {
     delete_on_termination = true

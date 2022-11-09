@@ -7,6 +7,8 @@ import json
 import os
 import pathlib
 import shutil
+from datetime import datetime
+from datetime import timedelta
 
 from ptscripts import command_group
 from ptscripts import Context
@@ -119,13 +121,23 @@ def build_ami(
             ),
         )
 
+    ci_build = os.environ.get("RUNNER_NAME") is not None
     command = []
     for var_file in var_files:
         command.append(f"-var-file={var_file}")
+    if ci_build and os.environ.get("GITHUB_EVENT_NAME", "") == "pull_request":
+        # Deprecate the image in 7 days
+        deprecate_at = datetime.utcnow() + timedelta(days=7)
+        command.extend(
+            [
+                "-var",
+                f"deprecate_at={deprecate_at.strftime('%Y%m%dT%H:%M:00')}",
+            ]
+        )
     command.extend(
         [
             "-var",
-            f"ci_build={str(os.environ.get('RUNNER_NAME') is not None).lower()}",
+            f"ci_build={str(ci_build).lower()}",
             "-var",
             f"aws_region={region}",
             "-var",

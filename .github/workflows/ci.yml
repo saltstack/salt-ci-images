@@ -79,6 +79,11 @@ jobs:
                 - *state_tree_added_modified
                 - os-images/AWS/files/*
                 - os-images/AWS/fedora/*.hcl
+            os-images-opensuse:
+              - added|modified:
+                - *state_tree_added_modified
+                - os-images/AWS/files/*
+                - os-images/AWS/opensuse/*.hcl
             os-images-ubuntu:
               - added|modified:
                 - *state_tree_added_modified
@@ -163,6 +168,16 @@ jobs:
       distro-name: fedora
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  opensuse:
+    name: Opensuse
+    needs:
+      - get-changed-files
+    if: ${{ fromJSON(needs.get-changed-files.outputs.changed-files)['os-images-opensuse'] == 'true' }}
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: opensuse
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   ubuntu:
     name: Ubuntu
     needs:
@@ -189,6 +204,7 @@ jobs:
       - centosstream
       - debian
       - fedora
+      - opensuse
       - ubuntu
     steps:
     - name: Download Exit Status Files

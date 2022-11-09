@@ -99,10 +99,6 @@ source "amazon-ebs" "image" {
 
   skip_create_ami = var.skip_create_ami
 
-  ami_users = [
-    "self"
-  ]
-
   #  ami_groups = [
   #    "all"
   #  ]

@@ -62,6 +62,15 @@ jobs:
       distro-name: almalinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  amazonlinux:
+    name: AmazonLinux
+    needs:
+      - get-changed-files
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: amazonlinux
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   debian:
     name: Debian
     needs:
@@ -90,6 +99,7 @@ jobs:
     needs:
       - pre-commit
       - almalinux
+      - amazonlinux
       - debian
       - ubuntu
     steps:

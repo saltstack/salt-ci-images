@@ -100,6 +100,10 @@ source "amazon-ebs" "image" {
 
   deprecate_at = var.deprecate_at
 
+  ami_users = [
+    "self"
+  ]
+
   launch_block_device_mappings {
     delete_on_termination = true
     device_name           = "/dev/sda1"

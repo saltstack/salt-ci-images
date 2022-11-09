@@ -4,16 +4,12 @@ variable "distro_arch" { type = string }
 variable "aws_region" { type = string }
 variable "ssh_keypair_name" { type = string }
 variable "ssh_private_key_file" { type = string }
-variable "build_type" {
-  type    = string
-  default = "ci"
-}
 variable "distro_version" {
   type = string
 }
-variable "deprecate_at" {
-  type    = string
-  default = null
+variable "skip_create_ami" {
+  type    = bool
+  default = false
 }
 
 # Variables set by pkrvars file
@@ -27,6 +23,10 @@ variable "ssh_username" {
 }
 
 # Remaining variables
+variable "build_type" {
+  type    = string
+  default = "ci"
+}
 variable "ami_owner" {
   type    = string
   default = "099720109477"
@@ -95,7 +95,7 @@ source "amazon-ebs" "image" {
   ebs_optimized     = true
   shutdown_behavior = "terminate"
 
-  deprecate_at = var.deprecate_at
+  skip_create_ami = var.skip_create_ami
 
   ami_users = [
     "self"

@@ -80,7 +80,8 @@ jobs:
 
       - name: Build Image
         run: |
-          tools --timestamps images build-ami --region=${{ env.AWS_REGION }} ${{ inputs.distro-name }} ${{ matrix.version }} ${{ matrix.arch }}
+          tools --timestamps images build-ami --region=${{ env.AWS_REGION }} \
+            ${{ inputs.distro-name }} ${{ matrix.version }} ${{ matrix.arch }}
 
       - name: Set Exit Status
         if: always()

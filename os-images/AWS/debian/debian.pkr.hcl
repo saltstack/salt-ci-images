@@ -169,7 +169,7 @@ build {
       "SALT_PROVISION_TYPE=${var.salt_provision_type}"
     ]
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    script          = "os-images/files/install-salt-onedir.sh"
+    script          = "os-images/files/provision-salt.sh"
   }
 
   provisioner "file" {

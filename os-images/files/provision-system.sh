@@ -9,11 +9,7 @@ echo "Contents of ${SALT_ROOT_DIR}:"
 ls -lah ${SALT_ROOT_DIR}
 
 if [ -f /tmp/salt/bin/salt-call ]; then
-    # Mayflower
     SALT_CALL=/tmp/salt/bin/salt-call
-elif [ -f ~/.pyenv/versions/${SALT_PY_VERSION}/bin/salt-call ]; then
-    # Pyenv
-    SALT_CALL="~/.pyenv/versions/${SALT_PY_VERSION}/bin/salt-call"
 else
     echo "Could not find a Salt mayflower build or Salt install in a PyEnv environment"
     exit 1

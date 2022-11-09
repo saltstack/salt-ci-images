@@ -9,6 +9,8 @@ permissions:
 
 jobs:
   get-changed-files:
+    # Run only on push events, or on pull requests events not coming from our repository
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name }}
     name: Get Changed Files
     runs-on: ubuntu-latest
     permissions:
@@ -74,7 +76,8 @@ jobs:
     # on a pull request instead of requiring all
     name: Set the ${{ github.workflow }} Pipeline Exit Status
     runs-on: ubuntu-latest
-    if: always()
+    # Run only on push events, or on pull requests events not coming from our repository
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name)
     needs:
       - pre-commit
       - almalinux

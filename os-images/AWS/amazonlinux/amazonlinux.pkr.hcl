@@ -91,7 +91,6 @@ data "amazon-ami" "image" {
 
 source "amazon-ebs" "image" {
   ami_description = "${upper(var.build_type)} Image of ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
-  ami_groups      = ["all"]
   ami_name        = local.ami_name
   instance_type   = var.instance_type
 
@@ -103,6 +102,10 @@ source "amazon-ebs" "image" {
   ami_users = [
     "self"
   ]
+
+  #  ami_groups = [
+  #    "all"
+  #  ]
 
   launch_block_device_mappings {
     delete_on_termination = true

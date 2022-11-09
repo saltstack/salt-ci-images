@@ -23,18 +23,18 @@ variable "instance_type" {
 }
 variable "ssh_username" {
   type    = string
-  default = "admin"
+  default = "ubuntu"
 }
 
 # Remaining variables
 variable "ami_owner" {
   type    = string
-  default = "903794441882"
+  default = "099720109477"
 }
 
 variable "distro_name" {
   type    = string
-  default = "Debian"
+  default = "Ubuntu"
 }
 
 variable "ami_filter" {

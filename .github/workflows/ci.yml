@@ -71,6 +71,15 @@ jobs:
       distro-name: debian
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  ubuntu:
+    name: Ubuntu
+    needs:
+      - get-changed-files
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: ubuntu
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   set-pipeline-exit-status:
     # This step is just so we can make github require this step, to pass checks
     # on a pull request instead of requiring all
@@ -81,6 +90,8 @@ jobs:
     needs:
       - pre-commit
       - almalinux
+      - debian
+      - ubuntu
     steps:
     - name: Download Exit Status Files
       if: always()

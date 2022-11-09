@@ -11,7 +11,7 @@ ls -lah ${SALT_ROOT_DIR}
 if [ -f /tmp/salt/bin/salt-call ]; then
     SALT_CALL=/tmp/salt/bin/salt-call
 else
-    echo "Could not find a Salt mayflower build or Salt install in a PyEnv environment"
+    echo "Could not find a Salt relenv build or Salt install in a PyEnv environment"
     exit 1
 fi
 

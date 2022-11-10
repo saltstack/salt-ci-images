@@ -7,9 +7,12 @@ import json
 import os
 import pathlib
 import shutil
+import time
+from operator import itemgetter
 
 from ptscripts import command_group
 from ptscripts import Context
+from rich.prompt import Confirm
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 PACKER_IMAGES_PATH = REPO_ROOT / "os-images"
@@ -204,3 +207,159 @@ def matrix(ctx: Context, distro: str):
             )
     print(json.dumps(build_matrix))
     ctx.exit(0)
+
+
+@images.command(
+    arguments={
+        "ami": {
+            "help": "The ami ID to delete.",
+        },
+        "name": {
+            "help": "The ami name filter to use",
+        },
+        "region": {
+            "help": "Which AWS region to search for images.",
+        },
+        "keep": {
+            "help": "When using the name filter, how many images to keep",
+        },
+        "assume_yes": {
+            "help": "Assume yes on destructive questions.",
+        },
+        "dry_run": {
+            "help": "Dry run.",
+        },
+    },
+)
+def delete(
+    ctx: Context,
+    ami: str = None,
+    name: str = None,
+    region: str = os.environ.get("AWS_DEFAULT_REGION", "eu-central-1"),
+    keep: int = 1,
+    assume_yes: bool = False,
+    dry_run: bool = False,
+):
+    if not ami and not name:
+        ctx.exit(1, "Please pass one of '--ami/--name'.")
+    if ami and name:
+        ctx.exit(1, "Please pass only one of '--ami/--name'.")
+
+    try:
+        import boto3
+    except ImportError:
+        ctx.exit(1, "Please install 'boto3'.")
+
+    ec2_client = boto3.client("ec2", region_name=region)
+    ec2_resource = boto3.resource("ec2", region_name=region)
+
+    if ami is not None:
+        try:
+            _delete_ami(ctx, ec2_resource.Image(ami), assume_yes, dry_run, ec2_client, ec2_resource)
+        except KeyboardInterrupt:
+            ctx.exit(1)
+        ctx.exit(0)
+
+    if not name.endswith("*"):
+        name += "*"
+
+    filters = [
+        {"Name": "name", "Values": [name]},
+        {"Name": "state", "Values": ["available"]},
+    ]
+
+    response = ec2_client.describe_images(Filters=filters)
+    if response["ResponseMetadata"]["HTTPStatusCode"] != 200:
+        ctx.error("Failed to get images. Full response:\n", response)
+        ctx.exit(1)
+
+    if not response["Images"]:
+        exitcode = 0
+        if keep == 0:
+            exitcode = 1
+        ctx.error("No images were returned. Full response:\n", response)
+        ctx.exit(exitcode)
+
+    images_listing = sorted(response["Images"], key=itemgetter("Name"))
+    if keep:
+        images_to_delete = images_listing[: keep * -1]
+    else:
+        images_to_delete = images_listing
+
+    if not images_to_delete:
+        ctx.exit(
+            0,
+            "Not going to delete {} image(s) that should be kept".format(
+                min(len(images_listing), keep)
+            ),
+        )
+
+    for image_details in images_to_delete:
+        try:
+            _delete_ami(
+                ctx,
+                ec2_resource.Image(image_details["ImageId"]),
+                assume_yes,
+                dry_run,
+                ec2_client,
+                ec2_resource,
+            )
+        except KeyboardInterrupt:
+            ctx.exit(1)
+
+
+def _delete_ami(ctx: Context, image, assume_yes: bool, dry_run: bool, ec2_client, ec2_resource):
+    import botocore.exceptions
+
+    exitcode = 0
+    msg = f"Unregistering {image.id!r}"
+    if image.description:
+        msg += f", {image.description!r}"
+    msg += " ..."
+    ctx.warn(msg)
+    block_devices = image.block_device_mappings
+    try:
+        if assume_yes is False:
+            msg = f"Unregister {image.id!r}"
+            if image.description:
+                msg += f", {image.description!r}"
+            msg += "?"
+            proceed = Confirm.ask(msg, default=False)
+            if proceed is False:
+                ctx.exit(0, "Not proceeding.")
+        image.deregister(DryRun=dry_run)
+        ctx.info(f"The AMI {image.id!r} was deregistered.")
+    except botocore.exceptions.ClientError as exc:
+        if "DryRun flag is set" not in str(exc):
+            ctx.error(exc)
+            ctx.exit(1)
+        else:
+            ctx.info(f"The AMI {image.id!r} would have been deregistered.")
+    time.sleep(1)
+    for block_device in block_devices:
+        if "VirtualName" in block_device:
+            # Just ignore virtual devices
+            continue
+        if "Ebs" not in block_device:
+            ctx.warn("Skipping non EBS block device with details:\n", block_device)
+            continue
+        snapshot_id = block_device["Ebs"]["SnapshotId"]
+        ctx.warn(f"Deleting snapshot {snapshot_id!r} of {image.id!r}")
+        ctx.info("Details:\n", block_device)
+        try:
+            if assume_yes is False:
+                proceed = Confirm.ask(
+                    f"Delete snapshot {snapshot_id!r} of {image.id!r}?", default=False
+                )
+                if proceed is False:
+                    ctx.exit(0, "Not proceeding.")
+            ec2_client.delete_snapshot(SnapshotId=snapshot_id, DryRun=dry_run)
+            ctx.info(f"The snapshot {snapshot_id!r} of {image.id!r} was deleted.")
+        except botocore.exceptions.ClientError as exc:
+            if "DryRun flag is set" not in str(exc):
+                ctx.error(exc)
+                ctx.exit(1)
+            else:
+                ctx.info(f"The snapshot {snapshot_id!r} of {image.id!r} would have been deleted.")
+    if exitcode:
+        ctx.exit(exitcode)

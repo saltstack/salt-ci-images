@@ -37,8 +37,8 @@ jobs:
         id: generate-matrix
         run: |
           MATRIX=$(tools images matrix ${{ inputs.distro-name }})
-          echo $MATRIX
-          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          echo "$MATRIX"
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build Image
@@ -66,17 +66,15 @@ jobs:
         run: |
           token=$(curl -s -f -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 10")
           region=$(curl -s -f -H "X-aws-ec2-metadata-token: $token" -v http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-          echo AWS_REGION=$region
-          echo "AWS_REGION=$region" >> $GITHUB_ENV
+          echo "AWS_REGION=$region"
+          echo "AWS_REGION=$region" >> "$GITHUB_ENV"
 
       - name: Install Python Tools Scripts
         env:
           PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
           PIP_EXTRA_INDEX_URL: https://pypi.org/simple
         run: |
-          if [ "x$(which tools)" = "x" ]; then
-            python3 -m pip install -r requirements/tools.txt
-          fi
+          python3 -m pip install -r requirements/tools.txt
 
       - name: Build Image
         run: |

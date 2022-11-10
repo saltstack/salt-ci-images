@@ -130,6 +130,8 @@ source "amazon-ebs" "image" {
   winrm_insecure = true
   winrm_use_ssl  = true
   winrm_username = "Administrator"
+  winrm_password = "Really-SuperS3cr3t!!!!"
+
   user_data_file = "${path.root}/scripts/SetUpWinRM.ps1"
 
   ssh_interface               = "${var.ci_build ? "private" : "public"}_ip"

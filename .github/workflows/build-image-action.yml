@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Packer
-        uses: hashicorp-contrib/setup-packer@v1
+        uses: hashicorp-contrib/setup-packer@v2
         with:
           packer-version: 1.8.4
 

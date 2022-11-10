@@ -19,7 +19,7 @@ jobs:
     outputs:
       changed-files: ${{ toJSON(steps.changed-files.outputs) }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get Changed Files
         id: changed-files
         uses: dorny/paths-filter@v2
@@ -232,7 +232,7 @@ jobs:
 
     - name: Delete Exit Status Artifacts
       if: always()
-      uses: geekyeggo/delete-artifact@v1
+      uses: geekyeggo/delete-artifact@v2
       with:
         name: exitstatus
         failOnError: false

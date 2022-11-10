@@ -16,7 +16,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
@@ -24,7 +24,7 @@ jobs:
           python-version: "3.9"
 
       - name: Setup Packer
-        uses: hashicorp-contrib/setup-packer@v1
+        uses: hashicorp-contrib/setup-packer@v2
         with:
           packer-version: 1.8.4
 

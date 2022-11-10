@@ -1,7 +1,17 @@
+$EC2LaunchDir = [io.path]::combine($env:ProgramFiles, 'Amazon', 'EC2Launch')
 $EC2ConfigDir = [io.path]::combine($env:ProgramFiles, 'Amazon', 'Ec2ConfigService')
 $EC2WindowsLaunch = [io.path]::combine($env:ProgramData, 'Amazon', 'EC2-Windows', 'Launch')
 
-if (Test-Path $EC2ConfigDir) {
+if (Test-Path $EC2LaunchDir) {
+  # Windows Server 2022
+  $EXECUTABLE = [io.path]::combine($EC2LaunchDir, 'ec2launch.exe')
+  Write-Host "Executing $EXECUTABLE sysprep -clean"
+  & cmd.exe /c "`"$EXECUTABLE`" sysprep -clean"
+  if ($LASTEXITCODE -ne 0) {
+    throw("Failed to run ec2launch.exe sysprep -clean")
+  }
+}
+ElseIf (Test-Path $EC2ConfigDir) {
   $EXECUTABLE = [io.path]::combine($EC2ConfigDir, 'ec2config.exe')
   Write-Host "Executing $EXECUTABLE -sysprep"
   & cmd.exe /c "`"$EXECUTABLE`" -sysprep"

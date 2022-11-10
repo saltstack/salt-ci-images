@@ -139,7 +139,7 @@ source "amazon-ebs" "image" {
   tags = {
     Build-Date           = "${local.build_timestamp}"
     Build-Type           = var.build_type
-    Name                 = "${upper(var.build_type)} // ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
+    Name                 = "Salt Project // ${upper(var.build_type)} // ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
     OS-Arch              = "${var.distro_arch}"
     OS-Name              = "${var.distro_name}"
     OS-Version           = "${var.distro_version}"

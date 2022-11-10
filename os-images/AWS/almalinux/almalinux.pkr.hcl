@@ -120,7 +120,7 @@ source "amazon-ebs" "image" {
   }
   security_group_filter {
     filters = {
-      group-name = "*-golden-images-${var.ci_build ? "private" : "public"}-*"
+      group-name = "*-golden-images-provision-${var.ci_build ? "private" : "public"}-*"
     }
   }
   source_ami                  = data.amazon-ami.image.id

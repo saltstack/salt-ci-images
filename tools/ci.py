@@ -58,7 +58,8 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
 
     if event_name == "pull_request":
         ctx.info("Running from a pull request event")
-        if gh_event["head"]["repo"]["full_name"] == gh_event["base"]["repo"]["full_name"]:
+        pr_event_data = gh_event["pull_request"]
+        if pr_event_data["head"]["repo"]["full_name"] == pr_event_data["base"]["repo"]["full_name"]:
             # If this is a pull request coming from the same repository, don't run anything
             ctx.info("Pull request is coming from the same repository")
             outputs = {

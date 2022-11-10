@@ -205,28 +205,6 @@ build {
     source      = ".tmp/${local.distro_slug}/"
   }
 
-  provisioner "file" {
-    destination = "${var.salt_provision_root_dir}\\Undo-WinRMConfig.ps1"
-    direction   = "upload"
-    source      = "${path.root}/scripts/Undo-WinRMConfig.ps1"
-  }
-
-  provisioner "powershell" {
-    elevated_password = ""
-    elevated_user     = "SYSTEM"
-    inline = [
-      "& ${var.salt_provision_root_dir}\\Undo-WinRMConfig.ps1 -RemoveShutdownScriptConfig",
-    ]
-  }
-
-  provisioner "powershell" {
-    elevated_password = ""
-    elevated_user     = "SYSTEM"
-    inline = [
-      "Remove-Item ${var.salt_provision_root_dir}\\Undo-WinRMConfig.ps1 -Force"
-    ]
-  }
-
   provisioner "powershell" {
     elevated_password = ""
     elevated_user     = "SYSTEM"

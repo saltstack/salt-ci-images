@@ -33,6 +33,12 @@ repos:
         language: script
         files: '\.hcl$'
         types: [file]
+#      - id: lint-github-workflows
+#        name: Lint GitHub Workflows
+#        entry: -v $(pwd):/repo --workdir /repo rhysd/actionlint:latest -color
+#        language: docker_image
+#        files: '.github/workflows/.*\.yml$'
+#        types: [file]
 
   # ----- Formatting ---------------------------------------------------------------------------->
   - repo: https://github.com/asottile/reorder_python_imports
@@ -78,6 +84,12 @@ repos:
         - flake8-mypy-fork
         - flake8-docstrings
         - flake8-typing-imports
+
+  - repo: https://github.com/hollow/pre-commit-actionlint
+    rev: "v1.6.22"
+    hooks:
+      - id: actionlint
+        files: '.github/workflows/.*\.yml$'
   # <---- Code Analysis --------------------------------------------------------------------------
 
 

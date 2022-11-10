@@ -92,6 +92,11 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/ubuntu/*.hcl
+            os-images-windows:
+              - added|modified:
+                - *state_tree_added_modified
+                - *os_images_scripts
+                - os-images/AWS/windows/*.hcl
 
       - name: Set Exit Status
         if: always()
@@ -276,6 +281,17 @@ jobs:
       distro-name: ubuntu
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  windows:
+    name: Windows
+    needs:
+      - collect-jobs
+      - get-changed-files
+    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-windows'] }}
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: windows
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+
   set-pipeline-exit-status:
     # This step is just so we can make github require this step, to pass checks
     # on a pull request instead of requiring all
@@ -295,6 +311,7 @@ jobs:
       - opensuse
       - photon
       - ubuntu
+      - windows
     steps:
     - name: Download Exit Status Files
       if: always()

@@ -1,7 +1,7 @@
 <powershell>
 
-write-output "Running User Data Script"
-write-host "(host) Running User Data Script"
+Write-Output "Running User Data Script"
+Write-Host "(host) Running User Data Script"
 
 Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force -ErrorAction Ignore
 
@@ -10,19 +10,18 @@ $ErrorActionPreference = "stop"
 
 # Remove HTTP listener
 Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
-Set-Item WSMan:\localhost\MaxTimeoutms 1800000
-Set-Item WSMan:\localhost\Service\Auth\Basic $true
 
+# Create a self-signed certificate to let ssl work
 $Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName "packer"
 New-Item -Path WSMan:\LocalHost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint -Force
 
 # WinRM
-write-output "Setting up WinRM"
-write-host "(host) setting up WinRM"
+Write-Output "Setting up WinRM"
+Write-Host "(host) setting up WinRM"
 
 cmd.exe /c winrm quickconfig -q
 cmd.exe /c winrm set "winrm/config" '@{MaxTimeoutms="1800000"}'
-cmd.exe /c winrm set "winrm/config/winrs" '@{MaxMemoryPerShellMB="5000"}'
+cmd.exe /c winrm set "winrm/config/winrs" '@{MaxMemoryPerShellMB="1024"}'
 cmd.exe /c winrm set "winrm/config/service" '@{AllowUnencrypted="true"}'
 cmd.exe /c winrm set "winrm/config/client" '@{AllowUnencrypted="true"}'
 cmd.exe /c winrm set "winrm/config/service/auth" '@{Basic="true"}'

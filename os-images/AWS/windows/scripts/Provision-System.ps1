@@ -26,7 +26,7 @@ function Run-Process
   Write-Host "`nRunning Command '$Executable $Arguments' Succeeded!" -ForegroundColor Yellow
 }
 
-$SALT_CALL = "$Env:SALT_PY_TARGET_DIR\salt-call.bat"
+$SALT_CALL = "$Env:TMP\salt\Scripts\salt-call.exe"
 $CONFIG_DIR = "$Env:SALT_ROOT_DIR\conf"
 $DEFAULT_ARGUMENTS = "--local --log-level=warning --config-dir=$CONFIG_DIR --retcode-passthrough"
 
@@ -51,7 +51,7 @@ Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS pkg.get_repo_d
 
 Start-Sleep -Second 2
 Write-Host "List Windows Repo States" -ForegroundColor Yellow
-Get-ChildItem -Path c:\salt\srv -Recurse
+Get-ChildItem -Path $Env:SALT_ROOT_DIR\cache\files\base -Recurse
 
 Start-Sleep -Second 2
 Write-Host "`nProvisioning System" -ForegroundColor Yellow

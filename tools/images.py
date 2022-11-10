@@ -174,7 +174,6 @@ def build_ami(
                 manifest_data = json.loads(manifest_file.read_text())
                 builds = manifest_data["builds"]
                 with open(summary_file, "w+", encoding="utf-8") as wfh:
-                    wfh.write("## Built Image\n")
                     wfh.write("| AMI | Region | Name |\n")
                     wfh.write("| :-- | --- | :-- |\n")
                     for build in builds:

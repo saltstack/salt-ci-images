@@ -124,10 +124,14 @@ def build_ami(
     gh_event_path = os.environ.get("GITHUB_EVENT_PATH") or None
     if gh_event_path is not None:
         gh_event = json.loads(open(gh_event_path).read())
-        default_branch = gh_event["repository"]["default_branch"]
-        if gh_event["ref"] != f"refs/heads/{default_branch}":
+        if "pull_request" in gh_event:
             skip_create_ami = True
-            ctx.warn("The AMI will not be published. Just testing the build process.")
+        else:
+            default_branch = gh_event["repository"]["default_branch"]
+            if gh_event["ref"] != f"refs/heads/{default_branch}":
+                skip_create_ami = True
+    if skip_create_ami:
+        ctx.warn("The AMI will not be published. Just testing the build process.")
     ci_build = os.environ.get("RUNNER_NAME") is not None
     command = []
     for var_file in var_files:

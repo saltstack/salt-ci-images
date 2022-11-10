@@ -83,6 +83,12 @@ jobs:
           tools --timestamps images build-ami --region=${{ env.AWS_REGION }} \
             ${{ inputs.distro-name }} ${{ matrix.version }} ${{ matrix.arch }}
 
+      - name: Get the built image details
+        run: |
+          if test -f manifest.json; then
+            cat manifest.json
+          fi
+
       - name: Set Exit Status
         if: always()
         run: |

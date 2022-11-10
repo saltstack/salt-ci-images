@@ -176,11 +176,11 @@ def build_ami(
                 with open(summary_file, "w+", encoding="utf-8") as wfh:
                     wfh.write("## Built Image\n")
                     wfh.write("| AMI | Region | Name |\n")
-                    wfh.write("| --- | --- | :-- |\n")
+                    wfh.write("| :-- | --- | :-- |\n")
                     for build in builds:
                         region, ami = build["artifact_id"].split(":", 1)
                         name = build["custom_data"]["ami_name"]
-                        wfh.write(f"| {ami} | {region} | {name} |\n")
+                        wfh.write(f"| `{ami}` | `{region}` | `{name}` |\n")
             except Exception as exc:
                 ctx.error("Failed to generate the build step summary:", exc)
     ctx.exit(0)

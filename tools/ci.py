@@ -44,6 +44,9 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
         ctx.error(f"Could not load the GH Event payload from {gh_event_path!r}:\n", exc)
         ctx.exit(1)
 
+    ctx.info("GH Event Payload:")
+    ctx.print(gh_event, soft_wrap=True)
+
     if not changed_files.exists():
         ctx.error(f"The '{changed_files}' file does not exist.")
         ctx.exit(1)

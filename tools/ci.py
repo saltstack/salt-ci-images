@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import pprint
 
 from ptscripts import command_group
 from ptscripts import Context
@@ -43,6 +44,9 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
     except Exception as exc:
         ctx.error(f"Could not load the GH Event payload from {gh_event_path!r}:\n", exc)
         ctx.exit(1)
+
+    ctx.info("GH Event Payload:")
+    print(pprint.pformat(gh_event), flush=True)
 
     if not changed_files.exists():
         ctx.error(f"The '{changed_files}' file does not exist.")

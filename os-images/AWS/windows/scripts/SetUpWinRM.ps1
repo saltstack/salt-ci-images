@@ -8,6 +8,10 @@ Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force -ErrorAction Ignore
 # Don't set this before Set-ExecutionPolicy as it throws an error
 $ErrorActionPreference = "stop"
 
+# Set administrator password
+net user Administrator Really-SuperS3cr3t!!!!
+wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE
+
 # Remove HTTP listener
 Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
 

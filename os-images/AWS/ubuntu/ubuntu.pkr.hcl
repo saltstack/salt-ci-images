@@ -159,6 +159,21 @@ build {
     ]
     inline_shebang  = "/bin/bash -ex"
     execute_command = "sudo bash -c '{{ .Vars }} {{ .Path }}'"
+    inline = [
+      "sleep 15",
+      "while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do",
+      "    echo Waiting for other software managers to finish... ",
+      "    sleep 10",
+      "done",
+    ]
+  }
+
+  provisioner "shell" {
+    environment_vars = [
+      "DEBIAN_FRONTEND=noninteractive"
+    ]
+    inline_shebang  = "/bin/bash -ex"
+    execute_command = "sudo bash -c '{{ .Vars }} {{ .Path }}'"
     script          = "${path.root}/scripts/apt.sh"
   }
 

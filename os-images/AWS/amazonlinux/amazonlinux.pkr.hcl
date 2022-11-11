@@ -144,10 +144,10 @@ source "amazon-ebs" "image" {
     OS-Name              = "${var.distro_name}"
     OS-Version           = "${var.distro_version}"
     Owner                = "SRE"
-    Promoted             = false
     Provision-State-Name = "${var.state_name}"
     Salt-Golden-Image    = true
     created-by           = "packer"
+    no-delete            = false
   }
 }
 

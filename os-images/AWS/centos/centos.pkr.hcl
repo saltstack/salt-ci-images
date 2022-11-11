@@ -135,16 +135,16 @@ source "amazon-ebs" "image" {
   }
   tags = {
     Build-Date           = "${local.build_timestamp}"
-    Build-Type           = upper(var.build_type)
+    Build-Type           = var.build_type
     Name                 = "Salt Project // ${upper(var.build_type)} // ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
     OS-Arch              = "${var.distro_arch}"
     OS-Name              = "${var.distro_name}"
     OS-Version           = "${var.distro_version}"
     Owner                = "SRE"
-    Promoted             = false
     Provision-State-Name = "${var.state_name}"
     Salt-Golden-Image    = true
     created-by           = "packer"
+    no-delete            = false
   }
 }
 

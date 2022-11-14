@@ -232,6 +232,9 @@ build {
   }
 
   provisioner "shell" {
+    environment_vars = [
+      "SSH_USERNAME=${var.ssh_username}"
+    ]
     script = "os-images/AWS/files/cleanup-linux.sh"
   }
 

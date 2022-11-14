@@ -240,6 +240,9 @@ build {
   }
 
   provisioner "shell" {
+    environment_vars = [
+      "SSH_USERNAME=${var.ssh_username}"
+    ]
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     script          = "os-images/AWS/files/cleanup-linux.sh"
   }

@@ -158,6 +158,7 @@ source "amazon-ebs" "image" {
     Salt-Golden-Image    = true
     created-by           = "packer"
     no-delete            = false
+    ssh-username         = var.ssh_username
   }
 }
 

@@ -7,6 +7,7 @@ include:
   - pkgs.docker
   - pkgs.gcc
   - pkgs.gpg
+  - pkgs.ipset
   - pkgs.libffi
   - pkgs.libgit2
   - pkgs.libsodium

@@ -1,0 +1,2 @@
+ipset:
+  pkg.latest

@@ -9,6 +9,7 @@ include:
   - pkgs.docker
   - pkgs.gcc
   - pkgs.gpg
+  - pkgs.ipset
   - pkgs.libcurl
   - pkgs.libffi
   - pkgs.libgit2

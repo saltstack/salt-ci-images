@@ -96,9 +96,14 @@ source "amazon-ebs" "image" {
 
   skip_create_ami = var.skip_create_ami
 
-  ami_groups = [
-    "all"
+  ami_users = [
+    "178480506716",
+    "540082622920"
   ]
+
+  #  ami_groups = [
+  #    "all"
+  #  ]
 
   launch_block_device_mappings {
     delete_on_termination = true

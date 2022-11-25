@@ -18,6 +18,7 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 PACKER_IMAGES_PATH = REPO_ROOT / "os-images"
 TIMESTAMP_UI = " -timestamp-ui" if "CI" in os.environ else ""
 PACKER_TMP_DIR = os.path.join(REPO_ROOT, ".tmp", "{}")
+AWS_REGION = os.environ.get("AWS_DEFAULT_REGION") or os.environ.get("AWS_REGION") or "us-west-2"
 
 images = command_group(name="images", help="AWS EC2 AMI Commands", description=__doc__)
 
@@ -60,7 +61,7 @@ def build_ami(
     key_name: str = os.environ.get("RUNNER_NAME"),  # type: ignore[assignment]
     key_path: pathlib.Path = None,
     debug: bool = False,
-    region: str = "eu-central-1",
+    region: str = AWS_REGION,
     skip_create_ami: bool = False,
 ):
     """
@@ -255,7 +256,7 @@ def delete(
     ctx: Context,
     ami: str = None,
     name: str = None,
-    region: str = os.environ.get("AWS_DEFAULT_REGION", "eu-central-1"),
+    region: str = AWS_REGION,
     keep: int = 1,
     assume_yes: bool = False,
     dry_run: bool = False,

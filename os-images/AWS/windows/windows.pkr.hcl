@@ -18,7 +18,7 @@ variable "skip_create_ami" {
 # Variables set by pkrvars file
 variable "instance_type" {
   type    = string
-  default = "m5.large"
+  default = "t3a.xlarge"
 }
 variable "ssh_username" {
   type    = string
@@ -72,6 +72,7 @@ variable "salt_provision_root_dir" {
 locals {
   build_timestamp = timestamp()
   ami_name        = "${var.ami_name_prefix}/${var.build_type}/${lower(var.distro_name)}/${var.distro_version}/${var.distro_arch}/${formatdate("YYYYMMDD.hhmm", local.build_timestamp)}"
+  ami_description = "${upper(var.build_type)} Image of ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
   distro_slug     = "${lower(var.distro_name)}-${var.distro_version}-${var.distro_arch}"
 }
 
@@ -90,7 +91,7 @@ data "amazon-ami" "image" {
 }
 
 source "amazon-ebs" "image" {
-  ami_description = "${upper(var.build_type)} Image of ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
+  ami_description = local.ami_description
   ami_name        = local.ami_name
   instance_type   = var.instance_type
 
@@ -254,7 +255,12 @@ build {
 
   post-processor "manifest" {
     custom_data = {
-      ami_name = local.ami_name
+      ami_name        = local.ami_name
+      ami_description = local.ami_description
+      ssh_username    = var.ssh_username
+      instance_type   = var.instance_type
+      is_windows      = true
+      slug            = "${lower(var.distro_name)}-${var.distro_version}${var.distro_arch == "arm64" ? "-${var.distro_arch}" : ""}"
     }
     output     = "manifest.json"
     strip_path = true

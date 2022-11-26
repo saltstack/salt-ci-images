@@ -292,15 +292,11 @@ jobs:
       distro-name: windows
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
-  set-pipeline-exit-status:
-    # This step is just so we can make github require this step, to pass checks
-    # on a pull request instead of requiring all
-    name: Set the ${{ github.workflow }} Pipeline Exit Status
-    runs-on: ubuntu-latest
+  generate-configs:
+    name: Generate Configuratio Files
     if: always()
+    uses: ./.github/workflows/generate-configs-action.yml
     needs:
-      - collect-jobs
-      - pre-commit
       - almalinux
       - amazonlinux
       - archlinux
@@ -312,6 +308,17 @@ jobs:
       - photon
       - ubuntu
       - windows
+
+  set-pipeline-exit-status:
+    # This step is just so we can make github require this step, to pass checks
+    # on a pull request instead of requiring all
+    name: Set the ${{ github.workflow }} Pipeline Exit Status
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - collect-jobs
+      - pre-commit
+      - generate-configs
     steps:
     - name: Download Exit Status Files
       if: always()

@@ -230,6 +230,61 @@ def matrix(ctx: Context, distro: str):
     ctx.exit(0)
 
 
+@images.command
+def configs(ctx: Context):
+    manifests_path = REPO_ROOT / "manifest"
+    if not manifests_path.exists():
+        ctx.exit(1, f"The '{manifests_path.relative_to(REPO_ROOT)}' directory does not exist.")
+
+    manifest_files = sorted(list(manifests_path.glob("*.json")))
+    if not manifest_files:
+        ctx.exit(
+            1, f"There are no JSON manifest files in '{manifests_path.relative_to(REPO_ROOT)}'."
+        )
+
+    images = {}
+    for fname in manifest_files:
+        ctx.info(f"Processing {fname.relative_to(REPO_ROOT)} ...")
+        data = json.loads(fname.read_text())
+        if "builds" not in data:
+            ctx.warn("Marformed manifest file. Skipping...")
+            continue
+        invalid_manifest = False
+        for build in data["builds"]:
+            if "artifact_id" not in build:
+                invalid_manifest = True
+                ctx.warn("Marformed manifest file. Skipping...")
+                break
+
+            _, ami = build["artifact_id"].split(":")
+
+            if "custom_data" not in build:
+                invalid_manifest = True
+                ctx.warn("Marformed manifest file. Skipping...")
+                break
+
+            custom_data = build["custom_data"]
+            slug = custom_data["slug"]
+            images[slug] = {
+                "ami": ami,
+                "ssh_username": custom_data["ssh_username"],
+                "description": custom_data["ami_description"],
+                "instance_type": custom_data["instance_type"],
+                "is_windows": custom_data["is_windows"],
+            }
+            if slug.startswith("windows"):
+                images[slug]["connect_timeout"] = 600
+
+        if invalid_manifest:
+            continue
+
+    images_output_file = REPO_ROOT / "golden-images.json"
+    ctx.info(f"Generated '{images_output_file.relative_to(REPO_ROOT)}' config:")
+    ctx.info(images)
+    images_output_file.write_text(json.dumps(images, indent=2))
+    ctx.exit(0)
+
+
 @images.command(
     arguments={
         "ami": {

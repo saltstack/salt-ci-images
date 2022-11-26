@@ -1,0 +1,58 @@
+name: Generate Configuration
+
+on:
+  - workflow_call
+
+
+env:
+  COLUMNS: 160
+
+jobs:
+  generate-matrix:
+    name: Generate Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Install Python Tools Scripts
+        env:
+          PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
+          PIP_EXTRA_INDEX_URL: https://pypi.org/simple
+        run: |
+          python3 -m pip install -r requirements/tools.txt
+
+      - name: Download Manifest Files
+        uses: actions/download-artifact@v3
+        with:
+          name: manifest
+          path: manifest
+
+      - name: Generate Configuration Files
+        run: |
+          tools images configs
+
+      - name: Show golden-images.json
+        run: |
+          jq < golden-images.json
+
+      - name: Upload golden-images.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: golden-images.json
+          path: golden-images.json
+          if-no-files-found: error
+
+      - name: Set Exit Status
+        if: always()
+        run: |
+          mkdir exitstatus
+          echo "${{ job.status }}" > exitstatus/${{ github.job }}
+
+      - name: Upload Exit Status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: exitstatus
+          path: exitstatus
+          if-no-files-found: error

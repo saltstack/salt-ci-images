@@ -85,7 +85,17 @@ jobs:
         run: |
           if test -f manifest.json; then
             cat manifest.json
+            mkdir manifest
+            mv manifest.json manifest/${{ inputs.distro-name }}-${{ matrix.version }}-${{ matrix.arch }}.json
           fi
+
+      - name: Upload Build Manifest
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: manifest
+          path: manifest
+          if-no-files-found: ignore
 
       - name: Set Exit Status
         if: always()

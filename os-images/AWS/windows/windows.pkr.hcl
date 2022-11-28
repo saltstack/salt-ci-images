@@ -3,13 +3,8 @@ variable "ci_build" { type = bool }
 variable "aws_region" { type = string }
 variable "ssh_keypair_name" { type = string }
 variable "ssh_private_key_file" { type = string }
-variable "distro_arch" {
-  type    = string
-  default = "amd64"
-}
-variable "distro_version" {
-  type = string
-}
+variable "distro_arch" { type = string }
+variable "distro_version" { type = string }
 variable "skip_create_ami" {
   type    = bool
   default = false
@@ -82,6 +77,7 @@ data "amazon-ami" "image" {
     root-device-type    = "ebs"
     state               = "available"
     virtualization-type = "hvm"
+    architecture        = var.distro_arch
   }
   most_recent = true
   owners = [

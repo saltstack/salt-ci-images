@@ -3,13 +3,8 @@ variable "ci_build" { type = bool }
 variable "aws_region" { type = string }
 variable "ssh_keypair_name" { type = string }
 variable "ssh_private_key_file" { type = string }
-variable "distro_arch" {
-  type    = string
-  default = "x86_64"
-}
-variable "distro_version" {
-  type = string
-}
+variable "distro_arch" { type = string }
+variable "distro_version" { type = string }
 variable "skip_create_ami" {
   type    = bool
   default = false

@@ -235,7 +235,7 @@ build {
     custom_data = {
       ami_name        = local.ami_name
       ami_description = local.ami_description
-      ssh_username    = var.ssh_username
+      ssh_username    = var.distro_version == "8" ? "cloud-user" : var.ssh_username
       instance_type   = var.instance_type
       is_windows      = false
       slug            = "${lower(var.distro_name)}-${var.distro_version}${var.distro_arch == "arm64" ? "-${var.distro_arch}" : ""}"

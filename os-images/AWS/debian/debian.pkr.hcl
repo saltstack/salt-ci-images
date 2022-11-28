@@ -116,10 +116,11 @@ source "amazon-ebs" "image" {
   region = var.aws_region
 
   run_tags = {
-    Name              = "Packer {{ upper `${var.build_type}` }} ${var.distro_name} ${var.distro_version} ${var.distro_arch} Builder"
-    Owner             = "SRE"
-    Salt-Golden-Image = true
-    created-by        = "packer"
+    Name                     = "Packer {{ upper `${var.build_type}` }} ${var.distro_name} ${var.distro_version} ${var.distro_arch} Builder"
+    Owner                    = "SRE"
+    Salt-Golden-Image        = true
+    create-salt-golden-image = true
+    created-by               = "packer"
   }
   security_group_filter {
     filters = {

@@ -272,8 +272,6 @@ def configs(ctx: Context):
                 "instance_type": custom_data["instance_type"],
                 "is_windows": custom_data["is_windows"],
             }
-            if slug.startswith("windows"):
-                images[slug]["connect_timeout"] = 600
 
         if invalid_manifest:
             continue

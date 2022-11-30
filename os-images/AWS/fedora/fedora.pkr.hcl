@@ -13,7 +13,7 @@ variable "skip_create_ami" {
 # Variables set by pkrvars file
 variable "instance_type" {
   type    = string
-  default = "t3a.large"
+  default = "c5a.large"
 }
 variable "ssh_username" {
   type    = string

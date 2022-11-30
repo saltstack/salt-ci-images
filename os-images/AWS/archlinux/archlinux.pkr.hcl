@@ -166,7 +166,7 @@ build {
       "systemctl mask tmp.mount",
       "pacman-key --init",
       "pacman-key --populate",
-      "reflector --country '' --protocol https --score 20 --sort rate --save /etc/pacman.d/mirrorlist",
+      "reflector --country '' --protocol https --score 20 --sort rate --save /etc/pacman.d/mirrorlist || true",
       "pacman-db-upgrade",
       "pacman -Sy --noconfirm --needed archlinux-keyring",
       "pacman -Syyu --noconfirm",

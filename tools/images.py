@@ -10,6 +10,7 @@ import shutil
 import time
 from operator import itemgetter
 
+import requests
 from ptscripts import command_group
 from ptscripts import Context
 from rich.prompt import Confirm
@@ -48,6 +49,9 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "debug": {
             "help": "Pass --debug to packer",
         },
+        "runner_version": {
+            "help": "The github actions runner version to install",
+        },
         "skip_create_ami": {
             "help": "Skip pulishing the AMI.",
         },
@@ -62,6 +66,7 @@ def build_ami(
     key_path: pathlib.Path = None,
     debug: bool = False,
     region: str = AWS_REGION,
+    runner_version: str = None,  # type: ignore[assignment]
     skip_create_ami: bool = False,
 ):
     """
@@ -133,6 +138,16 @@ def build_ami(
                 skip_create_ami = True
     if skip_create_ami:
         ctx.warn("The AMI will not be published. Just testing the build process.")
+
+    if runner_version is None:
+        response = requests.get(
+            "https://api.github.com/repos/actions/runner/releases/latest",
+            headers={
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
+        runner_version = response.json()["name"].replace("v", "")
+
     ci_build = os.environ.get("RUNNER_NAME") is not None
     command = []
     for var_file in var_files:
@@ -153,6 +168,8 @@ def build_ami(
             f"ssh_keypair_name={key_name}",
             "-var",
             f"ssh_private_key_file={key_path}",
+            "-var",
+            f"runner_version={runner_version}",
             str(packer_file),
         ]
     )

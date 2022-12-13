@@ -7,6 +7,9 @@ on:
 permissions:
   contents: read
 
+env:
+  COLUMNS: 160
+
 jobs:
   get-changed-files:
     name: Get Changed Files
@@ -119,6 +122,7 @@ jobs:
       - get-changed-files
     outputs:
       jobs: ${{ steps.collect-jobs.outputs.jobs }}
+      runner-version: ${{ steps.collect-jobs.outputs.runner-version }}
     steps:
       - uses: actions/checkout@v3
 
@@ -181,6 +185,7 @@ jobs:
     with:
       distro-name: almalinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   amazonlinux:
     name: AmazonLinux
@@ -192,6 +197,7 @@ jobs:
     with:
       distro-name: amazonlinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   archlinux:
     name: ArchLinux
@@ -203,6 +209,7 @@ jobs:
     with:
       distro-name: archlinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   centos:
     name: CentOS
@@ -214,6 +221,7 @@ jobs:
     with:
       distro-name: centos
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   centosstream:
     name: CentOS Stream
@@ -225,6 +233,7 @@ jobs:
     with:
       distro-name: centosstream
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   debian:
     name: Debian
@@ -236,6 +245,7 @@ jobs:
     with:
       distro-name: debian
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   fedora:
     name: Fedora
@@ -247,6 +257,7 @@ jobs:
     with:
       distro-name: fedora
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   opensuse:
     name: Opensuse
@@ -258,6 +269,7 @@ jobs:
     with:
       distro-name: opensuse
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   photon:
     name: PhotonOS
@@ -269,6 +281,7 @@ jobs:
     with:
       distro-name: photon
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   ubuntu:
     name: Ubuntu
@@ -280,6 +293,7 @@ jobs:
     with:
       distro-name: ubuntu
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   windows:
     name: Windows
@@ -291,6 +305,7 @@ jobs:
     with:
       distro-name: windows
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   generate-configs:
     name: Generate Configuratio Files

@@ -11,6 +11,10 @@ on:
         required: true
         type: string
         description: JSON string containing information about changed files
+      runner-version:
+        required: true
+        type: string
+        description: The version of the GitHub Actions Runner to install
 
 
 env:
@@ -79,6 +83,7 @@ jobs:
       - name: Build Image
         run: |
           tools --timestamps images build-ami --region=${{ env.AWS_REGION }} \
+            --runner-version=${{ inputs.runner-version }} \
             ${{ inputs.distro-name }} ${{ matrix.version }} ${{ matrix.arch }}
 
       - name: Get the built image details

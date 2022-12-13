@@ -6,11 +6,21 @@
 #
 attrs==22.1.0
     # via python-tools-scripts
+certifi==2022.12.7
+    # via requests
+charset-normalizer==2.1.1
+    # via requests
 commonmark==0.9.1
     # via rich
+idna==3.4
+    # via requests
 pygments==2.13.0
     # via rich
 python-tools-scripts==0.9.2
     # via -r requirements/tools.in
+requests==2.28.1
+    # via -r requirements/tools.in
 rich==12.6.0
     # via python-tools-scripts
+urllib3==1.26.13
+    # via requests

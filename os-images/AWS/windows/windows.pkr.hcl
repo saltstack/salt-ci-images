@@ -9,6 +9,11 @@ variable "skip_create_ami" {
   type    = bool
   default = false
 }
+variable "runner_version" {
+  description = "The version (no v prefix) of the GitHub Actions Runner software to install https://github.com/actions/runner/releases"
+  type        = string
+  default     = "2.286.1"
+}
 
 # Variables set by pkrvars file
 variable "instance_type" {
@@ -150,18 +155,19 @@ source "amazon-ebs" "image" {
     random    = false
   }
   tags = {
-    Build-Date           = "${local.build_timestamp}"
-    Build-Type           = var.build_type
-    Name                 = "Salt Project // ${upper(var.build_type)} // ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
-    OS-Arch              = "${var.distro_arch}"
-    OS-Name              = "${var.distro_name}"
-    OS-Version           = "${var.distro_version}"
-    Owner                = "SRE"
-    Provision-State-Name = "${var.state_name}"
-    Salt-Golden-Image    = true
-    created-by           = "packer"
-    no-delete            = false
-    ssh-username         = var.ssh_username
+    Build-Date                = "${local.build_timestamp}"
+    Build-Type                = var.build_type
+    Name                      = "Salt Project // ${upper(var.build_type)} // ${var.distro_name} ${var.distro_version} ${var.distro_arch}"
+    OS-Arch                   = "${var.distro_arch}"
+    OS-Name                   = "${var.distro_name}"
+    OS-Version                = "${var.distro_version}"
+    Owner                     = "SRE"
+    Provision-State-Name      = "${var.state_name}"
+    Salt-Golden-Image         = true
+    created-by                = "packer"
+    no-delete                 = false
+    ssh-username              = var.ssh_username
+    "spb:start-github-runner" = false
   }
 }
 
@@ -252,12 +258,13 @@ build {
 
   post-processor "manifest" {
     custom_data = {
-      ami_name        = local.ami_name
-      ami_description = local.ami_description
-      ssh_username    = var.ssh_username
-      instance_type   = var.instance_type
-      is_windows      = true
-      slug            = "${lower(var.distro_name)}-${var.distro_version}${var.distro_arch == "arm64" ? "-${var.distro_arch}" : ""}"
+      ami_name                   = local.ami_name
+      ami_description            = local.ami_description
+      ssh_username               = var.ssh_username
+      instance_type              = var.instance_type
+      is_windows                 = true
+      cloudwatch-agent-available = false
+      slug                       = "${lower(var.distro_name)}-${var.distro_version}${var.distro_arch == "arm64" ? "-${var.distro_arch}" : ""}"
     }
     output     = "manifest.json"
     strip_path = true

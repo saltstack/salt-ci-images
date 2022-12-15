@@ -10,6 +10,7 @@ env:
 jobs:
   generate-matrix:
     name: Generate Configuration
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code

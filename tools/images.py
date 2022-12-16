@@ -52,6 +52,9 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "runner_version": {
             "help": "The github actions runner version to install",
         },
+        "runner_username": {
+            "help": "The username under which the github actions runner will run",
+        },
         "skip_create_ami": {
             "help": "Skip pulishing the AMI.",
         },
@@ -67,6 +70,7 @@ def build_ami(
     debug: bool = False,
     region: str = AWS_REGION,
     runner_version: str = None,  # type: ignore[assignment]
+    runner_username: str = "actions-runner",
     skip_create_ami: bool = False,
 ):
     """
@@ -170,6 +174,8 @@ def build_ami(
             f"ssh_private_key_file={key_path}",
             "-var",
             f"runner_version={runner_version}",
+            "-var",
+            f"runner_username={runner_username}",
             str(packer_file),
         ]
     )

@@ -292,6 +292,7 @@ build {
 
   post-processor "manifest" {
     custom_data = {
+      arch                       = var.distro_arch
       ami_name                   = local.ami_name
       ami_description            = local.ami_description
       ssh_username               = var.ssh_username

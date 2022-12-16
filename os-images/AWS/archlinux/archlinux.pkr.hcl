@@ -14,6 +14,11 @@ variable "runner_version" {
   type        = string
   default     = "2.286.1"
 }
+variable "runner_username" {
+  description = "The username under which the GitHub Actions runner will run under"
+  type        = string
+  default     = "actions-runner"
+}
 
 # Variables set by pkrvars file
 variable "instance_type" {
@@ -200,9 +205,19 @@ build {
     inline_shebang = "/bin/sh -ex"
   }
 
+  provisioner "shell" {
+    # Create the GitHub Actions user
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    inline = [
+      "useradd -d /opt/actions-runner -m -U -r -s /bin/bash ${var.runner_username}",
+      "echo '${var.runner_username} ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/${var.runner_username}",
+    ]
+    inline_shebang = "/bin/sh -ex"
+  }
+
   provisioner "file" {
     content = templatefile(abspath("${path.root}/../files/install-github-actions-runner.sh"), {
-      RUN_AS               = "${var.ssh_username}"
+      RUN_AS               = "${var.runner_username}"
       INSTALL_DEPENDENCIES = "false"
       RUNNER_ARCHITECTURE  = "${var.distro_arch == "x86_64" ? "x64" : "arm64"}"
     })
@@ -216,15 +231,15 @@ build {
     ]
     inline = [
       "sudo chmod +x /tmp/install-github-actions-runner.sh",
-      "echo ${var.ssh_username} | tee -a /tmp/install-user.txt",
+      "echo ${var.runner_username} | tee -a /tmp/install-user.txt",
       "sudo RUNNER_TARBALL_URL=$RUNNER_TARBALL_URL /tmp/install-github-actions-runner.sh",
-      "echo ImageOS=${lower(var.distro_name)}-${var.distro_version} | tee -a /opt/actions-runner/.env"
+      "echo ImageOS=${lower(var.distro_name)}-${var.distro_version} | sudo -u ${var.runner_username} tee -a /opt/actions-runner/.env"
     ]
   }
 
   provisioner "file" {
     content = templatefile(abspath("${path.root}/../files/start-github-actions-runner.sh"), {
-      RUN_AS = "${var.ssh_username}"
+      RUN_AS = "${var.runner_username}"
     })
     destination = "/tmp/start-github-actions-runner.sh"
   }

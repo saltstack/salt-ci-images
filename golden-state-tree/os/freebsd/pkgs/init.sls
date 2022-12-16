@@ -18,3 +18,4 @@ include:
   - pkgs.rsync
   - pkgs.sed
   - pkgs.swig
+  - pkgs.jq

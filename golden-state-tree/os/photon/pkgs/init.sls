@@ -26,6 +26,7 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
-  - pkgs.jq {#-
+  - pkgs.jq
+  - pkgs.xz {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}

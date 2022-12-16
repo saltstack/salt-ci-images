@@ -19,3 +19,4 @@ include:
   - pkgs.sed
   - pkgs.swig
   - pkgs.jq
+  - pkgs.xz

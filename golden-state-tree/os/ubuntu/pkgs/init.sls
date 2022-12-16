@@ -33,6 +33,7 @@ include:
   - pkgs.tar
   - pkgs.zlib
   - pkgs.vault
-  - pkgs.jq {#-
+  - pkgs.jq
+  - pkgs.xz {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}

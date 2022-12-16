@@ -281,14 +281,8 @@ def configs(ctx: Context):
                 break
 
             custom_data = build["custom_data"]
-            slug = custom_data["slug"]
-            images[slug] = {
-                "ami": ami,
-                "ssh_username": custom_data["ssh_username"],
-                "description": custom_data["ami_description"],
-                "instance_type": custom_data["instance_type"],
-                "is_windows": custom_data["is_windows"],
-            }
+            slug = custom_data.pop("slug")
+            images[slug] = dict(ami=ami, **custom_data)
 
         if invalid_manifest:
             continue

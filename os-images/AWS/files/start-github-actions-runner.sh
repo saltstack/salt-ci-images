@@ -127,7 +127,7 @@ chmod 755 /opt/actions-runner/real-start-runner-service.sh
 
 cat >/opt/actions-runner/start-runner-service.sh <<-EOF
     echo "Starting the runner in ephemeral mode"
-    sudo --preserve-env=RUNNER_ALLOW_RUNASROOT -i -u "${RUN_AS}" -- bash /opt/actions-runner/real-start-runner-service.sh
+    sudo --preserve-env=RUNNER_ALLOW_RUNASROOT -u "${RUN_AS}" -- bash /opt/actions-runner/real-start-runner-service.sh
     echo "Runner has finished"
     echo "Terminating instance"
     aws ec2 terminate-instances --instance-ids "$INSTANCE_ID" --region "$REGION"

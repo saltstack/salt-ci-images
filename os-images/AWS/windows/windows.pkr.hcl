@@ -133,7 +133,7 @@ source "amazon-ebs" "image" {
   }
   security_group_filter {
     filters = {
-      group-name = "*-golden-images-provision-${var.ci_build ? "private" : "public"}-*"
+      group-name = "*-prod-*-golden-images-provision-${var.ci_build ? "private" : "public"}-*"
     }
   }
   source_ami = data.amazon-ami.image.id
@@ -154,7 +154,7 @@ source "amazon-ebs" "image" {
   associate_public_ip_address = var.ci_build == false
   subnet_filter {
     filters = {
-      "tag:Name" = "*-${var.ci_build ? "private" : "public"}-*"
+      "tag:Name" = "*-prod-vpc-${var.ci_build ? "private" : "public"}-*"
     }
     most_free = true
     random    = false

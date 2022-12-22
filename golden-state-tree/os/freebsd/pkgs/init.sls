@@ -20,3 +20,4 @@ include:
   - pkgs.swig
   - pkgs.jq
   - pkgs.xz
+  - pkgs.tree

@@ -17,7 +17,7 @@ variable "runner_version" {
 variable "runner_username" {
   description = "The username under which the GitHub Actions runner will run under"
   type        = string
-  default     = "actions-runner"
+  default     = "root"
 }
 
 # Variables set by pkrvars file
@@ -228,15 +228,15 @@ build {
     inline_shebang = "/bin/sh -ex"
   }
 
-  provisioner "shell" {
-    # Create the GitHub Actions user
-    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    inline = [
-      "useradd -d /opt/actions-runner -m -U -r -s /bin/bash ${var.runner_username}",
-      "echo '${var.runner_username} ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/${var.runner_username}",
-    ]
-    inline_shebang = "/bin/sh -ex"
-  }
+  #provisioner "shell" {
+  #  # Create the GitHub Actions user
+  #  execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+  #  inline = [
+  #    "useradd -d /opt/actions-runner -m -U -r -s /bin/bash ${var.runner_username}",
+  #    "echo '${var.runner_username} ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/${var.runner_username}",
+  #  ]
+  #  inline_shebang = "/bin/sh -ex"
+  #}
 
   provisioner "file" {
     content = templatefile(abspath("${path.root}/../files/install-github-actions-runner.sh"), {

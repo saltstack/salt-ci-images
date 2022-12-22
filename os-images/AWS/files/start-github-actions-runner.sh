@@ -124,6 +124,10 @@ echo "Starting runner after $(awk '{print int($1/3600)":"int(($1%3600)/60)":"int
 echo "Starting the runner as user ${RUN_AS}"
 cat >/opt/actions-runner/real-start-runner-service.sh <<-EOF
     echo "Starting the runner in ephemeral mode"
+    # Unset any AWS_ prefixed environment variables
+    for name in \$(printenv | grep AWS_ | cut -f 1 -d =); do
+        unset -v \$name
+    done
     export PATH=~/.local/bin:\$PATH
     export ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/actions-runner/notify-runner-started.sh
     export ACTIONS_RUNNER_HOOK_JOB_COMPLETED=/opt/actions-runner/notify-runner-completed.sh

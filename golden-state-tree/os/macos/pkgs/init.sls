@@ -3,6 +3,7 @@ include:
   - .python3
   - pkgs.dmidecode
   - pkgs.jq
-  - pkgs.xz {#-
+  - pkgs.xz
+  - pkgs.tree {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}

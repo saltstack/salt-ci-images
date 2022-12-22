@@ -99,6 +99,12 @@ if [ "$(cat /etc/os-release | grep ID_LIKE= | grep rhel)" != "" ] && [ "$(cat /e
   update-crypto-policies --set DEFAULT:SHA1
 fi
 
+if [ "$(cat /etc/os-release | grep -E ^ID= | cut -f 2 -d =)" = "photon" ]; then
+    # PhotonOS has the /opt permissions too closed
+    chown root:${RUN_AS} /opt
+    chmod 751 /opt
+fi
+
 chown -R "${RUN_AS}" /opt/actions-runner
 
 RUNNER_CONFIG=$(echo "$CONFIG" | jq -r .runner_config)

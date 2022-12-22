@@ -93,6 +93,12 @@ if [ "${RUN_AS}" = "root" ]; then
   export RUNNER_ALLOW_RUNASROOT=1
 fi
 
+if [ "$(cat /etc/os-release | grep ID_LIKE= | grep rhel)" != "" ] && [ "$(cat /etc/os-release | grep -E ^VERSION= | grep '="9')" != "" ]; then
+  # CentOS Stream 9 uses OpenSSL 3 and DotNet doesn't like it, yet
+  # This is a workaround since SHA1 is now know not to be secure
+  update-crypto-policies --set DEFAULT:SHA1
+fi
+
 chown -R "${RUN_AS}" /opt/actions-runner
 
 RUNNER_CONFIG=$(echo "$CONFIG" | jq -r .runner_config)

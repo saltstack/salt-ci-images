@@ -15,10 +15,6 @@ on:
         required: true
         type: string
         description: The version of the GitHub Actions Runner to install
-      runner-username:
-        type: string
-        description: The account the GitHub Actions Runners runs on
-        default: actions-runner
 
 
 env:
@@ -88,7 +84,6 @@ jobs:
         run: |
           tools --timestamps images build-ami --region=${{ env.AWS_REGION }} \
             --runner-version=${{ inputs.runner-version }} \
-            --runner-username=${{ inputs.runner-username }} \
             ${{ inputs.distro-name }} ${{ matrix.version }} ${{ matrix.arch }}
 
       - name: Get the built image details

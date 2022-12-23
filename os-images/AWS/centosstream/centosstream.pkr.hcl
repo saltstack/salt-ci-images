@@ -177,6 +177,17 @@ build {
   }
 
   provisioner "shell" {
+    # The above 'dnf update' call will upgrade cloud-init which defines a new
+    # username as the default user for the image.
+    # Make sure that user exists while running the remaining steps.
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    inline = [
+      "cloud-init single --name cc_users_groups"
+    ]
+    inline_shebang = "/bin/sh -ex"
+  }
+
+  provisioner "shell" {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
       "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg -o /tmp/amazon-cloudwatch-agent.gpg",
@@ -230,7 +241,7 @@ build {
 
   provisioner "file" {
     content = templatefile(abspath("${path.root}/../files/install-github-actions-runner.sh"), {
-      RUN_AS               = "${var.ssh_username}"
+      RUN_AS               = "${var.distro_version == "8" ? "cloud-user" : var.ssh_username}"
       INSTALL_DEPENDENCIES = "true"
       RUNNER_ARCHITECTURE  = "${var.distro_arch == "x86_64" ? "x64" : "arm64"}"
     })

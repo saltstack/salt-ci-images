@@ -14,11 +14,6 @@ variable "runner_version" {
   type        = string
   default     = "2.286.1"
 }
-variable "runner_username" {
-  description = "The username under which the GitHub Actions runner will run under"
-  type        = string
-  default     = "actions-runner"
-}
 
 # Variables set by pkrvars file
 variable "instance_type" {

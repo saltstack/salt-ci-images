@@ -282,7 +282,6 @@ jobs:
       distro-name: photon
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-      runner-username: root
 
   ubuntu:
     name: Ubuntu

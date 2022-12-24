@@ -88,28 +88,17 @@ if [ "$SPB_DEBUG" != "true" ]; then
     aws ssm delete-parameter --name "$RUNNER_CONFIG_PARAMETER_NAME" --region "$REGION"
 fi
 
-if [ "${RUN_AS}" = "root" ]; then
-  echo "run_as is set to root - export RUNNER_ALLOW_RUNASROOT=1"
-  export RUNNER_ALLOW_RUNASROOT=1
-fi
-
 if [ "$(cat /etc/os-release | grep ID_LIKE= | grep rhel)" != "" ] && [ "$(cat /etc/os-release | grep -E ^VERSION= | grep '="9')" != "" ]; then
   # CentOS Stream 9 uses OpenSSL 3 and DotNet doesn't like it, yet
   # This is a workaround since SHA1 is now know not to be secure
   update-crypto-policies --set DEFAULT:SHA1
 fi
 
-if [ "$(cat /etc/os-release | grep -E ^ID= | cut -f 2 -d =)" = "photon" ]; then
-    # PhotonOS has the /opt permissions too closed
-    chown root:${RUN_AS} /opt
-    chmod 751 /opt
-fi
-
 chown -R "${RUN_AS}" /opt/actions-runner
 
 RUNNER_CONFIG=$(echo "$CONFIG" | jq -r .runner_config)
 echo "Configure GH Runner as user ${RUN_AS}"
-sudo --preserve-env=RUNNER_ALLOW_RUNASROOT -u "${RUN_AS}" -- /opt/actions-runner/config.sh --unattended --name "$INSTANCE_ID" --work "_work" $${RUNNER_CONFIG}
+sudo -i -u "${RUN_AS}" -- /opt/actions-runner/config.sh --unattended --name "$INSTANCE_ID" --work "_work" $${RUNNER_CONFIG}
 
 INFO_ARCH=$(uname -p)
 INFO_OS=$( ( lsb_release -ds || cat /etc/*release || uname -om ) 2>/dev/null | head -n1 | cut -d "=" -f2- | tr -d '"')
@@ -143,7 +132,7 @@ chmod 755 /opt/actions-runner/real-start-runner-service.sh
 
 cat >/opt/actions-runner/start-runner-service.sh <<-EOF
     echo "Starting the runner in ephemeral mode"
-    sudo --preserve-env=RUNNER_ALLOW_RUNASROOT -u "${RUN_AS}" -- bash /opt/actions-runner/real-start-runner-service.sh
+    sudo -i -u "${RUN_AS}" -- bash /opt/actions-runner/real-start-runner-service.sh
     echo "Runner has finished"
     echo "Terminating instance"
     aws ec2 terminate-instances --instance-ids "$INSTANCE_ID" --region "$REGION"

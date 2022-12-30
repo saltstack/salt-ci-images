@@ -17,5 +17,13 @@ fi
 mkdir -p ${PILLAR_DIR}
 cp golden-pillar-tree/*.sls ${PILLAR_DIR}/
 
+if [ "${INSTALL_GITHUB_ACTIONS_RUNNER}" == "yes" ]; then
+    echo "github_actions_runner: true" >> ${PILLAR_DIR}/base.sls
+    echo "github_actions_runner_tarball_url: '${GITHUB_ACTIONS_RUNNER_TARBALL_URL}'" >> ${PILLAR_DIR}/base.sls
+    echo "github_actions_runner_install_dependencies: ${INSTALL_GITHUB_ACTIONS_RUNNER_DEPENDENCIES}" >> ${PILLAR_DIR}/base.sls
+else
+    echo "github_actions_runner: false" >> ${PILLAR_DIR}/base.sls
+fi
+
 echo "Pillar Tree Contents:"
 ls -lah ${PILLAR_DIR}/

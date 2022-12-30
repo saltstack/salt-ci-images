@@ -52,6 +52,7 @@ images = command_group(name="images", help="AWS EC2 AMI Commands", description=_
         "runner_version": {
             "help": "The github actions runner version to install",
         },
+        "skip_install_github_actions_runner": {"help": "Skip installing the GitHub Actions Runner"},
         "skip_create_ami": {
             "help": "Skip pulishing the AMI.",
         },
@@ -67,6 +68,7 @@ def build_ami(
     debug: bool = False,
     region: str = AWS_REGION,
     runner_version: str = None,  # type: ignore[assignment]
+    skip_install_github_actions_runner: bool = False,
     skip_create_ami: bool = False,
 ):
     """
@@ -139,7 +141,7 @@ def build_ami(
     if skip_create_ami:
         ctx.warn("The AMI will not be published. Just testing the build process.")
 
-    if runner_version is None:
+    if runner_version is None and skip_install_github_actions_runner is False:
         response = requests.get(
             "https://api.github.com/repos/actions/runner/releases/latest",
             headers={
@@ -168,11 +170,18 @@ def build_ami(
             f"ssh_keypair_name={key_name}",
             "-var",
             f"ssh_private_key_file={key_path}",
-            "-var",
-            f"runner_version={runner_version}",
-            str(packer_file),
         ]
     )
+    if runner_version and skip_install_github_actions_runner is False:
+        command.extend(
+            [
+                "-var",
+                f"runner_version={runner_version}",
+                "-var",
+                "install_github_actions_runner=true",
+            ]
+        )
+    command.append(str(packer_file))
 
     validate_command = [packer, "validate"] + command
     ctx.info(f"Running command: {validate_command}")

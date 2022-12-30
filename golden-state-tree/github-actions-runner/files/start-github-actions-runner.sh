@@ -3,6 +3,29 @@
 # Disable debug output explicitly
 set +x
 
+# Define our logging file and pipe paths
+LOGFILE="/var/log/runner-startup.log"
+LOGPIPE="/tmp/start-github-actions-runner.logpipe"
+# Ensure no residual pipe exists
+rm "$LOGPIPE" 2>/dev/null
+
+# Create our logging pipe
+# On FreeBSD we have to use mkfifo instead of mknod
+if ! (mknod "$LOGPIPE" p >/dev/null 2>&1 || mkfifo "$LOGPIPE" >/dev/null 2>&1); then
+    echo "Failed to create the named pipe required to log"
+    exit 1
+fi
+
+# What ever is written to the logpipe gets written to the logfile
+tee < "$LOGPIPE" "$LOGFILE" &
+
+# Close STDOUT, reopen it directing it to the logpipe
+exec 1>&-
+exec 1>"$LOGPIPE"
+# Close STDERR, reopen it directing it to the logpipe
+exec 2>&-
+exec 2>"$LOGPIPE"
+
 ## Retrieve instance metadata
 echo "Retrieving TOKEN from AWS API"
 TOKEN=$(curl -sS -f -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 180")
@@ -70,16 +93,16 @@ NOTIFICATION_URL=$(echo "$CONFIG" | jq -r .notification_url)
 NOTIFICATION_UUID=$(echo "$CONFIG" | jq -r .notification_uuid)
 
 cat >/opt/actions-runner/notify-runner-started.sh <<-EOF
-    echo "Notifying that the runner $INSTANCE_ID is working..."
-    RUNNER_NOTIFICATION_URL=$NOTIFICATION_URL
-    curl -f -s -H "Content-Type: application/json" -H "x-gh-runner-event: runner-started" -H "x-gh-runner-name: $INSTANCE_ID" -H "x-gh-runner-token: $NOTIFICATION_UUID" -X POST \$RUNNER_NOTIFICATION_URL
+echo "Notifying that the runner $INSTANCE_ID is working..."
+RUNNER_NOTIFICATION_URL=$NOTIFICATION_URL
+curl -f -s -H "Content-Type: application/json" -H "x-gh-runner-event: runner-started" -H "x-gh-runner-name: $INSTANCE_ID" -H "x-gh-runner-token: $NOTIFICATION_UUID" -X POST \$RUNNER_NOTIFICATION_URL
 EOF
 chmod 755 /opt/actions-runner/notify-runner-started.sh
 
 cat >/opt/actions-runner/notify-runner-completed.sh <<-EOF
-    echo "Notifying that the runner $INSTANCE_ID finished working..."
-    RUNNER_NOTIFICATION_URL=$NOTIFICATION_URL
-    curl -f -s -H "Content-Type: application/json" -H "x-gh-runner-event: runner-completed" -H "x-gh-runner-name: $INSTANCE_ID" -H "x-gh-runner-token: $NOTIFICATION_UUID" -X POST \$RUNNER_NOTIFICATION_URL
+echo "Notifying that the runner $INSTANCE_ID finished working..."
+RUNNER_NOTIFICATION_URL=$NOTIFICATION_URL
+curl -f -s -H "Content-Type: application/json" -H "x-gh-runner-event: runner-completed" -H "x-gh-runner-name: $INSTANCE_ID" -H "x-gh-runner-token: $NOTIFICATION_UUID" -X POST \$RUNNER_NOTIFICATION_URL
 EOF
 chmod 755 /opt/actions-runner/notify-runner-completed.sh
 
@@ -94,11 +117,11 @@ if [ "$(cat /etc/os-release | grep ID_LIKE= | grep rhel)" != "" ] && [ "$(cat /e
   update-crypto-policies --set DEFAULT:SHA1
 fi
 
-chown -R "${RUN_AS}" /opt/actions-runner
+chown -R {{ actions_runner_account }}:{{ actions_runner_account }} /opt/actions-runner
 
 RUNNER_CONFIG=$(echo "$CONFIG" | jq -r .runner_config)
-echo "Configure GH Runner as user ${RUN_AS}"
-sudo -i -u "${RUN_AS}" -- /opt/actions-runner/config.sh --unattended --name "$INSTANCE_ID" --work "_work" $${RUNNER_CONFIG}
+echo "Configure GH Runner as user {{ actions_runner_account }}"
+sudo -i -u "{{ actions_runner_account }}" -- /opt/actions-runner/config.sh --unattended --name "$INSTANCE_ID" --work "_work" ${RUNNER_CONFIG}
 
 INFO_ARCH=$(uname -p)
 INFO_OS=$( ( lsb_release -ds || cat /etc/*release || uname -om ) 2>/dev/null | head -n1 | cut -d "=" -f2- | tr -d '"')
@@ -116,30 +139,81 @@ tee /opt/actions-runner/.setup_info <<EOL
 EOL
 ## Start the runner
 echo "Starting runner after $(awk '{print int($1/3600)":"int(($1%3600)/60)":"int($1%60)}' /proc/uptime)"
-echo "Starting the runner as user ${RUN_AS}"
-cat >/opt/actions-runner/real-start-runner-service.sh <<-EOF
-    echo "Starting the runner in ephemeral mode"
-    # Unset any AWS_ prefixed environment variables
-    for name in \$(printenv | grep AWS_ | cut -f 1 -d =); do
-        unset -v \$name
-    done
-    export PATH=~/.local/bin:\$PATH
-    export ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/actions-runner/notify-runner-started.sh
-    export ACTIONS_RUNNER_HOOK_JOB_COMPLETED=/opt/actions-runner/notify-runner-completed.sh
-    /opt/actions-runner/run.sh
-EOF
-chmod 755 /opt/actions-runner/real-start-runner-service.sh
+echo "Starting the runner as user {{ actions_runner_account }}"
 
 cat >/opt/actions-runner/start-runner-service.sh <<-EOF
-    echo "Starting the runner in ephemeral mode"
-    sudo -i -u "${RUN_AS}" -- bash /opt/actions-runner/real-start-runner-service.sh
-    echo "Runner has finished"
+#!/usr/bin/env bash
+
+__trap_exit() {
     echo "Terminating instance"
     aws ec2 terminate-instances --instance-ids "$INSTANCE_ID" --region "$REGION"
+}
+trap "__trap_exit" INT ABRT QUIT TERM
+
+cd /opt/actions-runner
+echo "Starting the runner in ephemeral mode"
+
+# Unset any AWS_ prefixed environment variables
+for name in \$(printenv | grep AWS_ | cut -f 1 -d =); do
+    unset -v \$name
+done
+export PATH=~/.local/bin:\$PATH
+export ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/actions-runner/notify-runner-started.sh
+export ACTIONS_RUNNER_HOOK_JOB_COMPLETED=/opt/actions-runner/notify-runner-completed.sh
+/opt/actions-runner/bin/runsvc.sh
+echo "Runner has finished"
+echo "Terminating instance"
+aws ec2 terminate-instancts --instance-ids "$INSTANCE_ID" --region "$REGION"
 EOF
 chmod 755 /opt/actions-runner/start-runner-service.sh
 
-chown -R "${RUN_AS}" /opt/actions-runner
+chown -R {{ actions_runner_account }}:{{ actions_runner_account }} /opt/actions-runner
 
-# Starting the runner via a own process to ensure this process terminates
-nohup /opt/actions-runner/start-runner-service.sh &
+
+SVC_NAME=github-actions-runner
+CONFIG_PATH=/opt/actions-runner/.service
+UNIT_PATH=/etc/systemd/system/${SVC_NAME}.service
+command -v getenforce > /dev/null
+if [ $? -eq 0 ]
+then
+    selinuxEnabled=$(getenforce)
+    if [[ $selinuxEnabled == "Enforcing" ]]
+    then
+        # SELinux is enabled, we will need to Restore SELinux Context for the service file
+        restorecon -r -v "${UNIT_PATH}" || failed "failed to restore SELinux context on ${UNIT_PATH}"
+    fi
+fi
+systemctl daemon-reload || failed "failed to reload daemons"
+echo "${SVC_NAME}" > ${CONFIG_PATH} || failed "failed to create ${CONFIG_PATH} file"
+chown {{ actions_runner_account }}:{{ actions_runner_account }} ${CONFIG_PATH} || failed "failed to set permission for ${CONFIG_PATH}"
+
+function service_exists() {
+    if [ -f "${UNIT_PATH}" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function status()
+{
+    if service_exists; then
+        echo
+        echo "${UNIT_PATH}"
+    else
+        echo
+        echo "not installed"
+        echo
+        exit 1
+    fi
+
+    systemctl --no-pager status ${SVC_NAME}
+}
+
+function start()
+{
+    systemctl start ${SVC_NAME} || failed "failed to start ${SVC_NAME}"
+    status
+}
+
+start

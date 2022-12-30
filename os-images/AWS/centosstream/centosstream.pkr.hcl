@@ -12,7 +12,12 @@ variable "skip_create_ami" {
 variable "runner_version" {
   description = "The version (no v prefix) of the GitHub Actions Runner software to install https://github.com/actions/runner/releases"
   type        = string
-  default     = "2.286.1"
+  default     = "2.300.2"
+}
+variable "install_github_actions_runner" {
+  description = "Create a user to run the GitHub Actions Runner under."
+  type        = bool
+  default     = false
 }
 
 # Variables set by pkrvars file
@@ -197,6 +202,13 @@ build {
       "gpg --verify /tmp/amazon-cloudwatch-agent.rpm.sig /tmp/amazon-cloudwatch-agent.rpm",
       "rpm -U /tmp/amazon-cloudwatch-agent.rpm",
       "systemctl restart amazon-cloudwatch-agent",
+    ]
+    inline_shebang = "/bin/sh -ex"
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    inline = [
       "curl -f https://awscli.amazonaws.com/awscli-exe-linux-${var.distro_arch == "x86_64" ? "x86_64" : "aarch64"}.zip -o /tmp/awscliv2.zip",
       "cd /tmp; unzip awscliv2.zip",
       "cd /tmp; ./aws/install",
@@ -207,7 +219,10 @@ build {
   provisioner "shell-local" {
     environment_vars = [
       "DISTRO_SLUG=${local.distro_slug}",
-      "SALT_ROOT_DIR=${var.salt_provision_root_dir}"
+      "SALT_ROOT_DIR=${var.salt_provision_root_dir}",
+      "INSTALL_GITHUB_ACTIONS_RUNNER=${var.install_github_actions_runner ? "yes" : "no"}",
+      "INSTALL_GITHUB_ACTIONS_RUNNER_DEPENDENCIES=true",
+      "GITHUB_ACTIONS_RUNNER_TARBALL_URL=https://github.com/actions/runner/releases/download/v${var.runner_version}/actions-runner-linux-${var.distro_arch == "x86_64" ? "x64" : "arm64"}-${var.runner_version}.tar.gz"
     ]
     script = "os-images/AWS/files/prep-linux.sh"
   }
@@ -237,43 +252,6 @@ build {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     pause_after     = "5s"
     script          = "os-images/files/provision-system.sh"
-  }
-
-  provisioner "file" {
-    content = templatefile(abspath("${path.root}/../files/install-github-actions-runner.sh"), {
-      RUN_AS               = "${var.distro_version == "8" ? "cloud-user" : var.ssh_username}"
-      INSTALL_DEPENDENCIES = "true"
-      RUNNER_ARCHITECTURE  = "${var.distro_arch == "x86_64" ? "x64" : "arm64"}"
-    })
-    destination = "/tmp/install-github-actions-runner.sh"
-  }
-
-  provisioner "shell" {
-    inline_shebang = "/bin/bash -ex"
-    environment_vars = [
-      "RUNNER_TARBALL_URL=https://github.com/actions/runner/releases/download/v${var.runner_version}/actions-runner-linux-${var.distro_arch == "x86_64" ? "x64" : "arm64"}-${var.runner_version}.tar.gz"
-    ]
-    inline = [
-      "sudo chmod +x /tmp/install-github-actions-runner.sh",
-      "echo ${var.distro_version == "8" ? "cloud-user" : var.ssh_username} | tee -a /tmp/install-user.txt",
-      "sudo RUNNER_TARBALL_URL=$RUNNER_TARBALL_URL /tmp/install-github-actions-runner.sh",
-      "echo ImageOS=${lower(var.distro_name)}-${var.distro_version} | sudo -u ${var.distro_version == "8" ? "cloud-user" : var.ssh_username} tee -a /opt/actions-runner/.env"
-    ]
-  }
-
-  provisioner "file" {
-    content = templatefile(abspath("${path.root}/../files/start-github-actions-runner.sh"), {
-      RUN_AS = "${var.distro_version == "8" ? "cloud-user" : var.ssh_username}"
-    })
-    destination = "/tmp/start-github-actions-runner.sh"
-  }
-
-  provisioner "shell" {
-    inline_shebang = "/bin/bash -ex"
-    inline = [
-      "sudo mv /tmp/start-github-actions-runner.sh /var/lib/cloud/scripts/per-boot/start-github-actions-runner.sh",
-      "sudo chmod +x /var/lib/cloud/scripts/per-boot/start-github-actions-runner.sh",
-    ]
   }
 
   provisioner "shell" {

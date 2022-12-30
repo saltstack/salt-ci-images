@@ -12,7 +12,12 @@ variable "skip_create_ami" {
 variable "runner_version" {
   description = "The version (no v prefix) of the GitHub Actions Runner software to install https://github.com/actions/runner/releases"
   type        = string
-  default     = "2.286.1"
+  default     = "2.300.2"
+}
+variable "install_github_actions_runner" {
+  description = "Create a user to run the GitHub Actions Runner under."
+  type        = bool
+  default     = false
 }
 
 # Variables set by pkrvars file

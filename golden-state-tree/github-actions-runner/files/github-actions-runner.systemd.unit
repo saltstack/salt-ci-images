@@ -1,0 +1,16 @@
+# set ft=systemd
+
+[Unit]
+Description=GitHub Actions Runner
+After=network.target
+
+[Service]
+ExecStart=/opt/actions-runner/start-runner-service.sh
+User={{ actions_runner_account }}
+WorkingDirectory=/opt/actions-runner/
+KillMode=process
+KillSignal=SIGTERM
+TimeoutStopSec=5min
+
+[Install]
+WantedBy=multi-user.target

@@ -1,3 +1,12 @@
+{%- if grains['os'] == 'VMware Photon OS' %}
+{#- Photon OS has /opt with perms too closed for another user to access #}
+/opt:
+  file.directory:
+    - user: root
+    - group: sudo
+    - dir_mode: "0751"
+{%- endif %}
+
 /opt/hostedtoolcache:
   file.directory:
     - user: actions-runner

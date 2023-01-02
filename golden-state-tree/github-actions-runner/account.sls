@@ -28,6 +28,11 @@ create-actions-runner-account:
       - users
       - video
       - wheel
+      {%- if grains['os'] == 'VMware Photon OS' %}
+      {#- Let's also include the root's group in the account since Photon OS's
+          images are commonly built to use root and not other system accounts #}
+      - root
+      {%- endif %}
 
 actions-runner-sudoers-file:
   file.managed:

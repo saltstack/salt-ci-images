@@ -11,3 +11,4 @@ include: {#-
   - .vcredist
   - .chrome
   - .rsync
+  - .jq

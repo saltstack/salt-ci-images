@@ -191,10 +191,25 @@ build {
     script            = "${path.root}/scripts/InstallAndConfigureOpenSSH.ps1"
   }
 
+  provisioner "powershell" {
+    elevated_password = ""
+    elevated_user     = "SYSTEM"
+    script            = "${path.root}/scripts/Install-CloudWatchAgent.ps1"
+  }
+
+  provisioner "powershell" {
+    elevated_password = ""
+    elevated_user     = "SYSTEM"
+    script            = "${path.root}/scripts/Install-AwsSsmAgent.ps1"
+  }
+
   provisioner "shell-local" {
     environment_vars = [
       "DISTRO_SLUG=${local.distro_slug}",
-      "SALT_ROOT_DIR=${var.salt_provision_root_dir}"
+      "SALT_ROOT_DIR=${var.salt_provision_root_dir}",
+      "INSTALL_GITHUB_ACTIONS_RUNNER=${var.install_github_actions_runner ? "yes" : "no"}",
+      "INSTALL_GITHUB_ACTIONS_RUNNER_DEPENDENCIES=false",
+      "GITHUB_ACTIONS_RUNNER_TARBALL_URL=https://github.com/actions/runner/releases/download/v${var.runner_version}/actions-runner-win-${var.distro_arch == "x86_64" ? "x64" : "arm64"}-${var.runner_version}.zip"
     ]
     script = abspath("${path.root}/../files/prep-windows.sh")
   }
@@ -225,7 +240,8 @@ build {
     elevated_user     = "SYSTEM"
     environment_vars = [
       "SALT_ROOT_DIR=${var.salt_provision_root_dir}",
-      "SALT_STATE=${var.state_name}"
+      "SALT_STATE=${var.state_name}",
+      "PYTHONUTF8=1",
     ]
     script = "${path.root}/scripts/Provision-System.ps1"
   }
@@ -269,7 +285,7 @@ build {
       ssh_username               = var.ssh_username
       instance_type              = var.instance_type
       is_windows                 = true
-      cloudwatch-agent-available = false
+      cloudwatch-agent-available = true
       slug                       = "${lower(var.distro_name)}-${var.distro_version}${var.distro_arch == "arm64" ? "-${var.distro_arch}" : ""}"
     }
     output     = "manifest.json"

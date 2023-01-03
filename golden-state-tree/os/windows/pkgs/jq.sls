@@ -1,0 +1,2 @@
+jq:
+  chocolatey.installed

@@ -51,7 +51,7 @@ jobs:
       - image-builder
     needs:
       - generate-matrix
-    timeout-minutes: 60  # 1 Hour
+    timeout-minutes: 120  # 2 Hours
     strategy:
       fail-fast: false
       matrix:

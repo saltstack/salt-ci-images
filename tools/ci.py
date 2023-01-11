@@ -76,6 +76,7 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
             ctx.info("Pull request is coming from the same repository")
             outputs = {
                 "pre-commit": False,
+                "generate-configs": False,
             }
             for key in changed_files:
                 if not key.startswith("os-images-"):
@@ -90,6 +91,7 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
         ctx.info("Pull request is not comming from the same repository")
         outputs = {
             "pre-commit": True,
+            "generate-configs": False,
         }
         for key, data in changed_files.items():
             if not key.startswith("os-images-"):
@@ -104,6 +106,7 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
     ctx.info("Running from a push event")
     outputs = {
         "pre-commit": True,
+        "generate-configs": True,
     }
     if gh_event["repository"]["fork"] is True:
         # This is running on a forked repository, just run pre-commit

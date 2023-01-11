@@ -308,10 +308,12 @@ jobs:
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
   generate-configs:
-    name: Generate Configuratio Files
-    if: always()
+    name: Generate Configuration Files
+    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['generate-configs'] }}
     uses: ./.github/workflows/generate-configs-action.yml
     needs:
+      - collect-jobs
+      - get-changed-files
       - almalinux
       - amazonlinux
       - archlinux

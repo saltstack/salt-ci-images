@@ -12,3 +12,4 @@ include: {#-
   - .chrome
   - .rsync
   - .jq
+  - .docker

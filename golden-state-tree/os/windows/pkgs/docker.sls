@@ -1,0 +1,2 @@
+docker:
+  chocolatey.installed

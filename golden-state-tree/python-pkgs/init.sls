@@ -1,5 +1,6 @@
 include:
   - .nox
+  - .pyyaml
 
 provision-python-packages:
   test.show_notification:

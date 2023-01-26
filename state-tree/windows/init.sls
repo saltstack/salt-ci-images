@@ -7,6 +7,7 @@ include:
   - windows.vcredist
   - windows.openssl
   - windows.powershell_core
+  - windows.gpg4win
 
 stop-minion:
   service.dead:

@@ -84,7 +84,10 @@
     },
     {
       "type": "powershell",
-      "script": "os-images/AWS/windows/scripts/Install-Git.ps1"
+      "script": [
+        "os-images/AWS/windows/scripts/Install-Git.ps1",
+        "os-images/AWS/windows/scripts/Install-Gpg4win.ps1"
+      ]
     },
     {
       "type": "powershell",

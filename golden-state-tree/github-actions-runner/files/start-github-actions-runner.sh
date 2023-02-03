@@ -156,6 +156,8 @@ echo "Starting the runner in ephemeral mode"
 export PATH=~/.local/bin:\$PATH
 export ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/actions-runner/notify-runner-started.sh
 export ACTIONS_RUNNER_HOOK_JOB_COMPLETED=/opt/actions-runner/notify-runner-completed.sh
+export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+export RUNNER_TOOL_CACHE=/opt/hostedtoolcache
 /opt/actions-runner/bin/runsvc.sh
 echo "Runner has finished"
 echo "Terminating instance"

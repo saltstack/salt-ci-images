@@ -137,6 +137,8 @@ Write-Host "Starting runner after $(((get-date) - (gcim Win32_OperatingSystem).L
 
 $env:ACTIONS_RUNNER_HOOK_JOB_STARTED="c:\Notify-Runner-Started.ps1"
 $env:ACTIONS_RUNNER_HOOK_JOB_COMPLETED="c:\Notify-Runner-Completed.ps1"
+$env:AGENT_TOOLSDIRECTORY="c:\hostedtoolcache"
+$env:RUNNER_TOOL_CACHE="c:\hostedtoolcache"
 Invoke-Expression "$pwd\run.cmd"
 Start-Sleep 5
 $TerminateCommand = "aws ec2 terminate-instances --instance-ids $InstanceId --region $Region"

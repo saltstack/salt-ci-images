@@ -66,7 +66,7 @@ variable "salt_provision_type" {
 
 variable "salt_provision_version" {
   type    = string
-  default = "3005.1"
+  default = "3005.1+2103.gc1fc63d39a"
 }
 
 variable "salt_provision_root_dir" {
@@ -222,7 +222,7 @@ build {
     elevated_password = ""
     elevated_user     = "SYSTEM"
     environment_vars = [
-      "OS_ARCH=${var.distro_arch}",
+      "OS_ARCH=${var.distro_arch == "x86_64" ? "amd64" : var.distro_arch}",
       "SALT_VERSION=${var.salt_provision_version}",
     ]
     script = "${path.root}/scripts/Provision-Salt.ps1"

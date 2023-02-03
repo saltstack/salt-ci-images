@@ -10,6 +10,7 @@ include:
   - pkgs.libsodium
   - pkgs.libxml
   - pkgs.libxslt
+  - pkgs.make
   - pkgs.man
   - pkgs.nginx
   - pkgs.openldap

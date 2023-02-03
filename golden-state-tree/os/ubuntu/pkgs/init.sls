@@ -17,6 +17,7 @@ include:
   - pkgs.libxml
   - pkgs.libxslt
   - pkgs.lxc
+  - pkgs.make
   - pkgs.man
   - pkgs.nginx
   - pkgs.npm

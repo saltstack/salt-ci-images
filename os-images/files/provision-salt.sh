@@ -6,13 +6,13 @@ set -e
 set -x
 
 if [ "$(uname)" = "Linux" ]; then
-    PLATFORM="linux-gnu"
+    PLATFORM="linux"
 else
     PLATFORM="macos"
 fi
 
-SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-${OS_ARCH}-${PLATFORM}.tar.xz"
-SALT_DOWNLOAD_URL="http://139.64.236.21/gdvYr3DshH/${SALT_ARCHIVE_NAME}"
+SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-onedir-${PLATFORM}-${OS_ARCH}.tar.xz"
+SALT_DOWNLOAD_URL="http://salt-onedir-golden-images-provision.s3-website-us-west-2.amazonaws.com/${SALT_ARCHIVE_NAME}"
 
 if [ "$(which curl)x" != "x" ]; then
     curl -f --output /tmp/${SALT_ARCHIVE_NAME} ${SALT_DOWNLOAD_URL}

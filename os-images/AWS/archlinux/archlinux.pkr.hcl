@@ -66,7 +66,7 @@ variable "salt_provision_type" {
 
 variable "salt_provision_version" {
   type    = string
-  default = "3005.1"
+  default = "3005.1+2103.gc1fc63d39a"
 }
 
 variable "salt_provision_root_dir" {

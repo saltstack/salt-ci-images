@@ -1,2 +1,2 @@
 make:
-  pkg.installed:
+  pkg.installed

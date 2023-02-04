@@ -8,10 +8,10 @@ set -x
 echo "Contents of ${SALT_ROOT_DIR}:"
 ls -lah ${SALT_ROOT_DIR}
 
-if [ -f /tmp/salt/bin/salt-call ]; then
-    SALT_CALL=/tmp/salt/bin/salt-call
+if [ -f /tmp/salt/salt-call ]; then
+    SALT_CALL=/tmp/salt/salt-call
 else
-    echo "Could not find a Salt relenv build or Salt install in a PyEnv environment"
+    echo "Could not find a Salt relenv build environment"
     exit 1
 fi
 

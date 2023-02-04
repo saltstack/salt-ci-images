@@ -26,7 +26,7 @@ function Run-Process
   Write-Host "`nRunning Command '$Executable $Arguments' Succeeded!" -ForegroundColor Yellow
 }
 
-$SALT_CALL = "$Env:TMP\salt\Scripts\salt-call.exe"
+$SALT_CALL = "$Env:TMP\salt\salt-call.exe"
 $CONFIG_DIR = "$Env:SALT_ROOT_DIR\conf"
 $DEFAULT_ARGUMENTS = "--local --log-level=warning --config-dir=$CONFIG_DIR --retcode-passthrough"
 

@@ -1,3 +1,5 @@
+{%- set os_major_release = salt['grains.get']('osmajorrelease', 0)|int %}
+
 include:
   - pkgs.cron
   - pkgs.curl
@@ -26,7 +28,10 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  {%- if os_major_release != 38 %}
+  {#- There's no vault packages for Fedora 38 yet as it's the unstable version of Fedora #}
   - pkgs.vault
+  {%- endif %}
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree {#-

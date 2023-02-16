@@ -10,7 +10,12 @@
 
   {%- if grains['os_family'] in ('Debian', 'RedHat') %}
     {%- if grains['os'] != 'VMware Photon OS' %}
-      {%- set install_from_docker_repos = True %}
+      {%- if grains['os'] == 'Fedora' and grains['osmajorrelease']|int == 38 %}
+        {#- There's no docker official packages for Fedora 38 yet as it's the unstable version of Fedora #}
+        {%- set install_from_docker_repos = False %}
+      {%- else %}
+        {%- set install_from_docker_repos = True %}
+      {%- endif %}
     {%- else %}
       {%- set install_from_docker_repos = False %}
     {%- endif %}
@@ -64,6 +69,7 @@ docker-repo:
 install-docker:
   pkg.installed:
     - refresh: True
+    - aggregate: False
     - pkgs:
   {%- if install_from_docker_repos == True %}
       - docker-ce
@@ -72,7 +78,11 @@ install-docker:
     - require:
       - docker-repo
   {%- else %}
+    {%- if grains['os'] == 'Fedora' and grains['osmajorrelease']|int == 38 %}
+      - moby-engine
+    {%- else %}
       - docker
+    {%- endif %}
   {%- endif %}
 
   {%- if grains['os_family'] != 'Debian' %}

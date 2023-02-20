@@ -21,3 +21,4 @@ include:
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree
+  - pkgs.rust

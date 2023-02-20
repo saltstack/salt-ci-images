@@ -13,3 +13,4 @@ include: {#-
   - .rsync
   - .jq
   - .docker
+  - .rust

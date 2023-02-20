@@ -28,7 +28,8 @@ include:
   - pkgs.vault
   - pkgs.jq
   - pkgs.xz
-  - pkgs.tree {#-
+  - pkgs.tree
+  - pkgs.rust {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
 

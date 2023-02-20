@@ -30,7 +30,7 @@ include:
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree
-  - pkgs.rust {#-
+  - pkgs.cargo {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
   {#- OS Specific packages install #}

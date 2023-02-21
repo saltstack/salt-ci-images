@@ -7,7 +7,6 @@ import json
 import os
 import pathlib
 
-import requests
 from ptscripts import command_group
 from ptscripts import Context
 
@@ -57,13 +56,17 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
         ctx.error(f"Could not load the changed files from:\n{changed_files}:\n", exc)
         ctx.exit(1)
 
-    response = requests.get(
-        "https://api.github.com/repos/actions/runner/releases/latest",
-        headers={
-            "Accept": "application/vnd.github.v3+json",
-        },
-    )
-    runner_version = response.json()["name"].replace("v", "")
+    with ctx.web as requests:
+        response = requests.get(
+            "https://api.github.com/repos/actions/runner/releases/latest",
+            headers={
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
+        if response.status_code != 200:
+            ctx.error("Failed to get the latest GH Actions Runner version.")
+            ctx.exit(1)
+        runner_version = response.json()["name"].replace("v", "")
     ctx.info(f"Generated information about the latest GitHub Actions Runner: v{runner_version}")
     with open(github_output, "a", encoding="utf-8") as wfh:
         wfh.write(f"runner-version={runner_version}\n")

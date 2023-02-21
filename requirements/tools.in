@@ -1,2 +1,2 @@
-python-tools-scripts
+python-tools-scripts>=0.11.1
 requests

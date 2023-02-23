@@ -34,6 +34,7 @@ include:
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree
+  - pkgs.pyenv-python
   - .rust {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}

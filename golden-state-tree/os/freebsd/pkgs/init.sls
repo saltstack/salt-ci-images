@@ -22,3 +22,4 @@ include:
   - pkgs.xz
   - pkgs.tree
   - pkgs.cargo
+  - pkgs.pyenv-python

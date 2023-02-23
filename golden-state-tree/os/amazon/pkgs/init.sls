@@ -30,7 +30,8 @@ include:
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree
-  - pkgs.cargo {#-
+  - pkgs.cargo
+  - pkgs.pyenv-python {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
 

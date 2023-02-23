@@ -263,6 +263,15 @@ build {
     elevated_password = ""
     elevated_user     = "SYSTEM"
     inline = [
+      "icacls c:\\actions-runner /T /reset",
+      "icacls c:\\hostedtoolcache /T /reset",
+    ]
+  }
+
+  provisioner "powershell" {
+    elevated_password = ""
+    elevated_user     = "SYSTEM"
+    inline = [
       "Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced' -Name 'Hidden' -Value 1",
       "Set-Itemproperty -path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced' -Name 'HideFileExt' -value 0"
     ]

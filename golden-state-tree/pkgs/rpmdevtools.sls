@@ -1,0 +1,2 @@
+rpmdevtools:
+  pkg.installed

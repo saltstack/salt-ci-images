@@ -23,6 +23,7 @@ include:
   - pkgs.patch
   - pkgs.python3-pip
   - pkgs.rng-tools
+  - pkgs.rpmdevtools
   - pkgs.rsync
   - pkgs.sed
   - pkgs.swig

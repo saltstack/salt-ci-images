@@ -1,5 +1,6 @@
 {%- set target_python = "3.10.10" %}
 include:
+  - pkgs.curl
   - pkgs.make
   - pkgs.xz
   - pkgs.curl
@@ -43,9 +44,22 @@ install-dependencies:
       - failing-on-purpose
     {%- endif %}
 
-pyenv-python:
-  pyenv.installed:
-    - name: {{ target_python }}
-    - default: True
+bootstrap-pyenv:
+  cmd.run:
+    - name: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+    - runas: {{ pillar["ssh_username"] }}
     - require:
+      - curl
       - install-dependencies
+
+install-pyenv-python:
+  cmd.run:
+    - name: pyenv install -v {{ target_python }}
+    - runas: {{ pillar["ssh_username"] }}
+
+set-default-python:
+  cmd.run:
+    - name: pyenv global {{ target_python }}
+    - runas: {{ pillar["ssh_username"] }}
+    - require:
+      - install-pyenv-python

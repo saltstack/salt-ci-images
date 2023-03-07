@@ -25,5 +25,7 @@ else
     echo "github_actions_runner: false" >> ${PILLAR_DIR}/base.sls
 fi
 
+echo "ssh_username: ${SSH_USERNAME}" >> ${PILLAR_DIR}/base.sls
+
 echo "Pillar Tree Contents:"
 ls -lah ${PILLAR_DIR}/

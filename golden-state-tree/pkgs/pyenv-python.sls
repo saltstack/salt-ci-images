@@ -47,19 +47,27 @@ install-dependencies:
 bootstrap-pyenv:
   cmd.run:
     - name: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-    - runas: {{ pillar["ssh_username"] }}
     - require:
       - curl
       - install-dependencies
 
+update-bashrc:
+  file.append:
+    - name: /root/.bash_profile
+    - text:
+      - 'export PYENV_ROOT="$HOME/.pyenv"'
+      - 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"'
+      - 'eval "$(pyenv init -)"'
+      - 'eval "$(pyenv virtualenv-init -)"'
+
 install-pyenv-python:
   cmd.run:
     - name: pyenv install -v {{ target_python }}
-    - runas: {{ pillar["ssh_username"] }}
+    - require:
+      - update-bashrc
 
 set-default-python:
   cmd.run:
     - name: pyenv global {{ target_python }}
-    - runas: {{ pillar["ssh_username"] }}
     - require:
       - install-pyenv-python

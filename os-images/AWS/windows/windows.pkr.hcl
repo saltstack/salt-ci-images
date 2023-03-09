@@ -228,6 +228,18 @@ build {
     script = "${path.root}/scripts/Provision-Salt.ps1"
   }
 
+  provisioner "powershell" {
+    elevated_password = ""
+    elevated_user     = "SYSTEM"
+    inline = [
+      "Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force",
+      "Install-Module -Name DockerMsftProvider -Repository PSGallery -Force",
+      "Install-Package -Name docker -ProviderName DockerMsftProvider",
+      "DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V /NoRestart"
+    ]
+    pause_before = "5s"
+  }
+
   provisioner "file" {
     destination = "${var.salt_provision_root_dir}"
     direction   = "upload"

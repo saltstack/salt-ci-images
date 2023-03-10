@@ -235,7 +235,6 @@ build {
       "Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force",
       "Install-Module -Name DockerMsftProvider -Repository PSGallery -Force",
       "Install-Package -Name docker -ProviderName DockerMsftProvider -Force",
-      "Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart"
     ]
     pause_before = "5s"
   }

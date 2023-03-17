@@ -239,6 +239,10 @@ build {
     pause_before = "5s"
   }
 
+  provisioner "windows-restart" {
+    restart_check_command = "powershell -command \"& {Write-Output 'restarted.'}\""
+  }
+
   provisioner "file" {
     destination = "${var.salt_provision_root_dir}"
     direction   = "upload"

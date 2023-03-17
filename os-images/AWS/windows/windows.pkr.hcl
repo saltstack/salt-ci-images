@@ -231,11 +231,7 @@ build {
   provisioner "powershell" {
     elevated_password = ""
     elevated_user     = "SYSTEM"
-    inline = [
-      "Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force",
-      "Install-Module -Name DockerMsftProvider -Repository PSGallery -Force",
-      "Install-Package -Name docker -ProviderName DockerMsftProvider -Force"
-    ]
+    script = "${path.root}/scripts/Install-Docker.ps1"
     pause_before = "5s"
   }
 

@@ -231,8 +231,8 @@ build {
   provisioner "powershell" {
     elevated_password = ""
     elevated_user     = "SYSTEM"
-    script = "${path.root}/scripts/InstallDocker.ps1"
-    pause_before = "5s"
+    script            = "${path.root}/scripts/InstallDocker.ps1"
+    pause_before      = "5s"
   }
 
   provisioner "windows-restart" {

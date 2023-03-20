@@ -114,6 +114,7 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
     if gh_event["repository"]["fork"] is True:
         # This is running on a forked repository, just run pre-commit
         ctx.info("The push event is on a forked repository")
+        outputs["generate-configs"] = False
         for key in changed_files:
             if not key.startswith("os-images-"):
                 continue
@@ -129,6 +130,10 @@ def collect_jobs(ctx: Context, event_name: str, changed_files: pathlib.Path):
         if not key.startswith("os-images-"):
             continue
         outputs[key] = data
+    if gh_event["ref"] != f"refs/heads/{gh_event['repository']['default_branch']}":
+        ctx.info("Not building on the default branch, disabling the generate configs step")
+        outputs["generate-configs"] = False
+
     ctx.info("Generated information about what should run:\n", outputs)
     with open(github_output, "a", encoding="utf-8") as wfh:
         wfh.write(f"jobs={json.dumps(outputs)}\n")

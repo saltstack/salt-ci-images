@@ -329,7 +329,7 @@ vmware-profile:
     - show_changes: False
 
 {%- if salt['pillar.get']('vmware:ca-cert', '') != '' %}
-  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == 7 %}
+  {%- if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] >= 7 %}
 vmware-ca-cert:
   file.managed:
     - name: /etc/pki/ca-trust/source/anchors/vmware.crt

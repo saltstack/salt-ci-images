@@ -186,8 +186,8 @@ build {
     inline = [
       "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg -o /tmp/amazon-cloudwatch-agent.gpg",
       "gpg --import /tmp/amazon-cloudwatch-agent.gpg",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/redhat/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm -o /tmp/amazon-cloudwatch-agent.rpm",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/redhat/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm.sig -o /tmp/amazon-cloudwatch-agent.rpm.sig",
+      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm -o /tmp/amazon-cloudwatch-agent.rpm",
+      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm.sig -o /tmp/amazon-cloudwatch-agent.rpm.sig",
       "gpg --verify /tmp/amazon-cloudwatch-agent.rpm.sig /tmp/amazon-cloudwatch-agent.rpm",
       "rpm -U /tmp/amazon-cloudwatch-agent.rpm",
       "systemctl restart amazon-cloudwatch-agent",

@@ -218,7 +218,7 @@ build {
 
   provisioner "shell" {
     environment_vars = [
-      "OS_ARCH=${var.distro_arch}",
+      "OS_ARCH=${var.distro_arch == "arm64" ? "aarch64" : "x86_64"}",
       "SALT_VERSION=${var.salt_provision_version}",
       "SALT_PROVISION_TYPE=${var.salt_provision_type}"
     ]

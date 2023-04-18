@@ -175,6 +175,7 @@ build {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
       "yum install -y dnf || true",
+      "dnf install -y centos-gpg-keys centos-stream-release centos-stream-repos",
       "dnf update -y",
       "dnf install -y git vim sudo openssh-server dbus curl tar unzip"
     ]

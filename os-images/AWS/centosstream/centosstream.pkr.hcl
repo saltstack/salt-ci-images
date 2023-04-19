@@ -285,7 +285,7 @@ build {
       arch                       = var.distro_arch
       ami_name                   = local.ami_name
       ami_description            = local.ami_description
-      ssh_username               = var.distro_version == "8" ? "cloud-user" : var.ssh_username
+      ssh_username               = var.ssh_username
       instance_type              = var.instance_type
       is_windows                 = false
       cloudwatch-agent-available = true

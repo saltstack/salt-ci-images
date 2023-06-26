@@ -6,8 +6,8 @@
 
 # Suse does not package npm separately
 {%- if suse %}
-  {%- set npm = 'npm16' %}
-  {%- set nodejs = 'nodejs16' %}
+  {%- set npm = 'npm18' %}
+  {%- set nodejs = 'nodejs18' %}
 {%- elif ubuntu %}
   {%- set npm = 'npm' %}
   {%- set nodejs = 'nodejs' %}

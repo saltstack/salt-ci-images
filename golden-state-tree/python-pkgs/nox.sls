@@ -45,7 +45,11 @@
 nox:
   cmd.run:
   {%- if not on_windows %}
+    {%- if (grains['os'] == 'Debian' and grains['osmajorrelease'] >= 12) or grains['os'] == 'Arch' %}
+    - name: "{{ pip }} install 'nox=={{ nox_version }}' --break-system-packages"
+    {%- else %}
     - name: "{{ pip }} install 'nox=={{ nox_version }}'"
+    {%- endif %}
   {%- else %}
     - name: {{ pip }} install nox=={{ nox_version }}
   {%- endif %}

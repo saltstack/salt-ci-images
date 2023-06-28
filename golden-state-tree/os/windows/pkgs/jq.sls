@@ -1,2 +1,5 @@
 jq:
-  chocolatey.installed
+  chocolatey.installed:
+    - name: jq
+    - require:
+      - chocolatey-to-choco

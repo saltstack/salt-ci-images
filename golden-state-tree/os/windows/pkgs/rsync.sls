@@ -1,2 +1,5 @@
 rsync:
-  chocolatey.installed
+  chocolatey.installed:
+    - name: rsync
+    - require:
+      - chocolatey-to-choco

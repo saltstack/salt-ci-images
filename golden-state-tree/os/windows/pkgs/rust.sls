@@ -2,4 +2,4 @@ rust:
   chocolatey.installed:
     - name: rust
     - require:
-      - pkgs.chocolatey-to-choco
+      - sls: pkgs.choco_symlink

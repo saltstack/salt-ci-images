@@ -2,4 +2,4 @@ rsync:
   chocolatey.installed:
     - name: rsync
     - require:
-      - pkgs.chocolatey-to-choco
+      - sls: pkgs.choco_symlink

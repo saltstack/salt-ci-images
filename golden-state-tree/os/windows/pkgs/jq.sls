@@ -2,4 +2,4 @@ jq:
   chocolatey.installed:
     - name: jq
     - require:
-      - pkgs.chocolatey-to-choco
+      - sls: pkgs.choco_symlink

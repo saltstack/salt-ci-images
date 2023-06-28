@@ -5,15 +5,13 @@
 {%- elif grains['os'] == 'Fedora' %}
   {%- set python3_dev = 'python3-devel' %}
 {%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'RedHat') %}
-  {%- if grains['osrelease'].startswith('8') %}
-    {%- set python3_dev = 'python36-devel' %}
-  {%- elif grains['osrelease'].startswith('9') %}
-    {%- set python3_dev = 'python3-devel' %}
+  {%- if grains['osmajorrelease']|int >= 8) %}
+    {%- set python3_dev = 'python39-devel' %}
   {%- else %}
     {%- set python3_dev = 'python3-devel' %}
   {%- endif %}
 {%- elif grains['os_family'] == 'Suse' %}
-  {%- set python3_dev = 'python3-devel' %}
+  {%- set python3_dev = 'python310-devel' %}
 {%- elif grains['os_family'] == 'Debian' %}
   {%- set python3_dev = 'python3-dev' %}
 {%- elif grains['os'] == 'VMware Photon OS' %}
@@ -24,8 +22,10 @@
 
 {%- if grains['os_family'] == 'Arch' %}
   {%- set python3 = 'python' %}
-{%- elif grains["os_family"] == 'RedHat' and grains['osmajorrelease']|int == 8 %}
-  {%- set python3 = 'python36' %}
+{%- elif grains['os_family'] == 'Suse' %}
+  {%- set python3 = 'python310' %}
+{%- elif grains["os_family"] == 'RedHat' and grains['osmajorrelease']|int >= 8 %}
+  {%- set python3 = 'python39' %}
 {%- else %}
   {%- set python3 = 'python3' %}
 {%- endif %}

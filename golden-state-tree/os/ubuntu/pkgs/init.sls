@@ -37,6 +37,9 @@ include:
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree
-  - pkgs.cargo {#-
+  - pkgs.cargo
+  {%- if grains['osmajorrelease']|int < 22 %}
+  - pkgs.pyenv-python
+  {%- endif %} {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}

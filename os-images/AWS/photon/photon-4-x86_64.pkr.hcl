@@ -221,6 +221,7 @@ build {
   provisioner "shell-local" {
     environment_vars = [
       "DISTRO_SLUG=${local.distro_slug}",
+      "SSH_USERNAME=${var.ssh_username}",
       "SALT_ROOT_DIR=${var.salt_provision_root_dir}",
       "INSTALL_GITHUB_ACTIONS_RUNNER=${var.install_github_actions_runner ? "yes" : "no"}",
       "INSTALL_GITHUB_ACTIONS_RUNNER_DEPENDENCIES=false",

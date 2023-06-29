@@ -95,7 +95,7 @@ repos:
 
   # ----- Requirements -------------------------------------------------------------------------->
   - repo: https://github.com/jazzband/pip-tools
-    rev: "6.9.0"
+    rev: "6.13.0"
     hooks:
       - id: pip-compile
         alias: pip-compile-tools
@@ -103,6 +103,10 @@ repos:
         files: ^requirements/tools\.(in|txt)$
         args:
           - -v
+          - --build-isolation
+          - --resolver=backtracking
           - --output-file=requirements/tools.txt
           - requirements/tools.in
+        additional_dependencies:
+          - pip==23.1.2
   # <---- Requirements ---------------------------------------------------------------------------

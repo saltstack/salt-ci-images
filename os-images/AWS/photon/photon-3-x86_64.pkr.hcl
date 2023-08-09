@@ -182,9 +182,17 @@ build {
     inline = [
       "systemctl mask tmp.mount",
       "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
+      "tdnf install -y linux",
+      "tdnf remove -y linux-aws",
+      "tdnf install -y fipsify linux-hmacgen",
       "tdnf update -y",
+      "if ! grep -q fips=1 /boot/systemd.cfg; then sed -i 's/^systemd_cmdline=.*/& fips=1/' /boot/systemd.cfg; fi",
+      "if ! grep -q 'FipsMode yes' /etc/ssh/sshd_config; then echo 'FipsMode yes' >> /etc/ssh/sshd_config; fi",
+      "reboot"
     ]
-    inline_shebang = "/bin/sh -ex"
+    inline_shebang    = "/bin/sh -ex"
+    expect_disconnect = true
+    pause_after       = "10s"
   }
 
   provisioner "shell" {
@@ -199,8 +207,8 @@ build {
     inline = [
       "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg -o /tmp/amazon-cloudwatch-agent.gpg",
       "gpg --import /tmp/amazon-cloudwatch-agent.gpg",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/centos/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm -o /tmp/amazon-cloudwatch-agent.rpm",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/centos/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm.sig -o /tmp/amazon-cloudwatch-agent.rpm.sig",
+      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm -o /tmp/amazon-cloudwatch-agent.rpm",
+      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm.sig -o /tmp/amazon-cloudwatch-agent.rpm.sig",
       "gpg --verify /tmp/amazon-cloudwatch-agent.rpm.sig /tmp/amazon-cloudwatch-agent.rpm",
       "rpm -U /tmp/amazon-cloudwatch-agent.rpm",
       "systemctl restart amazon-cloudwatch-agent",

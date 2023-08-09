@@ -20,7 +20,9 @@ include:
   - pkgs.patch
   - pkgs.python3
   - pkgs.python3-pip
+  {%- if grains['cpuarch'].lower() == 'x86_64' %}
   - pkgs.rng-tools
+  {%- endif %}
   - pkgs.rsync
   - pkgs.sed
   - pkgs.swig

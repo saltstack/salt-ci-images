@@ -186,6 +186,23 @@ build {
   }
 
   provisioner "powershell" {
+    script = "${path.root}/scripts/update-git-path.ps1"
+  }
+
+  provisioner "file" {
+    destination = "${var.salt_provision_root_dir}/Install-Rsync.sh"
+    direction   = "upload"
+    source      = "${path.root}/scripts/Install-Rsync.sh"
+  }
+
+  provisioner "powershell" {
+    # By now, bash should be installed and available in path
+    inline = [
+      "bash -xe ${var.salt_provision_root_dir}/Install-Rsync.sh"
+    ]
+  }
+
+  provisioner "powershell" {
     elevated_password = ""
     elevated_user     = "SYSTEM"
     script            = "${path.root}/scripts/InstallAndConfigureOpenSSH.ps1"
@@ -212,10 +229,6 @@ build {
       "GITHUB_ACTIONS_RUNNER_TARBALL_URL=https://github.com/actions/runner/releases/download/v${var.runner_version}/actions-runner-win-${var.distro_arch == "x86_64" ? "x64" : "arm64"}-${var.runner_version}.zip"
     ]
     script = abspath("${path.root}/../files/prep-windows.sh")
-  }
-
-  provisioner "powershell" {
-    script = "${path.root}/scripts/update-git-path.ps1"
   }
 
   provisioner "powershell" {

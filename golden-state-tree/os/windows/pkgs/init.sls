@@ -11,6 +11,5 @@ include: {#-
   - .python3
   - .vcredist
   - .chrome
-  - .rsync
   - .jq
   - .rust

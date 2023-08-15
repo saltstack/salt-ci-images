@@ -2,7 +2,7 @@ Write-Host -NoNewline "Who Am I? "
 & whoami
 
 # Version and download URL
-$OPENSSH_VERSION = "8.9.1.0p1-Beta"
+$OPENSSH_VERSION = "9.2.2.0p1-Beta"
 $OPENSSH_URL = "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v$OPENSSH_VERSION/OpenSSH-Win64.zip"
 
 # GitHub became TLS 1.2 only on Feb 22, 2018

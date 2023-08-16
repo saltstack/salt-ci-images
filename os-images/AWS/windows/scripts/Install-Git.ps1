@@ -72,6 +72,9 @@ if (!($IsLinux -or $IsOSX))
     #Added TLS negotiation Fork jmangan68
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
+    # TODO: When changing the version here, be sure to also change the version
+    # TODO: in the Salt state so they don't compete with each other:
+    # TODO: ./golden-state-tree/os/windows/pkgs/git.sls
     $dlurl = 'https://github.com/git-for-windows/git/releases/download/v2.41.0.windows.3/Git-2.41.0.3-64-bit.exe'
     try
     {

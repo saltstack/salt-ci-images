@@ -30,6 +30,19 @@ $SALT_CALL = "$Env:TMP\salt\salt-call.exe"
 $CONFIG_DIR = "$Env:SALT_ROOT_DIR\conf"
 $DEFAULT_ARGUMENTS = "--local --log-level=warning --config-dir=$CONFIG_DIR --retcode-passthrough"
 
+# Inject Additional Config
+$additional_config = @"
+file_roots:
+  base:
+    - $Env:SALT_ROOT_DIR\states
+pillar_roots:
+  base:
+    - $Env:SALT_ROOT_DIR\pillar
+winrepo_dir: $Env:SALT_ROOT_DIR\states\win\repo
+winrepo_dir_ng: $Env:SALT_ROOT_DIR\states\win\repo-ng
+"@
+Add-Content -Path "$CONFIG_DIR\minion" -Value $additional_config
+
 Write-Host "`nBootstrapping Chocolatey" -ForegroundColor Yellow
 Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS chocolatey.bootstrap"
 
@@ -55,4 +68,4 @@ Get-ChildItem -Path $Env:SALT_ROOT_DIR\cache\files\base -Recurse
 
 Start-Sleep -Second 2
 Write-Host "`nProvisioning System" -ForegroundColor Yellow
-Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS --file-root=$Env:SALT_ROOT_DIR\states --pillar-root=$Env:SALT_ROOT_DIR\pillar state.sls $Env:SALT_STATE"
+Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS state.sls $Env:SALT_STATE"

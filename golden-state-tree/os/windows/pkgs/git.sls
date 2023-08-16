@@ -11,7 +11,7 @@ git-windeps:
   {%- if not git_binary %}
   pkg.installed:
     - name: git
-    - version: 2.22.0
+    - version: 2.41.0.3
     - refresh_modules: True
     - extra_install_flags: "/GitAndUnixToolsOnPath"
     - require:

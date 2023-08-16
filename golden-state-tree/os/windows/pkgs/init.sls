@@ -2,14 +2,15 @@ include: {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
   {#- OS Specific packages install #}
-  - .choco_symlink
   - .7zip
+  - .choco_symlink
+  - .chrome
   - .compiler
   - .git
   - .gvim
+  - .jq
   - .powershell_core
   - .python3
-  - .vcredist
-  - .chrome
-  - .jq
+  - .rsync
   - .rust
+  - .vcredist

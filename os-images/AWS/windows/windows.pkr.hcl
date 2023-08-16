@@ -189,19 +189,6 @@ build {
     script = "${path.root}/scripts/update-git-path.ps1"
   }
 
-  provisioner "file" {
-    destination = "${var.salt_provision_root_dir}/Install-Rsync.sh"
-    direction   = "upload"
-    source      = "${path.root}/scripts/Install-Rsync.sh"
-  }
-
-  provisioner "powershell" {
-    # By now, bash should be installed and available in path
-    inline = [
-      "bash -xe ${var.salt_provision_root_dir}/Install-Rsync.sh"
-    ]
-  }
-
   provisioner "powershell" {
     elevated_password = ""
     elevated_user     = "SYSTEM"

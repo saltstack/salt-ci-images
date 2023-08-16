@@ -43,6 +43,11 @@ winrepo_dir_ng: $Env:SALT_ROOT_DIR\states\win\repo-ng
 "@
 Add-Content -Path "$CONFIG_DIR\minion" -Value $additional_config
 
+# Create logs directory
+if ( !( Test-Path -path "$env:SALT_ROOT_DIR\logs" ) ) {
+    New-Item -Path "$Env:SALT_ROOT_DIR\logs" -Type Directory | Out-Null
+}
+
 Write-Host "`nBootstrapping Chocolatey" -ForegroundColor Yellow
 Run-Process -Executable $SALT_CALL -Arguments "$DEFAULT_ARGUMENTS chocolatey.bootstrap"
 

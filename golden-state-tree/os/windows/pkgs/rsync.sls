@@ -1,2 +1,2 @@
-rsync-git:
+cwrsync:
   pkg.installed

@@ -12,7 +12,7 @@
 {%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
 include:
   - os.centos-stream.pkgs.epel-release
-{%- elif grains['os'] == 'Amazon' %}
+{%- elif grains['oscodename'] == 'Amazon Linux 2' %}
 include:
   - os.amazon.pkgs.epel-release
 {%- endif %}

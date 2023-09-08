@@ -27,7 +27,7 @@ variable "instance_type" {
 }
 variable "ssh_username" {
   type    = string
-  default = "root"
+  default = "ec2-user"
 }
 
 # Remaining variables
@@ -37,12 +37,12 @@ variable "build_type" {
 }
 variable "ami_owner" {
   type    = string
-  default = "937850989293"
+  default = "137112412989"
 }
 
 variable "distro_name" {
   type    = string
-  default = "PhotonOS"
+  default = "AmazonLinux"
 }
 
 variable "ami_filter" {
@@ -66,7 +66,7 @@ variable "salt_provision_type" {
 
 variable "salt_provision_version" {
   type    = string
-  default = "3006.0"
+  default = "3006.2"
 }
 
 variable "salt_provision_root_dir" {
@@ -172,56 +172,21 @@ build {
   ]
 
   provisioner "shell" {
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
-      "df -h"
+      "dnf update -y",
+      "dnf swap -y curl-minimal curl-full",
+      "dnf swap -y libcurl-minimal libcurl-full",
+      "dnf install -y git vim sudo openssh-server dbus tar unzip gcc make wget"
     ]
     inline_shebang = "/bin/sh -ex"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "systemctl mask tmp.mount",
-      "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
-      "tdnf install -y linux",
-      "tdnf remove -y linux-aws",
-      "tdnf install -y fipsify linux-hmacgen",
-      "tdnf update -y",
-      "if ! grep -q fips=1 /boot/systemd.cfg; then sed -i 's/^systemd_cmdline=.*/& fips=1/' /boot/systemd.cfg; fi",
-      "if ! grep -q 'FipsMode yes' /etc/ssh/sshd_config; then echo 'FipsMode yes' >> /etc/ssh/sshd_config; fi",
-      "reboot"
-    ]
-    inline_shebang    = "/bin/sh -ex"
-    expect_disconnect = true
-    pause_after       = "10s"
-  }
-
-  provisioner "shell" {
-    inline_shebang = "/bin/sh -ex"
-    inline = [
-      "tdnf install -y git vim sudo openssh-server dbus curl rpm tar unzip gnupg"
-    ]
   }
 
   provisioner "shell" {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg -o /tmp/amazon-cloudwatch-agent.gpg",
-      "gpg --import /tmp/amazon-cloudwatch-agent.gpg",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm -o /tmp/amazon-cloudwatch-agent.rpm",
-      "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/${var.distro_arch == "x86_64" ? "centos" : "redhat"}/${var.distro_arch == "x86_64" ? "amd64" : "arm64"}/latest/amazon-cloudwatch-agent.rpm.sig -o /tmp/amazon-cloudwatch-agent.rpm.sig",
-      "gpg --verify /tmp/amazon-cloudwatch-agent.rpm.sig /tmp/amazon-cloudwatch-agent.rpm",
-      "rpm -U /tmp/amazon-cloudwatch-agent.rpm",
+      "dnf install -y amazon-cloudwatch-agent",
       "systemctl restart amazon-cloudwatch-agent",
-    ]
-    inline_shebang = "/bin/sh -ex"
-  }
-
-  provisioner "shell" {
-    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
-    inline = [
-      "curl -f https://awscli.amazonaws.com/awscli-exe-linux-${var.distro_arch == "x86_64" ? "x86_64" : "aarch64"}.zip -o /tmp/awscliv2.zip",
-      "cd /tmp; unzip awscliv2.zip",
-      "cd /tmp; ./aws/install",
     ]
     inline_shebang = "/bin/sh -ex"
   }
@@ -243,7 +208,8 @@ build {
       "SALT_VERSION=${var.salt_provision_version}",
       "SALT_PROVISION_TYPE=${var.salt_provision_type}"
     ]
-    script = "os-images/files/provision-salt.sh"
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    script          = "os-images/files/provision-salt.sh"
   }
 
   provisioner "file" {
@@ -258,15 +224,17 @@ build {
       "SALT_ROOT_DIR=${var.salt_provision_root_dir}",
       "SALT_STATE=${var.state_name}"
     ]
-    pause_after = "5s"
-    script      = "os-images/files/provision-system.sh"
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    pause_after     = "5s"
+    script          = "os-images/files/provision-system.sh"
   }
 
   provisioner "shell" {
-    inline_shebang = "/bin/sh -ex"
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    inline_shebang  = "/bin/sh -ex"
     inline = [
-      "tdnf clean all",
-      "rm -rf /var/cache/tdnf"
+      "dnf clean all",
+      "rm -rf /var/cache/dnf"
     ]
   }
 
@@ -274,14 +242,16 @@ build {
     environment_vars = [
       "SALT_ROOT_DIR=${var.salt_provision_root_dir}"
     ]
-    script = "os-images/files/cleanup-salt.sh"
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    script          = "os-images/files/cleanup-salt.sh"
   }
 
   provisioner "shell" {
     environment_vars = [
       "SSH_USERNAME=${var.ssh_username}"
     ]
-    script = "os-images/AWS/files/cleanup-linux.sh"
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    script          = "os-images/AWS/files/cleanup-linux.sh"
   }
 
   post-processor "manifest" {

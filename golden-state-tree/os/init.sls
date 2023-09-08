@@ -1,8 +1,10 @@
 include:
   {%- if grains['os'] == 'AlmaLinux' %}
   - os.alma-linux
-  {%- elif grains['os'] == 'Amazon' %}
+  {%- elif grains.get("oscodename") == 'Amazon Linux 2' %}
   - os.amazon
+  {%- elif grains.get("oscodename") == 'Amazon Linux 2023' %}
+  - os.amazon2023
   {%- elif grains['os_family'] == 'Arch' %}
   - os.arch
   {%- elif grains['os'] == 'CentOS' %}

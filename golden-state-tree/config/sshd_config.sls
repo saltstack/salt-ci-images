@@ -39,7 +39,11 @@ TCPKeepAlive:
 
 stop-sshd:
   service.dead:
+    {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease'] >= 23 %}
+    - name: ssh
+    {%- else %}
     - name: sshd
+    {%- endif %}
     - enable: True
     - require:
       - ClientAliveInterval
@@ -49,7 +53,11 @@ stop-sshd:
 
 start-sshd:
   service.enabled:
+    {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease'] >= 23 %}
+    - name: ssh
+    {%- else %}
     - name: sshd
+    {%- endif %}
     - enable: True
     - reload: True
     - require:

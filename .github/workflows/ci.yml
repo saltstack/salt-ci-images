@@ -56,6 +56,11 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/amazonlinux/*.hcl
+            os-images-amazonlinux2023:
+              - added|modified:
+                - *state_tree_added_modified
+                - *os_images_scripts
+                - os-images/AWS/amazonlinux2023/*.hcl
             os-images-archlinux:
               - added|modified:
                 - *state_tree_added_modified
@@ -196,6 +201,18 @@ jobs:
     uses: ./.github/workflows/build-image-action.yml
     with:
       distro-name: amazonlinux
+      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
+      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
+
+  amazonlinux2023:
+    name: AmazonLinux2023
+    needs:
+      - collect-jobs
+      - get-changed-files
+    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-amazonlinux2023'] }}
+    uses: ./.github/workflows/build-image-action.yml
+    with:
+      distro-name: amazonlinux2023
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 

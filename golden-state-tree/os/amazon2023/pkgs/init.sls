@@ -3,14 +3,11 @@ include:
   - pkgs.curl
   - pkgs.dmidecode
   - pkgs.dnsutils
-  - pkgs.docker
   - pkgs.gcc
   - pkgs.gpg
-  - pkgs.ipset
   - pkgs.libcurl
   - pkgs.libffi
-  - pkgs.libgit2
-  - pkgs.libsodium
+  - pkgs.libsodium-compile
   - pkgs.libxml
   - pkgs.libxslt
   - pkgs.make
@@ -23,6 +20,7 @@ include:
   - pkgs.python3
   - pkgs.python3-pip
   - pkgs.rng-tools
+  - pkgs.rpmdevtools
   - pkgs.rsync
   - pkgs.sed
   - pkgs.swig
@@ -37,6 +35,6 @@ include:
   - pkgs.amazon-cloudwatch-agent #}
 
   {#- OS Specific packages install #}
-  - .apt-utils
-  - .libdpkg-perl
-  - .timesync
+  {%- if grains['osarch'] not in ('amd64', 'armhf', 'arm64') %}
+  - .docker
+  {%- endif %}

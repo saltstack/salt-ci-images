@@ -185,7 +185,7 @@ build {
       "tdnf update -y",
       "tdnf install -y linux"
     ]
-    inline_shebang    = "/bin/sh -ex"
+    inline_shebang = "/bin/sh -ex"
   }
 
   provisioner "shell" {

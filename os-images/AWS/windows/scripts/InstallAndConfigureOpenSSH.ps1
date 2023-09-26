@@ -140,6 +140,7 @@ LogLevel DEBUG3
 '@
 # Un-comment below for debug logs
 #$SSHD_CONFIG_EXTRA | Out-File -Append -FilePath $SSHD_CONFIG -Encoding ASCII
+"PasswordAuthentication no" | Out-File -Append -FilePath $SSHD_CONFIG -Encoding ASCII
 
 # Ensure access control on administrators_authorized_keys meets the requirements
 $OPENSSH_UTILS_MODULE = [io.path]::combine($INSTALL_DIR, 'OpenSSHUtils.psd1')

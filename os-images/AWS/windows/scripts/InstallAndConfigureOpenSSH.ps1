@@ -154,6 +154,7 @@ Get-ChildItem $DATA_DIR\ssh_host_*_key -ErrorAction SilentlyContinue | % {
 $keyDownloadScript = @'
 $INSTALL_DIR = [io.path]::combine($env:ProgramFiles, 'OpenSSH')
 $OPENSSH_UTILS_MODULE = [io.path]::combine($INSTALL_DIR, 'OpenSSHUtils.psd1')
+$VerbosePreference = 'Continue'
 
 Import-Module $OPENSSH_UTILS_MODULE -Force
 # Download the instance key pair and authorize Administrator logins using it
@@ -171,6 +172,7 @@ $token=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/tok
 
 Write-Host "Downloading the current EC2 Instance Public Key from AWS"
 Invoke-WebRequest "http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key" -Headers @{"X-aws-ec2-metadata-token" = $token} -Outfile $openSSHAuthorizedKeys
+Get-Content $openSSHAuthorizedKeys
 Write-Host "EC2 Instance Public Key Written To $openSSHAuthorizedKeys"
 
 # Ensure access control on administrators_authorized_keys meets the requirements
@@ -188,7 +190,7 @@ $principal = New-ScheduledTaskPrincipal `
     -LogonType ServiceAccount `
     -RunLevel Highest
 $action = New-ScheduledTaskAction -Execute 'Powershell.exe' `
-  -Argument "-NoProfile -File ""$DOWNLOAD_KEYS_SCRIPT"""
+  -Argument "-NoProfile -File ""$DOWNLOAD_KEYS_SCRIPT"" -Verbose > c:\download-ec2-pubkey.log"
 $trigger =  New-ScheduledTaskTrigger -AtStartup
 Register-ScheduledTask -Action $action `
     -Trigger $trigger `

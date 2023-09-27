@@ -190,8 +190,14 @@ $principal = New-ScheduledTaskPrincipal `
     -RunLevel Highest
 $jobtrigger = New-JobTrigger -AtStartup
 $joboptions = New-ScheduledJobOption -RunElevated
-Register-ScheduledJob -Name $taskName -Trigger $jobtrigger -FilePath "$DOWNLOAD_KEYS_SCRIPT" -ScheduledJobOption $joboptions
-Set-ScheduledTask -TaskName $taskName -Principal $principal
+$psJobsPathInScheduler = "\Microsoft\Windows\PowerShell\ScheduledJobs"
+$generateLocalSVCSecStr = ConvertTo-SecureString (New-Guid).Guid -AsPlainText -Force
+$generateLocalSVCUser = New-LocalUser "service.scheduler" -Password $generateLocalSVCSecStr -Description "For scheduling PowerShell jobs"
+Add-LocalGroupMember -Group Administrators -Member service.scheduler
+$credVar = New-Object System.Management.Automation.PSCredential($generateLocalSVCUser.name, $generateLocalSVCSecStr)
+Register-ScheduledJob -Name $taskName -Trigger $jobtrigger -FilePath $DOWNLOAD_KEYS_SCRIPT -ScheduledJobOption $joboptions -Credential $credentials
+Set-ScheduledTask -TaskName $taskName -TaskPath $psJobsPathInScheduler -Principal $principal
+Remove-LocalUser "service.scheduler"
 
 # Run the download keys script, terminate if it fails
 & Powershell.exe -ExecutionPolicy Bypass -File $DOWNLOAD_KEYS_SCRIPT

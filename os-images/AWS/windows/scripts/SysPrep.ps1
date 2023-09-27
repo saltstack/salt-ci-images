@@ -39,5 +39,5 @@ ElseIf (Test-Path $EC2ConfigDir) {
 Else {
   throw("Neither $EC2LaunchDir nor $EC2ConfigDir nor $EC2WindowsLaunch were found")
 }
-Enable-ScheduledTask "Download EC2 PubKey"
-Get-ScheduledTask | where state -eq 'Ready'
+Enable-ScheduledJob "Download EC2 PubKey"
+Get-ScheduledJob | where state -eq 'Ready'

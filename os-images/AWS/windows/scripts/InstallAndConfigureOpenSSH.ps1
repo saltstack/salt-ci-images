@@ -179,6 +179,8 @@ Write-Host "EC2 Instance Public Key Written To $openSSHAuthorizedKeys"
 # Ensure access control on administrators_authorized_keys meets the requirements
 Write-Host "Repairing permissions on $openSSHAuthorizedKeys"
 Repair-AdministratorsAuthorizedKeysPermission -FilePath $openSSHAuthorizedKeys -Confirm:$false
+
+Disable-ScheduledTask -TaskName "Download EC2 PubKey"
 '@
 $keyDownloadScript | Out-File $DOWNLOAD_KEYS_SCRIPT
 
@@ -188,10 +190,15 @@ $principal = New-ScheduledTaskPrincipal `
     -UserID "NT AUTHORITY\SYSTEM" `
     -LogonType ServiceAccount `
     -RunLevel Highest
-$jobtrigger = New-JobTrigger -AtStartup
-$joboptions = New-ScheduledJobOption -RunElevated
-Register-ScheduledJob -Name $taskName -Trigger $jobtrigger -FilePath "$DOWNLOAD_KEYS_SCRIPT" -ScheduledJobOption $joboptions
-Set-ScheduledTask -TaskName $taskName -Principal $principal
+$action = New-ScheduledTaskAction -Execute 'Powershell.exe' `
+  -Argument "-NoProfile -File ""$DOWNLOAD_KEYS_SCRIPT"" -Verbose > c:\download-ec2-pubkey.log"
+$trigger =  New-ScheduledTaskTrigger -AtStartup
+Register-ScheduledTask -Action $action `
+    -Trigger $trigger `
+    -Principal $principal `
+    -TaskName $taskName `
+    -Description $taskName
+Disable-ScheduledTask -TaskName $taskName
 
 # Run the download keys script, terminate if it fails
 & Powershell.exe -ExecutionPolicy Bypass -File $DOWNLOAD_KEYS_SCRIPT

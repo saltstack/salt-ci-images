@@ -28,5 +28,5 @@ rich==13.4.2
     # via python-tools-scripts
 typing-extensions==4.7.1
     # via python-tools-scripts
-urllib3==2.0.4
+urllib3==2.0.6
     # via requests

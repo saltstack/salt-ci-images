@@ -269,6 +269,14 @@ build {
 
   provisioner "shell" {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    inline = [
+      "apt-get update -y && apt-get upgrade -yq",
+    ]
+    inline_shebang = "/bin/sh -ex"
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline_shebang  = "/bin/sh -ex"
     inline = [
       "rm -rf /var/lib/apt/lists/*",

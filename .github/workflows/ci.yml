@@ -56,11 +56,11 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/amazonlinux/*.hcl
-            os-images-amazonlinux2023:
+            os-images-amazonlinux2000:
               - added|modified:
                 - *state_tree_added_modified
                 - *os_images_scripts
-                - os-images/AWS/amazonlinux2023/*.hcl
+                - os-images/AWS/amazonlinux2000/*.hcl
             os-images-archlinux:
               - added|modified:
                 - *state_tree_added_modified
@@ -204,15 +204,15 @@ jobs:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
-  amazonlinux2023:
-    name: AmazonLinux2023
+  amazonlinux2000:
+    name: AmazonLinux2000
     needs:
       - collect-jobs
       - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-amazonlinux2023'] }}
+    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-amazonlinux2000'] }}
     uses: ./.github/workflows/build-image-action.yml
     with:
-      distro-name: amazonlinux2023
+      distro-name: amazonlinux2000
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
@@ -333,6 +333,7 @@ jobs:
       - get-changed-files
       - almalinux
       - amazonlinux
+      - amazonlinux2000
       - archlinux
       - centos
       - centosstream

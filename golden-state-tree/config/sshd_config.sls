@@ -37,6 +37,19 @@ TCPKeepAlive:
   {%- endif %}
 
 
+{%- if grains['os'] == 'VMware Photon OS' %}
+{%- for algo in ("ssh-ed25519", "ecdsa-sha2-nistp256") %}
+
+HostKeyAlgorithms-{{ algo }}:
+  file.line:
+    - name: {{ ssh_config }}
+    - content: "HostKeyAlgorithms {{ algo }}"
+    - mode: insert
+    - location: end
+
+{%- endfor %}
+{%- endif %}
+
 stop-sshd:
   service.dead:
     {%- if grains['os'] == 'Ubuntu' and grains['osmajorrelease'] >= 23 %}

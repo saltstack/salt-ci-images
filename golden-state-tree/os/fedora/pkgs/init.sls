@@ -39,6 +39,7 @@ include:
   - pkgs.cargo {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
+  - pkgs.samba
 
   {#- OS Specific packages install #}
   - .g++

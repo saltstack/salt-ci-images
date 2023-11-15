@@ -33,6 +33,7 @@ include:
   - pkgs.cargo {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
+  - pkgs.samba
 
   {#- OS Specific packages install #}
   {%- if grains['osarch'] not in ('amd64', 'armhf', 'arm64') %}

@@ -33,6 +33,7 @@ include:
   - pkgs.cargo {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
+  - pkgs.samba
   {#- OS Specific packages install #}
   - .python-xml   {#- Yes! openSuse ships xml as separate package #}
   {%- if not grains['osrelease'].startswith('15') %}

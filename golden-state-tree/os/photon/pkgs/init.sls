@@ -34,4 +34,3 @@ include:
   - pkgs.rust {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
-  - pkgs.samba

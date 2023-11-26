@@ -1,5 +1,5 @@
 {%- set on_docker = salt['grains.get']('virtual_subtype', '') in ('Docker',) %}
-{%- if grains['osarch'] in ('amd64', 'armhf', 'arm64') %}
+{%- if grains['osarch'] in ('armhf', 'arm64') %}
   {#- Don't install docker on arm platforms #}
   {% set install_docker = False %}
 {%- else %}

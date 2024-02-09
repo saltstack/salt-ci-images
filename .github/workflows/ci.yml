@@ -71,11 +71,6 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/centos/*.hcl
-            os-images-centosstream:
-              - added|modified:
-                - *state_tree_added_modified
-                - *os_images_scripts
-                - os-images/AWS/centosstream/*.hcl
             os-images-debian:
               - added|modified:
                 - *state_tree_added_modified
@@ -240,18 +235,6 @@ jobs:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
-  centosstream:
-    name: CentOS Stream
-    needs:
-      - collect-jobs
-      - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-centosstream'] }}
-    uses: ./.github/workflows/build-image-action.yml
-    with:
-      distro-name: centosstream
-      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
-      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-
   debian:
     name: Debian
     needs:
@@ -336,7 +319,6 @@ jobs:
       - amazonlinux2000
       - archlinux
       - centos
-      - centosstream
       - debian
       - fedora
       - opensuse

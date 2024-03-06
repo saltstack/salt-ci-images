@@ -7,12 +7,14 @@ include:
   - pkgs.docker
   - pkgs.gcc
   - pkgs.gpg
+  - pkgs.ipset
   - pkgs.libcurl
   - pkgs.libffi
   - pkgs.libgit2
   - pkgs.libsodium
   - pkgs.libxml
   - pkgs.libxslt
+  - pkgs.make
   - pkgs.man
   - pkgs.nginx
   - pkgs.openldap
@@ -22,6 +24,7 @@ include:
   - pkgs.python3
   - pkgs.python3-pip
   - pkgs.rng-tools
+  - pkgs.rpmdevtools
   - pkgs.rsync
   - pkgs.sed
   - pkgs.swig
@@ -34,3 +37,4 @@ include:
   - pkgs.cargo {#-
   - pkgs.awscli
   - pkgs.amazon-cloudwatch-agent #}
+  - pkgs.samba

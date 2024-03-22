@@ -6,9 +6,9 @@
   {%- set libgit2 = "libgit2" %}
 {%- endif %}
 
-{%- if grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream') %}
+{%- if grains['os'] in ('AlmaLinux', 'Rocky', 'CentOS', 'CentOS Stream') %}
 include:
-  - os.centos-stream.pkgs.epel-release
+  - os.rocky.pkgs.epel-release
 {%- elif grains['oscodename'] == 'Amazon Linux 2' %}
 include:
   - os.amazon.pkgs.epel-release

@@ -1,5 +1,5 @@
 include:
-  - os.centos-stream.pkgs.epel-release
+  - os.rocky.pkgs.epel-release
   - pkgs.cron
   - pkgs.curl
   - pkgs.dmidecode

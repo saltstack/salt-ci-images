@@ -39,4 +39,4 @@ include:
   - pkgs.samba
 
   {#- OS Specific packages install #}
-  - os.rocky.pkgs.epel-release
+  - .epel-release

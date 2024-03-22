@@ -33,7 +33,9 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
+  {%- if grains['osmajorrelease'] != 23 %}
   - pkgs.vault
+  {%- endif %}
   - pkgs.jq
   - pkgs.xz
   - pkgs.tree

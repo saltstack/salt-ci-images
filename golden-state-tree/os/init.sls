@@ -3,7 +3,7 @@ include:
   - os.alma-linux
   {%- elif grains.get("oscodename") == 'Amazon Linux 2' %}
   - os.amazon
-  {%- elif grains.get("oscodename") == 'Amazon Linux 2023' %}
+  {%- elif grains.get("osfinger") == 'Amazon Linux-2023' %}
   - os.amazon2023
   {%- elif grains['os_family'] == 'Arch' %}
   - os.arch
@@ -11,6 +11,8 @@ include:
   - os.centos
   {%- elif grains['os'] == 'CentOS Stream' %}
   - os.centos-stream
+  {%- elif grains['os'] == 'Rocky' %}
+  - os.rocky
   {%- elif grains['os'] == 'Debian' %}
   - os.debian
   {%- elif grains['os'] == 'Fedora' %}

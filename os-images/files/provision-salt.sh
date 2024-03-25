@@ -11,8 +11,15 @@ else
     PLATFORM="macos"
 fi
 
-SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-onedir-${PLATFORM}-${OS_ARCH}.tar.xz"
-SALT_DOWNLOAD_URL="http://salt-onedir-golden-images-provision.s3-website-us-west-2.amazonaws.com/${SALT_ARCHIVE_NAME}"
+if [ "${OS_ARCH}" = "aarch64" ]; then
+    SALT_ARCH="arm64"
+else
+    SALT_ARCH="${OS_ARCH}"
+fi
+
+# SALT_MAJOR_VERSION=$(echo "${SALT_VERSION}" | cut -f1 -d'.')
+SALT_ARCHIVE_NAME="salt-${SALT_VERSION}-onedir-${PLATFORM}-${SALT_ARCH}.tar.xz"
+SALT_DOWNLOAD_URL="https://repo.saltproject.io/salt/py3/onedir/minor/${SALT_VERSION}/${SALT_ARCHIVE_NAME}"
 
 if [ "$(which curl)x" != "x" ]; then
     curl -f --output /tmp/${SALT_ARCHIVE_NAME} ${SALT_DOWNLOAD_URL}

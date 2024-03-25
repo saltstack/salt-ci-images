@@ -68,7 +68,7 @@ variable "salt_provision_type" {
 
 variable "salt_provision_version" {
   type    = string
-  default = "3006.0"
+  default = "3006.8"
 }
 
 variable "salt_provision_root_dir" {
@@ -184,7 +184,7 @@ build {
     inline = [
       "systemctl mask tmp.mount",
       "find /etc/yum.repos.d -type f -exec sed -i 's!dl.bintray.com/vmware!packages.vmware.com/photon/$releasever!' {} ';'",
-      "tdnf update -y",
+      "if [ ${var.distro_version} == '4' ]; then tdnf update -y photon-repos-4.0-3.ph4 --enablerepo=photon --refresh ; else tdnf update -y; fi",
     ]
     inline_shebang = "/bin/sh -ex"
   }

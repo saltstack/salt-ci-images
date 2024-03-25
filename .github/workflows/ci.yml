@@ -46,11 +46,11 @@ jobs:
               - added|modified: &os_images_scripts
                 - os-images/files/*
                 - os-images/AWS/files/*
-            os-images-almalinux:
+            os-images-rockylinux:
               - added|modified:
                 - *state_tree_added_modified
                 - *os_images_scripts
-                - os-images/AWS/almalinux/*.hcl
+                - os-images/AWS/rockylinux/*.hcl
             os-images-amazonlinux:
               - added|modified:
                 - *state_tree_added_modified
@@ -175,15 +175,15 @@ jobs:
     with:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
-  almalinux:
-    name: AlmaLinux
+  rockylinux:
+    name: RockyLinux
     needs:
       - collect-jobs
       - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-almalinux'] }}
+    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-rockylinux'] }}
     uses: ./.github/workflows/build-image-action.yml
     with:
-      distro-name: almalinux
+      distro-name: rockylinux
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
@@ -314,7 +314,7 @@ jobs:
     needs:
       - collect-jobs
       - get-changed-files
-      - almalinux
+      - rockylinux
       - amazonlinux
       - amazonlinux2000
       - archlinux

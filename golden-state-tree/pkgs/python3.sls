@@ -4,7 +4,7 @@
   {%- set python3_dev = 'python3-devel' %}
 {%- elif grains['os'] == 'Fedora' %}
   {%- set python3_dev = 'python3-devel' %}
-{%- elif grains['os'] in ('AlmaLinux', 'CentOS', 'CentOS Stream', 'RedHat') %}
+{%- elif grains['os'] in ('AlmaLinux', 'Rocky', 'CentOS', 'CentOS Stream', 'RedHat') %}
   {%- if grains['osrelease'].startswith('8') %}
     {%- set python3_dev = 'python36-devel' %}
   {%- elif grains['osrelease'].startswith('9') %}

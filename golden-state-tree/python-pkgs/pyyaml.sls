@@ -8,7 +8,7 @@
 
 pyyaml:
   cmd.run:
-    - name: {{ pip }} install pyyaml==5.4.1
+    - name: {{ pip }} install pyyaml==6.0.1
     - unless:
       {%- if grains['os_family'] == 'Windows' %}
       - py -3 -c "import yaml"

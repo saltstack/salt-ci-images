@@ -29,8 +29,8 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
-  {%- if os_major_release != 38 %}
-  {#- There's no vault packages for Fedora 38 yet as it's the unstable version of Fedora #}
+  {%- if os_major_release <= 39 %}
+  {#- Newer OS targets don't require vault for CI/CD, as community salt extensions cover this #}
   - pkgs.vault
   {%- endif %}
   - pkgs.jq

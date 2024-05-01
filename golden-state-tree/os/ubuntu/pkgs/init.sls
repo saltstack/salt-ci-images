@@ -33,7 +33,8 @@ include:
   - pkgs.swig
   - pkgs.tar
   - pkgs.zlib
-  {%- if grains['osmajorrelease'] != 23 %}
+  {%- if grains['osmajorrelease'] <= 22 %}
+  {#- Newer OS targets don't require vault for CI/CD, as community salt extensions cover this #}
   - pkgs.vault
   {%- endif %}
   - pkgs.jq

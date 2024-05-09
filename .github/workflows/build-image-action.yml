@@ -28,7 +28,7 @@ jobs:
       matrix-include: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Python Tools Scripts
         env:
@@ -59,10 +59,10 @@ jobs:
 
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Packer
-        uses: hashicorp-contrib/setup-packer@v2
+        uses: hashicorp-contrib/setup-packer@v3
         with:
           packer-version: 1.8.4
 
@@ -96,7 +96,7 @@ jobs:
 
       - name: Upload Build Manifest
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: manifest
           path: manifest
@@ -110,7 +110,7 @@ jobs:
 
       - name: Upload Exit Status
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exitstatus
           path: exitstatus

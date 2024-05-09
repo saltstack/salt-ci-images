@@ -20,10 +20,10 @@ jobs:
     outputs:
       changed-files: ${{ toJSON(steps.changed-files.outputs) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get Changed Files
         id: changed-files
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@v3
         with:
           token: ${{ github.token }}
           list-files: json
@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload Exit Status
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exitstatus
           path: exitstatus
@@ -124,10 +124,10 @@ jobs:
       jobs: ${{ steps.collect-jobs.outputs.jobs }}
       runner-version: ${{ steps.collect-jobs.outputs.runner-version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -159,7 +159,7 @@ jobs:
 
       - name: Upload Exit Status
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exitstatus
           path: exitstatus
@@ -339,14 +339,14 @@ jobs:
     steps:
     - name: Download Exit Status Files
       if: always()
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: exitstatus
         path: exitstatus
 
     - name: Delete Exit Status Artifacts
       if: always()
-      uses: geekyeggo/delete-artifact@v2
+      uses: geekyeggo/delete-artifact@v5
       with:
         name: exitstatus
         failOnError: false

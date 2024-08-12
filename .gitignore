@@ -4,6 +4,7 @@ Gemfile.lock
 .bundle/
 .kitchen/
 *.sw[a-p]
+__pycache__
 
 # From os-images
 packer_cache

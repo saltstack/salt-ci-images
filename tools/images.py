@@ -1,6 +1,7 @@
 """
 AWS EC2 AMI Related Commands.
 """
+
 from __future__ import annotations
 
 import json

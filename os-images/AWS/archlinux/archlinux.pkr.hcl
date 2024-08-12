@@ -66,7 +66,7 @@ variable "salt_provision_type" {
 
 variable "salt_provision_version" {
   type    = string
-  default = "3006.8"
+  default = "3006.9"
 }
 
 variable "salt_provision_root_dir" {
@@ -177,6 +177,7 @@ build {
       "systemctl mask tmp.mount",
       "pacman-key --init",
       "pacman-key --populate",
+      "pacman-key --refresh-keys",
       "reflector --country '' --protocol https --score 20 --sort rate --save /etc/pacman.d/mirrorlist || true",
       "pacman-db-upgrade",
       "pacman -Sy --noconfirm --needed archlinux-keyring",

@@ -41,21 +41,21 @@ repos:
 #        types: [file]
 
   # ----- Formatting ---------------------------------------------------------------------------->
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.8.2
-    hooks:
-      - id: reorder-python-imports
-        args:
-          - --py38-plus
-          - --add-import=from __future__ import annotations
+  #  - repo: https://github.com/asottile/reorder_python_imports
+  #  rev: v3.13.0
+  #  hooks:
+  #    - id: reorder-python-imports
+  #      args:
+  #        - --py310-plus
+  #        - --add-import=from __future__ import annotations
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.37.3
+    rev: v3.17.0
     hooks:
       - id: pyupgrade
-        name: Rewrite Code to be Py3.8+
+        name: Rewrite Code to be Py3.10+
         args: [
-          --py37-plus
+          --py310-plus
         ]
 
   - repo: https://github.com/psf/black

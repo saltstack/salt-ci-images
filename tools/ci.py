@@ -1,6 +1,7 @@
 """
 GitHub Actions CI Utilities.
 """
+
 from __future__ import annotations
 
 import json

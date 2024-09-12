@@ -61,11 +61,6 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/amazonlinux2000/*.hcl
-            os-images-archlinux:
-              - added|modified:
-                - *state_tree_added_modified
-                - *os_images_scripts
-                - os-images/AWS/archlinux/*.hcl
             os-images-debian:
               - added|modified:
                 - *state_tree_added_modified
@@ -206,18 +201,6 @@ jobs:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
-  archlinux:
-    name: ArchLinux
-    needs:
-      - collect-jobs
-      - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-archlinux'] }}
-    uses: ./.github/workflows/build-image-action.yml
-    with:
-      distro-name: archlinux
-      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
-      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-
   debian:
     name: Debian
     needs:
@@ -300,7 +283,6 @@ jobs:
       - rockylinux
       - amazonlinux
       - amazonlinux2000
-      - archlinux
       - debian
       - fedora
       - opensuse

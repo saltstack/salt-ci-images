@@ -51,16 +51,6 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/rockylinux/*.hcl
-            os-images-amazonlinux:
-              - added|modified:
-                - *state_tree_added_modified
-                - *os_images_scripts
-                - os-images/AWS/amazonlinux/*.hcl
-            os-images-amazonlinux2000:
-              - added|modified:
-                - *state_tree_added_modified
-                - *os_images_scripts
-                - os-images/AWS/amazonlinux2000/*.hcl
             os-images-debian:
               - added|modified:
                 - *state_tree_added_modified
@@ -71,10 +61,6 @@ jobs:
                 - *state_tree_added_modified
                 - *os_images_scripts
                 - os-images/AWS/fedora/*.hcl
-            os-images-opensuse:
-              - added|modified:
-                - *state_tree_added_modified
-                - *os_images_scripts
             os-images-photon:
               - added|modified:
                 - *state_tree_added_modified
@@ -177,30 +163,6 @@ jobs:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
-  amazonlinux:
-    name: AmazonLinux
-    needs:
-      - collect-jobs
-      - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-amazonlinux'] }}
-    uses: ./.github/workflows/build-image-action.yml
-    with:
-      distro-name: amazonlinux
-      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
-      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-
-  amazonlinux2000:
-    name: AmazonLinux2000
-    needs:
-      - collect-jobs
-      - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-amazonlinux2000'] }}
-    uses: ./.github/workflows/build-image-action.yml
-    with:
-      distro-name: amazonlinux2000
-      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
-      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-
   debian:
     name: Debian
     needs:
@@ -222,18 +184,6 @@ jobs:
     uses: ./.github/workflows/build-image-action.yml
     with:
       distro-name: fedora
-      changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
-      runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
-
-  opensuse:
-    name: Opensuse
-    needs:
-      - collect-jobs
-      - get-changed-files
-    if: ${{ fromJSON(needs.collect-jobs.outputs.jobs)['os-images-opensuse'] }}
-    uses: ./.github/workflows/build-image-action.yml
-    with:
-      distro-name: opensuse
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
       runner-version: ${{ needs.collect-jobs.outputs.runner-version }}
 
@@ -281,11 +231,8 @@ jobs:
       - collect-jobs
       - get-changed-files
       - rockylinux
-      - amazonlinux
-      - amazonlinux2000
       - debian
       - fedora
-      - opensuse
       - photon
       - ubuntu
       - windows

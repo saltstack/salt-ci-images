@@ -206,6 +206,12 @@ build {
   }
 
   provisioner "shell" {
+    inline_shebang  = "/bin/bash -ex"
+    execute_command = "sudo -E -H -u ${var.ssh_username} bash -c '{{ .Vars }} {{ .Path }}'"
+    script          = "${path.root}/scripts/install_brew.sh"
+  }
+
+  provisioner "shell" {
     execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
     inline = [
       "curl -f https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg -o /tmp/amazon-cloudwatch-agent.gpg",

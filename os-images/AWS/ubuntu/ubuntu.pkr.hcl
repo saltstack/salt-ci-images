@@ -207,7 +207,7 @@ build {
 
   provisioner "shell" {
     inline_shebang  = "/bin/bash -ex"
-    execute_command = "sudo -E -H bash -c '{{ .Vars }} {{ .Path }}'"
+    execute_command = "sudo -E -H -u ${var.ssh_username} bash -c '{{ .Vars }} {{ .Path }}'"
     script          = "${path.root}/scripts/install_brew.sh"
   }
 

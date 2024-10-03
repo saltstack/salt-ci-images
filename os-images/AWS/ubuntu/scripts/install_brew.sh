@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Exit on failures
+set -e
+# Echo what runs
+set -x
+
 if [[ "$(uname -m)" != 'x86_64' ]]; then
   echo "brew won't be installed for $(uname -m) architecture"
   exit 0
